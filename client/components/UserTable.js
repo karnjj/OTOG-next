@@ -11,10 +11,10 @@ export default function UserTable(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.user.map((user,index) => (
+                    {props.user.map((user, index) => (
                         <tr key={index}>
-                            <td>{index+1}</td>
-                            <td>{user.sname}</td>
+                            <td>{index + 1}</td>
+                            <td className={user.rating >= 2000 ? 'grandmaster' : user.rating >= 1800 ? 'master' : 'regular'}>{user.sname}</td>
                             <td>{user.rating}</td>
                             <td>0</td>
                         </tr>
