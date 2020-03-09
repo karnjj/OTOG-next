@@ -59,7 +59,7 @@ app.post('/api/login', async (req, res) => {
 	var password = req.body.password;
 	hash.update(password);
 	console.log(username + ' Sign in at' + Date(Date.now()));
-	let sql = 'select * from user where username = "' + username + '"'
+	let sql = 'select * from User where username = "' + username + '"'
 	var result = await new Promise((resolve,reject) => {
 		db.query(sql,(err,result) => {
 			if(err) reject(err)
