@@ -99,6 +99,35 @@ app.get('/api/user', (req,res) => {
 		res.json(result);
 	});
 })
+
+app.get('/api/countProblem',(req,res) => {
+	let idUser = req.headers.authorization
+	let allProblem = new Promise((resolve,reject) => {
+		let sql = 'select count(*) as allP from Problem where state = 1'
+		db.query(sql,(err,result) => {
+			if(err) reject (err)
+			resolve(result)
+		})
+	})
+	let allUserDo = new Promise((resolve,reject) => {
+		let sql = 'SELECT r1.* FROM Result r1 inner join ( select prob_id,max(time) as maxTime '
+			+'from Result where user_id = ? group by prob_id) r2 on r1.prob_id = r2.prob_id and r1.time = r2.maxTime'
+		db.query(sql,[idUser],(err,result) => {
+			if(err) reject (err)
+			resolve(result)
+		})
+	})
+	Promise.all([allProblem,allUserDo]).then((result) => {
+		let passProb = 0;
+		let wrongProb = 0;
+		let sz = result[1].length;
+		for(let i = 0; i < sz; i++ ){
+			if(result[1][i].score == 100) passProb++
+			else wrongProb ++
+		}
+		res.json({allProblem:result[0][0].allP,userProblem:{passProb,wrongProb}})
+	})
+})
 app.listen(PORT, () => {
 	console.log("Starting server at PORT " + PORT)
 })

@@ -21,7 +21,7 @@ const Index = (props) => {
             <Header userData={userData}/>
             <div className="jumbotron">
                 <div className="container">
-                    {isLogin(userData) ? <Welcome /> : <div>
+                    {isLogin(userData) ? <Welcome userData={userData}/> : <div>
                         <h1>Welcome to <b>
                             <code className="font_green">O</code>
                             <code className="font_red">T</code>
