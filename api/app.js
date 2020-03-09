@@ -8,7 +8,7 @@ const mongodb = require("mongodb");
 const sha256 = require('js-sha256');
 const cookieParser = require('cookie-parser')
 const client = mongodb.MongoClient;
-const CONN_URL = "mongodb://localhost:2277/";
+const CONN_URL = "mongodb+srv://admin:0000@otog-w9ssf.gcp.mongodb.net/test?retryWrites=true&w=majority";
 let mongoClient = null;
 client.connect(CONN_URL,{ useNewUrlParser: true,useUnifiedTopology: true }, function (err, DBclient) {
 	mongoClient = DBclient;
