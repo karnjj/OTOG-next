@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
+    "bootstrap": "^4.4.1",
     "dotenv": "^8.2.0",
     "firebase": "^7.9.1",
     "import": "0.0.6",
@@ -26,6 +27,8 @@
     "next-cookies": "^2.0.3",
     "react": "^16.12.0",
     "react-countup": "^4.3.3",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "react-bootstrap": "^1.0.0-beta.17",
+    "styled-components": "^5.0.1"
   }
 }

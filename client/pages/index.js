@@ -5,6 +5,9 @@ import Header from '../components/Header'
 import ProbTABLE from '../components/ProbTable';
 import { withAuthSync, isLogin } from '../utils/auth'
 import Welcome from '../components/Welcome';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 const Index = (props) => {
     const userData = props.jsData
     const [taskState, setTaskState] = useState([])
