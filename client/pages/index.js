@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import App from '../components/App'
 import fetch from 'isomorphic-unfetch'
 import Header from '../components/Header'
-import ProbTABLE from '../components/Table';
+import ProbTABLE from '../components/ProbTable';
 import { withAuthSync, isLogin } from '../utils/auth'
 import Welcome from '../components/Welcome';
 const Index = (props) => {

@@ -3,7 +3,7 @@ import App from '../components/App'
 import Header from '../components/Header'
 import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
-import ProbTABLE from '../components/Table';
+import ProbTABLE from '../components/ProbTable';
 import { withAuthSync } from '../utils/auth';
 const Problem = (props) => {
     const userData = props.jsData

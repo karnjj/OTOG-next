@@ -10,7 +10,7 @@ export const isLogin = jsData => {
 }
 
 export const login = (token) => {
-    cookie.set('token', token, { expires: 3600 })
+    cookie.set('token', token, { expires: 1 })
     Router.push('/')
 }
 
