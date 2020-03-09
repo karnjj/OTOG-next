@@ -1,5 +1,7 @@
 import Link from 'next/link'
-export default function ProbTABLE(props) {
+import Submit from './Submit'
+
+const ProbTABLE = (props) => {
     return (
         <div className="table-responsive">
             <table className="table table-hover">
@@ -9,17 +11,11 @@ export default function ProbTABLE(props) {
                         <th scope="col">Name</th>
                         <th scope="col">Passed</th>
                         <th scope="col">Ratings</th>
+                        <th scope="col">Submit</th>
                     </tr>
                 </thead>
+                    <ProbData problems={props.problem}></ProbData>
                 <tbody>
-                    {props.problem.map(prob => (
-                        <tr key={prob.id_Prob}>
-                            <td>{prob.id_Prob}</td>
-                            <td><Link href={"docs/" + prob.id}><a className='otogtxt'>{prob.name}<br />({prob.time} วินาที {prob.mem} MB)</a></Link></td>
-                            <td>0</td>
-                            <td>0</td>
-                        </tr>
-                    ))}
                 </tbody>
             </table>
             <style jsx>{`
@@ -33,3 +29,22 @@ export default function ProbTABLE(props) {
         </div>
     )
 }
+
+const ProbData = ({ problems }) => (
+    problems.map(problem => {
+        const { id_Prob, name, time, mem } = problem
+        return (
+            <tr key={id_Prob}>
+                <td>{id_Prob}</td>
+                <td><Link href={`docs/${id_Prob}`}>
+                    <a className='otogtxt'>{name}<br />({time} วินาที {mem} MB)</a>
+                </Link></td>
+                <td>0</td>
+                <td>0</td>
+                <td><Submit prob={problem}></Submit></td>
+            </tr>
+        )
+    })
+)
+
+export default ProbTABLE
