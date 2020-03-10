@@ -128,6 +128,9 @@ app.get('/api/countProblem',(req,res) => {
 		res.json({allProblem:result[0][0].allP,userProblem:{passProb,wrongProb}})
 	})
 })
+app.get('/api/docs/:name',(req,res) => {
+	res.sendFile(__dirname+'/docs/'+req.params.name+'.pdf');
+})
 app.listen(PORT, () => {
 	console.log("Starting server at PORT " + PORT)
 })
