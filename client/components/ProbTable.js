@@ -32,11 +32,11 @@ const ProbTABLE = (props) => {
 
 const ProbData = ({ problems }) => (
     problems.map(problem => {
-        const { id_Prob, name, time, mem } = problem
+        const { id_Prob, name, time, mem, sname } = problem
         return (
             <tr key={id_Prob}>
                 <td>{id_Prob}</td>
-                <td><Link href={`docs/${id_Prob}`}>
+                <td><Link href={`/problem/${sname}`}>
                     <a className='otogtxt'>{name}<br />({time} วินาที {mem} MB)</a>
                 </Link></td>
                 <td>0</td>
