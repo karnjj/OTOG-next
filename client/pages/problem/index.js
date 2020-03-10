@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import App from '../components/App'
-import Header from '../components/Header'
+import App from '../../components/App'
+import Header from '../../components/Header'
 import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
-import ProbTABLE from '../components/ProbTable';
-import { withAuthSync } from '../utils/auth';
+import ProbTABLE from '../../components/ProbTable';
+import { withAuthSync } from '../../utils/auth';
 const Problem = (props) => {
     const userData = props.jsData
     const [taskState, setTaskState] = useState([])
