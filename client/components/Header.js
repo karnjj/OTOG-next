@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import Link from 'next/link'
 import { logout,isLogin } from '../utils/auth'
 import { withRouter } from 'next/router'

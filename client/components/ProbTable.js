@@ -31,17 +31,35 @@ const ProbTABLE = (props) => {
 }
 
 const ProbData = ({ problems }) => (
+<<<<<<< HEAD
     problems.map(prob => {
         const { id_Prob, name, time, mem } = prob
+||||||| merged common ancestors
+    problems.map(problem => {
+        const { id_Prob, name, time, mem } = problem
+=======
+    problems.map(problem => {
+        const { id_Prob, name, time, mem, sname, pass } = problem
+>>>>>>> aaea72b19b3e2568337282c9bfc6c2632cc49d7e
         return (
             <tr key={id_Prob}>
                 <td>{id_Prob}</td>
-                <td><Link href={`docs/${id_Prob}`}>
+                <td><Link href={`/problem/${sname}`}>
                     <a className='otogtxt'>{name}<br />({time} วินาที {mem} MB)</a>
                 </Link></td>
+<<<<<<< HEAD
                 <td>0</td>
                 <td>0</td>
                 <td><Submit prob={prob}></Submit></td>
+||||||| merged common ancestors
+                <td>0</td>
+                <td>0</td>
+                <td><Submit prob={problem}></Submit></td>
+=======
+                <td>{pass ? pass.length : 0}</td>
+                <td>1500</td>
+                <td><Submit prob={problem}></Submit></td>
+>>>>>>> aaea72b19b3e2568337282c9bfc6c2632cc49d7e
             </tr>
         )
     })

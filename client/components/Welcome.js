@@ -21,7 +21,7 @@ const Welcome = (props) => {
     },[])
     return (
         <div>
-            <h4 className="text-center"> <code className="font_gray">สวัสดี admin</code></h4>
+            <h4 className="text-center"> <code className="font_gray">สวัสดี {props.userData.sname}</code></h4>
             <ul className="d-flex justify-content-center flex-wrap p-0 list-unstyled">
                 <li><div className="count_button black select-none">
                     <h5 className="font_white cnt_msg">ทั้งหมด</h5>

@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+||||||| merged common ancestors
+import "../style.css"
+=======
+import "../style.css"
+import 'bootstrap/dist/css/bootstrap.min.css'
+>>>>>>> aaea72b19b3e2568337282c9bfc6c2632cc49d7e
 import Head from 'next/head'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import "../styles/style.css"

@@ -39,19 +39,29 @@ app.use((req,res,next)=>{
  })*/
 app.get('/api/problem', async (req, res) => {
 	let mode = req.query.mode
-	if (mode == 'firstpage') {
-		let sql = 'select * from Problem where state = 1 order by see_date desc limit 10'
-		db.query(sql,(err,result) => {
-			if(err) res.status(400).send(err)
-			res.status(200).json(result)
-		})
-	} else {
-		let sql = 'select * from Problem where state = 1 order by id_Prob'
-		db.query(sql,(err,result) => {
-			if(err) res.status(400).send(err)
-			res.status(200).json(result)
-		})
-	}
+	let whoPassPromise = new Promise((resolve, reject) => {
+		let sql = "select prob_id,GROUP_CONCAT(DISTINCT(sname) SEPARATOR ',') as pass from Result " +
+			"inner join User as U on Result.user_id = U.idUser " +
+			"where score = 100 and state = 1 group by prob_id"
+		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
+	})
+	let problemPromise = new Promise((resolve, reject) => {
+		let sql = '';
+		if (mode == 'firstpage') sql = 'select * from Problem where state = 1 order by see_date desc limit 10'
+		else sql = 'select * from Problem where state = 1 order by id_Prob desc'
+		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
+	})
+	Promise.all([whoPassPromise, problemPromise]).then(result => {
+		let whoPass = result[0];
+		let problem = result[1]
+		for (let key in whoPass) {
+			let idx = problem.findIndex(obj => obj.id_Prob == whoPass[key].prob_id)
+			if (idx == -1) continue
+			if (problem[idx]['pass'] == undefined) problem[idx]['pass'] = new Array()
+			problem[idx]['pass'] = whoPass[key].pass.split(',')
+		}
+		res.json(problem)
+	})
 })
 app.post('/api/login', async (req, res) => {
 	var hash = sha256.create();
@@ -60,9 +70,9 @@ app.post('/api/login', async (req, res) => {
 	hash.update(password);
 	console.log(username + ' Sign in at' + Date(Date.now()));
 	let sql = 'select * from User where username = "' + username + '"'
-	var result = await new Promise((resolve,reject) => {
-		db.query(sql,(err,result) => {
-			if(err) reject(err)
+	var result = await new Promise((resolve, reject) => {
+		db.query(sql, (err, result) => {
+			if (err) reject(err)
 			resolve(result[0])
 		})
 	})
@@ -88,45 +98,48 @@ app.get('/api/auth', (req, res) => {
 		res.status(401).json({})
 	}
 })
-app.get('/api/user', (req,res) => {
-	let sql = "SELECT sname,rating FROM User inner join Result as R on User.idUser = R.user_id "+
+app.get('/api/user', (req, res) => {
+	let sql = "SELECT sname,rating FROM User inner join Result as R on User.idUser = R.user_id " +
 		"where contestmode is not null and state = 1 group by sname order by rating desc"
 	db.query(sql, function (err, result) {
-		console.log(err);		
+		console.log(err);
 		if (err) res.status(400).send(err);
 		console.log(result);
-		
+
 		res.json(result);
 	});
 })
 
-app.get('/api/countProblem',(req,res) => {
+app.get('/api/countProblem', (req, res) => {
 	let idUser = req.headers.authorization
-	let allProblem = new Promise((resolve,reject) => {
+	let allProblem = new Promise((resolve, reject) => {
 		let sql = 'select count(*) as allP from Problem where state = 1'
-		db.query(sql,(err,result) => {
-			if(err) reject (err)
+		db.query(sql, (err, result) => {
+			if (err) reject(err)
 			resolve(result)
 		})
 	})
-	let allUserDo = new Promise((resolve,reject) => {
+	let allUserDo = new Promise((resolve, reject) => {
 		let sql = 'SELECT r1.* FROM Result r1 inner join ( select prob_id,max(time) as maxTime '
-			+'from Result where user_id = ? group by prob_id) r2 on r1.prob_id = r2.prob_id and r1.time = r2.maxTime'
-		db.query(sql,[idUser],(err,result) => {
-			if(err) reject (err)
+			+ 'from Result where user_id = ? group by prob_id) r2 on r1.prob_id = r2.prob_id and r1.time = r2.maxTime'
+		db.query(sql, [idUser], (err, result) => {
+			if (err) reject(err)
 			resolve(result)
 		})
 	})
-	Promise.all([allProblem,allUserDo]).then((result) => {
+	Promise.all([allProblem, allUserDo]).then((result) => {
 		let passProb = 0;
 		let wrongProb = 0;
 		let sz = result[1].length;
-		for(let i = 0; i < sz; i++ ){
-			if(result[1][i].score == 100) passProb++
-			else wrongProb ++
+		for (let i = 0; i < sz; i++) {
+			if (result[1][i].score == 100) passProb++
+			else wrongProb++
 		}
-		res.json({allProblem:result[0][0].allP,userProblem:{passProb,wrongProb}})
+		res.json({ allProblem: result[0][0].allP, userProblem: { passProb, wrongProb } })
 	})
+})
+app.get('/api/docs/:name', (req, res) => {
+	res.sendFile(__dirname + '/docs/' + req.params.name + '.pdf');
 })
 app.listen(PORT, () => {
 	console.log("Starting server at PORT " + PORT)
