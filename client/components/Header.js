@@ -44,9 +44,9 @@ const Header = (props) => {
                             <a className="nav-link head_typo">
                                 <i className="fa fa-sign-in"></i> <span>Login</span>
                             </a>
-                        </Link> : <bottom id='logoutBot' className="nav-link head_typo" onClick={logout}>
+                        </Link> : <a id='logoutBot' className="nav-link head_typo" onClick={logout}>
                             <i className="fa fa-sign-in"></i> <span>Logout</span>
-                        </bottom>}
+                        </a>}
                     </li>
                 </ul>
                 <style jsx>{`

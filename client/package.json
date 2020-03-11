@@ -22,10 +22,11 @@
     "next": "^9.2.2",
     "next-connect": "^0.6.0",
     "next-cookies": "^2.0.3",
+    "polished": "^3.4.4",
     "react": "^16.12.0",
+    "react-bootstrap": "^1.0.0-beta.17",
     "react-countup": "^4.3.3",
     "react-dom": "^16.12.0",
-    "react-bootstrap": "^1.0.0-beta.17",
     "styled-components": "^5.0.1"
   }
 }

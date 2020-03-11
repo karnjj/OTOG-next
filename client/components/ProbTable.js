@@ -14,8 +14,8 @@ const ProbTABLE = (props) => {
                         <th scope="col">Submit</th>
                     </tr>
                 </thead>
-                    <ProbData problems={props.problem}></ProbData>
                 <tbody>
+                    <ProbData problems={props.problem}></ProbData>
                 </tbody>
             </table>
             <style jsx>{`
@@ -25,14 +25,14 @@ const ProbTABLE = (props) => {
                 #coltable {
                     color: #FF851B;
                 }
-                `}</style>
+            `}</style>
         </div>
     )
 }
 
 const ProbData = ({ problems }) => (
-    problems.map(problem => {
-        const { id_Prob, name, time, mem } = problem
+    problems.map(prob => {
+        const { id_Prob, name, time, mem } = prob
         return (
             <tr key={id_Prob}>
                 <td>{id_Prob}</td>
@@ -41,7 +41,7 @@ const ProbData = ({ problems }) => (
                 </Link></td>
                 <td>0</td>
                 <td>0</td>
-                <td><Submit prob={problem}></Submit></td>
+                <td><Submit prob={prob}></Submit></td>
             </tr>
         )
     })
