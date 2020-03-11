@@ -16,7 +16,6 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "dotenv": "^8.2.0",
-    "firebase": "^7.9.1",
     "import": "0.0.6",
     "isomorphic-unfetch": "^3.0.0",
     "js-cookie": "^2.2.1",
@@ -28,16 +27,8 @@
     "react-bootstrap": "^1.0.0-beta.17",
     "react-countup": "^4.3.3",
     "react-dom": "^16.12.0",
-<<<<<<< HEAD
-||||||| merged common ancestors
     "react-bootstrap": "^1.0.0-beta.17",
-=======
-    "react-pdf": "^4.1.0",
-<<<<<<< HEAD
     "reactjs-popup": "^1.5.0",
-=======
->>>>>>> aaea72b19b3e2568337282c9bfc6c2632cc49d7e
->>>>>>> f744930686fce629c30e1c2eb6bc913234d03d8d
     "styled-components": "^5.0.1"
   }
 }
