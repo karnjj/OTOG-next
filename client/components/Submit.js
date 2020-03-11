@@ -1,36 +1,46 @@
 import { useState } from 'react'
-import { Button, Modal } from 'react-bootstrap'
-import styled from 'styled-components'
-
-const OrangeButton = styled(Button)`
-    color: white;
-    border-color: #FF851B;
-    background-color: #FF851B;
-`
-const SubmitModal = ({ show, handleClose, problem }) => {
-    const { id_Prob, name } = problem
-    return (
-        <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>{name}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>eiei</Modal.Body>
-            <Modal.Footer>
-                <OrangeButton onClick={handleClose}>Submit</OrangeButton>
-            </Modal.Footer>
-        </Modal>
-    )
-}
+import { Modal, Form } from 'react-bootstrap'
+import OrangeButton from './OrangeButton'
 
 const Submit = ({ prob }) => {
+    const { name } = prob
     const [ show, setShow ] = useState(false)
+    const [ fileName, setFileName ] = useState('')
     const handleShow = () => setShow(true)
     const handleClose = () => setShow(false)
-
+    const uploadFile = event => {
+        setFileName(event.target.files[0].name)
+    }
+    const onUploadCheck = e => {
+        let extension = fileName.split('.').pop().toLowerCase()
+        if (!['c', 'cpp'].some(ext => extension === ext)) {
+            e.preventDefault()
+        }
+    }
     return (
         <>
             <OrangeButton onClick={handleShow}>Submit</OrangeButton>
-            <SubmitModal show={show} handleClose={handleClose} problem={prob}></SubmitModal>
+            <Modal show={show} onHide={handleClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>{name}</Modal.Title>
+                </Modal.Header>
+                <Form action='upload' method='post' encType='multipart/form-data' onSubmit={onUploadCheck}>
+                    <Modal.Body>
+                        <div className='custom-file'>
+                            <input type='file' className='custom-file-input' onChange={uploadFile}/>
+                            <label className='custom-file-label'>{fileName || 'Choose file'}</label>
+                        </div><br/><br/>
+                        <Form.Label>Choose Language</Form.Label>
+                        <Form.Control as='select'>
+                            <option>C++</option>
+                            <option>C</option>
+                        </Form.Control>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <OrangeButton type='submit'>Submit</OrangeButton>
+                    </Modal.Footer>
+                </Form>
+            </Modal>
         </>
     )
 }

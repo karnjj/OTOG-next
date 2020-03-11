@@ -23,11 +23,21 @@
     "next": "^9.2.2",
     "next-connect": "^0.6.0",
     "next-cookies": "^2.0.3",
+    "polished": "^3.4.4",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.17",
     "react-countup": "^4.3.3",
     "react-dom": "^16.12.0",
+<<<<<<< HEAD
+||||||| merged common ancestors
+    "react-bootstrap": "^1.0.0-beta.17",
+=======
     "react-pdf": "^4.1.0",
+<<<<<<< HEAD
+    "reactjs-popup": "^1.5.0",
+=======
+>>>>>>> aaea72b19b3e2568337282c9bfc6c2632cc49d7e
+>>>>>>> f744930686fce629c30e1c2eb6bc913234d03d8d
     "styled-components": "^5.0.1"
   }
 }
