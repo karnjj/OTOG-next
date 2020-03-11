@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import App from '../../components/App';
-    import { Navbar, Nav, Button  } from 'react-bootstrap';
+import { Navbar, Nav  } from 'react-bootstrap';
 import { withAuthSync } from '../../utils/auth';
 import Submit from '../../components/Submit';
 const openPDF = props => {
@@ -10,7 +9,7 @@ const openPDF = props => {
     const url = 'http://localhost:8000/api/docs/' + name
     return (
         <App>
-            <Navbar sticky="top" expand="sm" bg="dark" variant="dark">
+            <Navbar fixed="top" expand="sm" bg="dark" variant="dark">
                 <Navbar.Brand>{name}</Navbar.Brand>
                 <Nav className="mr-auto" ></Nav>
                 <Nav className="mr-auto" ><code><h4>PPPPPPPPPPP</h4></code></Nav>
@@ -18,7 +17,7 @@ const openPDF = props => {
                     <Submit prob={{name}} />
                 </Nav>
             </Navbar>
-            <iframe src={url} type="application/pdf" >   </iframe>
+            <iframe src={url} type="application/pdf" />
             <style jsx>{`
                 iframe {
                     display: block;
