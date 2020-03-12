@@ -13,7 +13,6 @@ app
     server.get("*", (req, res) => {
       return handle(req, res);
     });
-
     server.listen(port, err => {
       if (err) throw err;
       console.log(`> Next.js ready on http://localhost:${port}`);
