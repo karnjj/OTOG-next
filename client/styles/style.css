@@ -54,28 +54,29 @@
     font-weight:100;
     text-align: center;
 }
-.font_white {
-  color: #FFFFFF;
-}
-.font_gray {
-  color: #111111;
-}
-.font_green {
-  color: #41E241;
-}
-.font_red{
-  color: #FF4D4D;
-}
-.font_org{
-  color: #FFAD33;
-}
-.font_blue{
-  color: #17b4e9;
-}
 
 .head_typo, .nav-link:hover{
   font-size: 1.1rem;
-  color: #ff851b;
+  color: #111111;
+}
+
+.font_white {
+  color: #FFFFFF !important;
+}
+.font_gray {
+  color: #111111 !important;
+}
+.font_green {
+  color: #41E241 !important;
+}
+.font_red{
+  color: #FF4D4D !important;
+}
+.font_org{
+  color: #FFAD33 !important;
+}
+.font_blue{
+  color: #17b4e9 !important;
 }
 
 a:hover{
@@ -207,19 +208,19 @@ a.configlink:hover {
   transition: background-color 0.2s;
 }
 .count_button.blue {
-  background-color: rgba(23, 181, 233, 0.5);
+  background-color: rgba(23, 181, 233, 0.9);
 }
 .count_button.green {
-  background-color: rgba(65, 226, 65, 0.5);
+  background-color: rgba(65, 226, 65, 0.9);
 }
 .count_button.red {
-  background-color: rgba(255, 77, 77, 0.5);
+  background-color: rgba(255, 77, 77, 0.9);
 }
 .count_button.org {
-  background-color: rgba(255, 173, 51, 0.5);
+  background-color: rgba(255, 173, 51, 0.9);
 }
 .count_button.black {
-  background-color: rgba(17, 17, 17, 0.5);
+  background-color: rgba(17, 17, 17, 0.9);
 }
 .count_button.blue:hover {
   background-color: rgba(23, 181, 233, 0.8);

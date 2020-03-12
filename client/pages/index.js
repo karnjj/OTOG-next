@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import App from '../components/App'
 import fetch from 'isomorphic-unfetch'
 import Header from '../components/Header'
-import ProbTABLE from '../components/ProbTable'
+import ProbTable from '../components/ProbTable'
 import { withAuthSync, isLogin } from '../utils/auth'
 import Welcome from '../components/Welcome'
 
@@ -61,7 +61,7 @@ const Index = (props) => {
                     <h2><i className="fa fa-puzzle-piece"></i> โจทย์ใหม่</h2>
                 </div>
                 <hr />
-                <ProbTABLE problem={taskState}/>
+                <ProbTable problems={taskState} userData={userData}/>
             </div>
         </App>
     )

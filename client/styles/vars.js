@@ -10,4 +10,10 @@ export default {
 
     otog: '#ff851b',
     orange: '#ff851b',
+    white: '#ffffff',
+    gray: '111111',
+    green: '#41e241',
+    red: '#ff4d4d',
+    org: '#ffad33',
+    blue: '#17b4e9',
 }

@@ -3,7 +3,7 @@ import App from '../../components/App'
 import Header from '../../components/Header'
 import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
-import ProbTABLE from '../../components/ProbTable';
+import ProbTable from '../../components/ProbTable';
 import { withAuthSync } from '../../utils/auth';
 const Problem = (props) => {
     const userData = props.jsData
@@ -22,8 +22,8 @@ const Problem = (props) => {
     }
     let filteredTask = taskState.filter((problem) => {
         let id = String(problem.id_Prob)
-        return (problem.name.indexOf(searchState)!==-1)||(id.indexOf(searchState)!==-1
-        )})
+        return (problem.name.indexOf(searchState)!==-1)||(id.indexOf(searchState)!==-1)
+    })
     return (
         <App>
             <Header userData={userData}/>
@@ -35,7 +35,7 @@ const Problem = (props) => {
                         onChange={updateSearch}/>
                     <a href="submission" className="col-12 col-sm-4 col-md-3 col-lg-2 btn otogbtn mt-1">View Submission</a>
                 </div> <hr></hr>
-                <ProbTABLE problem={filteredTask} />
+                <ProbTable problems={filteredTask} userData={userData}/>
             </div>
         </App>
     )

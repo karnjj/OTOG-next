@@ -2,21 +2,24 @@ import { useState } from 'react'
 import { Modal, Form } from 'react-bootstrap'
 import OrangeButton from './OrangeButton'
 
-const Submit = ({ prob }) => {
-    const { name } = prob
+const Submit = (props) => {
+    const { name } = props
     const [ show, setShow ] = useState(false)
     const [ fileName, setFileName ] = useState('')
+    const [ selectedFile, setSelectedFile] = useState(undefined)
+
     const handleShow = () => setShow(true)
     const handleClose = () => setShow(false)
     const uploadFile = event => {
-        setFileName(event.target.files[0].name)
-    }
-    const onUploadCheck = e => {
-        let extension = fileName.split('.').pop().toLowerCase()
-        if (!['c', 'cpp'].some(ext => extension === ext)) {
-            e.preventDefault()
+        if (event.target.files[0] !== undefined) {
+            setSelectedFile(event.target.files[0])
+            setFileName(event.target.files[0].name)
+        } else {
+            setSelectedFile(undefined)
+            setFileName('')
         }
     }
+
     return (
         <>
             <OrangeButton onClick={handleShow}>Submit</OrangeButton>
@@ -24,10 +27,10 @@ const Submit = ({ prob }) => {
                 <Modal.Header closeButton>
                     <Modal.Title>{name}</Modal.Title>
                 </Modal.Header>
-                <Form action='upload' method='post' encType='multipart/form-data' onSubmit={onUploadCheck}>
+                <Form action='upload' method='post'>
                     <Modal.Body>
                         <div className='custom-file'>
-                            <input type='file' className='custom-file-input' onChange={uploadFile}/>
+                            <input accept='.c,.cpp' type='file' className='custom-file-input' onChange={uploadFile}/>
                             <label className='custom-file-label'>{fileName || 'Choose file'}</label>
                         </div><br/><br/>
                         <Form.Label>Choose Language</Form.Label>
