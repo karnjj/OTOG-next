@@ -27,6 +27,7 @@ process.env.SECRET_KEY = fs.readFileSync('./private.key', 'utf8');
 process.env.PUBLIC_KEY = fs.readFileSync('./public.key', 'utf8');
 var app = express()
 app.use(cors())
+app.use(cors({origin: '*'}));
 var PORT = process.env.PORT || 8000
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
