@@ -11,7 +11,8 @@ const Index = (props) => {
     const [taskState, setTaskState] = useState([])
     useEffect(() => {
         const fetchData = async () => {
-            const res = await fetch('http://localhost:8000/api/problem?mode=firstpage')
+            const url = `${process.env.API_URL}/api/problem?mode=firstpage`
+            const res = await fetch(url)
             const json = await res.json()
             setTaskState(json)
           }

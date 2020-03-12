@@ -10,7 +10,8 @@ const Rating = (props) => {
     const [searchState, setsearchState] = useState('')
     useEffect(() => {
         const fetchData = async () => {
-            const res = await fetch('http://localhost:8000/api/user')
+            const url = `${process.env.API_URL}/api/user`
+            const res = await fetch(url)
             const json = await res.json()
             setUserState(json)
         }
@@ -25,15 +26,15 @@ const Rating = (props) => {
     return (
         <App>
             <Header userData={userData} />
-            <br /><br class="d-none d-md-block" /><br class="d-none d-lg-block" />
-            <div class="container">
-                <h2><i class="fa fa-bar-chart"></i> Rating </h2><br />
-                <div class="container row align-items-baseline">
-                    <label class="col-md-2 text-nowrap"><b>ค้นหาผู้ใช้ : </b></label>
-                    <input class="col-md-6 form-control" placeholder="ค้นหาผู้ใช้" 
+            <br /><br className="d-none d-md-block" /><br className="d-none d-lg-block" />
+            <div className="container">
+                <h2><i className="fa fa-bar-chart"></i> Rating </h2><br />
+                <div className="container row align-items-baseline">
+                    <label className="col-md-2 text-nowrap"><b>ค้นหาผู้ใช้ : </b></label>
+                    <input className="col-md-6 form-control" placeholder="ค้นหาผู้ใช้" 
                         value={searchState}
                         onChange={updateSearch}/>
-                    <div class="col-md-4"></div>
+                    <div className="col-md-4"></div>
                 </div>
                 <hr />
                 < UserTable user={filteredUser}/>

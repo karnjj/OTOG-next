@@ -16,7 +16,7 @@ export const login = (token) => {
 
 export const auth = async ctx => {
     const { token } = nextCookie(ctx)
-    let url = 'http://localhost:8000/api/auth'
+    let url = `${process.env.API_URL}/api/auth`
     let headers = { "Content-Type": "application/json" }
     if (token) {
         headers["Authorization"] = token;

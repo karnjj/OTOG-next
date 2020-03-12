@@ -6,7 +6,7 @@ import Submit from '../../components/Submit';
 const openPDF = props => {
     const router = useRouter()
     const { name } = router.query
-    const url = 'http://localhost:8000/api/docs/' + name
+    const url = `${process.env.API_URL}/api/docs/${name}`
     return (
         <App>
             <Navbar fixed="top" expand="sm" bg="dark" variant="dark">
