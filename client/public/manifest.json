@@ -1,0 +1,22 @@
+{
+    "icons": [
+      {
+        "src": "/logo196.png",
+        "sizes": "196x196",
+        "type": "image/png"
+      },
+      {
+        "src": "/logo512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "name": "OTOG",
+    "short_name": "OTOG",
+    "orientation": "portrait",
+    "display": "standalone",
+    "start_url": "/",
+    "description": "My awesome Progressive Web App!",
+    "background_color": "#ffffff",
+    "theme_color": "#ff851b"
+  }
