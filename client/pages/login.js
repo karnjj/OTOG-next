@@ -17,7 +17,7 @@ export default function Login() {
     }
     const handleSubmit = async (event) => {
         event.preventDefault()
-        const url = `${procress.env.API_URL}/api/login`
+        const url = `${process.env.API_URL}/api/login`
         try {
             const response = await fetch(url, {
                 method: 'POST',
