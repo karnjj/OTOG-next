@@ -36,7 +36,7 @@ const ProbData = (props) => (
         return (
             <tr key={id_Prob}>
                 <td>{id_Prob}</td>
-                <td><Link href={`/problem/${sname}`}>
+                <td><Link href="/problem/[name]" as={`/problem/${sname}`}>
                     <a className='otogtxt'>{name}<br />({time} วินาที {memory} MB)</a>
                 </Link></td>
                 <td><Popup trigger={<div>{pass ? pass.length : 0}</div>} position="left center">
