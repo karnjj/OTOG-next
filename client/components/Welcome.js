@@ -7,7 +7,7 @@ const Welcome = (props) => {
     const [noSub,setnoSub] = useState(0)
     useEffect(() => {
         const fetchData = async () => {
-            let url = 'http://localhost:8000/api/countProblem'
+            let url = `${process.env.API_URL}/api/countProblem`
             let headers = { "Content-Type": "application/json" }
             headers["Authorization"] = props.userData.id;
             const response = await fetch(url, { headers, })
