@@ -43,7 +43,7 @@ const ProbData = (props) => (
                     <div>{pass==undefined ? '' :pass.map((item,i) => <div key={i}>{item}</div>)}</div>
                 </Popup></td>
                 <td>0</td>
-                {isLogin(props.userData) && <td><Submit {...problem}></Submit></td>}
+                {isLogin(props.userData) && <td><Submit {...problem} userData={props.userData}></Submit></td>}
             </tr>
         )
     })

@@ -7,6 +7,9 @@ const logger = require('morgan');
 const sha256 = require('js-sha256');
 const cookieParser = require('cookie-parser')
 const mysql = require('mysql')
+const multer = require('multer')
+const path = require('path')
+const mkdirp = require('mkdirp');
 const db = mysql.createConnection({
 	host: 'localhost',
 	port: '3306',
@@ -15,14 +18,6 @@ const db = mysql.createConnection({
 	database: 'OTOG'
 })
 db.connect()
-/*
-const mongodb = require("mongodb");
-const client = mongodb.MongoClient;
-const CONN_URL = "mongodb+srv://admin:0000@otog-w9ssf.gcp.mongodb.net/test?retryWrites=true&w=majority";
-let mongoClient = null;
-client.connect(CONN_URL,{ useNewUrlParser: true,useUnifiedTopology: true }, function (err, DBclient) {
-	mongoClient = DBclient;
- })*/
 process.env.SECRET_KEY = fs.readFileSync('./private.key', 'utf8');
 process.env.PUBLIC_KEY = fs.readFileSync('./public.key', 'utf8');
 var app = express()
@@ -102,10 +97,7 @@ app.get('/api/user', (req, res) => {
 	let sql = "SELECT sname,rating FROM User inner join Result as R on User.idUser = R.user_id " +
 		"where contestmode is not null and state = 1 group by sname order by rating desc"
 	db.query(sql, function (err, result) {
-		console.log(err);
 		if (err) res.status(400).send(err);
-		console.log(result);
-
 		res.json(result);
 	});
 })
@@ -114,18 +106,12 @@ app.get('/api/countProblem', (req, res) => {
 	let idUser = req.headers.authorization
 	let allProblem = new Promise((resolve, reject) => {
 		let sql = 'select count(*) as allP from Problem where state = 1'
-		db.query(sql, (err, result) => {
-			if (err) reject(err)
-			resolve(result)
-		})
+		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
 	})
 	let allUserDo = new Promise((resolve, reject) => {
 		let sql = 'SELECT r1.* FROM Result r1 inner join ( select prob_id,max(time) as maxTime '
 			+ 'from Result where user_id = ? group by prob_id) r2 on r1.prob_id = r2.prob_id and r1.time = r2.maxTime'
-		db.query(sql, [idUser], (err, result) => {
-			if (err) reject(err)
-			resolve(result)
-		})
+		db.query(sql, [idUser], (err, result) => err ? reject(err) : resolve(result))
 	})
 	Promise.all([allProblem, allUserDo]).then((result) => {
 		let passProb = 0;
@@ -135,11 +121,38 @@ app.get('/api/countProblem', (req, res) => {
 			if (result[1][i].score == 100) passProb++
 			else wrongProb++
 		}
-		res.json({ allProblem: result[0][0].allP, userProblem: { passProb, wrongProb } })
+		res.json({
+			allProblem: result[0][0].allP,
+			userProblem: { passProb, wrongProb }
+		})
 	})
 })
 app.get('/api/docs/:name', (req, res) => {
 	res.sendFile(__dirname + '/docs/' + req.params.name + '.pdf');
+})
+var storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		var idUser = req.headers.authorization
+		mkdirp(`uploaded/${idUser}`).then(made => {
+			cb(null, `uploaded/${idUser}`)
+		})
+	},
+	filename: function (req, file, cb) {
+		var idProb = req.params.id
+		var time = req.body.time
+		var fileExt = path.extname(file.originalname)
+		cb(null, `${idProb}_${time}${fileExt}`)
+	}
+})
+var upload = multer({ storage: storage })
+app.post('/api/upload/:id', upload.single('file'), (req, res) => {
+	var time = req.body.time
+	var idProb = req.params.id
+	var idUser = req.headers.authorization
+	var sql = "INSERT INTO Result (time, user_id, prob_id, status,contestmode) VALUES ?";
+	var values = [[time, idUser, idProb, 0, null],];
+	con.query(sql, [values], (err, result) => err || console.log(err))
+	res.status(200).json({ msg: 'Upload Complete!' })
 })
 app.listen(PORT, () => {
 	console.log("Starting server at PORT " + PORT)

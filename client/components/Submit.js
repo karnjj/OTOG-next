@@ -1,16 +1,19 @@
 import { useState } from 'react'
 import { Modal, Form } from 'react-bootstrap'
 import OrangeButton from './OrangeButton'
-
+import fetch from 'isomorphic-unfetch'
 const Submit = (props) => {
-    const { name } = props
-    const [ show, setShow ] = useState(false)
-    const [ fileName, setFileName ] = useState('')
-    const [ selectedFile, setSelectedFile] = useState(undefined)
+    const { name, id_Prob } = props
+    const [show, setShow] = useState(false)
+    const [fileName, setFileName] = useState('')
+    const [fileLang, setFileLang] = useState('C++')
+    const [selectedFile, setSelectedFile] = useState(undefined)
 
     const handleShow = () => setShow(true)
     const handleClose = () => setShow(false)
-    const uploadFile = event => {
+    const selectLang = event => setFileLang(event.target.value)
+    
+    const selectFile = event => {
         if (event.target.files[0] !== undefined) {
             setSelectedFile(event.target.files[0])
             setFileName(event.target.files[0].name)
@@ -19,7 +22,24 @@ const Submit = (props) => {
             setFileName('')
         }
     }
-
+    const uploadFile = async (e) => {
+        e.preventDefault()
+        if (selectedFile === undefined) return false
+        const timeStamp = Math.floor(Date.now()/1000)
+        const data = new FormData()
+        data.append('file', selectedFile)
+        data.append('fileLang', fileLang)
+        data.append('time', timeStamp)
+        const url = `${process.env.API_URL}/api/upload/${id_Prob}`
+        const respone = await fetch(url, {
+            method: 'POST',
+            headers: {
+                authorization: props.userData.id
+            },
+            body: data
+        })
+        if(respone.ok) window.location.reload(false)
+    }
     return (
         <>
             <OrangeButton onClick={handleShow}>Submit</OrangeButton>
@@ -27,20 +47,20 @@ const Submit = (props) => {
                 <Modal.Header closeButton>
                     <Modal.Title>{name}</Modal.Title>
                 </Modal.Header>
-                <Form action='upload' method='post'>
+                <Form >
                     <Modal.Body>
                         <div className='custom-file'>
-                            <input accept='.c,.cpp' type='file' className='custom-file-input' onChange={uploadFile}/>
+                            <input accept='.c,.cpp' type='file' className='custom-file-input' onChange={selectFile} />
                             <label className='custom-file-label'>{fileName || 'Choose file'}</label>
-                        </div><br/><br/>
+                        </div><br /><br />
                         <Form.Label>Choose Language</Form.Label>
-                        <Form.Control as='select'>
+                        <Form.Control as='select' onChange={selectLang}>
                             <option>C++</option>
                             <option>C</option>
                         </Form.Control>
                     </Modal.Body>
                     <Modal.Footer>
-                        <OrangeButton type='submit'>Submit</OrangeButton>
+                        <OrangeButton type='submit' onClick={uploadFile}>Submit</OrangeButton>
                     </Modal.Footer>
                 </Form>
             </Modal>
