@@ -1,10 +1,13 @@
+const withPlugins = require('next-compose-plugins');
 const withCSS = require('@zeit/next-css')
-require('dotenv').config();
+const withOffline = require('next-offline')
 const prod = process.env.NODE_ENV === 'production'
-module.exports = withCSS(
-    {
-        env: {
-            API_URL: prod ? 'https://otog.cf' : 'http://localhost:8000'
-        }
+const nextConfig = {
+    env: {
+        API_URL: prod ? 'https://otog.cf' : 'http://localhost:8000'
     }
-)
+}
+module.exports = withPlugins([
+    [withCSS],
+    [withOffline]
+], nextConfig)

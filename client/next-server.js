@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path')
 const next = require("next");
 const dev = process.env.NODE_ENV !== "production";
 const port = process.env.PORT || 3002
@@ -9,7 +10,7 @@ app
   .prepare()
   .then(() => {
     const server = express();
-
+    server.use('/service-worker.js', express.static(path.join(__dirname, '.next', '/service-worker.js')))
     server.get("*", (req, res) => {
       return handle(req, res);
     });
