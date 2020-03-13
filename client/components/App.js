@@ -6,7 +6,7 @@ export default function App({ children }) {
     return(
         <main>
             <Head>
-                <title>openOTOG</title>
+                <title>OTOG</title>
                 <link rel="manifest" href="/manifest.json" />
                 <link rel="apple-touch-icon" href="/logoIOS.png"></link>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
