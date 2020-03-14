@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header'
 import fetch from 'isomorphic-unfetch'
-import App from '../components/App'
 import { withAuthSync } from '../utils/auth'
 import UserTable from '../components/UserTable';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChartBar } from '@fortawesome/free-solid-svg-icons'
 const Rating = (props) => {
-    const userData = props.jsData
     const [userState, setUserState] = useState([])
     const [searchState, setsearchState] = useState('')
     useEffect(() => {
@@ -24,11 +23,10 @@ const Rating = (props) => {
         return (user.sname.indexOf(searchState)!==-1)
     })
     return (
-        <App>
-            <Header userData={userData} />
+        <>
             <br /><br className="d-none d-md-block" /><br className="d-none d-lg-block" />
             <div className="container">
-                <h2><i className="fa fa-bar-chart"></i> Rating </h2><br />
+                <h2><FontAwesomeIcon icon={faChartBar} /> Rating </h2><br />
                 <div className="container row align-items-baseline">
                     <label className="col-md-2 text-nowrap"><b>ค้นหาผู้ใช้ : </b></label>
                     <input className="col-md-6 form-control" placeholder="ค้นหาผู้ใช้" 
@@ -39,7 +37,7 @@ const Rating = (props) => {
                 <hr />
                 < UserTable user={filteredUser}/>
             </div>
-        </App>
+        </>
     )
 }
 export default withAuthSync(Rating)

@@ -4,8 +4,8 @@ import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
 import fetch from 'isomorphic-unfetch'
 
-export const isLogin = jsData => {
-    if(jsData) return true
+export const isLogin = token => {
+    if(token) return true
     else false
 }
 

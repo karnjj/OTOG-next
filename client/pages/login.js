@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import cookie from "js-cookie";
 import Router from "next/router";
-import App from "../components/App";
 import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
 import { login } from '../utils/auth'
@@ -45,7 +43,7 @@ export default function Login() {
         setError(false)
     }
     return (
-        <App>
+        <>
             <div className="container">
                 <div className="row">
                     <div className="col-1 col-md-3 col-lg-4"></div>
@@ -95,6 +93,6 @@ export default function Login() {
                     <div className="col-1 col-md-3 col-lg-4"></div>
                 </div>
             </div>
-        </App>
+        </>
     )
 }
