@@ -8,10 +8,11 @@ export default {
     pupil: '#66d9ef',
     admin: '#000000',
 
+    //normal color
     otog: '#ff851b',
     orange: '#ff851b',
     white: '#ffffff',
-    gray: '111111',
+    gray: '#111111',
     green: '#41e241',
     red: '#ff4d4d',
     org: '#ffad33',

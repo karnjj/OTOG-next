@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Modal, Form } from 'react-bootstrap'
 import OrangeButton from './OrangeButton'
 import fetch from 'isomorphic-unfetch'
+
 const Submit = (props) => {
     const { name, id_Prob } = props
     const [show, setShow] = useState(false)

@@ -25,22 +25,22 @@ const Welcome = (props) => {
             <ul className="d-flex justify-content-center flex-wrap p-0 list-unstyled">
                 <li><div className="count_button black select-none">
                     <h5 className="font_white cnt_msg">ทั้งหมด</h5>
-                    <code className="font_white cnt_num"><CountUp end={allProb}/></code>
+                    <CountUp end={allProb} className="font_white cnt_num"/>
                 </div>
                 </li>
                 <li><div className="count_button green select-none">
                     <h5 className="font_white cnt_msg">ผ่านแล้ว</h5>
-                    <code className="font_white cnt_num"><CountUp end={passProb}/></code>
+                    <CountUp end={passProb} className="font_white cnt_num"/>
                 </div>
                 </li>
                 <li><div className="count_button red select-none">
                     <h5 className="font_white cnt_msg">ยังไม่ผ่าน</h5>
-                    <code className="font_white cnt_num"><CountUp end={wrongProb}/></code>
+                    <CountUp end={wrongProb} className="font_white cnt_num"/>
                 </div>
                 </li>
                 <li><div className="count_button org select-none">
                     <h5 className="font_white cnt_msg">ยังไม่ส่ง </h5>
-                    <code className="font_white cnt_num"><CountUp end={noSub}/></code>
+                    <CountUp end={noSub} className="font_white cnt_num"/>
                 </div>
                 </li>
                 <li><div className="count_button blue select-none">
