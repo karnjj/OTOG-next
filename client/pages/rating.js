@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import fetch from 'isomorphic-unfetch'
 import App from '../components/App'
 import { withAuthSync } from '../utils/auth'
-import UserTable from '../components/UserTable';
+import UserTable from '../components/UserTable'
+
 const Rating = (props) => {
     const userData = props.jsData
     const [userState, setUserState] = useState([])
@@ -25,8 +26,8 @@ const Rating = (props) => {
     })
     return (
         <App>
-            <Header userData={userData} />
-            <br /><br className="d-none d-md-block" /><br className="d-none d-lg-block" />
+            <Header {...{userData}} />
+            <br/><br className="d-none d-md-block" /><br className="d-none d-lg-block" />
             <div className="container">
                 <h2><i className="fa fa-bar-chart"></i> Rating </h2><br />
                 <div className="container row align-items-baseline">
@@ -36,8 +37,8 @@ const Rating = (props) => {
                         onChange={updateSearch}/>
                     <div className="col-md-4"></div>
                 </div>
-                <hr />
-                < UserTable user={filteredUser}/>
+                <hr/>
+                <UserTable user={filteredUser}/>
             </div>
         </App>
     )

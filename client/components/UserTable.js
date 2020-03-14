@@ -1,14 +1,8 @@
-import { Table } from 'react-bootstrap'
 import styled from 'styled-components'
 import vars from '../styles/vars'
+import { CustomTable } from './CustomTable'
 
-const Tr = styled.tr`
-    color: ${vars.orange};
-`
-const CenteredTable = styled(Table)`
-    text-align: center;
-`
-const ColoredName = styled.td`
+const Nametd = styled.td`
     color: ${props => {
         if (props.score >= 2000) {
             return vars.grandmaster
@@ -21,26 +15,26 @@ const ColoredName = styled.td`
 `
 
 const UserTable = (props) => (
-    <CenteredTable hover responsive>
+    <CustomTable>
         <thead>
-            <Tr>
+            <tr>
                 <th>#</th>
                 <th>Name</th>
                 <th>Rating</th>
                 <th>Passed</th>
-            </Tr>
+            </tr>
         </thead>
         <tbody>
         {props.user.map((user, index) => (
             <tr key={index}>
                 <td>{index + 1}</td>
-                <ColoredName score={user.rating}>{user.sname}</ColoredName>
+                <Nametd score={user.rating}>{user.sname}</Nametd>
                 <td>{user.rating}</td>
                 <td>0</td>
             </tr>
         ))}
         </tbody>
-    </CenteredTable>
+    </CustomTable>
 )
 
 export default UserTable

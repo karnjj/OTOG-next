@@ -5,7 +5,7 @@ import breakpoints from '../styles/breakpoints'
 import '../styles/style.css'
 
 export default function App({ children }) {
-    return(
+    return (
         <main>
             <Head>
                 <title>OTOG</title>
