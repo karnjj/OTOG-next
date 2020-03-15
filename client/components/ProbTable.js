@@ -4,6 +4,20 @@ import Popup from 'reactjs-popup'
 import { isLogin } from '../utils/auth'
 import { CustomTr, CustomTable } from './CustomTable'
 import styled from 'styled-components'
+import vars from '../styles/vars'
+
+const CenteredTable = styled(Table)`
+    text-align: center;
+    th, a {
+        color: ${vars.orange};
+    }
+`
+const Tr = styled.tr`
+    background: ${props => props.accept ? `rgb(235,255,235)` : props.wrong && `rgb(255,235,235)`};
+    & hover {
+        background: ${props => props.accept ? `rgb(235,255,235)` : props.wrong && `rgb(255,235,235)`};
+    }
+`
 
 const ProbTable = (props) => (
     <CustomTable>
@@ -26,7 +40,7 @@ const ProbData = ({ problems, userData }) => (
     problems === undefined ? null : problems.map(problem => {
         const { id_Prob, name, time, memory, sname, pass } = problem
         return (
-            <CustomTr key={id_Prob} accept={false} wrong={false} >
+            <Tr key={id_Prob} accept={problem.acceptState} wrong={problem.wrongState} >
                 <td>{id_Prob}</td>
                 <td><Link href="/problem/[name]" as={`/problem/${sname}`}>
                     <a>{name}<br />({time} วินาที {memory} MB)</a>

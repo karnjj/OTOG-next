@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-import App from '../../components/App';
 import { Navbar, Nav  } from 'react-bootstrap';
 import { withAuthSync } from '../../utils/auth';
 import Submit from '../../components/Submit';
@@ -8,7 +7,7 @@ const openPDF = props => {
     const { name } = router.query
     const url = `${process.env.API_URL}/api/docs/${name}`
     return (
-        <App>
+        <>
             <Navbar fixed="top" expand="sm" bg="dark" variant="dark">
                 <Navbar.Brand>{name}</Navbar.Brand>
                 <Nav className="mr-auto" ></Nav>
@@ -27,7 +26,7 @@ const openPDF = props => {
                     width: 100vw;
                 }
                 `}</style>
-        </App>
+        </>
     )
 }
 export default withAuthSync(openPDF)

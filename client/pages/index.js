@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import App from '../components/App'
 import fetch from 'isomorphic-unfetch'
-import Header from '../components/Header'
 import ProbTable from '../components/ProbTable'
 import { withAuthSync, isLogin } from '../utils/auth'
 import Welcome from '../components/Welcome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faQuestion, faFlagCheckered, faTrophy, faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 
 const Index = (props) => {
     const userData = props.jsData
@@ -12,18 +12,19 @@ const Index = (props) => {
     useEffect(() => {
         const fetchData = async () => {
             const url = `${process.env.API_URL}/api/problem?mode=firstpage`
-            const res = await fetch(url)
+            let headers = { "Content-Type": "application/json" }
+            headers["Authorization"] = userData ? userData.id : '';
+            const res = await fetch(url, { headers, })
             const json = await res.json()
             setTaskState(json)
-          }
+        }
         fetchData()
-    },[])
+    }, [])
     return (
-        <App>
-            <Header userData={userData}/>
+        <>
             <div className="jumbotron">
                 <div className="container">
-                    {isLogin(userData) ? <Welcome userData={userData}/> : <div>
+                    {isLogin(userData) ? <Welcome userData={userData} /> : <div>
                         <h1>Welcome to <b>
                             <code className="font_green">O</code>
                             <code className="font_red">T</code>
@@ -39,19 +40,19 @@ const Index = (props) => {
             <div className="container">
                 <div className="row">
                     <div className="col-md-4 suggest px-5 p-md-3">
-                        <h2><i className="fa fa-question"></i> FAQ</h2>
+                        <h2><FontAwesomeIcon icon={faQuestion} /> FAQ</h2>
                         <p> ไม่รู้ว่าจะเริ่มต้นอย่างไร ทุกอย่างดูงงไปหมด ถ้าหากคุณมีปัญหาเหล่านี้สามารถ หาคำตอบได้จาก คำถามยอดนิยมที่ผู้ใช้ส่วนใหญ่มักจะถามเป็นประจำ </p>
                         <a href="#" target="_blank" className="btn btn-lg otogbtn">Learn More</a>
                         <br /><br />
                     </div>
                     <div className="col-md-4 suggest px-5 p-md-3">
-                        <h2><i className="fa fa-flag-checkered"></i> Get started</h2>
+                        <h2><FontAwesomeIcon icon={faFlagCheckered} /> Get started</h2>
                         <p> เพิ่งเริ่มการเดินทาง อาจจะอยากได้การต้อนรับที่ดี ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน competitive programming </p>
                         <a href="problems" target="_blank" className="btn btn-lg otogbtn">View Problem</a>
                         <br /><br />
                     </div>
                     <div className="col-md-4 suggest px-5 p-md-3">
-                        <h2><i className="fa fa-trophy"></i> Contest</h2>
+                        <h2><FontAwesomeIcon icon={faTrophy} /> Contest</h2>
                         <p> ทำโจทย์คนเดียวมันอาจจะเหงา ลองมาเข้า contest การแข่งขันอันทรงเกียรติ (?) เพื่อจะได้มีเพื่อนทำโจทย์และแข่งขันไปพร้อมๆกันกับเรา </p>
                         <a href="contest" target="_blank" className="btn btn-lg otogbtn">Join Contest</a>
                         <br /><br />
@@ -59,12 +60,12 @@ const Index = (props) => {
                 </div>
                 <div>
                     <i className="glyphicon glyphicon-asterisk"></i>
-                    <h2><i className="fa fa-puzzle-piece"></i> โจทย์ใหม่</h2>
+                    <h2><FontAwesomeIcon icon={faPuzzlePiece} /> โจทย์ใหม่</h2>
                 </div>
                 <hr />
-                <ProbTable problems={taskState} userData={userData}/>
+                <ProbTable problems={taskState} userData={userData} />
             </div>
-        </App>
+        </>
     )
 }
 export default withAuthSync(Index)
