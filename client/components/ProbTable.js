@@ -13,9 +13,9 @@ const CenteredTable = styled(Table)`
     }
 `
 const Tr = styled.tr`
-    background: ${props => props.accept ? rgb(235,255,235) : props.wrong && rgb(255,235,235)};
+    background: ${props => props.accept ? `rgb(235,255,235)` : props.wrong && `rgb(255,235,235)`};
     & hover {
-        background: ${props => props.accept ? rgb(235,255,235) : props.wrong && rgb(255,235,235)};
+        background: ${props => props.accept ? `rgb(235,255,235)` : props.wrong && `rgb(255,235,235)`};
     }
 `
 
@@ -40,7 +40,7 @@ const ProbData = ({ problems, userData }) => (
     problems === undefined ? null : problems.map(problem => {
         const { id_Prob, name, time, memory, sname, pass } = problem
         return (
-            <Tr key={id_Prob} accept={false} wrong={false} >
+            <Tr key={id_Prob} accept={problem.acceptState} wrong={problem.wrongState} >
                 <td>{id_Prob}</td>
                 <td><Link href="/problem/[name]" as={`/problem/${sname}`}>
                     <a className='otogtxt'>{name}<br />({time} วินาที {memory} MB)</a>

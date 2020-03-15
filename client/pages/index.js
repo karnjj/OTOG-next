@@ -12,7 +12,9 @@ const Index = (props) => {
     useEffect(() => {
         const fetchData = async () => {
             const url = `${process.env.API_URL}/api/problem?mode=firstpage`
-            const res = await fetch(url)
+            let headers = { "Content-Type": "application/json" }
+            headers["Authorization"] = userData.id;
+            const res = await fetch(url, { headers, })
             const json = await res.json()
             setTaskState(json)
         }

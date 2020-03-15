@@ -11,7 +11,10 @@ const Problem = (props) => {
 	const [searchState, setsearchState] = useState('')
 	useEffect(() => {
 		const fetchData = async () => {
-			const res = await fetch('http://localhost:8000/api/problem?mode=full')
+			const url = `${process.env.API_URL}/api/problem?mode=full`
+			let headers = { "Content-Type": "application/json" }
+            headers["Authorization"] = userData.id;
+            const res = await fetch(url, { headers, })
 			const json = await res.json()
 			setTaskState(json)
 		}
