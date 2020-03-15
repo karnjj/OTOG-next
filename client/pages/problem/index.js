@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { withAuthSync } from '../../utils/auth'
+
 import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
-import ProbTable from '../../components/ProbTable';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
-	import { withAuthSync } from '../../utils/auth';
+
+import { Row, Col, Form, Container } from 'react-bootstrap'
+import OrangeButton from '../../components/OrangeButton'
+import ProbTable from '../../components/ProbTable'
+
 const Problem = (props) => {
 	const userData = props.jsData
 	const [taskState, setTaskState] = useState([])
@@ -30,16 +36,20 @@ const Problem = (props) => {
 	})
 	return (
 		<>
-			<div className="container">
-				<br /><br /><br /><h2> <FontAwesomeIcon icon={faPuzzlePiece}/> Problem </h2><br />
-				<div className="row m-auto justify-content-between align-items-baseline">
-					<input className="col-12 col-sm-6 col-md-8 form-control" placeholder="ค้นหาโจทย์"
+			<Container>
+				<br /><br /><br />
+				<h2> <FontAwesomeIcon icon={faPuzzlePiece}/> Problem </h2>
+				<br />
+				<Row className='m-auto justify-content-between align-items-baseline'>
+					<Col as={Form.Control} sm={6} md={8} placeholder='ค้นหาโจทย์'
 						value={searchState}
-						onChange={updateSearch} />
-					<a href="submission" className="col-12 col-sm-4 col-md-3 col-lg-2 btn otogbtn mt-1">View Submission</a>
-				</div> <hr></hr>
+						onChange={updateSearch}
+					/>
+					<Col as={OrangeButton} sm={4} md={3} lg={2} href='submission'>View Submission</Col>
+				</Row>
+				<hr/>
 				<ProbTable problems={filteredTask} {...{ userData }} />
-			</div>
+			</Container>
 		</>
 	)
 }

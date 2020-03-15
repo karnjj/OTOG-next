@@ -7,7 +7,7 @@ import { ThemeProvider } from 'styled-components'
 import breakpoints from '../styles/breakpoints'
 import { isLogin } from '../utils/auth'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import '../styles/style.css'
+//import '../styles/style.css'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 config.autoAddCss = false 

@@ -5,7 +5,7 @@ import { Modal, Form } from 'react-bootstrap'
 import OrangeButton from './OrangeButton'
 
 const Submit = (props) => {
-    const { name, id_Prob } = props
+    const { name, id_Prob, userData } = props
     const [show, setShow] = useState(false)
     const [fileName, setFileName] = useState('')
     const [fileLang, setFileLang] = useState('C++')
@@ -36,7 +36,7 @@ const Submit = (props) => {
         const respone = await fetch(url, {
             method: 'POST',
             headers: {
-                authorization: props.userData.id
+                authorization: userData.id
             },
             body: data
         })
