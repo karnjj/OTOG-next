@@ -1,36 +1,3 @@
-.otogtxt{
-  color: #FF851B;
-}
-/*
-.AC{
-  background-color: rgb(235,255,235);
-}
-.WA{
-  background-color: rgb(255,235,235);
-}
-.table-hover tbody tr:hover td.AC{
-  background-color: rgb(205,225,205);
-}
-.table-hover tbody tr:hover td.WA{
-  background-color: rgb(225,205,205);
-}
-*/
-.cnt_msg{
-    font-family: Calibri;
-    font-size: 15px;
-    margin-top:10px;
-    margin-bottom:0px;
-    font-weight:600;
-    text-align: center;
-}
-.cnt_num{
-  font-family: Calibri;
-    font-size: 50px;
-    margin-top:-5px;
-    font-weight:100;
-    text-align: center;
-}
-
 .font_white {
   color: #FFFFFF !important;
 }

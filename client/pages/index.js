@@ -9,6 +9,7 @@ import { faQuestion, faFlagCheckered, faTrophy, faPuzzlePiece } from '@fortaweso
 const Index = (props) => {
     const userData = props.jsData
     const [taskState, setTaskState] = useState([])
+    
     useEffect(() => {
         const fetchData = async () => {
             const url = `${process.env.API_URL}/api/problem?mode=firstpage`
@@ -20,6 +21,7 @@ const Index = (props) => {
         }
         fetchData()
     }, [])
+    
     return (
         <>
             <div className="jumbotron">

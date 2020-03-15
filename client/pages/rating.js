@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import fetch from 'isomorphic-unfetch'
 import { withAuthSync } from '../utils/auth'
-import UserTable from '../components/UserTable';
+import UserTable from '../components/UserTable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
+
 const Rating = (props) => {
     const [userState, setUserState] = useState([])
     const [searchState, setsearchState] = useState('')

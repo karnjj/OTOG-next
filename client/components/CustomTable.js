@@ -1,14 +1,21 @@
-import { Table } from 'react-bootstrap'
-import styled from 'styled-components'
 import vars from '../styles/vars'
+import styled from 'styled-components'
+
+import { Table } from 'react-bootstrap'
 
 export const CustomTr = styled.tr`
-    background: ${props => props.accept ? '#ebffeb' : props.wrong && '#ffebeb'};
+    background: ${props => props.acceptState ? 
+        ('#ebffeb') : (props.wrongState && '#ffebeb')
+    };
 `
 const CenterTable = styled(Table)`
     text-align: center;
     th, a {
         color: ${vars.orange};
+        &:hover {
+            color: ${vars.orange};
+            cursor: pointer;
+        }
     }
 `
 export const CustomTable = ({ children }) => (
