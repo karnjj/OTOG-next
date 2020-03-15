@@ -13,7 +13,7 @@ const Index = (props) => {
         const fetchData = async () => {
             const url = `${process.env.API_URL}/api/problem?mode=firstpage`
             let headers = { "Content-Type": "application/json" }
-            headers["Authorization"] = userData.id;
+            headers["Authorization"] = userData ? userData.id : '';
             const res = await fetch(url, { headers, })
             const json = await res.json()
             setTaskState(json)
