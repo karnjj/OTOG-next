@@ -9,7 +9,7 @@ import Submit from '../../components/Submit'
 import styled from 'styled-components'
 
 const StyledNavbar = styled(Navbar)`
-    top: ${props => props.hide ? '-56px' : '0'};
+    top: ${props => /*props.hide ? '-56px' : */'0'};
     transition: top 0.2s;
 `
 const Iframe = styled.object`
@@ -22,10 +22,19 @@ const Iframe = styled.object`
 
 const PDFReader = (props) => {
     const { url } = props
-    //const [scroll, setScroll] = useState(0)
+    const [scroll, setScroll] = useState(0)
     const [contentRef, setContentRef] = useState(null)
-    if(contentRef)console.log(contentRef.contentWindow)
-    //console.log(obj.contentWindow.document.body.scrollHeight)
+    const obj = contentRef && contentRef.contentWindow
+    console.log(`initially : ${obj}`)
+    const onScroll = () => {
+        setScroll(obj.document.body.scrollTop)
+        console.log(`scroll: ${scroll}`)
+    }
+    if (obj) {
+        console.log(`top: ${obj.document.body.scrollTop}`)
+        //obj.addEventListener('scroll', onScroll)
+        setTimeout(onScroll, 1000)
+    }
     return (
         <Iframe id='pdfreader' data={url} ref={setContentRef} type='application/pdf'/>
     )
@@ -36,7 +45,7 @@ const OpenPDF = (props) => {
     const { name } = router.query
     const url = `${process.env.API_URL}/api/docs/${name}`
 
-    const [hidden, setHidden] = useState('true')
+    const [hidden, setHidden] = useState('')
     return (
         <>
             <StyledNavbar fixed='top' expand='sm' bg='dark' variant='dark' hide={hidden}>
@@ -51,4 +60,4 @@ const OpenPDF = (props) => {
         </>
     )
 }
-export default OpenPDF
+export default withAuthSync(OpenPDF)

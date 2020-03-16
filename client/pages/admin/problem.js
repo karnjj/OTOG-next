@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 import { withAuthSync } from '../../utils/auth'
 import fetch from 'isomorphic-unfetch'
+
 const Problem = (props) => {
 	const userData = props.jsData
 	const [taskState, setTaskState] = useState([])
