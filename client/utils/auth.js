@@ -33,7 +33,7 @@ export const auth = async ctx => {
 export const logout = () => {
     cookie.remove('token')
     window.localStorage.setItem('logout', Date.now())
-    Router.push('/')
+    window.location.reload(false)
 }
 
 export const withAuthSync = WrappedComponent => {
