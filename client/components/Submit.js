@@ -47,17 +47,17 @@ const Submit = (props) => {
     }
     return (
         <>
-        { acceptState || wrongState ? (
+        {acceptState || wrongState ? (
             <ButtonGroup>
                 <OrangeButton onClick={handleShow}>
                     <FontAwesomeIcon icon={faFileUpload}/>
                 </OrangeButton>
-                <OrangeButton outline>
+                <OrangeButton outline='true'>
                     <FontAwesomeIcon icon={faCode}/>
                 </OrangeButton>
             </ButtonGroup>
         ) : (
-            <OrangeButton expand onClick={handleShow}>
+            <OrangeButton expand='true' onClick={handleShow}>
                 <FontAwesomeIcon icon={faFileUpload}/>
             </OrangeButton>
         )}

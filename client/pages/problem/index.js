@@ -48,7 +48,7 @@ const Problem = (props) => {
 				<Col as={OrangeButton} sm={4} md={3} lg={2} href='submission'>View Submission</Col>
 			</Row>
 			<hr/>
-			<ProbTable problems={filteredTask} {...{ userData }} />
+			<ProbTable problems={filteredTask} {...{userData}} />
 			<Footer />
 		</Container>
 	)
