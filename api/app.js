@@ -10,6 +10,7 @@ const mysql = require('mysql')
 const multer = require('multer')
 const path = require('path')
 const mkdirp = require('mkdirp');
+const AdminRoute = require('./routes/admin')
 const db = mysql.createConnection({
 	host: 'localhost',
 	port: '3306',
@@ -176,6 +177,19 @@ app.post('/api/upload/:id', upload.single('file'), (req, res) => {
 	var values = [[time, idUser, idProb, 0, null],];
 	con.query(sql, [values], (err, result) => err || console.log(err))
 	res.status(200).json({ msg: 'Upload Complete!' })
+})
+
+
+
+/* Admin */
+
+
+app.get('/api/admin/problem',async (req,res) => {
+	var sql = 'select * from Problem'
+	let problem = await new Promise((resolve) => {
+		db.query(sql,(err,result) => resolve(result))
+	})  
+    res.json(problem)
 })
 app.listen(PORT, () => {
 	console.log("Starting server at PORT " + PORT)
