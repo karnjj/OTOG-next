@@ -29,7 +29,7 @@ const ProbData = ({ problems, userData }) => (
             <CustomTr key={id_Prob} {...{acceptState, wrongState}}>
                 <td>{id_Prob}</td>
                 <td><Link href="/problem/[name]" as={`/problem/${sname}`}>
-                    <a>{name}<br />({time} วินาที {memory} MB)</a>
+                    <a target='_blank'>{name}<br />({time} วินาที {memory} MB)</a>
                 </Link></td>
                 <td>
                 {pass ? (
@@ -43,7 +43,7 @@ const ProbData = ({ problems, userData }) => (
                 )}
                 </td>
                 <td>0</td>
-                {isLogin(userData) && <td><Submit  {...prob} {...{userData}}></Submit></td>}
+                {isLogin(userData) && <td><Submit  {...prob} {...{userData}}/></td>}
             </CustomTr>
         )
     })

@@ -97,7 +97,7 @@ const Login = () => (
     <PaddedForm>
         <Row>
             <Col xs={1} md={3} lg={4}/>
-            <Col xd={10} md={6} lg={4}><LoginCard/></Col>
+            <Col xs={10}md={6} lg={4}><LoginCard/></Col>
             <Col xs={1} md={3} lg={4}/>
         </Row>
     </PaddedForm>

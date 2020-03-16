@@ -36,23 +36,21 @@ const Problem = (props) => {
 		)
 	})
 	return (
-		<>
-			<Container>
-				<br /><br /><br />
-				<h2> <FontAwesomeIcon icon={faPuzzlePiece}/> Problem </h2>
-				<br />
-				<Row className='m-auto justify-content-between align-items-baseline'>
-					<Col as={Form.Control} sm={6} md={8} placeholder='ค้นหาโจทย์'
-						value={searchState}
-						onChange={updateSearch}
-					/>
-					<Col as={OrangeButton} sm={4} md={3} lg={2} href='submission'>View Submission</Col>
-				</Row>
-				<hr/>
-				<ProbTable problems={filteredTask} {...{ userData }} />
-				<Footer />
-			</Container>
-		</>
+		<Container>
+			<br /><br /><br />
+			<h2> <FontAwesomeIcon icon={faPuzzlePiece}/> Problem </h2>
+			<br />
+			<Row className='m-auto justify-content-between align-items-baseline'>
+				<Col as={Form.Control} sm={6} md={8} placeholder='ค้นหาโจทย์'
+					value={searchState}
+					onChange={updateSearch}
+				/>
+				<Col as={OrangeButton} sm={4} md={3} lg={2} href='submission'>View Submission</Col>
+			</Row>
+			<hr/>
+			<ProbTable problems={filteredTask} {...{ userData }} />
+			<Footer />
+		</Container>
 	)
 }
 
