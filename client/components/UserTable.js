@@ -25,7 +25,7 @@ const UserTable = (props) => (
             </tr>
         </thead>
         <tbody>
-        {props.user.map((user, index) => (
+        {props.users.map((user, index) => (
             <tr key={index}>
                 <td>{index + 1}</td>
                 <Nametd score={user.rating}>{user.sname}</Nametd>

@@ -4,6 +4,7 @@ import { withAuthSync, isLogin } from '../utils/auth'
 
 import { Jumbotron, Container, Row, Col } from 'react-bootstrap'
 import Hello from '../components/Hello'
+import Footer from '../components/Footer'
 import Welcome from '../components/Welcome'
 import ProbTable from '../components/ProbTable'
 import OrangeButton from '../components/OrangeButton'
@@ -61,6 +62,7 @@ const Index = (props) => {
                 </div>
                 <hr />
                 <ProbTable problems={taskState} {...{userData}} />
+                <Footer/>
             </Container>
         </>
     )

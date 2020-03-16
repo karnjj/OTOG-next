@@ -23,15 +23,16 @@ const ProbTable = (props) => (
 )
 
 const ProbData = ({ problems, userData }) => (
-    problems.map((problem) => {
-        const { id_Prob, name, time, memory, sname, pass, acceptState, wrongState } = problem
+    problems.map((prob) => {
+        const { id_Prob, name, time, memory, sname, pass, acceptState, wrongState } = prob
         return (
             <CustomTr key={id_Prob} {...{acceptState, wrongState}}>
                 <td>{id_Prob}</td>
                 <td><Link href="/problem/[name]" as={`/problem/${sname}`}>
                     <a>{name}<br />({time} วินาที {memory} MB)</a>
                 </Link></td>
-                <td>{pass ? (
+                <td>
+                {pass ? (
                     <Popup trigger={<a>{pass.length}</a>} position='left center'>
                         <div>{pass.map((item, i) => (
                             <div key={i}>{item}</div>
@@ -39,9 +40,10 @@ const ProbData = ({ problems, userData }) => (
                     </Popup>
                 ) : (
                     <div>0</div>
-                )}</td>
+                )}
+                </td>
                 <td>0</td>
-                {isLogin(userData) && <td><Submit  {...problem} {...{userData}}></Submit></td>}
+                {isLogin(userData) && <td><Submit  {...prob} {...{userData}}></Submit></td>}
             </CustomTr>
         )
     })

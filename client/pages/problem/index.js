@@ -10,6 +10,7 @@ import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 import { Row, Col, Form, Container } from 'react-bootstrap'
 import OrangeButton from '../../components/OrangeButton'
 import ProbTable from '../../components/ProbTable'
+import Footer from '../../components/Footer'
 
 const Problem = (props) => {
 	const userData = props.jsData
@@ -49,6 +50,7 @@ const Problem = (props) => {
 				</Row>
 				<hr/>
 				<ProbTable problems={filteredTask} {...{ userData }} />
+				<Footer />
 			</Container>
 		</>
 	)

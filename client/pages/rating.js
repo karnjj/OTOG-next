@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import fetch from 'isomorphic-unfetch'
 import { withAuthSync } from '../utils/auth'
+
+import { Container, Col, Row, Form } from 'react-bootstrap'
 import UserTable from '../components/UserTable'
+import Footer from '../components/Footer'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
 
@@ -25,19 +29,21 @@ const Rating = (props) => {
     })
     return (
         <>
-            <br /><br className="d-none d-md-block" /><br className="d-none d-lg-block" />
-            <div className="container">
-                <h2><FontAwesomeIcon icon={faChartBar} /> Rating </h2><br />
-                <div className="container row align-items-baseline">
-                    <label className="col-md-2 text-nowrap"><b>ค้นหาผู้ใช้ : </b></label>
-                    <input className="col-md-6 form-control" placeholder="ค้นหาผู้ใช้" 
+            <br /><br /><br />
+            <Container>
+                <h2><FontAwesomeIcon icon={faChartBar} /> Rating </h2>
+                <br />
+                <Row className='align-items-baseline'>
+                    <Col as='label' md={2}><b>ค้นหาผู้ใช้ : </b></Col>
+                    <Col as={Form.Control} md={6} placeholder='ค้นหาผู้ใช้'
                         value={searchState}
                         onChange={updateSearch}/>
-                    <div className="col-md-4"></div>
-                </div>
+                    <Col md={4}></Col>
+                </Row>
                 <hr/>
-                <UserTable user={filteredUser}/>
-            </div>
+                <UserTable users={filteredUser}/>
+                <Footer/>
+            </Container>
         </>
     )
 }
