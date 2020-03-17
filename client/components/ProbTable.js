@@ -5,6 +5,8 @@ import Popup from 'reactjs-popup'
 import { isLogin } from '../utils/auth'
 import { CustomTr, CustomTable } from './CustomTable'
 
+import ViewCodeButton from './ViewCodeButton'
+
 const ProbTable = (props) => (
     <CustomTable>
         <thead>
@@ -34,16 +36,22 @@ const ProbData = ({ problems, userData }) => (
                 <td>
                 {pass ? (
                     <Popup trigger={<a>{pass.length}</a>} position='left center'>
-                        <div>{pass.map((item, i) => (
+                        <div>
+                        {pass.map((item, i) => (
                             <div key={i}>{item}</div>
-                        ))}</div>
+                        ))}
+                        </div>
                     </Popup>
-                ) : (
-                    <div>0</div>
-                )}
+                ) : <div>0</div>}
                 </td>
                 <td>0</td>
-                {isLogin(userData) && <td><Submit  {...prob} {...{userData}}/></td>}
+                {isLogin(userData) && <td>
+                    <Submit  {...prob} {...{userData}}>
+                    {(acceptState || wrongState) &&
+                        <ViewCodeButton/>
+                    }
+                    </Submit>
+                </td>}
             </CustomTr>
         )
     })

@@ -1,6 +1,4 @@
-import ReactDOM from 'react-dom'
 import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react'
 import { withAuthSync } from '../../utils/auth'
 
 import { Navbar, Nav  } from 'react-bootstrap'
@@ -8,11 +6,7 @@ import Submit from '../../components/Submit'
 
 import styled from 'styled-components'
 
-const StyledNavbar = styled(Navbar)`
-    top: ${props => /*props.hide ? '-56px' : */'0'};
-    transition: top 0.2s;
-`
-const Iframe = styled.object`
+const Iframe = styled.iframe`
     display: block;
     background: #000;
     border: none; 
@@ -20,43 +14,20 @@ const Iframe = styled.object`
     width: 100vw;
 `
 
-const PDFReader = (props) => {
-    const { url } = props
-    const [scroll, setScroll] = useState(0)
-    const [contentRef, setContentRef] = useState(null)
-    const obj = contentRef && contentRef.contentWindow
-    console.log(`initially : ${obj}`)
-    const onScroll = () => {
-        setScroll(obj.document.body.scrollTop)
-        console.log(`scroll: ${scroll}`)
-    }
-    if (obj) {
-        console.log(`top: ${obj.document.body.scrollTop}`)
-        //obj.addEventListener('scroll', onScroll)
-        setTimeout(onScroll, 1000)
-    }
-    return (
-        <Iframe id='pdfreader' data={url} ref={setContentRef} type='application/pdf'/>
-    )
-}
-
 const OpenPDF = (props) => {
     const router = useRouter()
     const { name } = router.query
     const url = `${process.env.API_URL}/api/docs/${name}`
 
-    const [hidden, setHidden] = useState('')
     return (
         <>
-            <StyledNavbar fixed='top' expand='sm' bg='dark' variant='dark' hide={hidden}>
-                <Navbar.Brand>{name}</Navbar.Brand>
-                <Nav className='mr-auto'></Nav>
-                <Nav className='mr-auto'><h4>PPPPPPPPPPP</h4></Nav>
-                <Nav className='justify-content-end'>
+            <Navbar fixed='top'>
+                <div className='mr-auto'></div>
+                <Nav>
                     <Submit prob={{name}}/>
                 </Nav>
-            </StyledNavbar>
-            <PDFReader {...{url}}/>
+            </Navbar>
+            <Iframe id='pdfreader' src={url} type='application/pdf'/>
         </>
     )
 }

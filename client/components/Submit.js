@@ -5,10 +5,10 @@ import { Modal, Form, ButtonGroup } from 'react-bootstrap'
 import OrangeButton from './OrangeButton'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFileUpload, faCode } from '@fortawesome/free-solid-svg-icons'
+import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
 
 const Submit = (props) => {
-    const { name, id_Prob, userData, acceptState, wrongState } = props
+    const { name, id_Prob, userData, acceptState, wrongState, children } = props
     const [show, setShow] = useState(false)
     const [fileName, setFileName] = useState('')
     const [fileLang, setFileLang] = useState('C++')
@@ -47,20 +47,13 @@ const Submit = (props) => {
     }
     return (
         <>
-        {acceptState || wrongState ? (
             <ButtonGroup>
-                <OrangeButton onClick={handleShow}>
+                <OrangeButton expand={acceptState || wrongState ? 1 : 0} onClick={handleShow}>
                     <FontAwesomeIcon icon={faFileUpload}/>
                 </OrangeButton>
-                <OrangeButton outline='true'>
-                    <FontAwesomeIcon icon={faCode}/>
-                </OrangeButton>
+                {children}
             </ButtonGroup>
-        ) : (
-            <OrangeButton expand='true' onClick={handleShow}>
-                <FontAwesomeIcon icon={faFileUpload}/>
-            </OrangeButton>
-        )}
+            
             <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>{name}</Modal.Title>

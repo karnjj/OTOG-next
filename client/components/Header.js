@@ -1,5 +1,6 @@
 import { logout } from '../utils/auth'
 import { withRouter } from 'next/router'
+import { useState, useEffect, useRef } from 'react'
 
 import { Nav, Navbar } from 'react-bootstrap'
 
@@ -12,6 +13,10 @@ import { faHome, faPuzzlePiece, faTrophy, faChartBar, faSignInAlt } from '@forta
 
 const RowNav = styled(Nav)`
     flex-direction: row;
+`
+const StyledNavbar = styled(Navbar)`
+    top: ${props => props.hide && '-68px'};
+    transition: top 0.2s;
 `
 const StyledNavLink = styled(Nav.Link)`
     font-size: 1.1rem;
@@ -33,6 +38,10 @@ const Icon = styled(FontAwesomeIcon)`
         margin: 0 10px;
     }
 `
+const HeaderSpace = styled.div`
+    display: block;
+    margin-bottom: 68px;
+`
 
 const NavLink = (props) => {
     const { name, icon, path, ...rest } = props
@@ -44,36 +53,68 @@ const NavLink = (props) => {
     )
 }
 
+const ScrollNavbar = ({ children, ...props }) => {
+    const [hidden, setHidden] = useState(0)
+    const prevScroll = useRef(0)
+    const onScroll = () => {
+        var curScroll = window.pageYOffset || window.scrollY
+        if (curScroll < 68) {
+            setHidden(0)
+        } else if (prevScroll.current < curScroll) {
+            if (!hidden) {
+                setHidden(1)
+            }
+        } else if (hidden) {
+            setHidden(0)
+        }
+        prevScroll.current = curScroll
+    }
+    useEffect(() => {
+        window.addEventListener('scroll', onScroll)
+        return () => {
+            window.removeEventListener('scroll', onScroll)
+        }
+    })
+    return (
+        <StyledNavbar {...props} hide={hidden}>
+            {children}
+        </StyledNavbar>
+    )
+}
+
 const Header = (props) => {
     const { router, login } = props
     const navLinks = [
-        //name,     favicon,        path
+        //name,     favicon,       path
         ['Main',    faHome,        '/',],
         ['Problems',faPuzzlePiece, '/problem',],
         ['Contest', faTrophy,      '/contest',],
         ['Ratings', faChartBar,    '/rating',],
     ]
     return (router.pathname != '/problem/[name]' &&
-        <Navbar bg='light' expand='sm'>
-            <Navbar.Brand className='mr-auto'>
-                <StyledNavLink href='/'>
-                    OTOG<span> - One Tambon One Grader</span>
-                </StyledNavLink>
-            </Navbar.Brand>
-            <RowNav>
-            {navLinks.map(([ name, icon, path ]) => (
-                <NavLink 
-                    {...{name, icon, path}} key={name}
-                    active={router.pathname === path}
-                ></NavLink>
-            ))}
-            {login ? (
-                <NavLink name='Logout' icon={faSignInAlt} onClick={logout} red='true'></NavLink>
-            ) : (
-                <NavLink name='Login' icon={faSignInAlt} path='/login'></NavLink>
-            )}
-            </RowNav>
-        </Navbar>
+        <>
+            <HeaderSpace/>
+            <ScrollNavbar bg='light' expand='sm' fixed='top'>
+                <Navbar.Brand className='mr-auto'>
+                    <StyledNavLink href='/'>
+                        OTOG<span> - One Tambon One Grader</span>
+                    </StyledNavLink>
+                </Navbar.Brand>
+                <RowNav>
+                {navLinks.map(([ name, icon, path ]) => (
+                    <NavLink 
+                        {...{name, icon, path}} key={name}
+                        active={router.pathname === path}
+                    ></NavLink>
+                ))}
+                {login ? (
+                    <NavLink name='Logout' icon={faSignInAlt} onClick={logout} red='true'></NavLink>
+                ) : (
+                    <NavLink name='Login' icon={faSignInAlt} path='/login'></NavLink>
+                )}
+                </RowNav>
+            </ScrollNavbar>
+        </>
     )
 }
 export default withRouter(Header)

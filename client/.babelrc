@@ -1,6 +1,12 @@
 { 
     "presets": ["next/babel"], 
     "plugins": [
-        ["styled-components", { "ssr": true }]
+        ["styled-components", { "ssr": true }],
+        ["prismjs", {
+            "languages": ["c", "cpp"],
+            "plugins": ["line-numbers", "show-language"],
+            "theme": "okaidia",
+            "css": true
+        }]
     ]
 }

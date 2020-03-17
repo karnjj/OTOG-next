@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap'
 import { darken } from 'polished'
 
 const StyledButton = styled(Button)`
-    padding: ${props => props.expand && '6px 12px'};
+    padding: ${props =>  props.outline ? '6px 8px' : '6px 12px'};
     color: ${props => props.outline ? vars.orange : vars.white};
     background: ${props => props.outline ? vars.white : vars.orange};
     border: 1px solid ${vars.orange};
@@ -18,8 +18,8 @@ const StyledButton = styled(Button)`
     }
 `
 
-const OrangeButton = ({ children, ...rest }) => (
-    <StyledButton variant='warning' {...rest}>
+const OrangeButton = ({ children, ...props }) => (
+    <StyledButton variant='warning' {...props}>
         {children}
     </StyledButton>
 )
