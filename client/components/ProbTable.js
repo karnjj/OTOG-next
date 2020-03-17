@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import Submit from './Submit'
 import Popup from 'reactjs-popup'
 
 import { isLogin } from '../utils/auth'
 import { CustomTr, CustomTable } from './CustomTable'
 
+import SubmitGroup from './SubmitGroup'
 import ViewCodeButton from './ViewCodeButton'
 
 const ProbTable = (props) => (
@@ -30,9 +30,11 @@ const ProbData = ({ problems, userData }) => (
         return (
             <CustomTr key={id_Prob} {...{acceptState, wrongState}}>
                 <td>{id_Prob}</td>
-                <td><Link href="/problem/[name]" as={`/problem/${sname}`}>
-                    <a target='_blank'>{name}<br />({time} วินาที {memory} MB)</a>
-                </Link></td>
+                <td>
+                    <Link href='/problem/[name]' as={`/problem/${sname}`}>
+                        <a target='_blank'>{name}<br />({time} วินาที {memory} MB)</a>
+                    </Link>
+                </td>
                 <td>
                 {pass ? (
                     <Popup trigger={<a>{pass.length}</a>} position='left center'>
@@ -46,11 +48,11 @@ const ProbData = ({ problems, userData }) => (
                 </td>
                 <td>0</td>
                 {isLogin(userData) && <td>
-                    <Submit  {...prob} {...{userData}}>
+                    <SubmitGroup  {...prob} {...{userData}}>
                     {(acceptState || wrongState) &&
                         <ViewCodeButton/>
                     }
-                    </Submit>
+                    </SubmitGroup>
                 </td>}
             </CustomTr>
         )

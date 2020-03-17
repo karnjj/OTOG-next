@@ -5,10 +5,17 @@ import OrangeButton from './OrangeButton'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCode } from '@fortawesome/free-solid-svg-icons'
+import styled from 'styled-components'
 import prism from 'prismjs'
 
+const FontPre = styled.pre`
+    span, code {
+        font-family: Fira Code;
+    }
+`
+
 const ViewCodeButton = (props) => {
-    const { language, code } = {language:'cpp', code: CodeTextTest, ...props}
+    const { language, noSubmission, code } = {language:'cpp', code: CodeTextTest, noSubmission: 69420, ...props}
     const [show, setShow] = useState(false)
     const handleShow = () => setShow(true)
     const handleClose = () => setShow(false)
@@ -26,14 +33,14 @@ const ViewCodeButton = (props) => {
             
             <Modal show={show} onHide={handleClose} centered size='lg'>
                 <Modal.Header closeButton>
-                    <Modal.Title>Submission : {69420}</Modal.Title>
+                    <Modal.Title>Submission : {noSubmission}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <pre className='line-numbers'>
+                    <FontPre className='line-numbers'>
                         <code className={`language-${language}`}>
                             {code}
                         </code>
-                    </pre>
+                    </FontPre>
                 </Modal.Body>
             </Modal>
         </>

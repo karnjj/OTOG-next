@@ -7,7 +7,7 @@ import OrangeButton from './OrangeButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
 
-const Submit = (props) => {
+const SubmitGroup = (props) => {
     const { name, id_Prob, userData, acceptState, wrongState, children } = props
     const [show, setShow] = useState(false)
     const [fileName, setFileName] = useState('')
@@ -81,4 +81,4 @@ const Submit = (props) => {
     )
 }
 
-export default Submit
+export default SubmitGroup

@@ -9,6 +9,9 @@ const StyledButton = styled(Button)`
     color: ${props => props.outline ? vars.orange : vars.white};
     background: ${props => props.outline ? vars.white : vars.orange};
     border: 1px solid ${vars.orange};
+    a {
+        color: ${props => props.outline ? vars.orange : vars.white};
+    }
     &:hover {
         color: ${props => props.outline ? vars.white : vars.black};
         background: ${vars.orange};
