@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import Popup from 'reactjs-popup'
 
+import { useRouter } from 'next/router'
+
 import { isLogin } from '../utils/auth'
 import { CustomTr, CustomTable } from './CustomTable'
 
@@ -24,14 +26,14 @@ const ProbTable = (props) => (
     </CustomTable>
 )
 
-const ProbData = ({ problems, userData }) => (
-    problems.map((prob) => {
+const ProbData = ({ problems, userData }) => {
+    return problems.map((prob) => {
         const { id_Prob, name, time, memory, sname, pass, acceptState, wrongState } = prob
         return (
             <CustomTr key={id_Prob} {...{acceptState, wrongState}}>
                 <td>{id_Prob}</td>
                 <td>
-                    <Link href='/problem/[name]' as={`/problem/${sname}`}>
+                    <Link href={`${process.env.API_URL}/api/docs/${sname}`}>
                         <a target='_blank'>{name}<br />({time} วินาที {memory} MB)</a>
                     </Link>
                 </td>
@@ -57,6 +59,6 @@ const ProbData = ({ problems, userData }) => (
             </CustomTr>
         )
     })
-)
+}
 
 export default ProbTable

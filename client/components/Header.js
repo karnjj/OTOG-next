@@ -105,12 +105,12 @@ const Header = (props) => {
                     <NavLink 
                         {...{name, icon, path}} key={name}
                         active={router.pathname === path}
-                    ></NavLink>
+                    />
                 ))}
                 {login ? (
-                    <NavLink name='Logout' icon={faSignInAlt} onClick={logout} red='true'></NavLink>
+                    <NavLink name='Logout' icon={faSignInAlt} onClick={logout} red='true'/>
                 ) : (
-                    <NavLink name='Login' icon={faSignInAlt} path='/login'></NavLink>
+                    <NavLink name='Login' icon={faSignInAlt} path='/login' active={router.pathname === '/login'}/>
                 )}
                 </RowNav>
             </ScrollNavbar>
