@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { withAuthSync } from '../../utils/auth'
 
-import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

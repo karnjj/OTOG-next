@@ -33,7 +33,7 @@ const ProbData = ({ problems, userData }) => {
             <CustomTr key={id_Prob} {...{acceptState, wrongState}}>
                 <td>{id_Prob}</td>
                 <td>
-                    <Link href={`${process.env.API_URL}/api/docs/${sname}`}>
+                    <Link href={`/problem/[name]/`} as={`/problem/${sname}`}>
                         <a target='_blank'>{name}<br />({time} วินาที {memory} MB)</a>
                     </Link>
                 </td>
