@@ -1,5 +1,6 @@
 import { logout } from '../utils/auth'
 import { withRouter } from 'next/router'
+import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 
 import { Nav, Navbar } from 'react-bootstrap'
@@ -45,11 +46,19 @@ const HeaderSpace = styled.div`
 
 const NavLink = (props) => {
     const { name, icon, path, ...rest } = props
-    return (
-        <StyledNavLink href={path} {...rest}>
-            <Icon {...{icon}}></Icon>
-            <span> {name}</span>
-        </StyledNavLink>
+    return (path ? (
+            <Link href={path} passHref>
+                <StyledNavLink {...rest}>
+                    <Icon {...{icon}}></Icon>
+                    <span> {name}</span>
+                </StyledNavLink>
+            </Link>
+        ) : (
+            <StyledNavLink {...rest}>
+                <Icon {...{icon}}></Icon>
+                <span> {name}</span>
+            </StyledNavLink>
+        )
     )
 }
 
@@ -91,8 +100,8 @@ const Header = (props) => {
         ['Contest', faTrophy,      ['/contest',],               ],
         ['Ratings', faChartBar,    ['/rating',],                ],
     ]
-
-    return (router.pathname != '/problem/[name]' && router.pathname != '/login' &&
+    console.log('->', router.pathname)
+    return (router.pathname != '/login' && router.pathname.slice(0, 6) != '/admin' &&
         <>
             <HeaderSpace/>
             <ScrollNavbar bg='light' expand='sm' fixed='top'>

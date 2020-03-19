@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { withAuthSync } from '../../utils/auth'
+import { withAuthSync } from '../utils/auth'
 
 import fetch from 'isomorphic-unfetch'
 
@@ -7,9 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 
 import { Row, Col, Form, Container } from 'react-bootstrap'
-import OrangeButton from '../../components/OrangeButton'
-import ProbTable from '../../components/ProbTable'
-import Footer from '../../components/Footer'
+import OrangeButton from '../components/OrangeButton'
+import ProbTable from '../components/ProbTable'
+import Footer from '../components/Footer'
 
 const Problem = (props) => {
 	const userData = props.jsData

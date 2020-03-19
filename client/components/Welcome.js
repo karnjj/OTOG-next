@@ -30,7 +30,7 @@ const Welcome = () => (
         <h1>Become a god of competitive programming.</h1>
         <h3>Learn how to code and build algorithms efficiently.</h3>
         <br />
-        <OrangeButton size='lg' href="register" target="_blank">Sign Up</OrangeButton>
+        <OrangeButton size='lg' href='register' target='_blank'>Sign Up</OrangeButton>
     </StyledWelcome>
 )
 

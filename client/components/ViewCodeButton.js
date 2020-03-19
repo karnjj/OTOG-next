@@ -17,7 +17,7 @@ const FontPre = styled.pre`
 const ViewCodeButton = (props) => {
     const { language, noSubmission, code } = {language:'cpp', code: CodeTextTest, noSubmission: 69420, ...props}
     const [show, setShow] = useState(false)
-    const [showLineNumber, setShowLineNumber] = useState(true)
+    const [showLineNumber, setShowLineNumber] = useState()
     const handleShow = () => setShow(true)
     const handleClose = () => setShow(false)
     useEffect(() => {
@@ -30,6 +30,7 @@ const ViewCodeButton = (props) => {
                 setShowLineNumber(true)
             }
         }
+        onResize()
         window.addEventListener('resize', onResize)
         if (show) {
             prism.highlightAll()

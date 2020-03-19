@@ -46,7 +46,7 @@ const Index = (props) => {
                     <Col md={4} className="px-5 p-md-3">
                         <h2><FontAwesomeIcon icon={faFlagCheckered} /> Get started</h2>
                         <p> เพิ่งเริ่มการเดินทาง อาจจะอยากได้การต้อนรับที่ดี ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน competitive programming </p>
-                        <OrangeButton size='lg' href="problems" target="_blank">View Problem</OrangeButton>
+                        <OrangeButton size='lg' href="problem" target="_blank">View Problem</OrangeButton>
                         <br /><br />
                     </Col>
                     <Col md={4} className="px-5 p-md-3">

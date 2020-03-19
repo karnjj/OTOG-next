@@ -8,8 +8,8 @@ const Problem = (props) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const url = `${process.env.API_URL}/api/admin/problem`
-			let headers = { "Content-Type": "application/json" }
-            headers["Authorization"] = userData ? userData.id : '';
+			let headers = { 'Content-Type': 'application/json' }
+            headers['Authorization'] = userData ? userData.id : '';
             const res = await fetch(url, { headers, })
 			const json = await res.json()
 			setTaskState(json)

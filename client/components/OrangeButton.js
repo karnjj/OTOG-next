@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import vars from '../styles/vars'
 import styled from 'styled-components'
 
@@ -21,10 +22,18 @@ const StyledButton = styled(Button)`
     }
 `
 
-const OrangeButton = ({ children, ...props }) => (
-    <StyledButton variant='warning' {...props}>
-        {children}
-    </StyledButton>
+const OrangeButton = ({ children, href, ...props }) => (
+    href ? (
+        <Link {...{href}}>
+            <StyledButton variant='warning' {...props}>
+                {children}
+            </StyledButton>
+        </Link>
+    ) : (
+        <StyledButton variant='warning' {...props}>
+            {children}
+        </StyledButton>
+    )
 )
 
 export default OrangeButton
