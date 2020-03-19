@@ -1,7 +1,4 @@
-import Link from 'next/link'
 import Popup from 'reactjs-popup'
-
-import { useRouter } from 'next/router'
 
 import { isLogin } from '../utils/auth'
 import { CustomTr, CustomTable } from './CustomTable'
@@ -33,9 +30,9 @@ const ProbData = ({ problems, userData }) => {
             <CustomTr key={id_Prob} {...{acceptState, wrongState}}>
                 <td>{id_Prob}</td>
                 <td>
-                    <Link href={`/problem/[name]/`} as={`/problem/${sname}`}>
-                        <a target='_blank'>{name}<br />({time} วินาที {memory} MB)</a>
-                    </Link>
+                    <a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
+                        {name}<br />({time} วินาที {memory} MB)
+                    </a>
                 </td>
                 <td>
                 {pass ? (

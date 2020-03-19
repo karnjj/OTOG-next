@@ -29,9 +29,10 @@ export default class MyApp extends App {
                 <Head>
                     <title>OTOG</title>
                     <link rel="manifest" href="/manifest.json" />
-                    <link rel="apple-touch-icon" href="/logoIOS.png"></link>
+                    <link rel="apple-touch-icon" href="/logoIOS.png"/>
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
-                    <meta name="theme-color" content="#ff851b"></meta>
+                    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet"/>
+                    <meta name="theme-color" content="#ff851b"/>
                 </Head>
                 <ThemeProvider theme={{breakpoints}}>
                     <Header login={isLogin(token)}/>

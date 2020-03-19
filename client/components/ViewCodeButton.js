@@ -10,7 +10,7 @@ import prism from 'prismjs'
 
 const FontPre = styled.pre`
     span, code {
-        font-family: Fira Code;
+        font-family: 'Fira Code', 'Courier New', Courier, monospace;
     }
 `
 
@@ -27,7 +27,7 @@ const ViewCodeButton = (props) => {
     
     return (
         <>
-            <OrangeButton outline='true' onClick={handleShow}>
+            <OrangeButton outline='true' onClick={handleShow} icon='true'>
                 <FontAwesomeIcon icon={faCode}/>
             </OrangeButton>
             

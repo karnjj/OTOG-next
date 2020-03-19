@@ -1,18 +1,6 @@
 import styled from 'styled-components'
 import vars from '../styles/vars'
-import { CustomTable } from './CustomTable'
-
-const Nametd = styled.td`
-    color: ${props => {
-        if (props.score >= 2000) {
-            return vars.grandmaster
-        } else if (props.score >= 1800) {
-            return vars.master 
-        } else {
-            return vars.regular
-        }
-    }};
-`
+import { CustomTable, Name } from './CustomTable'
 
 const UserTable = (props) => (
     <CustomTable>
@@ -28,7 +16,7 @@ const UserTable = (props) => (
         {props.users.map((user, index) => (
             <tr key={index}>
                 <td>{index + 1}</td>
-                <Nametd score={user.rating}>{user.sname}</Nametd>
+                <td><Name score={user.rating}>{user.sname}</Name></td>
                 <td>{user.rating}</td>
                 <td>0</td>
             </tr>
