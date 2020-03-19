@@ -85,13 +85,14 @@ const ScrollNavbar = ({ children, ...props }) => {
 const Header = (props) => {
     const { router, login } = props
     const navLinks = [
-        //name,     favicon,       path
-        ['Main',    faHome,        '/',],
-        ['Problems',faPuzzlePiece, '/problem',],
-        ['Contest', faTrophy,      '/contest',],
-        ['Ratings', faChartBar,    '/rating',],
+        //name,     favicon,       paths
+        ['Main',    faHome,        ['/'],                       ],
+        ['Problems',faPuzzlePiece, ['/problem', '/submission',],],
+        ['Contest', faTrophy,      ['/contest',],               ],
+        ['Ratings', faChartBar,    ['/rating',],                ],
     ]
-    return (router.pathname != '/problem/[name]' &&
+
+    return (router.pathname != '/problem/[name]' && router.pathname != '/login' &&
         <>
             <HeaderSpace/>
             <ScrollNavbar bg='light' expand='sm' fixed='top'>
@@ -101,16 +102,17 @@ const Header = (props) => {
                     </StyledNavLink>
                 </Navbar.Brand>
                 <RowNav>
-                {navLinks.map(([ name, icon, path ]) => (
+                {navLinks.map(([ name, icon, paths ]) => (
                     <NavLink 
-                        {...{name, icon, path}} key={name}
-                        active={router.pathname === path}
+                        {...{name, icon}}
+                        path={paths[0]} key={name}
+                        active={paths.some(path => path === router.pathname)}
                     />
                 ))}
                 {login ? (
                     <NavLink name='Logout' icon={faSignInAlt} onClick={logout} red='true'/>
                 ) : (
-                    <NavLink name='Login' icon={faSignInAlt} path='/login' active={router.pathname === '/login'}/>
+                    <NavLink name='Login' icon={faSignInAlt} path='/login'/>
                 )}
                 </RowNav>
             </ScrollNavbar>

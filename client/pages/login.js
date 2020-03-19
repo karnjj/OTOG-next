@@ -90,14 +90,16 @@ const LoginCard = () => {
 }
 
 const PaddedForm = styled(Container)`
-    padding: 100px 0;
+    padding: 150px 0;
 `
 
 const Login = () => (
     <PaddedForm>
         <Row>
             <Col xs={1} md={3} lg={4}/>
-            <Col xs={10}md={6} lg={4}><LoginCard/></Col>
+            <Col xs={10}md={6} lg={4}>
+                <LoginCard/>
+            </Col>
             <Col xs={1} md={3} lg={4}/>
         </Row>
     </PaddedForm>

@@ -11,7 +11,36 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import Header from '../components/Header'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import { createGlobalStyle } from 'styled-components'
+import { down } from 'styled-breakpoints'
 config.autoAddCss = false 
+
+const GlobalStyle = createGlobalStyle`
+    ${down('sm')} {    
+        h1 {
+            font-size: 1.9rem;
+        }
+        h2 {
+            font-size: 1.6rem;
+        }
+        h3 {
+            font-size: 1.3rem;
+        }
+        a.otogbtn,
+        button.otogbtn {
+            font-size: 0.9rem;
+        }
+        a, p, span,
+        input::placeholder,
+        label,
+        td, th, code, pre {
+            font-size: 0.85rem;
+        }
+        .language-c, .language-cpp{
+            font-size: 0.85rem!important;
+        }
+    }
+`
 
 export default class MyApp extends App {
     static async getInitialProps({ Component, ctx }) {
@@ -35,6 +64,7 @@ export default class MyApp extends App {
                     <meta name="theme-color" content="#ff851b"/>
                 </Head>
                 <ThemeProvider theme={{breakpoints}}>
+                    <GlobalStyle/>
                     <Header login={isLogin(token)}/>
                     <Component {...pageProps} />
                 </ThemeProvider>

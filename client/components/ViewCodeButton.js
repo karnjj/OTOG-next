@@ -17,13 +17,27 @@ const FontPre = styled.pre`
 const ViewCodeButton = (props) => {
     const { language, noSubmission, code } = {language:'cpp', code: CodeTextTest, noSubmission: 69420, ...props}
     const [show, setShow] = useState(false)
+    const [showLineNumber, setShowLineNumber] = useState(true)
     const handleShow = () => setShow(true)
     const handleClose = () => setShow(false)
     useEffect(() => {
+        const onResize = () => {
+            if (window.innerWidth < 768) {
+                if (showLineNumber) {
+                    setShowLineNumber(false)
+                }
+            } else if (!showLineNumber) {
+                setShowLineNumber(true)
+            }
+        }
+        window.addEventListener('resize', onResize)
         if (show) {
             prism.highlightAll()
         }
-    }, [show])
+        return () => {
+            window.removeEventListener('resize', onResize)
+        }
+    }, [show, showLineNumber])
     
     return (
         <>
@@ -36,7 +50,7 @@ const ViewCodeButton = (props) => {
                     <Modal.Title>Submission : {noSubmission}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <FontPre className='line-numbers'>
+                    <FontPre className={showLineNumber  && 'line-numbers'}>
                         <code className={`language-${language}`}>
                             {code}
                         </code>
