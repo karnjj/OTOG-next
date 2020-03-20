@@ -6,19 +6,26 @@ import Header from '../../components/admin/Header'
 
 const Guide = () => (
 	<Card>
-		<Card.Header>
+		<Card.Header as='h6'>
 			Note
 		</Card.Header>
 		<Card.Body>
-			1. You can add and edit problems in this page.<br/><br/>
-			2. Hover over each icons for explanation.<br/><br/>
-			3. In add feature you must fill every form carefully.<br/>
+			<Card.Text>
+				1. You can add and edit problems in this page.
+			</Card.Text>
+			<Card.Text>
+				2. Hover over each icons for explanation.
+			</Card.Text>
+			<Card.Text>
+				3. In add feature you <b>must</b> fill every form carefully.
+			</Card.Text>
 		</Card.Body>
 	</Card>
 )
 
 const Task = (props) => {
 	const userData = props.jsData
+	console.log(userData)
 	return (
 		<>
 			<Header/>

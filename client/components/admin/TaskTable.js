@@ -16,11 +16,12 @@ export const NewProblem = () => {
 }
 
 const ConfigTask = (props) => {
+    const { state } = props
     return (
         <ButtonGroup>
             <Button variant='info'>   <FontAwesomeIcon icon={faPencilAlt}/></Button>
             <Button variant='warning'><FontAwesomeIcon icon={faSyncAlt}/></Button>
-            <Button variant='light'>  <FontAwesomeIcon icon={faEye}/></Button>
+            <Button variant='light'>  <FontAwesomeIcon icon={state ? faEye : faEyeSlash}/></Button>
             <Button variant='danger'> <FontAwesomeIcon icon={faTrash}/></Button>
         </ButtonGroup>
     )
@@ -52,7 +53,7 @@ export const TaskTable = ({ userData }) => {
             </thead>
             <tbody>
             {taskState.map(prob => {
-                const { name, id_Prob, time, memory, sname } = prob
+                const { name, id_Prob, time, memory, sname, state } = prob
                 return (
                     <tr key={id_Prob}>
                         <td>{id_Prob}</td>
@@ -66,7 +67,7 @@ export const TaskTable = ({ userData }) => {
                         </td>
                         <td>{time}</td>
                         <td>{memory}</td>
-                        <td><ConfigTask/></td>
+                        <td><ConfigTask {...prob}/></td>
                     </tr>
                 )
             })}
