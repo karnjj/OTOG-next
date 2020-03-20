@@ -21,7 +21,9 @@ const ConfigTask = (props) => {
         <ButtonGroup>
             <Button variant='info'>   <FontAwesomeIcon icon={faPencilAlt}/></Button>
             <Button variant='warning'><FontAwesomeIcon icon={faSyncAlt}/></Button>
-            <Button variant='light'>  <FontAwesomeIcon icon={state ? faEye : faEyeSlash}/></Button>
+            <Button variant={state ? 'light' : 'dark'}> 
+                <FontAwesomeIcon icon={state ? faEye : faEyeSlash}/>
+            </Button>
             <Button variant='danger'> <FontAwesomeIcon icon={faTrash}/></Button>
         </ButtonGroup>
     )
