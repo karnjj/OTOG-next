@@ -8,7 +8,6 @@ const Code = styled.code`
     font-weight: bold;
     color: ${props => props.color};
 `
-
 const StyledWelcome = styled.div`
     ${down('xl')} {
         text-align: center;
@@ -17,7 +16,6 @@ const StyledWelcome = styled.div`
         align-items: center;
     }
 `
-
 
 const Welcome = () => (
     <StyledWelcome>

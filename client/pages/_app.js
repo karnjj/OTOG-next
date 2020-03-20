@@ -16,6 +16,9 @@ import { down } from 'styled-breakpoints'
 config.autoAddCss = false 
 
 const GlobalStyle = createGlobalStyle`
+    body {
+        overflow-y: scroll;
+    }
     ${down('sm')} {    
         h1 {
             font-size: 1.9rem;

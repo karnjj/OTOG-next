@@ -37,22 +37,22 @@ const Index = (props) => {
             </Jumbotron>
             <Container>
                 <Row>
-                    <Col md={4} className="px-5 p-md-3">
+                    <Col md={4} className='px-5 p-md-3'>
                         <h2><FontAwesomeIcon icon={faQuestion} /> FAQ</h2>
                         <p> ไม่รู้ว่าจะเริ่มต้นอย่างไร ทุกอย่างดูงงไปหมด ถ้าหากคุณมีปัญหาเหล่านี้สามารถ หาคำตอบได้จาก คำถามยอดนิยมที่ผู้ใช้ส่วนใหญ่มักจะถามเป็นประจำ </p>
-                        <OrangeButton size='lg' href="#" target="_blank">Learn More</OrangeButton>
+                        <OrangeButton size='lg' href='#'>Learn More</OrangeButton>
                         <br /><br />
                     </Col>
-                    <Col md={4} className="px-5 p-md-3">
+                    <Col md={4} className='px-5 p-md-3'>
                         <h2><FontAwesomeIcon icon={faFlagCheckered} /> Get started</h2>
                         <p> เพิ่งเริ่มการเดินทาง อาจจะอยากได้การต้อนรับที่ดี ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน competitive programming </p>
-                        <OrangeButton size='lg' href="problem" target="_blank">View Problem</OrangeButton>
+                        <OrangeButton size='lg' href='problem'>View Problem</OrangeButton>
                         <br /><br />
                     </Col>
-                    <Col md={4} className="px-5 p-md-3">
+                    <Col md={4} className='px-5 p-md-3'>
                         <h2><FontAwesomeIcon icon={faTrophy} /> Contest</h2>
                         <p> ทำโจทย์คนเดียวมันอาจจะเหงา ลองมาเข้า contest การแข่งขันอันทรงเกียรติ (?) เพื่อจะได้มีเพื่อนทำโจทย์และแข่งขันไปพร้อมๆกันกับเรา </p>
-                        <OrangeButton size='lg' href="contest" target="_blank">Join Contest</OrangeButton>
+                        <OrangeButton size='lg' href='contest'>Join Contest</OrangeButton>
                         <br /><br />
                     </Col>
                 </Row>

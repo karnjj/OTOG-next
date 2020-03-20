@@ -10,7 +10,6 @@ export const Alink = styled.a`
         cursor: pointer;
     }
 `
-
 export const CustomTr = styled.tr`
     background: ${props => props.acceptState ? 
         ('#ebffeb') : (props.wrongState && '#ffebeb')
