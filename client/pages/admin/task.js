@@ -25,7 +25,6 @@ const Guide = () => (
 
 const Task = (props) => {
 	const userData = props.jsData
-	console.log(userData)
 	return (
 		<>
 			<Header/>

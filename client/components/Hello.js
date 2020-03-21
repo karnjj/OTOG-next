@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useAuthContext } from '../utils/auth'
 
 import styled from 'styled-components'
 import vars from '../styles/vars'
@@ -64,36 +65,40 @@ const CountButton = styled.div`
     }
 `
 
-const Hello = (props) => {
-    const [allProb,setallProb] = useState(0)
-    const [passProb,setpassProb] = useState(0)
-    const [wrongProb,setwrongProb] = useState(0)
-    const [noSub,setnoSub] = useState(0)
+const Hello = () => {
+    const userData = useAuthContext()
+    const [allProb,setAllProb] = useState(0)
+    const [passProb,setPassProb] = useState(0)
+    const [wrongProb,setWrongProb] = useState(0)
+    const [noSub,setNoSub] = useState(0)
+    const [newProb, setNewProb] = useState(0)
 
     useEffect(() => {
         const fetchData = async () => {
             let url = `${process.env.API_URL}/api/countProblem`
             let headers = { "Content-Type": "application/json" }
-            headers["Authorization"] = props.userData.id;
+            headers["Authorization"] = userData.id;
             const response = await fetch(url, { headers, })
-            const js = await response.json()
-            setallProb(js.allProblem)
-            setpassProb(js.userProblem.passProb)
-            setwrongProb(js.userProblem.wrongProb)
-            setnoSub(js.allProblem-js.userProblem.passProb-js.userProblem.wrongProb)
+            const { allProblem, userProblem } = await response.json()
+            const { passProb, wrongProb } = userProblem
+            setAllProb(allProblem)
+            setPassProb(passProb)
+            setWrongProb(wrongProb)
+            setNoSub(allProblem - passProb - wrongProb)
+            setNewProb(0)
         }
         fetchData()
     }, [])
     return (
         <>
-            <WelcomeText>สวัสดี {props.userData.sname}</WelcomeText>
+            <WelcomeText>สวัสดี {userData.sname}</WelcomeText>
             <ButtonWrapper>
             {[  //message,  number,     color
                 ['ทั้งหมด',   allProb,    vars.btn_black],
                 ['ผ่านแล้ว',  passProb,   vars.btn_green],
                 ['ยังไม่ผ่าน', wrongProb,  vars.btn_red],
                 ['ยังไม่ส่ง',  noSub,      vars.btn_orng],
-                ['โจทย์วันนี้', 0,          vars.btn_blue],
+                ['โจทย์วันนี้', newProb,    vars.btn_blue],
             ].map(([ message, number, color ], index) => (
                 <CountButton {...{color}} key={index}>
                     <Message>{message}</Message>

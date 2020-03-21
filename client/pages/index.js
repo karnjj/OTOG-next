@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import fetch from 'isomorphic-unfetch'
-import { withAuthSync, isLogin } from '../utils/auth'
+import { withAuthSync, useAuthContext } from '../utils/auth'
 
 import { Jumbotron, Container, Row, Col } from 'react-bootstrap'
 import Hello from '../components/Hello'
+import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Welcome from '../components/Welcome'
 import ProbTable from '../components/ProbTable'
@@ -12,8 +13,8 @@ import OrangeButton from '../components/OrangeButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestion, faFlagCheckered, faTrophy, faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 
-const Index = (props) => {
-    const userData = props.jsData
+const Index = () => {
+    const userData = useAuthContext()
     const [taskState, setTaskState] = useState([])
     
     useEffect(() => {
@@ -30,9 +31,10 @@ const Index = (props) => {
     
     return (
         <>
+            <Header/>
             <Jumbotron>
                 <Container>
-                {isLogin(userData) ? <Hello {...{userData}}/> : <Welcome/>}
+                {userData ? <Hello/> : <Welcome/>}
                 </Container>
             </Jumbotron>
             <Container>
@@ -61,7 +63,7 @@ const Index = (props) => {
                     <h2><FontAwesomeIcon icon={faPuzzlePiece} /> โจทย์ใหม่</h2>
                 </div>
                 <hr />
-                <ProbTable problems={taskState} {...{userData}} />
+                <ProbTable problems={taskState} />
                 <Footer/>
             </Container>
         </>

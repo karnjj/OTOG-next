@@ -76,7 +76,7 @@ int dj[] = {1, 0,-1, 0};
 int n, m;
 map<char,int> mp;
 bool bound(int i, int j) {
-    return i >= 0 && j >=0 && i<n && j<m;
+    return i >= 0 && j >= 0 && i < n && j < m;
 }
 int dfs(int i, int j ,int h) {
     if(h == 0)

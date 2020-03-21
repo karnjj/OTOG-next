@@ -7,12 +7,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 
 import { Row, Col, Form, Container } from 'react-bootstrap'
+import { useAuthContext } from '../utils/auth'
 import OrangeButton from '../components/OrangeButton'
 import ProbTable from '../components/ProbTable'
+import Header from '../components/Header'
 import Footer from '../components/Footer'
 
-const Problem = (props) => {
-	const userData = props.jsData
+const Problem = () => {
+	const userData = useAuthContext()
 	const [taskState, setTaskState] = useState([])
 	const [searchState, setsearchState] = useState('')
 	useEffect(() => {
@@ -35,6 +37,8 @@ const Problem = (props) => {
 		)
 	})
 	return (
+		<>
+		<Header/>
 		<Container>
 			<br /><br /><br />
 			<h2> <FontAwesomeIcon icon={faPuzzlePiece}/> Problem </h2>
@@ -47,9 +51,10 @@ const Problem = (props) => {
 				<Col as={OrangeButton} sm={4} md={3} lg={2} href='submission'>View Submission</Col>
 			</Row>
 			<hr/>
-			<ProbTable problems={filteredTask} {...{userData}} />
+			<ProbTable problems={filteredTask}/>
 			<Footer />
 		</Container>
+		</>
 	)
 }
 

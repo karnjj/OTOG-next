@@ -4,12 +4,13 @@ import { withAuthSync } from '../utils/auth'
 
 import { Container, Col, Row, Form } from 'react-bootstrap'
 import UserTable from '../components/UserTable'
+import Header from '../components/Header'
 import Footer from '../components/Footer'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
 
-const Rating = (props) => {
+const Rating = () => {
     const [userState, setUserState] = useState([])
     const [searchState, setsearchState] = useState('')
     useEffect(() => {
@@ -29,6 +30,7 @@ const Rating = (props) => {
     })
     return (
         <>
+            <Header/>
             <br /><br /><br />
             <Container>
                 <h2><FontAwesomeIcon icon={faChartBar} /> Rating </h2>

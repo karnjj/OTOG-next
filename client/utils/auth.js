@@ -1,12 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useContext, createContext } from 'react'
 import Router from 'next/router'
 import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
 import fetch from 'isomorphic-unfetch'
 
 export const isLogin = token => {
-    if(token) return true
-    else false
+    return !!token
 }
 
 export const login = (token) => {
@@ -55,14 +54,14 @@ export const withAuthSync = WrappedComponent => {
 
         return <WrappedComponent {...props} />
     }
-
-    Wrapper.getInitialProps = async ctx => {
-        const jsData = await auth(ctx)
-        const componentProps =
-            WrappedComponent.getInitialProps &&
-            (await WrappedComponent.getInitialProps(ctx))
-        //console.log(jsData);
-        return { ...componentProps, jsData }
-    }
     return Wrapper
 }
+
+export const AuthContext = createContext()
+export const AuthProvider = (props) => (
+    <AuthContext.Provider {...props}/>
+)
+export const useAuthContext = () => {
+    return useContext(AuthContext)
+}
+

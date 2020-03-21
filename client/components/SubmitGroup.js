@@ -1,14 +1,15 @@
 import { useState } from 'react'
+import { useAuthContext } from '../utils/auth'
 import fetch from 'isomorphic-unfetch'
 
 import { Modal, Form, ButtonGroup } from 'react-bootstrap'
 import OrangeButton from './OrangeButton'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
 
 const SubmitGroup = (props) => {
-    const { name, id_Prob, userData, acceptState, wrongState, children } = props
+    const userData = useAuthContext()
+    const { name, id_Prob, acceptState, wrongState, children } = props
     const [show, setShow] = useState(false)
     const [fileName, setFileName] = useState('')
     const [fileLang, setFileLang] = useState('C++')

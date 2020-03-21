@@ -1,8 +1,11 @@
 import Error from 'next/error'
 import { withAuthSync } from '../utils/auth'
-const Contest = (props) => {
-    return(
+import Header from '../components/Header'
+
+const Contest = () => {
+    return (
         <>
+            <Header/>
             <Error statusCode={404} />
         </>
     )

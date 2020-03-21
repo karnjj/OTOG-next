@@ -1,12 +1,13 @@
-import { logout } from '../utils/auth'
-import { withRouter } from 'next/router'
+import { logout, useAuthContext } from '../utils/auth'
+import { useRouter } from 'next/router'
 
 import { Navbar } from 'react-bootstrap'
 import { StyledNavLink, ScrollNavbar, HeaderSpace, RowNav, NavLink } from './CustomNavbar'
 import { faHome, faPuzzlePiece, faTrophy, faChartBar, faSignInAlt } from '@fortawesome/free-solid-svg-icons'
 
-const Header = (props) => {
-    const { router, login } = props
+const Header = () => {
+    const userData = useAuthContext()
+    const router = useRouter()
     const navLinks = [
         //name,     favicon,       paths
         ['Main',    faHome,        ['/'],                       ],
@@ -14,7 +15,7 @@ const Header = (props) => {
         ['Contest', faTrophy,      ['/contest',],               ],
         ['Ratings', faChartBar,    ['/rating',],                ],
     ]
-    return (router.pathname != '/login' && router.pathname.slice(0, 6) != '/admin' &&
+    return (
         <>
             <HeaderSpace/>
             <ScrollNavbar bg='light' expand='sm' fixed='top'>
@@ -31,7 +32,7 @@ const Header = (props) => {
                         active={paths.some(path => path === router.pathname)}
                     />
                 ))}
-                {login ? (
+                {userData ? (
                     <NavLink name='Logout' icon={faSignInAlt} onClick={logout} red='true'/>
                 ) : (
                     <NavLink name='Login' icon={faSignInAlt} path='/login'/>
@@ -41,4 +42,4 @@ const Header = (props) => {
         </>
     )
 }
-export default withRouter(Header)
+export default Header

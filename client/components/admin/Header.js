@@ -11,14 +11,14 @@ const Header = (props) => {
             <ScrollNavbar bg='dark' variant='dark' fixed='top'>
                 <Nav>
                     {[
-                        ['Main',    faWrench,   '/admin/config',],
+                        ['Main',    faWrench,   '/admin/',],
                         ['Task',    faTasks,    '/admin/task',],
                         ['User',    faUserCog,  '/admin/user',],
                         ['Contest', faTrophy,   '/admin/contest',],
                     ].map(([name, icon, path], index) => (
                         <NavLink
-                            {...{name, icon}}
-                            key={index} href={path}
+                            {...{name, icon, path}}
+                            key={index}
                             active={path === router.pathname}
                         />
                     ))}
