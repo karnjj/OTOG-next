@@ -1,13 +1,15 @@
 import Error from 'next/error'
-import { withAuthSync } from '../../utils/auth'
+
+import { withAuthSync, useAuthContext, withAdminAuth } from '../../utils/auth'
 import Header from '../../components/admin/Header'
 
-const Contest = (props) => {
-    return (
-        <>
-            <Header/>
-            <Error statusCode={404} />
-        </>
-    )
+const Contest = props => {
+	const userData = useAuthContext()
+	return (
+		<>
+			<Header />
+			<Error statusCode={404} />
+		</>
+	)
 }
-export default withAuthSync(Contest)
+export default withAdminAuth(withAuthSync(Contest))

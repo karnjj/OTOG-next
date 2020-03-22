@@ -11,7 +11,7 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { createGlobalStyle } from 'styled-components'
 import { down } from 'styled-breakpoints'
-config.autoAddCss = false 
+config.autoAddCss = false
 
 const GlobalStyle = createGlobalStyle`
     body {
@@ -43,34 +43,36 @@ const GlobalStyle = createGlobalStyle`
     }
 `
 
-const MyApp = (props) => {
-    const { Component, pageProps, userData } = props
-    return (
-        <>
-            <Head>
-                <title>OTOG</title>
-                <link rel="manifest" href="/manifest.json" />
-                <link rel="apple-touch-icon" href="/logoIOS.png"/>
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet"/>
-                <meta name="theme-color" content="#ff851b"/>
-            </Head>
-            <ThemeProvider theme={{breakpoints}}>
-                <AuthProvider value={userData}>
-                    <GlobalStyle/>
-                    <Component {...pageProps} />
-                </AuthProvider>
-            </ThemeProvider>
-        </>
-    )
+const MyApp = props => {
+	const { Component, pageProps, userData } = props
+	return (
+		<>
+			<Head>
+				<title>OTOG</title>
+				<link rel='manifest' href='/manifest.json' />
+				<link rel='apple-touch-icon' href='/logoIOS.png' />
+				<meta name='viewport' content='width=device-width, initial-scale=1' />
+				<link
+					href='https://fonts.googleapis.com/css?family=Fira+Code&display=swap'
+					rel='stylesheet'
+				/>
+				<meta name='theme-color' content='#ff851b' />
+			</Head>
+			<ThemeProvider theme={{ breakpoints }}>
+				<AuthProvider value={userData}>
+					<GlobalStyle />
+					<Component {...pageProps} />
+				</AuthProvider>
+			</ThemeProvider>
+		</>
+	)
 }
 
 MyApp.getInitialProps = async ({ Component, ctx }) => {
-    const pageProps =
-        Component.getInitialProps &&
-        (await Component.getInitialProps(ctx))
-    const userData = await auth(ctx)
-    return { pageProps, userData }
+	const pageProps =
+		Component.getInitialProps && (await Component.getInitialProps(ctx))
+	const userData = await auth(ctx)
+	return { pageProps, userData }
 }
 
 export default MyApp

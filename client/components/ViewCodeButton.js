@@ -9,63 +9,66 @@ import styled from 'styled-components'
 import prism from 'prismjs'
 
 const FontPre = styled.pre`
-    span, code {
-        font-family: 'Fira Code', 'Courier New', Courier, monospace;
-    }
+	span,
+	code {
+		font-family: 'Fira Code', 'Courier New', Courier, monospace;
+	}
 `
 
-const ViewCodeButton = (props) => {
-    const { language, noSubmission, code } = {language:'cpp', code: CodeTextTest, noSubmission: 69420, ...props}
-    const [show, setShow] = useState(false)
-    const [showLineNumber, setShowLineNumber] = useState()
-    const handleShow = () => setShow(true)
-    const handleClose = () => setShow(false)
-    useEffect(() => {
-        const onResize = () => {
-            if (window.innerWidth < 768) {
-                if (showLineNumber) {
-                    setShowLineNumber(false)
-                }
-            } else if (!showLineNumber) {
-                setShowLineNumber(true)
-            }
-        }
-        onResize()
-        window.addEventListener('resize', onResize)
-        if (show) {
-            prism.highlightAll()
-        }
-        return () => {
-            window.removeEventListener('resize', onResize)
-        }
-    }, [show, showLineNumber])
-    
-    return (
-        <>
-            <OrangeButton outline='true' onClick={handleShow} icon='true'>
-                <FontAwesomeIcon icon={faCode}/>
-            </OrangeButton>
-            
-            <Modal show={show} onHide={handleClose} centered size='lg'>
-                <Modal.Header closeButton>
-                    <Modal.Title>Submission : {noSubmission}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <FontPre className={showLineNumber  && 'line-numbers'}>
-                        <code className={`language-${language}`}>
-                            {code}
-                        </code>
-                    </FontPre>
-                </Modal.Body>
-            </Modal>
-        </>
-    )
+const ViewCodeButton = props => {
+	const { language, noSubmission, code } = {
+		language: 'cpp',
+		code: CodeTextTest,
+		noSubmission: 69420,
+		...props
+	}
+	const [show, setShow] = useState(false)
+	const [showLineNumber, setShowLineNumber] = useState()
+	const handleShow = () => setShow(true)
+	const handleClose = () => setShow(false)
+	useEffect(() => {
+		const onResize = () => {
+			if (window.innerWidth < 768) {
+				if (showLineNumber) {
+					setShowLineNumber(false)
+				}
+			} else if (!showLineNumber) {
+				setShowLineNumber(true)
+			}
+		}
+		onResize()
+		window.addEventListener('resize', onResize)
+		if (show) {
+			prism.highlightAll()
+		}
+		return () => {
+			window.removeEventListener('resize', onResize)
+		}
+	}, [show, showLineNumber])
+
+	return (
+		<>
+			<OrangeButton outline='true' onClick={handleShow} icon='true'>
+				<FontAwesomeIcon icon={faCode} />
+			</OrangeButton>
+
+			<Modal show={show} onHide={handleClose} centered size='lg'>
+				<Modal.Header closeButton>
+					<Modal.Title>Submission : {noSubmission}</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<FontPre className={showLineNumber && 'line-numbers'}>
+						<code className={`language-${language}`}>{code}</code>
+					</FontPre>
+				</Modal.Body>
+			</Modal>
+		</>
+	)
 }
 
 export default ViewCodeButton
 
-const CodeTextTest = 
-`#include <bits/stdc++.h>
+const CodeTextTest = `#include <bits/stdc++.h>
 using namespace std;
 const int mxn = 15;
 char arr[mxn][mxn];
