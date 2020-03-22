@@ -58,7 +58,7 @@ export const NavLink = props => {
 	)
 }
 
-export const ScrollNavbar = ({ children, ...props }) => {
+export const ScrollNavbar = props => {
 	const [hidden, setHidden] = useState(0)
 	const prevScroll = useRef(0)
 	const onScroll = () => {
@@ -80,9 +80,5 @@ export const ScrollNavbar = ({ children, ...props }) => {
 			window.removeEventListener('scroll', onScroll)
 		}
 	})
-	return (
-		<StyledNavbar {...props} hide={hidden}>
-			{children}
-		</StyledNavbar>
-	)
+	return <StyledNavbar {...props} hide={hidden} />
 }

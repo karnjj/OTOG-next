@@ -8,7 +8,9 @@ const Guide = () => (
 	<Card>
 		<Card.Header as='h6'>Note</Card.Header>
 		<Card.Body>
-			<Card.Text>1. You can add and edit problems in this page.</Card.Text>
+			<Card.Text>
+				1. <b>Double Click</b> to edit problems in this page.
+			</Card.Text>
 			<Card.Text>2. Hover over each icons for explanation.</Card.Text>
 			<Card.Text>
 				3. In add feature you <b>must</b> fill every form carefully.
@@ -17,8 +19,7 @@ const Guide = () => (
 	</Card>
 )
 
-const Task = props => {
-	const userData = props.jsData
+const Task = () => {
 	return (
 		<>
 			<Header />
@@ -33,7 +34,7 @@ const Task = props => {
 						<br />
 					</Col>
 					<Col lg={9}>
-						<TaskTable {...{ userData }} />
+						<TaskTable />
 					</Col>
 				</Row>
 			</Container>

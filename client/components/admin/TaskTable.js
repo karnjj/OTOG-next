@@ -1,7 +1,17 @@
 import { useState, useEffect } from 'react'
+import { useAuthContext } from '../../utils/auth'
 import fetch from 'isomorphic-unfetch'
 
-import { Table, ButtonGroup, Button } from 'react-bootstrap'
+import {
+	Table,
+	ButtonGroup,
+	Button,
+	Modal,
+	Form,
+	Col,
+	Row,
+	InputGroup
+} from 'react-bootstrap'
 import { Alink } from '../CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -15,19 +25,80 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 export const NewProblem = () => {
+	const [show, setShow] = useState(false)
+	const handleShow = () => setShow(true)
+	const handleClose = () => setShow(false)
+	const onSubmit = async event => {
+		event.preventDefault()
+		handleClose()
+	}
 	return (
-		<Button variant='success' size='lg'>
-			<FontAwesomeIcon icon={faPlusCircle} /> New Problem
-		</Button>
+		<>
+			<Button variant='success' size='lg' onClick={handleShow}>
+				<FontAwesomeIcon icon={faPlusCircle} /> New Problem
+			</Button>
+			<Modal show={show} onHide={handleClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Add New Problem</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Form>
+						<Form.Label>Description : </Form.Label>
+						<InputGroup>
+							<Form.Control placeholder='Display Name' />
+							<Form.Control placeholder='Short Name' />
+						</InputGroup>
+						<br />
+						<div className='custom-file'>
+							<input
+								accept='.pdf'
+								type='file'
+								className='custom-file-input'
+								/*onChange={selectFile}*/
+							/>
+							<label className='custom-file-label'>
+								{/*fileName || */ 'Document (PDF)'}
+							</label>
+						</div>
+						<br />
+						<br />
+						<div className='custom-file'>
+							<input
+								accept='.zip'
+								type='file'
+								className='custom-file-input'
+								/*onChange={selectFile}*/
+							/>
+							<label className='custom-file-label'>
+								{/*fileName || */ 'Testcases (ZIP)'}
+							</label>
+						</div>
+						<br />
+						<br />
+						<Form.Label>Constraint : </Form.Label>
+						<InputGroup>
+							<Form.Control placeholder='Time Limit (s)' />
+							<Form.Control placeholder='Memory (MB)' />
+							<Form.Control placeholder='Score' />
+						</InputGroup>
+					</Form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant='success' onClick={onSubmit}>
+						Save
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
 	)
 }
 
 const ConfigTask = props => {
 	const { state } = props
+	const { handleShow } = props
 	return (
 		<ButtonGroup>
-			<Button variant='info'>
-				{' '}
+			<Button variant='info' onClick={handleShow}>
 				<FontAwesomeIcon icon={faPencilAlt} />
 			</Button>
 			<Button variant='warning'>
@@ -37,14 +108,112 @@ const ConfigTask = props => {
 				<FontAwesomeIcon icon={state ? faEye : faEyeSlash} />
 			</Button>
 			<Button variant='danger'>
-				{' '}
 				<FontAwesomeIcon icon={faTrash} />
 			</Button>
 		</ButtonGroup>
 	)
 }
 
-export const TaskTable = ({ userData }) => {
+const EditModal = props => {
+	const { show, setShow } = props
+	const { id_Prob } = props
+	const [name, setName] = useState(props.name)
+	const [sname, setSname] = useState(props.sname)
+	const [memory, setMemory] = useState(props.memory)
+	const [time, setTime] = useState(props.time)
+	const [score, setScore] = useState(props.score)
+	const handleClose = () => setShow(false)
+
+	const handleChangeName = event => {
+		setName(event.target.value)
+	}
+	const handleChangeSname = event => {
+		setSname(event.target.value)
+	}
+	const handleChangeMemory = event => {
+		setMemory(event.target.value)
+	}
+	const handleChangeTime = event => {
+		setTime(event.target.value)
+	}
+	const handleChangeScore = event => {
+		setScore(event.target.value)
+	}
+	const onSave = async event => {
+		event.preventDefault()
+		handleClose()
+		console.log([name, sname, memory, time, score])
+	}
+	return (
+		<Modal show={show} onHide={handleClose}>
+			<Modal.Header closeButton>
+				<Modal.Title>Problem #{id_Prob}</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<Form>
+					<Form.Label>Name</Form.Label>
+					<Form.Control defaultValue={name} onChange={handleChangeName} />
+					<br />
+					<Form.Label>Short Name</Form.Label>
+					<Form.Control defaultValue={sname} onChange={handleChangeSname} />
+					<br />
+					<Row>
+						<Col xs={4}>
+							<Form.Label>Time</Form.Label>
+							<Form.Control defaultValue={time} onChange={handleChangeTime} />
+						</Col>
+						<Col xs={4}>
+							<Form.Label>Memory</Form.Label>
+							<Form.Control
+								defaultValue={memory}
+								onChange={handleChangeMemory}
+							/>
+						</Col>
+						<Col xs={4}>
+							<Form.Label>Score</Form.Label>
+							<Form.Control defaultValue={score} onChange={handleChangeScore} />
+						</Col>
+					</Row>
+				</Form>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button variant='success' onClick={onSave}>
+					Save
+				</Button>
+			</Modal.Footer>
+		</Modal>
+	)
+}
+
+const TaskTr = props => {
+	const { id_Prob, name, sname, memory, time, score } = props
+
+	const [show, setShow] = useState(false)
+	const handleShow = () => setShow(true)
+	return (
+		<tr onDoubleClick={handleShow}>
+			<td>{id_Prob}</td>
+			<td>
+				<Alink
+					target='_blank'
+					href={`${process.env.API_URL}/api/docs/${sname}`}
+				>
+					{name}
+				</Alink>
+			</td>
+			<td>{time}</td>
+			<td>{memory}</td>
+			<td>{score}</td>
+			<td>
+				<ConfigTask {...props} {...{ handleShow }} />
+				<EditModal {...props} {...{ setShow, show }} />
+			</td>
+		</tr>
+	)
+}
+
+export const TaskTable = props => {
+	const userData = useAuthContext()
 	const [taskState, setTaskState] = useState([])
 	useEffect(() => {
 		const fetchData = async () => {
@@ -65,31 +234,14 @@ export const TaskTable = ({ userData }) => {
 					<th>Name</th>
 					<th>Time</th>
 					<th>Memory</th>
+					<th>Score</th>
 					<th>Config</th>
 				</tr>
 			</thead>
 			<tbody>
-				{taskState.map(prob => {
-					const { name, id_Prob, time, memory, sname, state } = prob
-					return (
-						<tr key={id_Prob}>
-							<td>{id_Prob}</td>
-							<td>
-								<Alink
-									target='_blank'
-									href={`${process.env.API_URL}/api/docs/${sname}`}
-								>
-									{name}
-								</Alink>
-							</td>
-							<td>{time}</td>
-							<td>{memory}</td>
-							<td>
-								<ConfigTask {...prob} />
-							</td>
-						</tr>
-					)
-				})}
+				{taskState.map((prob, index) => (
+					<TaskTr key={index} {...prob} />
+				))}
 			</tbody>
 		</Table>
 	)
