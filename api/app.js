@@ -192,6 +192,14 @@ app.get('/api/admin/problem',async (req,res) => {
     res.json(problem)
 })
 
+app.get('/api/admin/user',async (req,res) => {
+	var sql = 'select * from User'
+	let problem = await new Promise((resolve) => {
+		db.query(sql,(err,result) => resolve(result))
+	})  
+    res.json(problem)
+})
+
 app.post('/api/admin/problem/:id', (req,res) => {
 	const data = req.body
 	const idProb = req.params.id
