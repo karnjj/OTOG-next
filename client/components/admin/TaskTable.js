@@ -94,8 +94,7 @@ export const NewProblem = () => {
 }
 
 const ConfigTask = props => {
-	const { state } = props
-	const { handleShow } = props
+	const { state, handleShow } = props
 	return (
 		<ButtonGroup>
 			<Button variant='info' onClick={handleShow}>
@@ -141,7 +140,7 @@ const EditModal = props => {
 	}
 	const onSave = async event => {
 		event.preventDefault()
-		const data = {name,sname,memory,time,score}
+		const data = { name, sname, memory, time, score }
 		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}`
 		const response = await fetch(url, {
 			method: 'POST',
@@ -150,6 +149,7 @@ const EditModal = props => {
 		})
 		if (response.ok) handleClose(), window.location.reload(false)
 	}
+
 	return (
 		<Modal show={show} onHide={handleClose}>
 			<Modal.Header closeButton>
@@ -193,9 +193,9 @@ const EditModal = props => {
 
 const TaskTr = props => {
 	const { id_Prob, name, sname, memory, time, score } = props
-
 	const [show, setShow] = useState(false)
 	const handleShow = () => setShow(true)
+
 	return (
 		<tr onDoubleClick={handleShow}>
 			<td>{id_Prob}</td>
@@ -220,7 +220,8 @@ const TaskTr = props => {
 
 export const TaskTable = props => {
 	const userData = useAuthContext()
-	const [taskState, setTaskState] = useState([])
+	const [tasks, setTasks] = useState([])
+
 	useEffect(() => {
 		const fetchData = async () => {
 			const url = `${process.env.API_URL}/api/admin/problem`
@@ -228,10 +229,11 @@ export const TaskTable = props => {
 			headers['Authorization'] = userData ? userData.id : ''
 			const res = await fetch(url, { headers })
 			const json = await res.json()
-			setTaskState(json)
+			setTasks(json)
 		}
 		fetchData()
 	}, [])
+
 	return (
 		<Table responsive hover>
 			<thead className='thead-light'>
@@ -245,8 +247,8 @@ export const TaskTable = props => {
 				</tr>
 			</thead>
 			<tbody>
-				{taskState.map((prob, index) => (
-					<TaskTr key={index} {...prob} />
+				{tasks.map((task, index) => (
+					<TaskTr key={index} {...task} />
 				))}
 			</tbody>
 		</Table>

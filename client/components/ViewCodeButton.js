@@ -17,26 +17,25 @@ const FontPre = styled.pre`
 `
 
 const ViewCodeButton = props => {
+	const { idResult, id_Prob } = props
 	const userData = useAuthContext()
-	const { language, noSubmission, noProblem } = {
-		language: 'cpp',
-		noSubmission: props.idResult,
-		noProblem: props.id_Prob,
-		...props
-	}
+
 	const [show, setShow] = useState(false)
-	const [showLineNumber, setShowLineNumber] = useState()
-	const [SC, setSC] = useState('')
+	const [sourceCode, setSourceCode] = useState('')
+	const [showLineNumber, setShowLineNumber] = useState(true)
+
+	const handleClose = () => setShow(false)
 	const handleShow = async () => {
-		let url = noSubmission ? `${process.env.API_URL}/api/scode?idSubmit=${noSubmission}` :
-			`${process.env.API_URL}/api/scode?idUser=${userData.id}&idProb=${noProblem}`
+		let url = idResult
+			? `${process.env.API_URL}/api/scode?idSubmit=${idResult}`
+			: `${process.env.API_URL}/api/scode?idUser=${userData.id}&idProb=${id_Prob}`
 		let headers = { 'Content-Type': 'application/json' }
 		const response = await fetch(url, { headers })
 		const data = await response.json()
-		setSC(data.sCode)
+		setSourceCode(data.sCode)
 		setShow(true)
 	}
-	const handleClose = () => setShow(false)
+
 	useEffect(() => {
 		const onResize = () => {
 			if (window.innerWidth < 768) {
@@ -65,11 +64,11 @@ const ViewCodeButton = props => {
 
 			<Modal show={show} onHide={handleClose} centered size='lg'>
 				<Modal.Header closeButton>
-					<Modal.Title>Submission : {noSubmission}</Modal.Title>
+					<Modal.Title>Submission : {idResult}</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<FontPre className={showLineNumber && 'line-numbers'}>
-						<code className={`language-${language}`}>{SC}</code>
+						<code className={`language-cpp`}>{sourceCode}</code>
 					</FontPre>
 				</Modal.Body>
 			</Modal>
@@ -78,47 +77,3 @@ const ViewCodeButton = props => {
 }
 
 export default ViewCodeButton
-/*
-const CodeTextTest = `#include <bits/stdc++.h>
-using namespace std;
-const int mxn = 15;
-char arr[mxn][mxn];
-bool flag[mxn][mxn];
-
-int di[] = {0, 1, 0,-1};
-int dj[] = {1, 0,-1, 0};
-int n, m;
-map<char,int> mp;
-bool bound(int i, int j) {
-    return i >= 0 && j >= 0 && i < n && j < m;
-}
-int dfs(int i, int j ,int h) {
-    if(h == 0)
-        return 0;
-    if(i == n-1 && j == m-1)
-        return h;
-    flag[i][j] = true;
-    int mx = 0;
-    for(int d=0; d<4; d++) {
-        int ni = i + di[d];
-        int nj = j + dj[d];
-        if(bound(ni, nj) and not flag[ni][nj]) {
-            int nh = h + mp[arr[ni][nj]];
-            mx = max(mx, dfs(ni, nj, nh));
-        }
-    }
-    flag[i][j] = false;
-    return mx;
-}
-
-int main() {
-    cin >> n >> m;
-    for(int i=0; i<n; i++) {
-        for(int j=0; j<m; j++) {
-            cin >> arr[i][j];
-        }
-    }
-    mp['E'] = 0, mp['X'] = -1, mp['*'] = 1;
-    cout << dfs(0, 0, 3);
-}`
-*/

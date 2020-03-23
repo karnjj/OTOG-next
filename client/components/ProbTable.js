@@ -29,7 +29,6 @@ const ProbTable = props => {
 }
 
 const ProbTr = props => {
-	const userData = useAuthContext()
 	const {
 		id_Prob,
 		name,
@@ -40,6 +39,7 @@ const ProbTr = props => {
 		acceptState,
 		wrongState
 	} = props
+	const userData = useAuthContext()
 	return (
 		<CustomTr {...{ acceptState, wrongState }}>
 			<td>{id_Prob}</td>
@@ -66,7 +66,7 @@ const ProbTr = props => {
 			{userData && (
 				<td>
 					<SubmitGroup {...props}>
-						{(acceptState || wrongState) && <ViewCodeButton idUser={userData.id} {...{id_Prob}}/>}
+						{(acceptState || wrongState) && <ViewCodeButton {...{ id_Prob }} />}
 					</SubmitGroup>
 				</td>
 			)}

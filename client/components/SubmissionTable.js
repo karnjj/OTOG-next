@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useAuthContext } from '../utils/auth'
 import { CustomTr, CustomTable, Name } from './CustomTable'
 
@@ -6,6 +7,20 @@ import { ButtonGroup } from 'react-bootstrap'
 
 const SubmissionTable = props => {
 	const userData = useAuthContext()
+	const [results, setResults] = useState([])
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const url = `${process.env.API_URL}/api/submission`
+			let headers = { 'Content-Type': 'application/json' }
+			headers['Authorization'] = userData ? userData.id : ''
+			const res = await fetch(url, { headers })
+			const json = await res.json()
+			setResults(json)
+		}
+		fetchData()
+	}, [])
+
 	return (
 		<CustomTable>
 			<thead>
@@ -20,7 +35,7 @@ const SubmissionTable = props => {
 				</tr>
 			</thead>
 			<tbody>
-				{props.results.map((res, index) => (
+				{results.map((res, index) => (
 					<SubTr key={index} {...res} />
 				))}
 			</tbody>
@@ -30,17 +45,14 @@ const SubmissionTable = props => {
 
 const SubTr = props => {
 	const userData = useAuthContext()
-	const {
-		sname,
-		name,
-		timeuse,
-		score,
-		result,
-		acceptState,
-		idResult
-	} = props
+	const { sname, name, timeuse, score, result, idResult } = props
+	const isAccept = result => result.split('').every(res => res === 'P')
+	const round = num => Math.round(num * 100) / 100
+	const canViewCode = (userData, sname) =>
+		userData && (userData.state === 0 || userData.sname === sname)
+
 	return (
-		<CustomTr {...{ acceptState }}>
+		<CustomTr acceptState={isAccept(result)}>
 			<td>{idResult}</td>
 			<td>
 				<Name>{sname}</Name>
@@ -48,11 +60,11 @@ const SubTr = props => {
 			<td>{name}</td>
 			<td>{result}</td>
 			<td>{timeuse} s</td>
-			<td>{score}</td>
-			{userData && (
+			<td>{round(score)}</td>
+			{canViewCode(userData, sname) && (
 				<td>
 					<ButtonGroup>
-						<ViewCodeButton {...{idResult}}/>
+						<ViewCodeButton {...{ idResult }} />
 					</ButtonGroup>
 				</td>
 			)}

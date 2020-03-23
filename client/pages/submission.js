@@ -1,4 +1,4 @@
-import { useEffect,useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuthContext, withAuthSync } from '../utils/auth'
 
 import { Container, Row, Col } from 'react-bootstrap'
@@ -16,86 +16,7 @@ const Submission = () => {
 	const userData = useAuthContext()
 	//const { name, sname } = props.latestProblem
 	const { name, sname } = { name: 'pattern_0', sname: 'a4_ratri' }
-	const [submission,setSubmission] = useState([])
-	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/submission`
-			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = userData ? userData.id : ''
-			const res = await fetch(url, { headers })
-			const json = await res.json()
-			setSubmission(json)
-		}
-		fetchData()
-	}, [])
-	/*
-	const filteredSubmission = [
-		{
-			username: 'anos_136',
-			name: 'pattern_0',
-			time: '0.00',
-			score: '0',
-			result: '--',
-			submitNumber: '69690'
-		},
-		{
-			username: 'anos_136',
-			name: 'pattern_0',
-			time: '0.00',
-			score: '0',
-			result: '--',
-			submitNumber: '69691'
-		},
-		{
-			username: 'anos_136',
-			name: 'pattern_0',
-			time: '0.00',
-			score: '0',
-			result: '--',
-			submitNumber: '69692'
-		},
-		{
-			username: 'anos_136',
-			name: 'pattern_0',
-			time: '0.00',
-			score: '0',
-			result: '--',
-			submitNumber: '69693'
-		},
-		{
-			username: 'anos_136',
-			name: 'pattern_0',
-			time: '0.00',
-			score: '0',
-			result: '--',
-			submitNumber: '69694'
-		},
-		{
-			username: 'anos_136',
-			name: 'pattern_0',
-			time: '0.00',
-			score: '0',
-			result: '--',
-			submitNumber: '69695'
-		},
-		{
-			username: 'anos_136',
-			name: 'pattern_0',
-			time: '0.00',
-			score: '0',
-			result: '--',
-			submitNumber: '69696'
-		},
-		{
-			username: 'anos_136',
-			name: 'pattern_0',
-			time: '0.00',
-			score: '100',
-			result: 'BIGPP',
-			acceptState: true,
-			submitNumber: '69420'
-		}
-	]*/
+
 	return (
 		<>
 			<Header />
@@ -128,7 +49,7 @@ const Submission = () => {
 					</Col>
 				</Row>
 				<hr />
-				<SubmissionTable results={submission} />
+				<SubmissionTable />
 			</Container>
 		</>
 	)
