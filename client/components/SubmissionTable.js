@@ -31,29 +31,28 @@ const SubmissionTable = props => {
 const SubTr = props => {
 	const userData = useAuthContext()
 	const {
-		username,
+		sname,
 		name,
-		time,
+		timeuse,
 		score,
 		result,
 		acceptState,
-		submitNumber
+		idResult
 	} = props
-
 	return (
 		<CustomTr {...{ acceptState }}>
-			<td>{submitNumber}</td>
+			<td>{idResult}</td>
 			<td>
-				<Name>{username}</Name>
+				<Name>{sname}</Name>
 			</td>
 			<td>{name}</td>
 			<td>{result}</td>
-			<td>{time} s</td>
+			<td>{timeuse} s</td>
 			<td>{score}</td>
 			{userData && (
 				<td>
 					<ButtonGroup>
-						<ViewCodeButton />
+						<ViewCodeButton {...{idResult}}/>
 					</ButtonGroup>
 				</td>
 			)}

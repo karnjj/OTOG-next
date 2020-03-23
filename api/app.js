@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs')
 const logger = require('morgan');
 const sha256 = require('js-sha256');
-const cookieParser = require('cookie-parser')
 const mysql = require('mysql')
 const multer = require('multer')
 const path = require('path')
@@ -26,7 +25,6 @@ app.use(cors())
 var PORT = process.env.PORT || 8000
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(cookieParser())
 app.use(logger('dev'));
 app.get('/api/problem', async (req, res) => {
 	let mode = req.query.mode
@@ -82,6 +80,17 @@ app.get('/api/problem', async (req, res) => {
 		res.json(problems)
 	})
 })
+app.get('/api/submission', async (req,res) => {
+	let Submit = await new Promise((resolve,reject) => {
+		var sql = 
+			`SELECT idResult,U.sname,P.name,result,timeuse,Result.score,errmsg FROM Result 
+			inner join Problem as P on Result.prob_id = P.id_Prob
+			inner join User as U on Result.user_id = U.idUser
+			order by idResult desc limit 100`
+		db.query(sql,(err,result) => err ? reject(err) : resolve(result)) 
+	})
+	res.json(Submit)
+})
 app.post('/api/login', async (req, res) => {
 	var hash = sha256.create();
 	var username = req.body.username;
@@ -100,7 +109,8 @@ app.post('/api/login', async (req, res) => {
 	else {
 		var data = { username: result.username, id: result.idUser, sname: result.sname, state: result.state }
 		let token = jwt.sign(data, process.env.SECRET_KEY, {
-			algorithm: "RS256"
+			algorithm: "RS256",
+			expiresIn: '3h'
 		})
 		res.status(200).json(token);
 	}
@@ -175,8 +185,26 @@ app.post('/api/upload/:id', upload.single('file'), (req, res) => {
 	var idUser = req.headers.authorization
 	var sql = "INSERT INTO Result (time, user_id, prob_id, status,contestmode) VALUES ?";
 	var values = [[time, idUser, idProb, 0, null],];
-	con.query(sql, [values], (err, result) => err || console.log(err))
+	db.query(sql, [values], (err, result) => err || console.log(err))
 	res.status(200).json({ msg: 'Upload Complete!' })
+})
+
+app.get('/api/scode',(req,res) => {
+	let idSubmit = Number(req.query.idSubmit)
+	let idUser = Number(req.query.idUser)
+	let idProb = Number(req.query.idProb)
+	let sql = idSubmit ? `select * from Result where idResult = ${idSubmit}` :
+		`select * from (select max(idResult) as latest from Result where user_id = ${idUser} and prob_id = ${idProb}) 
+		as X inner join Result as R on R.idResult = X.latest`
+	db.query(sql,(err,result) => {
+		if(err) throw err
+		var submitData = result[0]
+		var fileName = `${submitData.prob_id}_${submitData.time}.cpp`
+		fs.readFile(`./uploaded/${submitData.user_id}/${fileName}`, function (err, data) {
+			if (err) return res.json({sCode : 'Error: ENOENT: no such file or directory'})
+			res.json({sCode : data.toString()})
+		});
+	})
 })
 
 

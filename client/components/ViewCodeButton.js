@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCode } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import prism from 'prismjs'
+import { useAuthContext } from '../utils/auth'
 
 const FontPre = styled.pre`
 	span,
@@ -16,15 +17,25 @@ const FontPre = styled.pre`
 `
 
 const ViewCodeButton = props => {
-	const { language, noSubmission, code } = {
+	const userData = useAuthContext()
+	const { language, noSubmission, noProblem } = {
 		language: 'cpp',
-		code: CodeTextTest,
-		noSubmission: 69420,
+		noSubmission: props.idResult,
+		noProblem: props.id_Prob,
 		...props
 	}
 	const [show, setShow] = useState(false)
 	const [showLineNumber, setShowLineNumber] = useState()
-	const handleShow = () => setShow(true)
+	const [SC, setSC] = useState('')
+	const handleShow = async () => {
+		let url = noSubmission ? `${process.env.API_URL}/api/scode?idSubmit=${noSubmission}` :
+			`${process.env.API_URL}/api/scode?idUser=${userData.id}&idProb=${noProblem}`
+		let headers = { 'Content-Type': 'application/json' }
+		const response = await fetch(url, { headers })
+		const data = await response.json()
+		setSC(data.sCode)
+		setShow(true)
+	}
 	const handleClose = () => setShow(false)
 	useEffect(() => {
 		const onResize = () => {
@@ -58,7 +69,7 @@ const ViewCodeButton = props => {
 				</Modal.Header>
 				<Modal.Body>
 					<FontPre className={showLineNumber && 'line-numbers'}>
-						<code className={`language-${language}`}>{code}</code>
+						<code className={`language-${language}`}>{SC}</code>
 					</FontPre>
 				</Modal.Body>
 			</Modal>
@@ -67,7 +78,7 @@ const ViewCodeButton = props => {
 }
 
 export default ViewCodeButton
-
+/*
 const CodeTextTest = `#include <bits/stdc++.h>
 using namespace std;
 const int mxn = 15;
@@ -110,3 +121,4 @@ int main() {
     mp['E'] = 0, mp['X'] = -1, mp['*'] = 1;
     cout << dfs(0, 0, 3);
 }`
+*/

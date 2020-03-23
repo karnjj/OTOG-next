@@ -66,7 +66,7 @@ const ProbTr = props => {
 			{userData && (
 				<td>
 					<SubmitGroup {...props}>
-						{(acceptState || wrongState) && <ViewCodeButton />}
+						{(acceptState || wrongState) && <ViewCodeButton idUser={userData.id} {...{id_Prob}}/>}
 					</SubmitGroup>
 				</td>
 			)}
