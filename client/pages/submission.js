@@ -1,3 +1,4 @@
+import { useEffect,useState } from 'react'
 import { useAuthContext, withAuthSync } from '../utils/auth'
 
 import { Container, Row, Col } from 'react-bootstrap'
@@ -9,11 +10,25 @@ import SubmitGroup from '../components/SubmitGroup'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
+import { formatWithValidation } from 'next/dist/next-server/lib/utils'
 
 const Submission = () => {
 	const userData = useAuthContext()
 	//const { name, sname } = props.latestProblem
 	const { name, sname } = { name: 'pattern_0', sname: 'a4_ratri' }
+	const [submission,setSubmission] = useState([])
+	useEffect(() => {
+		const fetchData = async () => {
+			const url = `${process.env.API_URL}/api/submission`
+			let headers = { 'Content-Type': 'application/json' }
+			headers['Authorization'] = userData ? userData.id : ''
+			const res = await fetch(url, { headers })
+			const json = await res.json()
+			setSubmission(json)
+		}
+		fetchData()
+	}, [])
+	/*
 	const filteredSubmission = [
 		{
 			username: 'anos_136',
@@ -80,7 +95,7 @@ const Submission = () => {
 			acceptState: true,
 			submitNumber: '69420'
 		}
-	]
+	]*/
 	return (
 		<>
 			<Header />
@@ -113,7 +128,7 @@ const Submission = () => {
 					</Col>
 				</Row>
 				<hr />
-				<SubmissionTable results={filteredSubmission} />
+				<SubmissionTable results={submission} />
 			</Container>
 		</>
 	)
