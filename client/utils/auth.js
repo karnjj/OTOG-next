@@ -10,7 +10,7 @@ export const isLogin = token => {
 }
 
 export const login = token => {
-	cookie.set('token', token, { expires: 1 })
+	cookie.set('token', token, { expires: 3/(24) })
 	router.push('/')
 }
 
