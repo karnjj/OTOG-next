@@ -131,18 +131,24 @@ const EditModal = props => {
 		setSname(event.target.value)
 	}
 	const handleChangeMemory = event => {
-		setMemory(event.target.value)
+		setMemory(Number(event.target.value))
 	}
 	const handleChangeTime = event => {
-		setTime(event.target.value)
+		setTime(Number(event.target.value))
 	}
 	const handleChangeScore = event => {
-		setScore(event.target.value)
+		setScore(Number(event.target.value))
 	}
 	const onSave = async event => {
 		event.preventDefault()
-		handleClose()
-		console.log([name, sname, memory, time, score])
+		const data = {name,sname,memory,time,score}
+		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}`
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data)
+		})
+		if (response.ok) handleClose(), window.location.reload(false)
 	}
 	return (
 		<Modal show={show} onHide={handleClose}>

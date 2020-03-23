@@ -191,6 +191,18 @@ app.get('/api/admin/problem',async (req,res) => {
 	})  
     res.json(problem)
 })
+
+app.post('/api/admin/problem/:id', (req,res) => {
+	const data = req.body
+	const idProb = req.params.id
+	var sql = `update Problem set name = ?, sname = ?, 
+		score = ?, time = ?, memory = ? where id_Prob = ${idProb}`
+	db.query(sql,[data.name,data.sname,data.score,data.time,data.memory],(err)=> {
+		if(err) throw err	
+		res.status(200).send('')
+	})
+})
+
 app.listen(PORT, () => {
 	console.log("Starting server at PORT " + PORT)
 })
