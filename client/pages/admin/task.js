@@ -4,7 +4,7 @@ import { Row, Col, Container, Card } from 'react-bootstrap'
 import { TaskTable, NewProblem } from '../../components/admin/TaskTable'
 import Header from '../../components/admin/Header'
 
-const Guide = () => (
+const Note = () => (
 	<Card>
 		<Card.Header as='h6'>Note</Card.Header>
 		<Card.Body>
@@ -30,7 +30,7 @@ const Task = () => {
 					<Col lg={3}>
 						<NewProblem />
 						<hr />
-						<Guide />
+						<Note />
 						<br />
 					</Col>
 					<Col lg={9}>
