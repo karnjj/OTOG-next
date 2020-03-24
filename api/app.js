@@ -58,8 +58,8 @@ app.get('/api/problem', async (req, res) => {
 		let answer = result[2]
 		if (answer !== undefined) {
 			answer = answer[0]
-			answer.pass = answer.pass.split(' ')
-			answer.wrong = answer.wrong.split(' ')
+			answer.pass = answer.pass ? answer.pass.split(' ') : []
+			answer.wrong = answer.wrong ? answer.wrong.split(' ') : []
 			for (let i in answer.pass) {
 				let idx = problems.findIndex(obj => obj.id_Prob == Number(answer.pass[i]))
 				if (idx == -1) continue
@@ -80,14 +80,14 @@ app.get('/api/problem', async (req, res) => {
 		res.json(problems)
 	})
 })
-app.get('/api/submission', async (req,res) => {
-	let Submit = await new Promise((resolve,reject) => {
-		var sql = 
+app.get('/api/submission', async (req, res) => {
+	let Submit = await new Promise((resolve, reject) => {
+		var sql =
 			`SELECT idResult,U.sname,P.name,result,timeuse,Result.score,errmsg FROM Result 
 			inner join Problem as P on Result.prob_id = P.id_Prob
 			inner join User as U on Result.user_id = U.idUser
 			order by idResult desc limit 100`
-		db.query(sql,(err,result) => err ? reject(err) : resolve(result)) 
+		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
 	})
 	res.json(Submit)
 })
@@ -114,6 +114,25 @@ app.post('/api/login', async (req, res) => {
 		})
 		res.status(200).json(token);
 	}
+})
+app.post('/api/register', async (req, res) => {
+	var username = req.body.username;
+	var password = req.body.password;
+	var sname = req.body.sname;
+	let sql = 'select * from User where username = ?'
+	db.query(sql, [username], (err, result) => {
+		if (result[0] === undefined) {
+			var hash = sha256.create()
+			hash.update(password)
+			password = hash.hex()
+			var sql = "insert into User (username, password, sname) values ?"
+			var values = [
+				[username, password, sname],
+			]
+			db.query(sql, [values], (err) => err ? console.log(err) :
+				res.status(200).send(''))
+		} else res.status(403).send('')
+	})
 })
 app.get('/api/auth', (req, res) => {
 	let token = req.headers.authorization
@@ -189,30 +208,30 @@ app.post('/api/upload/:id', upload.single('file'), (req, res) => {
 	res.status(200).json({ msg: 'Upload Complete!' })
 })
 
-app.get('/api/scode',(req,res) => {
+app.get('/api/scode', (req, res) => {
 	let idSubmit = Number(req.query.idSubmit)
 	let idUser = Number(req.query.idUser)
 	let idProb = Number(req.query.idProb)
 	let sql = idSubmit ? `select * from Result where idResult = ${idSubmit}` :
 		`select * from (select max(idResult) as latest from Result where user_id = ${idUser} and prob_id = ${idProb}) 
 		as X inner join Result as R on R.idResult = X.latest`
-	db.query(sql,(err,result) => {
-		if(err) throw err
+	db.query(sql, (err, result) => {
+		if (err) throw err
 		var submitData = result[0]
 		var fileName = `${submitData.prob_id}_${submitData.time}.cpp`
 		fs.readFile(`./uploaded/${submitData.user_id}/${fileName}`, function (err, data) {
-			if (err) return res.json({sCode : 'Error: ENOENT: no such file or directory'})
-			res.json({sCode : data.toString()})
+			if (err) return res.json({ sCode: 'Error: ENOENT: no such file or directory' })
+			res.json({ sCode: data.toString() })
 		});
 	})
 })
 
-app.get('/api/contest',(req,res) => {
+app.get('/api/contest', (req, res) => {
 	let sql = `select * from Contest`
-	db.query(sql,(err,result) => {
-		if(err) throw err
+	db.query(sql, (err, result) => {
+		if (err) throw err
 		res.json(result)
-		});
+	});
 })
 
 
@@ -220,46 +239,46 @@ app.get('/api/contest',(req,res) => {
 /* Admin */
 
 
-app.get('/api/admin/problem',async (req,res) => {
+app.get('/api/admin/problem', async (req, res) => {
 	var sql = 'select * from Problem'
 	let problem = await new Promise((resolve) => {
-		db.query(sql,(err,result) => resolve(result))
-	})  
-    res.json(problem)
+		db.query(sql, (err, result) => resolve(result))
+	})
+	res.json(problem)
 })
 
-app.get('/api/admin/user',async (req,res) => {
+app.get('/api/admin/user', async (req, res) => {
 	var sql = 'select * from User'
 	let problem = await new Promise((resolve) => {
-		db.query(sql,(err,result) => resolve(result))
-	})  
-    res.json(problem)
+		db.query(sql, (err, result) => resolve(result))
+	})
+	res.json(problem)
 })
 
-app.post('/api/admin/user/:id',async (req,res) => {
+app.post('/api/admin/user/:id', async (req, res) => {
 	const data = req.body
 	const idUser = req.params.id
-	var value = [data.username,data.sname,data.state]
-	if(data.password) {
+	var value = [data.username, data.sname, data.state]
+	if (data.password) {
 		var hash = sha256.create();
 		hash.update(data.password);
 		value.push(hash.hex())
 	}
 	var sql = `update User set username = ?, sname = ?, state = ?
 		${data.password && `, password = ?`} where idUser = ${idUser}`
-	db.query(sql,value,(err)=> {
-		if(err) throw err	
+	db.query(sql, value, (err) => {
+		if (err) throw err
 		res.status(200).send('')
 	})
 })
 
-app.post('/api/admin/problem/:id', (req,res) => {
+app.post('/api/admin/problem/:id', (req, res) => {
 	const data = req.body
 	const idProb = req.params.id
 	var sql = `update Problem set name = ?, sname = ?, 
 		score = ?, time = ?, memory = ? where id_Prob = ${idProb}`
-	db.query(sql,[data.name,data.sname,data.score,data.time,data.memory],(err)=> {
-		if(err) throw err	
+	db.query(sql, [data.name, data.sname, data.score, data.time, data.memory], (err) => {
+		if (err) throw err
 		res.status(200).send('')
 	})
 })
