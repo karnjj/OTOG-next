@@ -207,6 +207,14 @@ app.get('/api/scode',(req,res) => {
 	})
 })
 
+app.get('/api/contest',(req,res) => {
+	let sql = `select * from Contest`
+	db.query(sql,(err,result) => {
+		if(err) throw err
+		res.json(result)
+		});
+})
+
 
 
 /* Admin */
