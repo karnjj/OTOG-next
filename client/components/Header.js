@@ -1,4 +1,4 @@
-import { logout, useAuthContext } from '../utils/auth'
+import { logout, useAuthContext, isAdmin } from '../utils/auth'
 import { useRouter } from 'next/router'
 
 import { Navbar } from 'react-bootstrap'
@@ -32,7 +32,7 @@ const Header = () => {
 			<HeaderSpace />
 			<ScrollNavbar bg='light' expand='sm' fixed='top'>
 				<Navbar.Brand className='mr-auto'>
-					<StyledNavLink href='/'>
+					<StyledNavLink href={isAdmin(userData) ? '/admin' : '/'}>
 						OTOG<span> - One Tambon One Grader</span>
 					</StyledNavLink>
 				</Navbar.Brand>
