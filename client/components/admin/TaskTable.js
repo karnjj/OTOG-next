@@ -79,6 +79,10 @@ export const NewProblem = () => {
 						<InputGroup>
 							<Form.Control placeholder='Time Limit (s)' />
 							<Form.Control placeholder='Memory (MB)' />
+						</InputGroup>
+						<br />
+						<InputGroup>
+							<Form.Control placeholder='Number of testcases' />
 							<Form.Control placeholder='Score' />
 						</InputGroup>
 					</Form>
