@@ -117,7 +117,7 @@ app.post('/api/login', async (req, res) => {
 			expiresIn: '3h'
 		})
 		const timeStamp = Math.floor(Date.now() / 1000)
-		const sql = `insert into sessions (expires,idUser,token) values ?`
+		const sql = `insert into session (expires,idUser,token) values ?`
 		var values = [
 			[(timeStamp+10800), data.id, token],
 		]
@@ -127,7 +127,7 @@ app.post('/api/login', async (req, res) => {
 })
 app.get('/api/logout', (req, res) => {
 	const username = req.headers.authorization
-	var sql = "delete from sessions where idUser = ?"
+	var sql = "delete from session where idUser = ?"
 	db.query(sql, [username], (err) => err && console.log(err))
 	res.status(200).send('')
 })
@@ -159,7 +159,7 @@ app.get('/api/auth', (req, res) => {
 		res.status(200).json(js)
 	} catch {
 		if(token) {
-			var sql = "delete from sessions where token = ?"
+			var sql = "delete from session where token = ?"
 			db.query(sql, [token], (err) => err && console.log(err))
 		}
 		res.status(401).json({})
@@ -186,7 +186,7 @@ app.get('/api/countProblem', (req, res) => {
 		db.query(sql, [idUser], (err, result) => err ? reject(err) : resolve(result))
 	})
 	let allUserOnline = new Promise((resolve, reject) => {
-		let sql = `select count(*) as online from sessions where expires >= UNIX_TIMESTAMP()`
+		let sql = `select count(*) as online from session where expires >= UNIX_TIMESTAMP()`
 		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
 	})
 	Promise.all([allProblem, allUserDo, allUserOnline]).then((result) => {
