@@ -106,3 +106,5 @@ dist
 package-lock.json
 docs
 uploaded
+source
+compiled
