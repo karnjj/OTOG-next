@@ -54,7 +54,7 @@ export const NewProblem = () => {
 								accept='.pdf'
 								type='file'
 								className='custom-file-input'
-								/*onChange={selectFile}*/
+							/*onChange={selectFile}*/
 							/>
 							<label className='custom-file-label'>
 								{/*fileName || */ 'Document (PDF)'}
@@ -67,7 +67,7 @@ export const NewProblem = () => {
 								accept='.zip'
 								type='file'
 								className='custom-file-input'
-								/*onChange={selectFile}*/
+							/*onChange={selectFile}*/
 							/>
 							<label className='custom-file-label'>
 								{/*fileName || */ 'Testcases (ZIP)'}
@@ -98,7 +98,19 @@ export const NewProblem = () => {
 }
 
 const ConfigTask = props => {
-	const { state, handleShow } = props
+	const { id_Prob, handleShow, state } = props
+	const [onoff, setOnoff] = useState(state)
+	const handleChangeState = async event => {
+		event.preventDefault()
+		const data = { onoff }
+		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}?option=onoff`
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data)
+		})
+		if (response.ok) setOnoff(!onoff)
+	}
 	return (
 		<ButtonGroup>
 			<Button variant='info' onClick={handleShow}>
@@ -107,8 +119,8 @@ const ConfigTask = props => {
 			<Button variant='warning'>
 				<FontAwesomeIcon icon={faSyncAlt} />
 			</Button>
-			<Button variant={state ? 'light' : 'dark'}>
-				<FontAwesomeIcon icon={state ? faEye : faEyeSlash} />
+			<Button variant={onoff ? 'light' : 'dark'} onClick={handleChangeState}>
+				<FontAwesomeIcon icon={onoff ? faEye : faEyeSlash} />
 			</Button>
 			<Button variant='danger'>
 				<FontAwesomeIcon icon={faTrash} />
@@ -145,7 +157,7 @@ const EditModal = props => {
 	const onSave = async event => {
 		event.preventDefault()
 		const data = { name, sname, memory, time, score }
-		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}`
+		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}?option=save`
 		const response = await fetch(url, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
