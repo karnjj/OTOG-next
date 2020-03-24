@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { withAuthSync } from '../../utils/auth'
 
 import { Container, Row, Jumbotron } from 'react-bootstrap'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrophy } from '@fortawesome/free-solid-svg-icons'
 

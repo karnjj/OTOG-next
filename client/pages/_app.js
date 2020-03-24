@@ -34,7 +34,7 @@ const GlobalStyle = createGlobalStyle`
         a, p, span,
         input::placeholder,
         label,
-        td, th, code, pre {
+        td, th, pre {
             font-size: 0.85rem;
         }
         .language-c, .language-cpp{
