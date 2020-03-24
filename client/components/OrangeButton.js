@@ -6,10 +6,10 @@ import { Button } from 'react-bootstrap'
 import { darken } from 'polished'
 
 const StyledButton = styled(Button)`
-	padding: ${props => (props.outline ? '6px 8px' : '6px 12px')};
 	color: ${props => (props.outline ? vars.orange : vars.white)};
 	background: ${props => (props.outline ? vars.white : vars.orange)};
 	border: 1px solid ${vars.orange};
+	padding: ${props => `6px ${6 + props.expand}px`};
 	a {
 		color: ${props => (props.outline ? vars.orange : vars.white)};
 	}
@@ -23,17 +23,13 @@ const StyledButton = styled(Button)`
 	}
 `
 
-const OrangeButton = ({ children, href, ...props }) =>
+const OrangeButton = ({ href, dynamic, ...props }) =>
 	href ? (
-		<Link {...{ href }}>
-			<StyledButton variant='warning' {...props}>
-				{children}
-			</StyledButton>
+		<Link href={href} as={dynamic}>
+			<StyledButton variant='warning' {...props} />
 		</Link>
 	) : (
-		<StyledButton variant='warning' {...props}>
-			{children}
-		</StyledButton>
+		<StyledButton variant='warning' {...props} />
 	)
 
 export default OrangeButton

@@ -58,7 +58,7 @@ const ViewCodeButton = props => {
 
 	return (
 		<>
-			<OrangeButton outline='true' onClick={handleShow} icon='true'>
+			<OrangeButton expand={2} outline='true' onClick={handleShow} icon='true'>
 				<FontAwesomeIcon icon={faCode} />
 			</OrangeButton>
 

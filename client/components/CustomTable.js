@@ -36,8 +36,4 @@ const CenterTable = styled(Table)`
 		}
 	}
 `
-export const CustomTable = ({ children }) => (
-	<CenterTable responsive hover>
-		{children}
-	</CenterTable>
-)
+export const CustomTable = props => <CenterTable responsive hover {...props} />

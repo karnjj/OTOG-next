@@ -17,6 +17,20 @@ const Submission = () => {
 	//const { name, sname } = props.latestProblem
 	const { name, sname } = { name: 'pattern_0', sname: 'a4_ratri' }
 
+	const [results, setResults] = useState([])
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const url = `${process.env.API_URL}/api/submission`
+			let headers = { 'Content-Type': 'application/json' }
+			headers['Authorization'] = userData ? userData.id : ''
+			const res = await fetch(url, { headers })
+			const json = await res.json()
+			setResults(json)
+		}
+		fetchData()
+	}, [])
+
 	return (
 		<>
 			<Header />
@@ -49,7 +63,7 @@ const Submission = () => {
 					</Col>
 				</Row>
 				<hr />
-				<SubmissionTable />
+				<SubmissionTable {...{ results }} />
 			</Container>
 		</>
 	)

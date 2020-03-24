@@ -7,20 +7,7 @@ import { ButtonGroup } from 'react-bootstrap'
 
 const SubmissionTable = props => {
 	const userData = useAuthContext()
-	const [results, setResults] = useState([])
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/submission`
-			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = userData ? userData.id : ''
-			const res = await fetch(url, { headers })
-			const json = await res.json()
-			setResults(json)
-		}
-		fetchData()
-	}, [])
-
+	const { results } = props
 	return (
 		<CustomTable>
 			<thead>

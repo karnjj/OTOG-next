@@ -40,6 +40,7 @@ const ProbTr = props => {
 		wrongState
 	} = props
 	const userData = useAuthContext()
+
 	return (
 		<CustomTr {...{ acceptState, wrongState }}>
 			<td>{id_Prob}</td>

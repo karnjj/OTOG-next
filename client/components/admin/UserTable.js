@@ -91,7 +91,7 @@ const EditModal = props => {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(data)
 		})
-		if (respone.ok) handleClose(),window.location.reload(false)
+		if (respone.ok) handleClose(), window.location.reload(false)
 	}
 
 	return (
@@ -114,7 +114,10 @@ const EditModal = props => {
 					<Form.Control defaultValue={state} onChange={handleChangeState} />
 					<br />
 					<Form.Label>New Password : </Form.Label>
-					<Form.Control defaultValue={password} onChange={handleChangePassword} />
+					<Form.Control
+						placeholder='Password'
+						onChange={handleChangePassword}
+					/>
 					<br />
 				</Form>
 			</Modal.Body>

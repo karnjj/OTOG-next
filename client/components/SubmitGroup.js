@@ -51,10 +51,7 @@ const SubmitGroup = props => {
 	return (
 		<>
 			<ButtonGroup>
-				<OrangeButton
-					expand={acceptState || wrongState ? 1 : 0}
-					onClick={handleShow}
-				>
+				<OrangeButton expand={6} onClick={handleShow}>
 					<FontAwesomeIcon icon={faFileUpload} />
 				</OrangeButton>
 				{children}

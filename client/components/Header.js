@@ -24,7 +24,7 @@ const Header = () => {
 		//name,     favicon,       paths
 		['Main', faHome, ['/']],
 		['Problems', faPuzzlePiece, ['/problem', '/submission']],
-		['Contest', faTrophy, ['/contest']],
+		['Contest', faTrophy, ['/contest', '/contest/history', '/contest/[id]']],
 		['Ratings', faChartBar, ['/rating']]
 	]
 	return (

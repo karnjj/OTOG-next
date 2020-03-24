@@ -48,8 +48,9 @@ const MyApp = props => {
 	return (
 		<>
 			<Head>
-				<title>OTOG</title>
+				<title>OTOG - One Tambon One Grader</title>
 				<link rel='manifest' href='/manifest.json' />
+				<link rel='shortcut icon' href='/logo196.png' />
 				<link rel='apple-touch-icon' href='/logoIOS.png' />
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
 				<link
