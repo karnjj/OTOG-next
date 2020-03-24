@@ -67,6 +67,7 @@ const EditModal = props => {
 	const [username, setUsername] = useState(props.username)
 	const [sname, setSname] = useState(props.sname)
 	const [state, setState] = useState(props.state)
+	const [password, setPassword] = useState('')
 	const handleClose = () => setShow(false)
 
 	const handleChangeUserame = event => {
@@ -78,8 +79,19 @@ const EditModal = props => {
 	const handleChangeState = event => {
 		setState(Number(event.target.value))
 	}
+	const handleChangePassword = event => {
+		setPassword(event.target.value)
+	}
 	const onSave = async event => {
 		event.preventDefault()
+		const data = { username, sname, state, password }
+		const url = `${process.env.API_URL}/api/admin/user/${idUser}`
+		const respone = await fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data)
+		})
+		if (respone.ok) handleClose(),window.location.reload(false)
 	}
 
 	return (
@@ -100,6 +112,9 @@ const EditModal = props => {
 					<br />
 					<Form.Label>User Level : </Form.Label>
 					<Form.Control defaultValue={state} onChange={handleChangeState} />
+					<br />
+					<Form.Label>New Password : </Form.Label>
+					<Form.Control defaultValue={password} onChange={handleChangePassword} />
 					<br />
 				</Form>
 			</Modal.Body>

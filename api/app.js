@@ -56,7 +56,7 @@ app.get('/api/problem', async (req, res) => {
 		let whoPass = result[0]
 		let problems = result[1]
 		let answer = result[2]
-		if (answer != undefined) {
+		if (answer !== undefined) {
 			answer = answer[0]
 			answer.pass = answer.pass.split(' ')
 			answer.wrong = answer.wrong.split(' ')
@@ -226,6 +226,23 @@ app.get('/api/admin/user',async (req,res) => {
 		db.query(sql,(err,result) => resolve(result))
 	})  
     res.json(problem)
+})
+
+app.post('/api/admin/user/:id',async (req,res) => {
+	const data = req.body
+	const idUser = req.params.id
+	var value = [data.username,data.sname,data.state]
+	if(data.password) {
+		var hash = sha256.create();
+		hash.update(data.password);
+		value.push(hash.hex())
+	}
+	var sql = `update User set username = ?, sname = ?, state = ?
+		${data.password && `, password = ?`} where idUser = ${idUser}`
+	db.query(sql,value,(err)=> {
+		if(err) throw err	
+		res.status(200).send('')
+	})
 })
 
 app.post('/api/admin/problem/:id', (req,res) => {
