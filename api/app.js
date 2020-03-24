@@ -116,8 +116,20 @@ app.post('/api/login', async (req, res) => {
 			algorithm: "RS256",
 			expiresIn: '3h'
 		})
-		res.status(200).json(token);
+		const timeStamp = Math.floor(Date.now() / 1000)
+		const sql = `insert into sessions (expires,idUser,token) values ?`
+		var values = [
+			[(timeStamp+10800), data.id, token],
+		]
+		db.query(sql, [values], (err) => err ? console.log(err) :
+			res.status(200).json(token))
 	}
+})
+app.get('/api/logout', (req, res) => {
+	const username = req.headers.authorization
+	var sql = "delete from sessions where idUser = ?"
+	db.query(sql, [username], (err) => err && console.log(err))
+	res.status(200).send('')
 })
 app.post('/api/register', async (req, res) => {
 	var username = req.body.username;
@@ -145,8 +157,11 @@ app.get('/api/auth', (req, res) => {
 			algorithm: "RS256"
 		})
 		res.status(200).json(js)
-
 	} catch {
+		if(token) {
+			var sql = "delete from sessions where token = ?"
+			db.query(sql, [token], (err) => err && console.log(err))
+		}
 		res.status(401).json({})
 	}
 })
@@ -170,7 +185,11 @@ app.get('/api/countProblem', (req, res) => {
 			+ 'from Result where user_id = ? group by prob_id) r2 on r1.prob_id = r2.prob_id and r1.time = r2.maxTime'
 		db.query(sql, [idUser], (err, result) => err ? reject(err) : resolve(result))
 	})
-	Promise.all([allProblem, allUserDo]).then((result) => {
+	let allUserOnline = new Promise((resolve, reject) => {
+		let sql = `select count(*) as online from sessions where expires >= UNIX_TIMESTAMP()`
+		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
+	})
+	Promise.all([allProblem, allUserDo, allUserOnline]).then((result) => {
 		let passProb = 0;
 		let wrongProb = 0;
 		let sz = result[1].length;
@@ -180,7 +199,8 @@ app.get('/api/countProblem', (req, res) => {
 		}
 		res.json({
 			allProblem: result[0][0].allP,
-			userProblem: { passProb, wrongProb }
+			userProblem: { passProb, wrongProb },
+			onlineUser : result[2][0].online
 		})
 	})
 })
@@ -280,12 +300,24 @@ app.post('/api/admin/user/:id', async (req, res) => {
 app.post('/api/admin/problem/:id', (req, res) => {
 	const data = req.body
 	const idProb = req.params.id
-	var sql = `update Problem set name = ?, sname = ?, 
-		score = ?, time = ?, memory = ? where id_Prob = ${idProb}`
-	db.query(sql, [data.name, data.sname, data.score, data.time, data.memory], (err) => {
-		if (err) throw err
-		res.status(200).send('')
-	})
+	const option = req.query.option
+	switch (option) {
+		case 'save':
+			var sql = `update Problem set name = ?, sname = ?, 
+				score = ?, time = ?, memory = ? where id_Prob = ${idProb}`
+			db.query(sql, [data.name, data.sname, data.score, data.time, data.memory], (err) => {
+				if (err) throw err
+				res.status(200).send('')
+			})
+			break;
+		case 'onoff':
+			var sql = `update Problem set state = ? where id_Prob = ${idProb}`
+			db.query(sql, [(!data.onoff)], (err) => {
+				if (err) throw err
+				res.status(200).send('')
+			})
+			break;
+	}
 })
 
 app.listen(PORT, () => {

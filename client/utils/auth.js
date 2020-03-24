@@ -30,7 +30,11 @@ export const auth = async ctx => {
 	}
 }
 
-export const logout = () => {
+export const logout = (userData) => {
+	let url = `${process.env.API_URL}/api/logout`
+	let headers = { 'Content-Type': 'application/json' }
+	headers['Authorization'] = userData.id
+	const res = fetch(url, { headers })
 	cookie.remove('token')
 	window.localStorage.setItem('logout', Date.now())
 	window.location.reload(false)

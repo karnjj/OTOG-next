@@ -27,6 +27,7 @@ const Header = () => {
 		['Contest', faTrophy, ['/contest', '/contest/history', '/contest/[id]']],
 		['Ratings', faChartBar, ['/rating']]
 	]
+	const handleClickLogout = () => logout(userData)
 	return (
 		<>
 			<HeaderSpace />
@@ -49,7 +50,7 @@ const Header = () => {
 						<NavLink
 							name='Logout'
 							icon={faSignInAlt}
-							onClick={logout}
+							onClick={handleClickLogout}
 							red='true'
 						/>
 					) : (

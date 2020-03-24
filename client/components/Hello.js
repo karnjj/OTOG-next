@@ -72,6 +72,7 @@ const Hello = () => {
 	const [wrongProb, setWrongProb] = useState(0)
 	const [noSub, setNoSub] = useState(0)
 	const [newProb, setNewProb] = useState(0)
+	const [onlineUser, setOnlineUser] = useState(0)
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -79,13 +80,14 @@ const Hello = () => {
 			let headers = { 'Content-Type': 'application/json' }
 			headers['Authorization'] = userData.id
 			const response = await fetch(url, { headers })
-			const { allProblem, userProblem } = await response.json()
+			const { allProblem, userProblem, onlineUser } = await response.json()
 			const { passProb, wrongProb } = userProblem
 			setAllProb(allProblem)
 			setPassProb(passProb)
 			setWrongProb(wrongProb)
 			setNoSub(allProblem - passProb - wrongProb)
 			setNewProb(0)
+			setOnlineUser(onlineUser)
 		}
 		fetchData()
 	}, [])
@@ -107,7 +109,7 @@ const Hello = () => {
 					</CountButton>
 				))}
 			</ButtonWrapper>
-			<AliveText>ยังมีชีวิตรอด : {0}</AliveText>
+			<AliveText>ยังมีชีวิตรอด : <CountUp end={onlineUser}/></AliveText>
 		</>
 	)
 }
