@@ -20,6 +20,10 @@ const db = mysql.createConnection({
 db.connect()
 process.env.SECRET_KEY = fs.readFileSync('./private.key', 'utf8');
 process.env.PUBLIC_KEY = fs.readFileSync('./public.key', 'utf8');
+const fileExt = {
+	'C' : '.c',
+	'C++' : '.cpp'
+}
 var app = express()
 app.use(cors())
 var PORT = process.env.PORT || 8000
@@ -193,18 +197,19 @@ var storage = multer.diskStorage({
 	filename: function (req, file, cb) {
 		var idProb = req.params.id
 		var time = req.body.time
-		var fileExt = path.extname(file.originalname)
-		cb(null, `${idProb}_${time}${fileExt}`)
+		var fileLang = req.body.fileLang
+		cb(null, `${idProb}_${time}${fileExt[fileLang]}`)
 	}
 })
 var upload = multer({ storage: storage })
 app.post('/api/upload/:id', upload.single('file'), (req, res) => {
 	var time = req.body.time
+	var lang = req.body.fileLang
 	var idProb = req.params.id
 	var idUser = req.headers.authorization
-	var sql = "INSERT INTO Result (time, user_id, prob_id, status,contestmode) VALUES ?";
-	var values = [[time, idUser, idProb, 0, null],];
-	db.query(sql, [values], (err, result) => err || console.log(err))
+	var sql = "INSERT INTO Result (time, user_id, prob_id, status,contestmode,language) VALUES ?";
+	var values = [[time, idUser, idProb, 0, null, lang],];
+	db.query(sql, [values], (err, result) => err && console.log(err))
 	res.status(200).json({ msg: 'Upload Complete!' })
 })
 
@@ -218,7 +223,7 @@ app.get('/api/scode', (req, res) => {
 	db.query(sql, (err, result) => {
 		if (err) throw err
 		var submitData = result[0]
-		var fileName = `${submitData.prob_id}_${submitData.time}.cpp`
+		var fileName = `${submitData.prob_id}_${submitData.time}${fileExt[submitData.language]}`
 		fs.readFile(`./uploaded/${submitData.user_id}/${fileName}`, function (err, data) {
 			if (err) return res.json({ sCode: 'Error: ENOENT: no such file or directory' })
 			res.json({ sCode: data.toString() })
