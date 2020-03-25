@@ -62,7 +62,6 @@ const Contest = () => {
 		<>
 			<Header />
 			<Container>
-				<br />
 				<Announce>
 					<h2>Announcement from Admin</h2>
 				</Announce>
@@ -78,10 +77,7 @@ const Contest = () => {
 				) : (
 					<br />
 				)}
-				<br />
-				<br />
-				<br />
-				<Footer />
+				<Footer br={4} />
 			</Container>
 		</>
 	)

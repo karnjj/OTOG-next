@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { withAuthSync } from '../../utils/auth'
 
 import { Container } from 'react-bootstrap'
+import Title from '../../components/Title'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { CustomTable, CustomTr } from '../../components/CustomTable'
@@ -87,13 +88,9 @@ const History = () => {
 		<>
 			<Header />
 			<Container>
-				<br />
-				<br />
-				<br />
-				<h2>
-					<FontAwesomeIcon icon={faTrophy} /> Contest History
-				</h2>
-				<br />
+				<Title noBr='true' icon={faTrophy}>
+					Contest History
+				</Title>
 				<hr />
 				<ContestTable />
 				<Footer />

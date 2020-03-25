@@ -4,10 +4,10 @@ import { withAuthSync } from '../utils/auth'
 
 import { Container, Col, Row, Form } from 'react-bootstrap'
 import UserTable from '../components/UserTable'
+import Title from '../components/Title'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
 
 const Rating = () => {
@@ -31,14 +31,8 @@ const Rating = () => {
 	return (
 		<>
 			<Header />
-			<br />
-			<br />
-			<br />
 			<Container>
-				<h2>
-					<FontAwesomeIcon icon={faChartBar} /> Rating{' '}
-				</h2>
-				<br />
+				<Title icon={faChartBar}>Rating</Title>
 				<Row className='align-items-baseline'>
 					<Col as='label' md={2}>
 						<b>ค้นหาผู้ใช้ : </b>

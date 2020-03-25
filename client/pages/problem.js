@@ -3,15 +3,15 @@ import { withAuthSync } from '../utils/auth'
 
 import fetch from 'isomorphic-unfetch'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
-
 import { Row, Col, Form, Container } from 'react-bootstrap'
 import { useAuthContext } from '../utils/auth'
 import OrangeButton from '../components/OrangeButton'
 import ProbTable from '../components/ProbTable'
+import Title from '../components/Title'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+
+import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 
 const Problem = () => {
 	const userData = useAuthContext()
@@ -41,14 +41,7 @@ const Problem = () => {
 		<>
 			<Header />
 			<Container>
-				<br />
-				<br />
-				<br />
-				<h2>
-					{' '}
-					<FontAwesomeIcon icon={faPuzzlePiece} /> Problem{' '}
-				</h2>
-				<br />
+				<Title icon={faPuzzlePiece}>Problem</Title>
 				<Row className='m-auto justify-content-between align-items-baseline'>
 					<Col
 						as={Form.Control}

@@ -12,8 +12,11 @@ const Text = styled.p`
 	text-align: right;
 `
 
-const Footer = () => (
+const Footer = props => (
 	<>
+		{[...Array(props.br)].map((n, i) => (
+			<br key={i} />
+		))}
 		<hr />
 		<Row>
 			<Col md={6}>
