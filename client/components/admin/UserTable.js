@@ -161,7 +161,6 @@ export const UserTable = props => {
 			const res = await fetch(url, { headers })
 			const json = await res.json()
 			setUsers(json)
-			console.log(json)
 		}
 		fetchData()
 	}, [])

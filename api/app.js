@@ -259,7 +259,23 @@ app.get('/api/contest', (req, res) => {
 	});
 })
 
-
+app.get('/api/contest/:id', (req, res) => {
+	const idContest = req.params.id
+	let sql = `select * from Contest where idContest = ?`
+	db.query(sql, [idContest], (err, result) => {
+		if (err) throw err
+		const problem = JSON.parse(result[0].problems)
+		let sql = `SELECT * FROM Problem WHERE id_Prob IN (?)`
+		db.query(sql,[problem],(err,prob) => {
+			res.json({
+				name : result[0].name,
+				id : result[0].idContest,
+				timeEnd : result[0].time_end,
+				problem : prob
+			})
+		})
+	});
+})
 
 /* Admin */
 
