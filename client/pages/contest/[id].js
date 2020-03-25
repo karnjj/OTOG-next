@@ -56,7 +56,7 @@ const Submission = props => {
             const url = `${process.env.API_URL}/api/contest/submission/${id}`
             const response = await fetch(url, {
                 headers: {
-                    authorization: userData.id
+                    authorization: userData ? userData.id : ''
                 }
             })
             const json = await response.json()
@@ -67,7 +67,7 @@ const Submission = props => {
                 if (lastest[0].status == 0)
                     waitingData = setInterval(fetchNewData, 1000);
         }
-        fetchData()
+        //fetchData()
     }, [])
     const sendData = () => {
         if (lastest[0] !== undefined) props.ParentCallback(lastest[0].score, best[0].idResult);
@@ -168,7 +168,7 @@ const Problem = props => {
         const respone = await fetch(url, {
             method: 'POST',
             headers: {
-                authorization: userData.id
+                authorization: userData ? userData.id : ''
             },
             body: data
         })
