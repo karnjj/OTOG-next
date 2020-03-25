@@ -10,7 +10,7 @@ export const isLogin = token => {
 }
 
 export const login = token => {
-	cookie.set('token', token, { expires: 3/(24) })
+	cookie.set('token', token, { expires: 3 / 24 })
 	router.push('/')
 }
 
@@ -30,7 +30,7 @@ export const auth = async ctx => {
 	}
 }
 
-export const logout = (userData) => {
+export const logout = userData => {
 	let url = `${process.env.API_URL}/api/logout`
 	let headers = { 'Content-Type': 'application/json' }
 	headers['Authorization'] = userData.id
@@ -77,5 +77,5 @@ export const withAdminAuth = WrappedComponent => {
 			<Error statusCode={404} />
 		)
 	}
-	return Wrapper
+	return withAuthSync(Wrapper)
 }

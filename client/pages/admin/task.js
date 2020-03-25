@@ -1,4 +1,4 @@
-import { withAuthSync, withAdminAuth } from '../../utils/auth'
+import { withAdminAuth } from '../../utils/auth'
 
 import { Row, Col, Container, Card } from 'react-bootstrap'
 import { TaskTable, NewProblem } from '../../components/admin/TaskTable'
@@ -42,4 +42,4 @@ const Task = () => {
 	)
 }
 
-export default withAdminAuth(withAuthSync(Task))
+export default withAdminAuth(Task)

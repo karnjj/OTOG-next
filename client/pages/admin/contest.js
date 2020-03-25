@@ -1,6 +1,6 @@
 import Error from 'next/error'
 
-import { withAuthSync, useAuthContext, withAdminAuth } from '../../utils/auth'
+import { useAuthContext, withAdminAuth } from '../../utils/auth'
 import Header from '../../components/admin/Header'
 
 const Contest = props => {
@@ -12,4 +12,4 @@ const Contest = props => {
 		</>
 	)
 }
-export default withAdminAuth(withAuthSync(Contest))
+export default withAdminAuth(Contest)

@@ -1,4 +1,4 @@
-import { withAuthSync, withAdminAuth } from '../../utils/auth'
+import { withAdminAuth } from '../../utils/auth'
 
 import { Row, Col, Container, Button, Form } from 'react-bootstrap'
 import Header from '../../components/admin/Header'
@@ -45,4 +45,4 @@ const Config = props => {
 		</>
 	)
 }
-export default withAdminAuth(withAuthSync(Config))
+export default withAdminAuth(Config)
