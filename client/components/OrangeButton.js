@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap'
 import { darken } from 'polished'
 
 const StyledButton = styled(Button)`
+	float: ${props => props.right && 'right'};
 	color: ${props => (props.outline ? vars.orange : vars.white)};
 	background: ${props => (props.outline ? vars.white : vars.orange)};
 	border: 1px solid ${vars.orange};

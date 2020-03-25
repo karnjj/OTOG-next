@@ -3,12 +3,13 @@ import { useAuthContext, withAuthSync } from '../utils/auth'
 
 import { Container, Row, Col } from 'react-bootstrap'
 import { Alink } from '../components/CustomTable'
+
+import Title from '../components/Title'
 import Header from '../components/Header'
 import OrangeButton from '../components/OrangeButton'
 import SubmissionTable from '../components/SubmissionTable'
 import SubmitGroup from '../components/SubmitGroup'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 import { formatWithValidation } from 'next/dist/next-server/lib/utils'
 
@@ -35,13 +36,7 @@ const Submission = () => {
 		<>
 			<Header />
 			<Container>
-				<br />
-				<br />
-				<br />
-				<h2>
-					<FontAwesomeIcon icon={faPuzzlePiece} /> Submission
-				</h2>
-				<br />
+				<Title icon={faPuzzlePiece}>Submission</Title>
 				<Row className='m-auto align-items-baseline'>
 					<Col className='mr-auto'>
 						{userData && (

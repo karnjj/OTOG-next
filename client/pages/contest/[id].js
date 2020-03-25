@@ -1,11 +1,11 @@
 import { Container, Row, Col } from 'react-bootstrap'
 
+import Title from '../../components/Title'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import OrangeButton from '../../components/OrangeButton'
 import { CustomTable, CustomTr } from '../../components/CustomTable'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartArea } from '@fortawesome/free-solid-svg-icons'
 
 const ScoreTr = props => {
@@ -34,8 +34,8 @@ const Scoreboard = () => {
 				<tr>
 					<th>#</th>
 					<th>ชื่อผู้เข้าแข่งขัน</th>
-					{[...Array(countProblem).keys()].map(n => (
-						<th>ข้อที่ {n + 1}</th>
+					{[...Array(countProblem)].map((n, i) => (
+						<th key={i}>ข้อที่ {i + 1}</th>
 					))}
 					<th>คะแนนรวม</th>
 					<th>เวลารวม</th>
@@ -55,19 +55,12 @@ const ContestScoreboard = props => {
 		<>
 			<Header />
 			<Container>
-				<br />
-				<br />
-				<br />
-				<Row>
-					<Col>
-						<h2>
-							<FontAwesomeIcon icon={faChartArea} /> Contest Ranking
-						</h2>
-					</Col>
-					<Col xs='auto'>
-						<OrangeButton href='/contest/history'>View Contest</OrangeButton>
-					</Col>
-				</Row>
+				<Title icon={faChartArea} noBr='true'>
+					Contest Ranking
+					<OrangeButton right='true' href='/contest/history'>
+						View Contest
+					</OrangeButton>
+				</Title>
 				<hr />
 				<Scoreboard />
 				<Footer />
