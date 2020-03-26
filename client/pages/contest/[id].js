@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
-import { withAuthSync, useAuthContext } from "../../utils/auth";
 import { useRouter } from "next/router";
+import {
+    Container, Row,
+    Col, Card,
+    Button, ButtonToolbar,
+    ButtonGroup, Table
+} from "react-bootstrap";
+import { withAuthSync, useAuthContext } from "../../utils/auth";
+
 import Header from "../../components/Header";
 import Timer from '../../components/Timer'
-import { Button, ButtonToolbar, ButtonGroup, Table } from 'react-bootstrap'
 import OrangeButton from '../../components/OrangeButton'
+
 const Annoucement = () => {
     var timee = 1585218437;
     return (
@@ -47,13 +50,13 @@ const Submission = props => {
     const router = useRouter()
     const { id } = router.query
     const userData = useAuthContext()
-    const [best, setBest] = useState(null)
-    const [lastest, setLastest] = useState(null)
+    const [best, setBest] = useState([])
+    const [lastest, setLastest] = useState([])
     const [SC, setSC] = useState('test')
     var waitingData = 0
     useEffect(() => {
         const fetchData = async () => {
-            const url = `${process.env.API_URL}/api/contest/submission/${id}`
+            const url = `${process.env.API_URL}/api/contest/${id}/submission?idProb=${props.idProb}`
             const response = await fetch(url, {
                 headers: {
                     authorization: userData ? userData.id : ''
@@ -62,14 +65,14 @@ const Submission = props => {
             const json = await response.json()
             setBest(json.best_submit)
             setLastest(json.lastest_submit)
-            sendData()
-            if (lastest[0] !== undefined)
-                if (lastest[0].status == 0)
+            sendData(json.best_submit, json.lastest_submit)
+            if (json.lastest_submit[0] !== undefined)
+                if (json.lastest_submit[0].status == 0)
                     waitingData = setInterval(fetchNewData, 1000);
         }
-        //fetchData()
+        fetchData()
     }, [])
-    const sendData = () => {
+    const sendData = (lastest, best) => {
         if (lastest[0] !== undefined) props.ParentCallback(lastest[0].score, best[0].idResult);
     }
     /*
@@ -83,7 +86,7 @@ const Submission = props => {
         this.setState({showSc : true, SC : this.state.lastest[0].scode })
     }*/
     const fetchNewData = async () => {
-        const url = `${process.env.API_URL}/api/contest/submission/${id}`
+        const url = `${process.env.API_URL}/api/contest/${id}/submission?idProb=${props.idProb}`
         const response = await fetch(url, {
             headers: {
                 authorization: userData.id
@@ -92,32 +95,8 @@ const Submission = props => {
         const json = await response.json()
         setBest(json.best_submit)
         setLastest(json.lastest_submit)
-        sendData()
-        if (lastest[0].status == 1) clearInterval(waitingData);
-    }
-    //console.log('submit ' + this.state.best);
-    var best_submission = [], last_submission = []
-    for (var e in best) {
-        var temp = best[e]
-        best_submission.push(<tr key={e}>
-            <td>Best 👍</td>
-            <td>{temp.result}</td>
-            <td>{temp.score}</td>
-            <td>
-                <Button size="sm" variant="outline-link" /*onClick={this.ShowBest.bind(this)}*/>🔎</Button>
-            </td>
-        </tr>)
-    }
-    for (var e in lastest) {
-        var temp = lastest[e]
-        last_submission.push(<tr key={e}>
-            <td>Lastest</td>
-            <td>{temp.result}</td>
-            <td>{temp.score}</td>
-            <td>
-                <Button size="sm" variant="outline-link" /*onClick={this.ShowLast.bind(this)}*/>🔎</Button>
-            </td>
-        </tr>)
+        sendData(json.lastest_submit, json.best_submit)
+        if (json.lastest_submit[0].status == 1) clearInterval(waitingData);
     }
     return (
         <>
@@ -132,8 +111,30 @@ const Submission = props => {
                     </tr>
                 </thead>
                 <tbody>
-                    {last_submission}
-                    {best_submission}
+                    {lastest.map((prob, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>Lastest</td>
+                                <td>{prob.result}</td>
+                                <td>{prob.score}</td>
+                                <td>
+                                    <Button size="sm" variant="outline-link" /*onClick={this.ShowLast.bind(this)}*/>🔎</Button>
+                                </td>
+                            </tr>
+                        )
+                    })}
+                    {best.map((prob, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>Lastest</td>
+                                <td>{prob.result}</td>
+                                <td>{prob.score}</td>
+                                <td>
+                                    <Button size="sm" variant="outline-link" /*onClick={this.ShowLast.bind(this)}*/>🔎</Button>
+                                </td>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </Table>
         </>
@@ -141,12 +142,13 @@ const Submission = props => {
 }
 
 const Problem = props => {
+    const router = useRouter()
+    const { id } = router.query
     const userData = useAuthContext()
     const [selectedFile, setSelectedFile] = useState(undefined)
     const [fileName, setFileName] = useState('')
     const [fileLang, setFileLang] = useState('C++')
     const [solved, setSolved] = useState(false)
-    const [idBest, setIdBest] = useState(-1)
     const selectFile = event => {
         if (event.target.files[0] !== undefined) {
             setSelectedFile(event.target.files[0])
@@ -164,7 +166,7 @@ const Problem = props => {
         data.append('file', selectedFile)
         data.append('fileLang', fileLang)
         data.append('time', timeStamp)
-        const url = `${process.env.API_URL}/api/upload/${id_Prob}`
+        const url = `${process.env.API_URL}/api/upload/${props.id_Prob}?contest=${id}`
         const respone = await fetch(url, {
             method: 'POST',
             headers: {
@@ -174,23 +176,8 @@ const Problem = props => {
         })
         if (respone.ok) window.location.reload(false)
     }
-    const quickResend = async () => {
-        if (idBest != -1) {
-            const url = `${process.env.API_URL}/api/contest/quickresend`
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: idBest })
-            })
-            if (response.ok) window.location.reload(false)
-        }
-    }
-
     const CallbackFunc = (ChildData, id) => {
         if (ChildData == 100) setSolved(true)
-        setIdBest(id)
     }
     return (
         <>
@@ -201,7 +188,6 @@ const Problem = props => {
                     Problem {props.index} {props.name + ' '}
                     {solved && <Badge variant="success">Solved</Badge>}
                     <p></p>
-                    <Button variant="outline-info" size="sm" onClick={quickResend}>Quick Submit ⚡</Button>
                 </Card.Header>
                 <Row>
                     <Col>
@@ -244,7 +230,7 @@ const Problem = props => {
                         </Card.Body>
                     </Col>
                     <Col>
-                        <Submission idProb={props.id_Prob} ParentCallback={CallbackFunc}/>
+                        <Submission idProb={props.id_Prob} ParentCallback={CallbackFunc} />
                     </Col>
                     <Col xs={1}></Col>
                 </Row>
