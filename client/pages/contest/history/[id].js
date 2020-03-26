@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { useAuthContext } from '../../../utils/auth'
 import { Container, Row, Col } from 'react-bootstrap'
 
 import Header from '../../../components/Header'
@@ -7,27 +9,25 @@ import { CustomTable, CustomTr } from '../../../components/CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartArea } from '@fortawesome/free-solid-svg-icons'
+import { useRouter } from 'next/router'
 
 const ScoreTr = props => {
-	const { id, username, timeUsed } = props
-	const scores = []
-	const sum = arr => arr.reduce((a, b) => a + b, 0)
-
+	const { id, sname, timeUsed, sum ,prob } = props
 	return (
 		<CustomTr>
 			<td>{id}</td>
-			<td>{username}</td>
-			{scores.map((score, index) => (
-				<td key={index}>{score}</td>
+			<td>{sname}</td>
+			{prob.map((score, index) => (
+				<td key={index}>{score.score}</td>
 			))}
-			<td>{sum(scores)}</td>
+			<td>{sum}</td>
 			<td>{timeUsed}</td>
 		</CustomTr>
 	)
 }
 
-const Scoreboard = () => {
-	const { countProblem, contestants } = { countProblem: 3, contestants: [] }
+const Scoreboard = props => {
+	const { countProblem, contestants } = props
 	return (
 		<CustomTable>
 			<thead>
@@ -51,6 +51,23 @@ const Scoreboard = () => {
 }
 
 const ContestScoreboard = props => {
+	const router = useRouter()
+	const { id } = router.query
+	const userData = useAuthContext()
+	const [taskState, setTaskState] = useState([])
+	useEffect(() => {
+		const fetchData = async () => {
+			const url = `${process.env.API_URL}/api/contest/history/${id}`
+			const response = await fetch(url, {
+				headers: {
+					authorization: userData ? userData.id : ''
+				}
+			})
+			const json = await response.json()
+			setTaskState(json)
+		}
+		fetchData()
+	}, [])
 	return (
 		<>
 			<Header />
@@ -69,7 +86,7 @@ const ContestScoreboard = props => {
 					</Col>
 				</Row>
 				<hr />
-				<Scoreboard />
+				<Scoreboard contestants={taskState} countProblem={3} />
 				<Footer />
 			</Container>
 		</>

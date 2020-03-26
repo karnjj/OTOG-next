@@ -54,7 +54,7 @@ const ContestTable = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/contest`
+			const url = `${process.env.API_URL}/api/contest/history`
 			const response = await fetch(url)
 			const data = await response.json()
 			setContests(data)
