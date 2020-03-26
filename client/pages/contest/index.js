@@ -327,20 +327,22 @@ const Contest = () => {
 					<h1>ญินดีร์ฏ้อณลับสูเก็ดเฎอร์ฌาวไฑย</h1>
 				</Announce>
 			</Container>
-			<Jumbotron as={Row} fluid>
-				<Col xs={0} md={1} lg={2} />
-				<Col xs={12} md={10} lg={8}>
-					{isAboutToStart ? (
-						<Countdown startTime={start} />
-					) : isHolding ? (
-						<HoldingContest endTime={end} idContest={idContest} />
-					) : isJustEnd ? (
-						<EndingContest />
-					) : (
-						<NoContest />
-					)}
-				</Col>
-				<Col xs={0} md={1} lg={2} />
+			<Jumbotron>
+				<Container fluid as={Row}>
+					<Col xs={0} md={1} lg={2} />
+					<Col xs={12} md={10} lg={8}>
+						{isAboutToStart ? (
+							<Countdown startTime={start} />
+						) : isHolding ? (
+							<HoldingContest endTime={end} idContest={idContest} />
+						) : isJustEnd ? (
+							<EndingContest />
+						) : (
+							<NoContest />
+						)}
+					</Col>
+					<Col xs={0} md={1} lg={2} />
+				</Container>
 			</Jumbotron>
 			<Container>
 				{(isAboutToStart || isJustEnd) && (
