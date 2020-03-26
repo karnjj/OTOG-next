@@ -36,7 +36,7 @@ const Submission = () => {
 		<>
 			<Header />
 			<Container>
-				<Title icon={faPuzzlePiece}>Submission</Title>
+				<Title icon={faPuzzlePiece} title='Submission' />
 				<Row className='m-auto align-items-baseline'>
 					<Col className='mr-auto'>
 						{userData && (

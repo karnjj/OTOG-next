@@ -12,7 +12,7 @@ export const Alink = styled.a`
 `
 export const CustomTr = styled.tr`
 	background: ${props =>
-		props.acceptState ? '#ebffeb' : props.wrongState && '#ffebeb'};
+		props.acceptState ? vars.accept : props.wrongState && vars.wrong};
 `
 export const Name = styled.a`
 	color: ${props => {

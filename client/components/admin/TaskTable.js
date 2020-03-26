@@ -32,6 +32,7 @@ export const NewProblem = () => {
 		event.preventDefault()
 		handleClose()
 	}
+
 	return (
 		<>
 			<Button variant='success' size='lg' onClick={handleShow}>
@@ -41,52 +42,47 @@ export const NewProblem = () => {
 				<Modal.Header closeButton>
 					<Modal.Title>Add New Problem</Modal.Title>
 				</Modal.Header>
-				<Modal.Body>
-					<Form>
+				<Form as={Modal.Body}>
+					<Form.Group>
 						<Form.Label>Description : </Form.Label>
 						<InputGroup>
 							<Form.Control placeholder='Display Name' />
 							<Form.Control placeholder='Short Name' />
 						</InputGroup>
-						<br />
-						<div className='custom-file'>
-							<input
-								accept='.pdf'
-								type='file'
-								className='custom-file-input'
-							/*onChange={selectFile}*/
-							/>
-							<label className='custom-file-label'>
-								{/*fileName || */ 'Document (PDF)'}
-							</label>
-						</div>
-						<br />
-						<br />
-						<div className='custom-file'>
-							<input
-								accept='.zip'
-								type='file'
-								className='custom-file-input'
-							/*onChange={selectFile}*/
-							/>
-							<label className='custom-file-label'>
-								{/*fileName || */ 'Testcases (ZIP)'}
-							</label>
-						</div>
-						<br />
-						<br />
+					</Form.Group>
+
+					<Form.Group>
+						<Form.File
+							label={/*fileName || */ 'Document (PDF)'}
+							accept='.pdf'
+							// onChange={selectFile}
+							custom
+						/>
+					</Form.Group>
+					<Form.Group>
+						<Form.File
+							label={/*fileName || */ 'Testcases (ZIP)'}
+							accept='.zip'
+							// onChange={selectFile}
+							custom
+						/>
+					</Form.Group>
+
+					<Form.Group>
 						<Form.Label>Constraint : </Form.Label>
 						<InputGroup>
 							<Form.Control placeholder='Time Limit (s)' />
 							<Form.Control placeholder='Memory (MB)' />
 						</InputGroup>
-						<br />
+					</Form.Group>
+
+					<Form.Group>
 						<InputGroup>
-							<Form.Control placeholder='Number of testcases' />
+							<Form.Control placeholder='Testcases e.g.[PPPPP][PPPPP]' />
 							<Form.Control placeholder='Score' />
 						</InputGroup>
-					</Form>
-				</Modal.Body>
+					</Form.Group>
+				</Form>
 				<Modal.Footer>
 					<Button variant='success' onClick={onSubmit}>
 						Save
@@ -171,33 +167,30 @@ const EditModal = props => {
 			<Modal.Header closeButton>
 				<Modal.Title>Problem #{id_Prob}</Modal.Title>
 			</Modal.Header>
-			<Modal.Body>
-				<Form>
+			<Form as={Modal.Body}>
+				<Form.Group>
 					<Form.Label>Name</Form.Label>
 					<Form.Control defaultValue={name} onChange={handleChangeName} />
-					<br />
+				</Form.Group>
+				<Form.Group>
 					<Form.Label>Short Name</Form.Label>
 					<Form.Control defaultValue={sname} onChange={handleChangeSname} />
-					<br />
-					<Row>
-						<Col xs={4}>
-							<Form.Label>Time</Form.Label>
-							<Form.Control defaultValue={time} onChange={handleChangeTime} />
-						</Col>
-						<Col xs={4}>
-							<Form.Label>Memory</Form.Label>
-							<Form.Control
-								defaultValue={memory}
-								onChange={handleChangeMemory}
-							/>
-						</Col>
-						<Col xs={4}>
-							<Form.Label>Score</Form.Label>
-							<Form.Control defaultValue={score} onChange={handleChangeScore} />
-						</Col>
-					</Row>
-				</Form>
-			</Modal.Body>
+				</Form.Group>
+				<Form.Group as={Row}>
+					<Col xs={4}>
+						<Form.Label>Time</Form.Label>
+						<Form.Control defaultValue={time} onChange={handleChangeTime} />
+					</Col>
+					<Col xs={4}>
+						<Form.Label>Memory</Form.Label>
+						<Form.Control defaultValue={memory} onChange={handleChangeMemory} />
+					</Col>
+					<Col xs={4}>
+						<Form.Label>Score</Form.Label>
+						<Form.Control defaultValue={score} onChange={handleChangeScore} />
+					</Col>
+				</Form.Group>
+			</Form>
 			<Modal.Footer>
 				<Button variant='success' onClick={onSave}>
 					Save

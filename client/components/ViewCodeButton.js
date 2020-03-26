@@ -17,7 +17,7 @@ const FontPre = styled.pre`
 `
 
 const ViewCodeButton = props => {
-	const { idResult, id_Prob } = props
+	const { idResult, id_Prob, mini } = props
 	const userData = useAuthContext()
 
 	const [show, setShow] = useState(false)
@@ -58,9 +58,20 @@ const ViewCodeButton = props => {
 
 	return (
 		<>
-			<OrangeButton expand={2} outline='true' onClick={handleShow} icon='true'>
-				<FontAwesomeIcon icon={faCode} />
-			</OrangeButton>
+			{mini ? (
+				<Button size='sm' variant='outline-link' onClick={handleShow}>
+					🔎
+				</Button>
+			) : (
+				<OrangeButton
+					expand={2}
+					outline='true'
+					onClick={handleShow}
+					icon='true'
+				>
+					<FontAwesomeIcon icon={faCode} />
+				</OrangeButton>
+			)}
 
 			<Modal show={show} onHide={handleClose} centered size='lg'>
 				<Modal.Header closeButton>

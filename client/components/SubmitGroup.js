@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
 
 const SubmitGroup = props => {
-	const { name, id_Prob, acceptState, wrongState, children } = props
+	const { name, id_Prob, children } = props
 	const userData = useAuthContext()
 
 	const [show, setShow] = useState(false)
@@ -61,33 +61,28 @@ const SubmitGroup = props => {
 				<Modal.Header closeButton>
 					<Modal.Title>{name}</Modal.Title>
 				</Modal.Header>
-				<Form>
-					<Modal.Body>
-						<div className='custom-file'>
-							<input
-								accept='.c,.cpp'
-								type='file'
-								className='custom-file-input'
-								onChange={selectFile}
-							/>
-							<label className='custom-file-label'>
-								{fileName || 'Choose file'}
-							</label>
-						</div>
-						<br />
-						<br />
+				<Form as={Modal.Body}>
+					<Form.Group>
+						<Form.File
+							label={fileName || 'Choose file'}
+							accept='.c,.cpp'
+							onChange={selectFile}
+							custom
+						/>
+					</Form.Group>
+					<Form.Group>
 						<Form.Label>Choose Language</Form.Label>
 						<Form.Control as='select' onChange={selectLang}>
 							<option>C++</option>
 							<option>C</option>
 						</Form.Control>
-					</Modal.Body>
-					<Modal.Footer>
-						<OrangeButton type='submit' onClick={uploadFile}>
-							Submit
-						</OrangeButton>
-					</Modal.Footer>
+					</Form.Group>
 				</Form>
+				<Modal.Footer>
+					<OrangeButton type='submit' onClick={uploadFile}>
+						Submit
+					</OrangeButton>
+				</Modal.Footer>
 			</Modal>
 		</>
 	)

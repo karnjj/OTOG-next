@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import fetch from 'isomorphic-unfetch'
 import { withAuthSync, useAuthContext } from '../utils/auth'
 
-import { Jumbotron, Container, Row, Col } from 'react-bootstrap'
+import { Jumbotron, Container, Row, Col, Form } from 'react-bootstrap'
 import Hello from '../components/Hello'
+import Title from '../components/Title'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Welcome from '../components/Welcome'
@@ -93,9 +94,7 @@ const Index = () => {
 				</Row>
 				<div>
 					<i className='glyphicon glyphicon-asterisk'></i>
-					<h2>
-						<FontAwesomeIcon icon={faPuzzlePiece} /> โจทย์ใหม่
-					</h2>
+					<Title icon={faPuzzlePiece} title='โจทย์ใหม่' noBot='true' />
 				</div>
 				<hr />
 				<ProbTable problems={taskState} />

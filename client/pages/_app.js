@@ -1,12 +1,10 @@
 import Head from 'next/head'
-import nextCookie from 'next-cookies'
 import { ThemeProvider } from 'styled-components'
-import { isLogin, AuthProvider, auth } from '../utils/auth'
+import { AuthProvider, auth } from '../utils/auth'
 
 import breakpoints from '../styles/breakpoints'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import Header from '../components/Header'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { createGlobalStyle } from 'styled-components'

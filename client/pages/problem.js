@@ -41,7 +41,7 @@ const Problem = () => {
 		<>
 			<Header />
 			<Container>
-				<Title icon={faPuzzlePiece}>Problem</Title>
+				<Title icon={faPuzzlePiece} title='Problem' />
 				<Row className='m-auto justify-content-between align-items-baseline'>
 					<Col
 						as={Form.Control}

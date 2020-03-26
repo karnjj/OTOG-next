@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { withAuthSync } from '../../../utils/auth'
 
 import { Container } from 'react-bootstrap'
+import Title from '../../../components/Title'
 import Header from '../../../components/Header'
 import Footer from '../../../components/Footer'
 import { CustomTable, CustomTr } from '../../../components/CustomTable'
@@ -16,6 +17,7 @@ const ContestTr = props => {
 	const { idContest, name, time_start, time_end, mode_grader, judge } = props
 	const now = new Date()
 	const start = new Date(Number(time_start * 1000))
+	const PascalCase = str => str[0].toUpperCase() + str.slice(1)
 	const difftime = timestamp => {
 		timestamp = Math.floor(timestamp / 60)
 		var int_hours = Math.floor(timestamp / 60)
@@ -32,7 +34,7 @@ const ContestTr = props => {
 			<td>{name}</td>
 			<td>{start.toLocaleDateString('th-TH')}</td>
 			<td>{difftime(time_end - time_start)}</td>
-			<td>{`${mode_grader} (${judge})`}</td>
+			<td>{`${PascalCase(mode_grader)} (${PascalCase(judge)})`}</td>
 			<td>
 				{time_end < now.valueOf() && (
 					<OrangeButton
@@ -87,13 +89,7 @@ const History = () => {
 		<>
 			<Header />
 			<Container>
-				<br />
-				<br />
-				<br />
-				<h2>
-					<FontAwesomeIcon icon={faTrophy} /> Contest History
-				</h2>
-				<br />
+				<Title icon={faTrophy} noBot='true' title='Contest History' />
 				<hr />
 				<ContestTable />
 				<Footer />

@@ -32,7 +32,7 @@ const Rating = () => {
 		<>
 			<Header />
 			<Container>
-				<Title icon={faChartBar}>Rating</Title>
+				<Title icon={faChartBar} title='Rating' />
 				<Row className='align-items-baseline'>
 					<Col as='label' md={2}>
 						<b>ค้นหาผู้ใช้ : </b>
