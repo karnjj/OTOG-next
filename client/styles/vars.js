@@ -18,6 +18,7 @@ export default {
 	red: '#ff4d4d',
 	org: '#ffad33',
 	blue: '#17b4e9',
+	grey: '#fafafa',
 
 	//button color
 	btn_blue: '#17b4e9',

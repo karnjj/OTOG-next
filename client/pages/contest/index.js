@@ -29,6 +29,7 @@ import Timer from '../../components/Timer'
 import OrangeButton from '../../components/OrangeButton'
 
 import styled from 'styled-components'
+import vars from '../../styles/vars'
 
 const Announce = styled(Container)`
 	text-align: center;
@@ -48,6 +49,9 @@ const CenteredDiv = styled.div`
 const HideIcon = styled(FontAwesomeIcon)`
 	cursor: pointer;
 	user-select: none;
+`
+const StyledJumbotron = styled(Jumbotron)`
+	background: ${vars.grey};
 `
 const MiniSubmission = props => {
 	const { idContest } = props
@@ -311,14 +315,13 @@ const HoldingContest = props => {
 }
 
 const Contest = () => {
-	const start = 1585238437
+	let start = 1585238437
 	const end = start + 60 * 60
 	const now = Math.floor(new Date() / 1000)
 	const idContest = 12
 	const isAboutToStart = now < start
 	const isHolding = start < now && now < end
 	const isJustEnd = now - end < 90 * 60
-
 	return (
 		<>
 			<Header />
@@ -327,7 +330,7 @@ const Contest = () => {
 					<h1>ญินดีร์ฏ้อณลับสูเก็ดเฎอร์ฌาวไฑย</h1>
 				</Announce>
 			</Container>
-			<Jumbotron>
+			<StyledJumbotron>
 				<Container fluid as={Row}>
 					<Col xs={0} md={1} lg={2} />
 					<Col xs={12} md={10} lg={8}>
@@ -343,7 +346,7 @@ const Contest = () => {
 					</Col>
 					<Col xs={0} md={1} lg={2} />
 				</Container>
-			</Jumbotron>
+			</StyledJumbotron>
 			<Container>
 				{(isAboutToStart || isJustEnd) && (
 					<Row>
