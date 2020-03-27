@@ -16,12 +16,10 @@ function getProblem(req,res) {
 		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
 	})
 	let PassOrWrongPromise = new Promise((resolve, reject) => {
-		let sql = `SELECT 
-		GROUP_CONCAT( DISTINCT CASE WHEN score = 100 THEN prob_id ELSE NULL 
-			END SEPARATOR ' ') AS pass,
-		GROUP_CONCAT( DISTINCT CASE WHEN score != 100 THEN prob_id ELSE NULL 
-			END SEPARATOR ' ') AS wrong 
-		FROM Result where user_id = ?`;
+		let sql = `select R1.prob_id,score from (select user_id,prob_id,max(time) 
+			as lastest from Result where user_id = ? group by prob_id) as R1 
+			inner join Result as R2 on R1.lastest = R2.time and R1.prob_id = R2.prob_id 
+			and R1.user_id = R2.user_id`
 		db.query(sql, [idUser], (err, result) => err ? reject(err) : resolve(result))
 	})
 	const promiseValue = [whoPassPromise, problemPromise]
@@ -31,19 +29,11 @@ function getProblem(req,res) {
 		let problems = result[1]
 		let answer = result[2]
 		if (answer !== undefined) {
-			answer = answer[0]
-			answer.pass = answer.pass ? answer.pass.split(' ') : []
-			answer.wrong = answer.wrong ? answer.wrong.split(' ') : []
-			for (let i in answer.pass) {
-				let idx = problems.findIndex(obj => obj.id_Prob == Number(answer.pass[i]))
-				if (idx == -1) continue
-				problems[idx]['acceptState'] = true;
-			}
-			for (let i in answer.wrong) {
-				let idx = problems.findIndex(obj => obj.id_Prob == Number(answer.wrong[i]))
-				if (idx == -1) continue
-				problems[idx]['wrongState'] = true;
-			}
+			answer.map((data) => {
+				let idx = problems.findIndex(obj => obj.id_Prob == Number(data.prob_id))
+				if (idx !== -1) if (data.score === 100) problems[idx]['acceptState'] = true
+				else problems[idx]['wrongState'] = true
+			})
 		}
 		for (let key in whoPass) {
 			let idx = problems.findIndex(obj => obj.id_Prob == whoPass[key].prob_id)

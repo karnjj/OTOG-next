@@ -12,13 +12,15 @@ import { faChartArea } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 
 const ScoreTr = props => {
-	const { id, sname, timeUsed, sum, prob } = props
+	const { id, sname, timeUsed, sum, scores , problem} = props
 	return (
 		<CustomTr>
 			<td>{id}</td>
 			<td>{sname}</td>
-			{prob.map((score, index) => (
-				<td key={index}>{score.score}</td>
+			{problem.map((prob, index) => (
+				<td key={index}>{(scores[prob.id_Prob]) ? 
+					scores[prob.id_Prob].score : 
+					0}</td>
 			))}
 			<td>{sum}</td>
 			<td>{timeUsed}</td>
@@ -27,14 +29,14 @@ const ScoreTr = props => {
 }
 
 const Scoreboard = props => {
-	const { countProblem, contestants } = props
+	const { Problem, contestants } = props
 	return (
 		<CustomTable>
 			<thead>
 				<tr>
 					<th>#</th>
 					<th>ชื่อผู้เข้าแข่งขัน</th>
-					{[...Array(countProblem)].map((n, i) => (
+					{Problem.map((n, i) => (
 						<th key={i}>ข้อที่ {i + 1}</th>
 					))}
 					<th>คะแนนรวม</th>
@@ -43,7 +45,7 @@ const Scoreboard = props => {
 			</thead>
 			<tbody>
 				{contestants.map((con, index) => (
-					<ScoreTr key={index} {...con} />
+					<ScoreTr key={index} problem={Problem} {...con} />
 				))}
 			</tbody>
 		</CustomTable>
@@ -55,16 +57,25 @@ const ContestScoreboard = props => {
 	const { id } = router.query
 	const userData = useAuthContext()
 	const [taskState, setTaskState] = useState([])
+	const [contestProb, setContestProb] = useState([])
 	useEffect(() => {
 		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/contest/history/${id}`
-			const response = await fetch(url, {
+			const url1 = `${process.env.API_URL}/api/contest/history/${id}`
+			const url2 = `${process.env.API_URL}/api/contest/${id}`
+			const response1 = await fetch(url1, {
 				headers: {
 					authorization: userData ? userData.id : ''
 				}
 			})
-			const json = await response.json()
-			setTaskState(json)
+			const response2 = await fetch(url2, {
+				headers: {
+					authorization: userData ? userData.id : ''
+				}
+			})
+			const json1 = await response1.json()
+			const json2 = await response2.json()
+			setTaskState(json1)
+			setContestProb(json2.problem)
 		}
 		fetchData()
 	}, [])
@@ -76,7 +87,7 @@ const ContestScoreboard = props => {
 					<OrangeButton href='/contest/history'>View Contest</OrangeButton>
 				</Title>
 				<hr />
-				<Scoreboard contestants={taskState} countProblem={3} />
+				<Scoreboard contestants={taskState} Problem={contestProb} />
 				<Footer />
 			</Container>
 		</>

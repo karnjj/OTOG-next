@@ -14,6 +14,7 @@ function getContestWithId(req,res) {
 	db.query(sql, [idContest], (err, result) => {
 		if (err) throw err
 		const problem = JSON.parse(result[0].problems)
+		problem.sort((a, b) => a - b);
 		let sql = `SELECT * FROM Problem WHERE id_Prob IN (?)`
 		db.query(sql, [problem], (err, prob) => {
 			res.json({
@@ -37,17 +38,19 @@ function getContestHistoryWithId(req,res) {
 		var info = {}
 		result.map((data,index) => {
 			if(info.sum === undefined) info.sum = 0
-			if(info.prob === undefined) info.prob = []
+			if(info.scores === undefined) info.scores = {}
+			if(info.scores[data.prob_id] === undefined) info.scores[data.prob_id] = {}
 			info.idUser = data.idUser
 			info.sname = data.sname
 			info.sum = Number(info.sum) + Number(data.score)
-			info.prob.push({idProb:data.prob_id,score:data.score})
+			info.scores[data.prob_id].score = data.score
 			var next = result[Number(index)+1] || {idUser:-1}
 			if(data.idUser != next.idUser) {
 				new_result.push(info)
 				info = {}
 			}
 		})
+		new_result.sort((a,b) => b.sum - a.sum)
 		res.json(new_result)
 	});
 }
