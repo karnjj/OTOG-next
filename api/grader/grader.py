@@ -14,8 +14,8 @@ mydb = mysql.connector.connect(
 )
 ioeredirect = " 0<env/input.txt 1>env/output.txt 2>env/error.txt"
 langarr = {
-    "C": {"extension": "c", "system": "find /usr/bin/ -name gcc", "compile": "gcc uploaded/[idUser]/[codefilename].c -O2 -fomit-frame-pointer -o compiled/[codefilename]" + ioeredirect, "execute": "compiled/[exename][inputfile]"},
-    "C++": {"extension": "cpp", "system": "find /usr/bin/ -name g++", "compile": "g++ uploaded/[idUser]/[codefilename].cpp -O2 -fomit-frame-pointer -o compiled/[codefilename]" + ioeredirect, "execute": "compiled/[exename][inputfile]"}
+    "C": {"extension": "c", "system": "find /usr/bin/ -name gcc", "compile": "gcc ../uploaded/[idUser]/[codefilename].c -O2 -fomit-frame-pointer -o compiled/[codefilename]" + ioeredirect, "execute": "compiled/[exename][inputfile]"},
+    "C++": {"extension": "cpp", "system": "find /usr/bin/ -name g++", "compile": "g++ ../uploaded/[idUser]/[codefilename].cpp -O2 -fomit-frame-pointer -o compiled/[codefilename]" + ioeredirect, "execute": "compiled/[exename][inputfile]"}
 }
 
 
@@ -73,7 +73,6 @@ def execute(language, idUser, probName, idProb, testcase, timelimit, memlimit, u
         os.system("chmod 777 env/error.txt")
     if(os.path.exists("env/output.txt")):
         os.system("chmod 777 env/output.txt")
-    print(cmd)
     starttime = time.time()
     proc = subprocess.Popen([cmd], shell=True, preexec_fn=os.setsid)
     try:
@@ -86,7 +85,6 @@ def execute(language, idUser, probName, idProb, testcase, timelimit, memlimit, u
     os.system("chmod 777 .")
     if(os.path.exists("/proc/"+str(proc.pid))):
         os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
-    print("Return Code : " + str(t))
     return t
 
 
@@ -137,7 +135,6 @@ while True:
         time_limit = float(probInfo[4])
         mem_limit = int(probInfo[5])
         result = create(idProb + "_" + uploadTime, idUser, fileLang)
-        print(result)
         if(os.path.exists("source/" + probName + "/script.php")):
             case = file_read("source/" + probName + "/script.php")
             idx = case.find("cases = ")
