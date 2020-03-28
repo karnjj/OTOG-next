@@ -6,13 +6,15 @@ import {
 	Row,
 	Jumbotron,
 	Card,
+	Accordion,
 	Col,
 	Form,
 	ButtonToolbar,
 	Button,
 	ButtonGroup,
 	Table,
-	Badge
+	Badge,
+	useAccordionToggle
 } from 'react-bootstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -46,12 +48,12 @@ const CenteredDiv = styled.div`
 		font-weight: bold;
 	}
 `
-const HideIcon = styled(FontAwesomeIcon)`
-	cursor: pointer;
-	user-select: none;
-`
 const StyledJumbotron = styled(Jumbotron)`
 	background: ${vars.grey};
+`
+const Icon = styled(FontAwesomeIcon)`
+	user-select: none;
+	cursor: pointer;
 `
 const MiniSubmission = props => {
 	const { idContest } = props
@@ -154,12 +156,22 @@ const TaskCard = props => {
 	const [solved, setSolved] = useState(false)
 	const [idBest, setIdBest] = useState(-1)
 	const [passed, setPassed] = useState(Math.floor(15 * Math.random()))
-	const [isHidden, setIsHidden] = useState(false)
-	const handleClose = e => {
-		e.preventDefault()
-		setIsHidden(!isHidden)
-	}
 
+	const CustomToggle = props => {
+		const [isHidden, setIsHidden] = useState(false)
+		const handleClick = useAccordionToggle(props.eventKey, () => {
+			setIsHidden(!isHidden)
+		})
+		return (
+			<Accordion.Toggle
+				{...props}
+				as={Icon}
+				className='float-right'
+				icon={isHidden ? faChevronDown : faChevronUp}
+				onClick={handleClick}
+			/>
+		)
+	}
 	const selectFile = event => {
 		if (event.target.files[0] !== undefined) {
 			setSelectedFile(event.target.files[0])
@@ -206,19 +218,16 @@ const TaskCard = props => {
 	}
 
 	return (
-		<Card className='mb-4'>
+		<Accordion as={Card} defaultActiveKey='0' className='mb-4'>
 			<Card.Header as='h5'>
 				Problem #{index} {name}{' '}
 				{solved && <Badge variant='success'>Solved</Badge>}
-				<HideIcon
-					className='float-right'
-					onClick={handleClose}
-					icon={isHidden ? faChevronDown : faChevronUp}
-				/>
+				<CustomToggle eventKey='0' />
 				<br />
 				ผ่านแล้ว : {passed}
 			</Card.Header>
-			{!isHidden && (
+
+			<Accordion.Collapse eventKey='0'>
 				<Card.Body as={Row}>
 					<Col>
 						<MiniSubmission
@@ -249,8 +258,8 @@ const TaskCard = props => {
 						</ButtonToolbar>
 					</Col>
 				</Card.Body>
-			)}
-		</Card>
+			</Accordion.Collapse>
+		</Accordion>
 	)
 }
 const Countdown = props => {
@@ -316,8 +325,9 @@ const HoldingContest = props => {
 
 const Contest = () => {
 	let start = 1585238437
-	const end = start + 60 * 60
 	const now = Math.floor(new Date() / 1000)
+	start = now - 1
+	const end = start + 60 * 60
 	const idContest = 12
 	const isAboutToStart = now < start
 	const isHolding = start < now && now < end
