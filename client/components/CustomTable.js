@@ -1,7 +1,11 @@
 import vars from '../styles/vars'
 import styled from 'styled-components'
+import { darken } from 'polished'
 
 import { Table } from 'react-bootstrap'
+
+const customColor = props =>
+	props.acceptState ? vars.accept : props.wrongState && vars.wrong
 
 export const Alink = styled.a`
 	color: ${vars.orange};
@@ -11,10 +15,15 @@ export const Alink = styled.a`
 	}
 `
 export const CustomTr = styled.tr`
-	background: ${props =>
-		props.acceptState ? vars.accept : props.wrongState && vars.wrong};
+	background: ${customColor};
+	&:hover td {
+		background: ${vars.hover};
+	}
 `
-export const Name = styled.a`
+export const CustomTd = styled.td`
+	background: ${customColor};
+`
+const Name = styled.a`
 	color: ${props => {
 		if (props.score >= 2000) {
 			return vars.grandmaster
@@ -25,6 +34,11 @@ export const Name = styled.a`
 		}
 	}}!important;
 `
+export const UserTd = props => (
+	<td>
+		<Name {...props} />
+	</td>
+)
 const CenterTable = styled(Table)`
 	text-align: center;
 	th,

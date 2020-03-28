@@ -30,5 +30,6 @@ export default {
 
 	//state
 	accept: '#ebffeb',
-	wrong: '#ffebeb'
+	wrong: '#ffebeb',
+	hover: '#e9ecef'
 }

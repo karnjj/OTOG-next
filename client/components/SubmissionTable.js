@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuthContext } from '../utils/auth'
-import { CustomTr, CustomTable, Name } from './CustomTable'
+import { CustomTr, CustomTable, UserTd } from './CustomTable'
 
 import ViewCodeButton from './ViewCodeButton'
 import { ButtonGroup } from 'react-bootstrap'
@@ -41,9 +41,7 @@ const SubTr = props => {
 	return (
 		<CustomTr acceptState={isAccept(result)}>
 			<td>{idResult}</td>
-			<td>
-				<Name>{sname}</Name>
-			</td>
+			<UserTd>{sname}</UserTd>
 			<td>{name}</td>
 			<td>{result}</td>
 			<td>{timeuse} s</td>

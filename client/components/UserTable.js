@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import vars from '../styles/vars'
-import { CustomTable, Name } from './CustomTable'
+import { CustomTable, UserTd } from './CustomTable'
 
 const UserTable = props => (
 	<CustomTable>
@@ -16,9 +16,7 @@ const UserTable = props => (
 			{props.users.map((user, index) => (
 				<tr key={index}>
 					<td>{index + 1}</td>
-					<td>
-						<Name score={user.rating}>{user.sname}</Name>
-					</td>
+					<UserTd score={user.rating}>{user.sname}</UserTd>
 					<td>{user.rating}</td>
 					<td>0</td>
 				</tr>
