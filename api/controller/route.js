@@ -39,6 +39,8 @@ router.get('/contest/:id/submission', contest.getContestSubmissionWithId)
 //Admin
 router.get('/admin/problem', admin.Problems)
 router.get('/admin/user', admin.Users)
+router.get('/admin/contest', admin.Contests)
+router.get('/admin/contest/:id', admin.getContestWithId)
 router.post('/admin/user/:id', admin.editUser)
 router.post('/admin/problem/:id', admin.editProblem)
 module.exports = router

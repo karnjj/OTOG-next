@@ -16,10 +16,15 @@ var storage = multer.diskStorage({
 		})
 	},
 	filename: function (req, file, cb) {
+		const timeStamp = Math.floor(Date.now() / 1000)
 		var idProb = req.params.id
-		var time = req.body.time
 		var fileLang = req.body.fileLang
-		cb(null, `${idProb}_${time}${fileExt[fileLang]}`)
+		var contest = req.query.contest
+		var idUser = req.headers.authorization
+		var sql = "INSERT INTO Result (time, user_id, prob_id, status,contestmode,language) VALUES ?";
+		var values = [[timeStamp, idUser, idProb, 0, (contest ? contest : null), fileLang],];
+		db.query(sql, [values], (err, result) => err && console.log(err))
+		cb(null, `${idProb}_${timeStamp}${fileExt[fileLang]}`)
 	}
 })
 const multerConfig = multer({ storage: storage })
@@ -109,14 +114,6 @@ function getUser(req,res) {
 
 
 function uploadFie(req,res) {
-	var contest = req.query.contest
-	var time = req.body.time
-	var lang = req.body.fileLang
-	var idProb = req.params.id
-	var idUser = req.headers.authorization
-	var sql = "INSERT INTO Result (time, user_id, prob_id, status,contestmode,language) VALUES ?";
-	var values = [[time, idUser, idProb, 0, (contest ? contest : null), lang],];
-	db.query(sql, [values], (err, result) => err && console.log(err))
 	res.status(200).json({ msg: 'Upload Complete!' })
 }
 

@@ -15,6 +15,40 @@ async function Users(req,res) {
 	})
 	res.json(problem)
 }
+
+async function Contests(req,res) {
+    var sql = 'select idContest,name from Contest'
+	let contest = await new Promise((resolve) => {
+		db.query(sql, (err, result) => resolve(result))
+	})
+	res.json(contest)
+}
+
+function getContestWithId(req,res) {
+	const idContest = req.params.id
+	let problemPromise = new Promise((resolve) => {
+		var sql = 'select * from Problem'
+		db.query(sql, [idContest], (err, result) => resolve(result))
+	})
+	let contestPromise = new Promise((resolve) => {
+		var sql = `select problems from Contest where idContest = ?`
+		db.query(sql,[idContest], (err,result) => resolve(result))
+	})
+	Promise.all([problemPromise,contestPromise]).then(values => {
+		var problem = values[0]
+		var conProb = values[1]
+		if(conProb[0]) {
+			conProb = JSON.parse(conProb[0].problems)
+			conProb.map(idProb => {
+				var idx = problem.findIndex(obj => obj.id_Prob === idProb)
+				if(idx != -1) problem[idx].see = true
+			})
+		}
+		res.json(problem)
+
+	})
+}
+
 async function editUser(req,res) {
     const data = req.body
 	const idUser = req.params.id
@@ -56,7 +90,9 @@ function editProblem(req,res) {
 
 module.exports = {
     Problems,
-    Users,
+	Users,
+	Contests,
     editProblem,
-    editUser
+	editUser,
+	getContestWithId
 }
