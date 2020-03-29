@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useAuthContext } from '../utils/auth'
 import fetch from 'isomorphic-unfetch'
+import router from 'next/router'
 
 import { Modal, Form, ButtonGroup } from 'react-bootstrap'
 import OrangeButton from './OrangeButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
+import { route } from 'next/dist/next-server/server/router'
 
 const SubmitGroup = props => {
 	const { name, id_Prob, children } = props
@@ -32,11 +34,9 @@ const SubmitGroup = props => {
 	const uploadFile = async e => {
 		e.preventDefault()
 		if (selectedFile === undefined) return false
-		const timeStamp = Math.floor(Date.now() / 1000)
 		const data = new FormData()
 		data.append('file', selectedFile)
 		data.append('fileLang', fileLang)
-		data.append('time', timeStamp)
 		const url = `${process.env.API_URL}/api/upload/${id_Prob}`
 		const respone = await fetch(url, {
 			method: 'POST',
@@ -45,7 +45,7 @@ const SubmitGroup = props => {
 			},
 			body: data
 		})
-		if (respone.ok) window.location.reload(false)
+		if (respone.ok) router.push('/submission')
 	}
 
 	return (

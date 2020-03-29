@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { Modal } from 'react-bootstrap'
+import { Modal,Button } from 'react-bootstrap'
 import OrangeButton from './OrangeButton'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

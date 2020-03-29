@@ -66,7 +66,7 @@ function getContestSubmissionWithId(req,res) {
     const idContest = req.params.id
 	const idProb = req.query.idProb
 	const idUser = req.headers.authorization
-	var last_query = `select idResult,result,errmsg,status from Result 
+	var last_query = `select idResult,result,errmsg,status,score from Result 
 		where user_id = ? and prob_id = ? and contestmode = ? 
 		order by idResult desc limit 1`
 	var best_query = `select idResult,result,score,errmsg from Result 

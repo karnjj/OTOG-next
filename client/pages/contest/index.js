@@ -29,7 +29,7 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import Timer from '../../components/Timer'
 import OrangeButton from '../../components/OrangeButton'
-
+import ViewCodeButton from '../../components/ViewCodeButton'
 import styled from 'styled-components'
 import vars from '../../styles/vars'
 
@@ -56,16 +56,16 @@ const Icon = styled(FontAwesomeIcon)`
 	cursor: pointer;
 `
 const MiniSubmission = props => {
-	const { idContest } = props
+	const { idContest, idProb, parentCallback } = props
 	const userData = useAuthContext()
-	const [best, setBest] = useState(null)
-	const [lastest, setLastest] = useState(null)
+	const [best, setBest] = useState([])
+	const [lastest, setLastest] = useState([])
 	const [SC, setSC] = useState('test')
 
 	var waitingData = 0
 	useEffect(() => {
 		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/contest/submission/${idContest}`
+			const url = `${process.env.API_URL}/api/contest/${idContest}/submission?idProb=${idProb}`
 			const response = await fetch(url, {
 				headers: {
 					authorization: userData ? userData.id : ''
@@ -74,16 +74,17 @@ const MiniSubmission = props => {
 			const json = await response.json()
 			setBest(json.best_submit)
 			setLastest(json.lastest_submit)
-			sendData()
-			if (lastest[0] !== undefined)
-				if (lastest[0].status == 0)
-					waitingData = setInterval(fetchNewData, 1000)
+			sendData(json.best_submit, json.lastest_submit)
+			if (json.lastest_submit[0] !== undefined)
+				if (json.lastest_submit[0].status == 0)
+				{
+					//waitingData = setInterval(fetchNewData, 1000)
+				}
 		}
-		//fetchData()
+		fetchData()
 	}, [])
-	const sendData = () => {
-		if (lastest[0] !== undefined)
-			props.parentCallback(lastest[0].score, best[0].idResult)
+	const sendData = (lastest, best) => {
+		if (lastest[0] !== undefined) parentCallback(lastest[0].score, best[0].idResult);
 	}
 	/*
     const HideSc = event => {
@@ -96,7 +97,7 @@ const MiniSubmission = props => {
         this.setState({showSc : true, SC : this.state.lastest[0].scode })
     }*/
 	const fetchNewData = async () => {
-		const url = `${process.env.API_URL}/api/contest/submission/${idContest}`
+		const url = `${process.env.API_URL}/api/contest/${idContest}/submission?idProb=${idProb}`
 		const response = await fetch(url, {
 			headers: {
 				authorization: userData.id
@@ -105,30 +106,11 @@ const MiniSubmission = props => {
 		const json = await response.json()
 		setBest(json.best_submit)
 		setLastest(json.lastest_submit)
-		sendData()
-		if (lastest[0].status == 1) clearInterval(waitingData)
+		sendData(json.lastest_submit, json.best_submit)
+		if (json.lastest_submit[0].status == 1) clearInterval(waitingData);
 	}
-	//console.log('submit ' + this.state.best);
-	const best_submission = best && (
-		<tr>
-			<td>Lastest</td>
-			<td>{best.result}</td>
-			<td>{best.score}</td>
-			<td>
-				<ViewCodeButton mini='true' />
-			</td>
-		</tr>
-	)
-	const last_submission = lastest && (
-		<tr>
-			<td>Lastest</td>
-			<td>{lastest.result}</td>
-			<td>{lastest.score}</td>
-			<td>
-				<ViewCodeButton mini='true' />
-			</td>
-		</tr>
-	)
+	console.log(lastest);
+	
 	return (
 		<Table size='sm' bordered hover>
 			<thead>
@@ -140,8 +122,30 @@ const MiniSubmission = props => {
 				</tr>
 			</thead>
 			<tbody>
-				{last_submission}
-				{best_submission}
+				{lastest.map((prob, index) => {
+					return (
+						<tr key={index}>
+							<td>Lastest</td>
+							<td>{prob.result}</td>
+							<td>{prob.score}</td>
+							<td>
+								<ViewCodeButton mini='true' idResult={prob.idResult}/>
+							</td>
+						</tr>
+					)
+				})}
+				{best.map((prob, index) => {
+					return (
+						<tr key={index}>
+							<td>Best</td>
+							<td>{prob.result}</td>
+							<td>{prob.score}</td>
+							<td>
+								<ViewCodeButton mini='true' idResult={prob.idResult}/>
+							</td>
+						</tr>
+					)
+				})}
 			</tbody>
 		</Table>
 	)
@@ -184,12 +188,10 @@ const TaskCard = props => {
 	const uploadFile = async e => {
 		e.preventDefault()
 		if (selectedFile === undefined) return false
-		const timeStamp = Math.floor(Date.now() / 1000)
 		const data = new FormData()
 		data.append('file', selectedFile)
 		data.append('fileLang', fileLang)
-		data.append('time', timeStamp)
-		const url = `${process.env.API_URL}/api/upload/${id_Prob}`
+		const url = `${process.env.API_URL}/api/upload/${id_Prob}?contest=${idContest}`
 		const respone = await fetch(url, {
 			method: 'POST',
 			headers: {
@@ -351,8 +353,8 @@ const Contest = () => {
 						) : isJustEnd ? (
 							<EndingContest />
 						) : (
-							<NoContest />
-						)}
+										<NoContest />
+									)}
 					</Col>
 					<Col xs={0} md={1} lg={2} />
 				</Container>
