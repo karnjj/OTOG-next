@@ -55,9 +55,14 @@ export const withAuthSync = WrappedComponent => {
 				window.localStorage.removeItem('logout')
 			}
 		}, [])
-
 		return <WrappedComponent {...props} />
 	}
+	Wrapper.getInitialProps = async ctx => {
+		const componentProps = 
+			WrappedComponent.getInitialProps &&
+			(await WrappedComponent.getInitialProps(ctx))
+		return {...componentProps}
+	  }
 	return Wrapper
 }
 
@@ -77,5 +82,11 @@ export const withAdminAuth = WrappedComponent => {
 			<Error statusCode={404} />
 		)
 	}
+	Wrapper.getInitialProps = async ctx => {
+		const componentProps = 
+			WrappedComponent.getInitialProps &&
+			(await WrappedComponent.getInitialProps(ctx))
+		return {...componentProps}
+	  }
 	return withAuthSync(Wrapper)
 }
