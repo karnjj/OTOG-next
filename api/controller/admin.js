@@ -28,7 +28,7 @@ function getContestWithId(req,res) {
 	const idContest = req.params.id
 	let problemPromise = new Promise((resolve) => {
 		var sql = 'select * from Problem'
-		db.query(sql, [idContest], (err, result) => resolve(result))
+		db.query(sql, (err, result) => resolve(result))
 	})
 	let contestPromise = new Promise((resolve) => {
 		var sql = `select problems from Contest where idContest = ?`
@@ -88,11 +88,32 @@ function editProblem(req,res) {
 	}
 }
 
+function editContest(req,res) {
+	const idContest = req.params.id
+	if(idContest == 0) {
+		res.status(404).send('')
+		return 
+	}
+	const data = req.body
+	var sql = `select problems from Contest where idContest = ?`
+	db.query(sql,[idContest], (err,result) => {
+		conProb = JSON.parse(result[0].problems)
+		if(data.state) conProb.push(data.idProb)
+		else conProb =  conProb.filter(item => item !== data.idProb)
+		var sql = `update Contest set problems = ? where idContest = ?`
+		db.query(sql,[JSON.stringify(conProb),idContest],(err) =>{
+			if (err) throw err
+			res.status(200).send('')
+		})
+	})
+}
+
 module.exports = {
     Problems,
 	Users,
 	Contests,
     editProblem,
 	editUser,
-	getContestWithId
+	getContestWithId,
+	editContest
 }

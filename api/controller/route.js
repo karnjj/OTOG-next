@@ -43,4 +43,5 @@ router.get('/admin/contest', admin.Contests)
 router.get('/admin/contest/:id', admin.getContestWithId)
 router.post('/admin/user/:id', admin.editUser)
 router.post('/admin/problem/:id', admin.editProblem)
+router.post('/admin/contest/:id', admin.editContest)
 module.exports = router

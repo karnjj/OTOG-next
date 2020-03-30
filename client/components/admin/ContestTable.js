@@ -82,16 +82,22 @@ export const NewContest = () => {
 }
 
 const ConfigTask = props => {
-	const { id_Prob, see } = props
-	const [onoff, setOnoff] = useState(false)
+	const { id_Prob, see, idContest } = props
+	const [onoff, setOnoff] = useState(undefined)
 	useEffect(() => {
 		setOnoff(see)
-	},[see])
+	},[see,idContest])
 	const handleChangeState = async event => {
 		event.preventDefault()
-		setOnoff(!onoff)
+		const data = { idProb: id_Prob, state : !onoff }
+		const url = `${process.env.API_URL}/api/admin/contest/${idContest}`
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data)
+		})
+		if (response.ok) setOnoff(!onoff)
 	}
-	
 	return (
 		<Button variant={onoff ? 'light' : 'dark'} onClick={handleChangeState}>
 			<FontAwesomeIcon icon={onoff ? faEye : faEyeSlash} />
@@ -206,11 +212,11 @@ export const SelectContest = props => {
 	return (
 		<Form.Group>
 			<Form.Label>Choose Contest : </Form.Label>
-			<Form.Control as='select' onChange={setId}>
+			<Form.Control as='select' onChange={setId} >
 				<option disabled selected > -- select a contest -- </option>
-				{contests.map(contest => {
+				{contests.map((contest,index) => {
 					return (
-						<option value={contest.idContest}> {contest.name}</option>
+						<option key={index} value={contest.idContest}> {contest.name}</option>
 					)
 				})}
 			</Form.Control>
@@ -246,7 +252,7 @@ export const TaskTable = ({ idContest }) => {
 			</thead>
 			<tbody>
 				{tasks.map((task, index) => (
-					<TaskTr key={index} {...task} />
+					<TaskTr key={index} {...task} idContest={idContest} />
 				))}
 			</tbody>
 		</Table>
