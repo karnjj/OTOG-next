@@ -32,7 +32,7 @@ const ContestTr = props => {
 		<CustomTr>
 			<td>{idContest}</td>
 			<td>{name}</td>
-			<td>{start.toLocaleDateString('th-TH')}</td>
+			<td>{start.toLocaleString('th-TH')}</td>
 			<td>{difftime(time_end - time_start)}</td>
 			<td>{`${PascalCase(mode_grader)} (${PascalCase(judge)})`}</td>
 			<td>

@@ -366,7 +366,7 @@ const Contest = ({isContest}) => {
 				</Container>
 			</StyledJumbotron>
 			<Container>
-				{(isAboutToStart || isJustEnd) && (
+				{(isAboutToStart) && (
 					<Row>
 						<OrangeButton
 							outline='true'
