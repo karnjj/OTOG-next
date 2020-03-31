@@ -76,15 +76,15 @@ const MiniSubmission = props => {
 			setLastest(json.lastest_submit)
 			sendData(json.best_submit, json.lastest_submit)
 			if (json.lastest_submit[0] !== undefined)
-				if (json.lastest_submit[0].status == 0)
-				{
+				if (json.lastest_submit[0].status == 0) {
 					//waitingData = setInterval(fetchNewData, 1000)
 				}
 		}
 		fetchData()
 	}, [])
 	const sendData = (lastest, best) => {
-		if (lastest[0] !== undefined) parentCallback(lastest[0].score, best[0].idResult);
+		if (lastest[0] !== undefined)
+			parentCallback(lastest[0].score, best[0].idResult)
 	}
 	/*
     const HideSc = event => {
@@ -107,10 +107,9 @@ const MiniSubmission = props => {
 		setBest(json.best_submit)
 		setLastest(json.lastest_submit)
 		sendData(json.lastest_submit, json.best_submit)
-		if (json.lastest_submit[0].status == 1) clearInterval(waitingData);
+		if (json.lastest_submit[0].status == 1) clearInterval(waitingData)
 	}
-	console.log(lastest);
-	
+
 	return (
 		<Table size='sm' bordered hover>
 			<thead>
@@ -129,7 +128,7 @@ const MiniSubmission = props => {
 							<td>{prob.result}</td>
 							<td>{prob.score}</td>
 							<td>
-								<ViewCodeButton mini='true' idResult={prob.idResult}/>
+								<ViewCodeButton mini='true' idResult={prob.idResult} />
 							</td>
 						</tr>
 					)
@@ -141,7 +140,7 @@ const MiniSubmission = props => {
 							<td>{prob.result}</td>
 							<td>{prob.score}</td>
 							<td>
-								<ViewCodeButton mini='true' idResult={prob.idResult}/>
+								<ViewCodeButton mini='true' idResult={prob.idResult} />
 							</td>
 						</tr>
 					)
@@ -222,7 +221,7 @@ const TaskCard = props => {
 	return (
 		<Accordion as={Card} defaultActiveKey='0' className='mb-4'>
 			<Card.Header as='h5'>
-				Problem #{index} {name}{' '}
+				Problem {index} : {name}
 				{solved && <Badge variant='success'>Solved</Badge>}
 				<CustomToggle eventKey='0' />
 				<br />
@@ -319,7 +318,12 @@ const HoldingContest = props => {
 			</Title>
 			<hr />
 			{tasks.map((task, index) => (
-				<TaskCard key={index} idContest={idContest} {...task} />
+				<TaskCard
+					key={index}
+					idContest={idContest}
+					index={index + 1}
+					{...task}
+				/>
 			))}
 		</>
 	)
@@ -355,8 +359,8 @@ const Contest = ({isContest}) => {
 						) : isJustEnd ? (
 							<EndingContest />
 						) : (
-										<NoContest />
-									)}
+							<NoContest />
+						)}
 					</Col>
 					<Col xs={0} md={1} lg={2} />
 				</Container>
