@@ -325,15 +325,17 @@ const HoldingContest = props => {
 	)
 }
 
-const Contest = () => {
-	let start = 1585238437
-	const now = Math.floor(new Date() / 1000)
-	start = now - 1
-	const end = start + 60 * 60
-	const idContest = 12
-	const isAboutToStart = now < start
-	const isHolding = start < now && now < end
-	const isJustEnd = now - end < 90 * 60
+const Contest = ({isContest}) => {
+	var start,end,idContest,isAboutToStart,isHolding,isJustEnd = null
+	if(isContest) {
+		start = isContest.time_start
+		const now = Math.floor(new Date() / 1000)
+		end = isContest.time_end
+		idContest = isContest.idContest
+		isAboutToStart = now < start
+		isHolding = start <= now && now <= end
+		isJustEnd = now - end < 90 * 60
+	}
 	return (
 		<>
 			<Header />
@@ -376,4 +378,12 @@ const Contest = () => {
 		</>
 	)
 }
+Contest.getInitialProps = async ctx => {
+	const url = `${process.env.API_URL}/api/contest`
+	let headers = { 'Content-Type': 'application/json' }
+	const res = await fetch(url, { headers })
+	const json = await res.json()
+	return { isContest : json[0] }
+  }
+
 export default withAuthSync(Contest)

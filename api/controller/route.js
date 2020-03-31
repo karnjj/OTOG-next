@@ -8,7 +8,11 @@ const problems = require('./problems')
 const contest = require('./contest')
 const submission = require('./submissions')
 const admin = require('./admin')
-router.use(cors())
+var corsOptions = {
+  origin: 'http://localhost:3002',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+router.use(cors(corsOptions))
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(logger('dev'));
@@ -32,6 +36,7 @@ router.get('/docs/:name', problems.getDoc)
 //Submission
 router.get('/submission', submission.AllSubmission)
 //Contest
+router.get('/contest', contest.contest)
 router.get('/contest/history',contest.getAllContest )
 router.get('/contest/:id', contest.getContestWithId)
 router.get('/contest/history/:idContest', contest.getContestHistoryWithId)

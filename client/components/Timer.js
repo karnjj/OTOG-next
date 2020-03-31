@@ -38,6 +38,7 @@ const Timer = ({ countTo, mode, ...props }) => {
 		setTimeState(secondsToTime(seconds))
 		if (seconds <= 0) {
 			clearInterval(timer)
+			window.location.reload(false)
 		}
 	}
 	const thCountdown = timeState => {

@@ -1,5 +1,12 @@
 const db = require('../models/database').Pool
 
+function contest(req,res) {
+	let sql = `select * from Contest where time_end >= UNIX_TIMESTAMP() order by time_start limit 1`
+	db.query(sql,(err,result) => {
+		res.json(result)
+	})
+}
+
 function getAllContest(req,res) {
     let sql = `select * from Contest`
 	db.query(sql, (err, result) => {
@@ -89,6 +96,7 @@ function getContestSubmissionWithId(req,res) {
 }
 
 module.exports = {
+	contest,
     getAllContest,
     getContestWithId,
     getContestHistoryWithId,
