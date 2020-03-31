@@ -1,14 +1,14 @@
 const db = require('../models/database').Pool
 
 function contest(req,res) {
-	let sql = `select * from Contest where time_end >= UNIX_TIMESTAMP() order by time_start limit 1`
+	let sql = `select idContest,time_start,time_end from Contest where time_end >= UNIX_TIMESTAMP() order by time_start limit 1`
 	db.query(sql,(err,result) => {
 		res.json(result)
 	})
 }
 
 function getAllContest(req,res) {
-    let sql = `select * from Contest`
+	let sql = `select * from Contest where time_end < UNIX_TIMESTAMP()`
 	db.query(sql, (err, result) => {
 		if (err) throw err
 		res.json(result)
@@ -24,12 +24,18 @@ function getContestWithId(req,res) {
 		problem.sort((a, b) => a - b);
 		let sql = `SELECT * FROM Problem WHERE id_Prob IN (?)`
 		db.query(sql, [problem], (err, prob) => {
-			res.json({
-				name: result[0].name,
-				id: result[0].idContest,
-				timeEnd: result[0].time_end,
-				problem: prob
-			})
+			if (err) throw err
+			const start = result[0].time_start
+			const end = result[0].time_end
+			const now = Math.floor(new Date() / 1000)
+			if(start <= now && now <= end) {
+				res.json({
+					name: result[0].name,
+					id: result[0].idContest,
+					timeEnd: result[0].time_end,
+					problem: prob
+				})
+			}else res.status(404).send('')
 		})
 	});
 }

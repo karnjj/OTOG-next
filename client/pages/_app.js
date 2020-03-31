@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { ThemeProvider } from 'styled-components'
-import { AuthProvider, auth } from '../utils/auth'
+import { AuthProvider, auth, TokenProvider } from '../utils/auth'
+import nextCookie from 'next-cookies'
 
 import breakpoints from '../styles/breakpoints'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -42,7 +43,7 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const MyApp = props => {
-	const { Component, pageProps, userData } = props
+	const { Component, pageProps, userData, token } = props
 	return (
 		<>
 			<Head>
@@ -59,8 +60,10 @@ const MyApp = props => {
 			</Head>
 			<ThemeProvider theme={{ breakpoints }}>
 				<AuthProvider value={userData}>
-					<GlobalStyle />
-					<Component {...pageProps} />
+                    <TokenProvider value={token}>
+                        <GlobalStyle />
+                        <Component {...pageProps} />
+                    </TokenProvider>
 				</AuthProvider>
 			</ThemeProvider>
 		</>
@@ -69,9 +72,10 @@ const MyApp = props => {
 
 MyApp.getInitialProps = async ({ Component, ctx }) => {
 	const pageProps =
-		Component.getInitialProps && (await Component.getInitialProps(ctx))
-	const userData = await auth(ctx)
-	return { pageProps, userData }
+        Component.getInitialProps && (await Component.getInitialProps(ctx))
+    const { token } = nextCookie(ctx)
+	const userData = await auth(token)
+	return { pageProps, userData, token }
 }
 
 export default MyApp

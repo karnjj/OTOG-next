@@ -8,6 +8,18 @@ const fileExt = {
 	'C': '.c',
 	'C++': '.cpp'
 }
+
+var verifyToken = token => {
+	try {
+		let js = jwt.verify(token, process.env.PUBLIC_KEY, {
+			algorithm: "RS256"
+		})
+		return js
+	} catch {
+		return false
+	}
+}
+
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		var idUser = req.headers.authorization
@@ -118,15 +130,24 @@ function uploadFie(req,res) {
 }
 
 function viewSouceCode(req,res) {
+	let token = req.headers.authorization
 	let idSubmit = Number(req.query.idSubmit)
-	let idUser = Number(req.query.idUser)
 	let idProb = Number(req.query.idProb)
+	var userData = verifyToken(token)
+	if(!userData) {
+		res.json({sCode : 'Access Denied'})
+		return
+	}
 	let sql = idSubmit ? `select * from Result where idResult = ${idSubmit}` :
 		`select * from (select max(idResult) as latest from Result where user_id = ${idUser} and prob_id = ${idProb}) 
 		as X inner join Result as R on R.idResult = X.latest`
 	db.query(sql, (err, result) => {
 		if (err) throw err
 		var submitData = result[0]
+		if(userData.id != submitData.user_id && userData.state != 0) {
+			res.json({sCode : 'Access Denied'})
+			return
+		}
 		var fileName = `${submitData.prob_id}_${submitData.time}${fileExt[submitData.language]}`
 		fs.readFile(`./uploaded/${submitData.user_id}/${fileName}`, function (err, data) {
 			if (err) return res.json({ sCode: 'Error: ENOENT: no such file or directory' })

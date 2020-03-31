@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCode } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import prism from 'prismjs'
-import { useAuthContext } from '../utils/auth'
+import { useAuthContext, useTokenContext } from '../utils/auth'
 
 const FontPre = styled.pre`
 	span,
@@ -19,7 +19,7 @@ const FontPre = styled.pre`
 const ViewCodeButton = props => {
 	const { idResult, id_Prob, mini } = props
 	const userData = useAuthContext()
-
+	const token = useTokenContext()
 	const [show, setShow] = useState(false)
 	const [sourceCode, setSourceCode] = useState('')
 	const [showLineNumber, setShowLineNumber] = useState(true)
@@ -28,8 +28,9 @@ const ViewCodeButton = props => {
 	const handleShow = async () => {
 		let url = idResult
 			? `${process.env.API_URL}/api/scode?idSubmit=${idResult}`
-			: `${process.env.API_URL}/api/scode?idUser=${userData.id}&idProb=${id_Prob}`
+			: `${process.env.API_URL}/api/scode?idProb=${id_Prob}`
 		let headers = { 'Content-Type': 'application/json' }
+		headers['authorization'] = token ? token : ''
 		const response = await fetch(url, { headers })
 		const data = await response.json()
 		setSourceCode(data.sCode)

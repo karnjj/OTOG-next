@@ -14,8 +14,7 @@ export const login = token => {
 	router.push('/')
 }
 
-export const auth = async ctx => {
-	const { token } = nextCookie(ctx)
+export const auth = async token => {
 	let url = `${process.env.API_URL}/api/auth`
 	let headers = { 'Content-Type': 'application/json' }
 	if (token) {
@@ -45,7 +44,7 @@ export const withAuthSync = WrappedComponent => {
 		const syncLogout = event => {
 			if (event.key === 'logout') {
 				console.log('logged out from storage!')
-				router.push('/login')
+				window.location.reload(false)
 			}
 		}
 		useEffect(() => {
@@ -71,6 +70,13 @@ export const AuthProvider = props => <AuthContext.Provider {...props} />
 export const useAuthContext = () => {
 	return useContext(AuthContext)
 }
+
+export const TokenContext = createContext()
+export const TokenProvider = props => <TokenContext.Provider {...props} />
+export const useTokenContext = () => {
+	return useContext(TokenContext)
+}
+
 export const isAdmin = userData => userData && userData.state === 0
 
 export const withAdminAuth = WrappedComponent => {
