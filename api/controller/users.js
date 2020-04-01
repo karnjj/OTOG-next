@@ -139,7 +139,7 @@ function viewSouceCode(req,res) {
 		return
 	}
 	let sql = idSubmit ? `select * from Result where idResult = ${idSubmit}` :
-		`select * from (select max(idResult) as latest from Result where user_id = ${idUser} and prob_id = ${idProb}) 
+		`select * from (select max(idResult) as latest from Result where user_id = ${userData.id} and prob_id = ${idProb}) 
 		as X inner join Result as R on R.idResult = X.latest`
 	db.query(sql, (err, result) => {
 		if (err) throw err

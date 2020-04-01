@@ -1,4 +1,16 @@
 const db = require('../models/database').Pool
+const jwt = require('jsonwebtoken')
+
+var verifyToken = token => {
+	try {
+		let js = jwt.verify(token, process.env.PUBLIC_KEY, {
+			algorithm: "RS256"
+		})
+		return js
+	} catch {
+		return false
+	}
+}
 
 function contest(req,res) {
 	let sql = `select idContest,time_start,time_end from Contest where time_end >= UNIX_TIMESTAMP() order by time_start limit 1`
@@ -16,7 +28,9 @@ function getAllContest(req,res) {
 }
 
 function getContestWithId(req,res) {
-    const idContest = req.params.id
+	const idContest = req.params.id
+	const token = req.headers.authorization
+	var userData = verifyToken(token)
 	let sql = `select * from Contest where idContest = ?`
 	db.query(sql, [idContest], (err, result) => {
 		if (err) throw err
@@ -26,16 +40,15 @@ function getContestWithId(req,res) {
 		db.query(sql, [problem], (err, prob) => {
 			if (err) throw err
 			const start = result[0].time_start
-			const end = result[0].time_end
 			const now = Math.floor(new Date() / 1000)
-			if(start <= now && now <= end) {
+			if(start <= now || userData.state === 0) {
 				res.json({
 					name: result[0].name,
 					id: result[0].idContest,
 					timeEnd: result[0].time_end,
 					problem: prob
 				})
-			}else res.status(404).send('')
+			}else res.status(404).json({})
 		})
 	});
 }
