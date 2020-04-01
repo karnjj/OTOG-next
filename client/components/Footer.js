@@ -21,7 +21,7 @@ const Footer = props => (
 		<Row>
 			<Col md={6}>
 				If you have any problem or suggestion, please{' '}
-				<Link href='#'>Contact Us</Link>
+				<Link href='https://fb.me/kkuotog' target="_blank" >Contact Us</Link>
 			</Col>
 			<Col as={Text} md={6}>
 				&copy; 2019 Phakphum Dev Team
