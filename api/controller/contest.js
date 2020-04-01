@@ -36,11 +36,16 @@ function getContestWithId(req,res) {
 		if (err) throw err
 		const problem = JSON.parse(result[0].problems)
 		problem.sort((a, b) => a - b);
-		let sql = `SELECT * FROM Problem WHERE id_Prob IN (?)`
+		let sql = `SELECT id_Prob,name,group_concat(distinct CASE WHEN R.score = 100 THEN user_id ELSE null END SEPARATOR ' ') 
+			as sum FROM Problem left join Result as R on R.prob_id = id_Prob
+			WHERE id_Prob IN (?) group by id_Prob`
 		db.query(sql, [problem], (err, prob) => {
 			if (err) throw err
 			const start = result[0].time_start
 			const now = Math.floor(new Date() / 1000)
+			for(var i in prob) {
+				prob[i].sum = prob[i].sum ? prob[i].sum.split(" ").length : 0
+			}
 			if(start <= now || userData.state === 0) {
 				res.json({
 					name: result[0].name,
