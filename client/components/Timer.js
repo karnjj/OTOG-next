@@ -17,6 +17,9 @@ const Timer = ({ countTo, mode, ...props }) => {
 		if (timer == 0 && countTo > 0) {
 			timer = setInterval(countdown, 1000)
 		}
+		return function cleanup() {
+			clearInterval(timer)
+		  }
 	}, [])
 
 	const secondsToTime = secs => {
