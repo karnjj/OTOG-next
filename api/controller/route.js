@@ -12,7 +12,7 @@ var corsOptions = {
   origin: 'http://localhost:3002',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
-router.use(cors(corsOptions))
+router.use(cors())
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(logger('dev'));
