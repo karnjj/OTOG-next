@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useAuthContext } from '../../utils/auth'
+import { useAuthContext, useTokenContext } from '../../utils/auth'
 import fetch from 'isomorphic-unfetch'
 
 import { Table, ButtonGroup, Button, Modal, Form } from 'react-bootstrap'
@@ -62,6 +62,7 @@ const ConfigUser = props => {
 }
 
 const EditModal = props => {
+	const token = useTokenContext()
 	const { show, setShow } = props
 	const { idUser } = props
 	const [username, setUsername] = useState(props.username)
@@ -88,7 +89,8 @@ const EditModal = props => {
 		const url = `${process.env.API_URL}/api/admin/user/${idUser}`
 		const respone = await fetch(url, {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+			headers: { 'Content-Type': 'application/json',
+						'Authorization': token ? token : '' },
 			body: JSON.stringify(data)
 		})
 		if (respone.ok) handleClose(), window.location.reload(false)
@@ -151,13 +153,14 @@ const UserTr = props => {
 
 export const UserTable = props => {
 	const userData = useAuthContext()
+	const token = useTokenContext()
 	const [users, setUsers] = useState([])
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const url = `${process.env.API_URL}/api/admin/user`
 			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = userData ? userData.id : ''
+			headers['Authorization'] = token ? token : ''
 			const res = await fetch(url, { headers })
 			const json = await res.json()
 			setUsers(json)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useAuthContext } from '../../utils/auth'
+import { useAuthContext, useTokenContext } from '../../utils/auth'
 import fetch from 'isomorphic-unfetch'
 
 import {
@@ -84,6 +84,7 @@ export const NewContest = () => {
 const ConfigTask = props => {
 	const { id_Prob, see, idContest } = props
 	const [onoff, setOnoff] = useState(undefined)
+	const token = useTokenContext()
 	useEffect(() => {
 		setOnoff(see)
 	},[see,idContest])
@@ -93,7 +94,8 @@ const ConfigTask = props => {
 		const url = `${process.env.API_URL}/api/admin/contest/${idContest}`
 		const response = await fetch(url, {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+			headers: { 'Content-Type': 'application/json',
+					   'Authorization': token ? token : ''},
 			body: JSON.stringify(data)
 		})
 		if (response.ok) setOnoff(!onoff)
@@ -106,6 +108,7 @@ const ConfigTask = props => {
 }
 
 const EditModal = props => {
+	const token = useTokenContext()
 	const { show, setShow } = props
 	const { id_Prob } = props
 	const [name, setName] = useState(props.name)
@@ -136,7 +139,8 @@ const EditModal = props => {
 		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}?option=save`
 		const response = await fetch(url, {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+			headers: { 'Content-Type': 'application/json',
+						'Authorization': token ? token : '' },
 			body: JSON.stringify(data)
 		})
 		if (response.ok) handleClose(), window.location.reload(false)
@@ -226,12 +230,13 @@ export const SelectContest = props => {
 
 export const TaskTable = ({ idContest }) => {
 	const userData = useAuthContext()
+	const token = useTokenContext()
 	const [tasks, setTasks] = useState([])
 	useEffect(() => {
 		const fetchData = async () => {
 			const url = `${process.env.API_URL}/api/admin/contest/${idContest}`
 			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = userData ? userData.id : ''
+			headers['Authorization'] = token ? token : ''
 			const res = await fetch(url, { headers })
 			const json = await res.json()
 			setTasks(json)

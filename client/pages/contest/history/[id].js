@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { withAuthSync, useAuthContext } from '../../../utils/auth'
+import { withAuthSync, useAuthContext, useTokenContext } from '../../../utils/auth'
 import { Container } from 'react-bootstrap'
 
 import Title from '../../../components/Title'
@@ -51,7 +51,7 @@ const Scoreboard = props => {
 						<th>#</th>
 						<th>ชื่อผู้เข้าแข่งขัน</th>
 						{problems.map((n, i) => (
-							<th key={i}>ข้อที่ {i + 1}</th>
+							<th key={i} title={n.name} >ข้อที่ {i + 1}</th>
 						))}
 						<th>คะแนนรวม</th>
 						<th>เวลารวม</th>
@@ -71,6 +71,7 @@ const ContestScoreboard = props => {
 	const router = useRouter()
 	const { id } = router.query
 	const userData = useAuthContext()
+	const token = useTokenContext()
 	const [contestants, setContestants] = useState([])
 	const [problems, setProblems] = useState([])
 
@@ -85,7 +86,7 @@ const ContestScoreboard = props => {
 			})
 			const response2 = await fetch(url2, {
 				headers: {
-					authorization: userData ? userData.id : ''
+					authorization: token ? token : ''
 				}
 			})
 			const json1 = await response1.json()

@@ -1,5 +1,19 @@
 const db = require('../models/database').Pool
 const sha256 = require('js-sha256');
+const jwt = require('jsonwebtoken')
+
+function AdminAuth(req,res,next) {
+	const token = req.headers.authorization
+	try {
+		let js = jwt.verify(token, process.env.PUBLIC_KEY, {
+			algorithm: "RS256"
+		})
+		if(js.state === 0) next()
+		else res.status(404).json({})
+	} catch {
+		res.status(404).json({})
+	}
+}
 
 async function Problems(req,res) {
     var sql = 'select * from Problem'
@@ -115,5 +129,6 @@ module.exports = {
     editProblem,
 	editUser,
 	getContestWithId,
-	editContest
+	editContest,
+	AdminAuth
 }
