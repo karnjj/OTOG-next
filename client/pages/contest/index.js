@@ -151,14 +151,14 @@ const MiniSubmission = props => {
 }
 
 const TaskCard = props => {
-	const { idContest, id_Prob, index, name, sum } = props
+	const { idContest, id_Prob, index, name, whopass } = props
 	const userData = useAuthContext()
 	const [selectedFile, setSelectedFile] = useState(undefined)
 	const [fileName, setFileName] = useState('')
 	const [fileLang, setFileLang] = useState('C++')
 	const [solved, setSolved] = useState(false)
 	const [idBest, setIdBest] = useState(-1)
-	const [passed, setPassed] = useState(sum)
+	const [passed, setPassed] = useState(whopass)
 
 	const CustomToggle = props => {
 		const [isHidden, setIsHidden] = useState(false)
