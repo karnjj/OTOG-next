@@ -10,7 +10,6 @@ app
   .prepare()
   .then(() => {
     const server = express();
-    server.use('/service-worker.js', express.static(path.join(__dirname, '.next', '/service-worker.js')))
     server.get("*", (req, res) => {
       return handle(req, res);
     });

@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { ThemeProvider } from 'styled-components'
 import { AuthProvider, auth, TokenProvider } from '../utils/auth'
 import nextCookie from 'next-cookies'
+import { register, unregister } from 'next-offline/runtime'
 
 import breakpoints from '../styles/breakpoints'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -10,6 +11,7 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { createGlobalStyle } from 'styled-components'
 import { down } from 'styled-breakpoints'
+import { useEffect } from 'react'
 config.autoAddCss = false
 
 const GlobalStyle = createGlobalStyle`
@@ -43,7 +45,10 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const MyApp = props => {
-	const { Component, pageProps, userData, token } = props
+    const { Component, pageProps, userData, token } = props
+    useEffect(() => {
+        unregister()
+    },[])
 	return (
 		<>
 			<Head>

@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node next-server.js",
+    "dev": "next -p 3002",
     "build": "next build",
-    "start": "NODE_ENV=production node next-server.js",
+    "start": "NODE_ENV=production next start -p 3002",
     "analyze": "ANALYZE=true next build"
   },
   "keywords": [],
