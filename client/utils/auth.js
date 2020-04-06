@@ -28,7 +28,7 @@ export const auth = token => {
 		}
 		return response.json()
 	}*/
-	return jwt_decode(token)
+	return token ? jwt_decode(token) : {}
 }
 
 export const logout = userData => {
