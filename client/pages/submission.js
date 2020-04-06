@@ -16,8 +16,7 @@ import { formatWithValidation } from 'next/dist/next-server/lib/utils'
 const Submission = () => {
 	const userData = useAuthContext()
 	//const { name, sname } = props.latestProblem
-	const { name, sname } = { name: 'pattern_0', sname: 'a4_ratri' }
-
+	const [lastest, setLastest] = useState({})
 	const [results, setResults] = useState([])
 
 	useEffect(() => {
@@ -27,7 +26,8 @@ const Submission = () => {
 			headers['Authorization'] = userData ? userData.id : ''
 			const res = await fetch(url, { headers })
 			const json = await res.json()
-			setResults(json)
+			setLastest(json.lastest)
+			setResults(json.result)
 		}
 		fetchData()
 	}, [])
@@ -45,11 +45,11 @@ const Submission = () => {
 								<Alink
 									target='_blank'
 									className='mx-4'
-									href={`${process.env.API_URL}/api/docs/${sname}`}
+									href={`${process.env.API_URL}/api/docs/${lastest.sname}`}
 								>
-									{name}
+									{lastest.name}
 								</Alink>
-								<SubmitGroup {...{ name, sname }} />
+								<SubmitGroup {...lastest} />
 							</div>
 						)}
 					</Col>

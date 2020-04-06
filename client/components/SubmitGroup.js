@@ -45,7 +45,7 @@ const SubmitGroup = props => {
 			},
 			body: data
 		})
-		if (respone.ok) router.push('/submission')
+		if (respone.ok) (router.pathname === '/submission') ? window.location.reload(false) : router.push('/submission')
 	}
 
 	return (
