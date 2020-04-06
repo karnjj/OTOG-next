@@ -14,7 +14,7 @@ export const login = token => {
 	router.push('/')
 }
 
-export const auth = token => {
+export const auth = async token => {
 	/*
 	let url = `${process.env.API_URL}/api/auth`
 	let headers = { 'Content-Type': 'application/json' }
@@ -28,7 +28,7 @@ export const auth = token => {
 		}
 		return response.json()
 	}*/
-	return token ? jwt_decode(token) : {}
+	return token && jwt_decode(token)
 }
 
 export const logout = userData => {
@@ -69,7 +69,7 @@ export const withAuthSync = WrappedComponent => {
 			WrappedComponent.getInitialProps &&
 			(await WrappedComponent.getInitialProps(ctx))
 		const { token } = nextCookie(ctx)
-		const userData = auth(token)
+		const userData = await auth(token)
 		return { ...componentProps, token, userData }
 	}
 	return Wrapper
