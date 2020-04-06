@@ -150,11 +150,11 @@ while True:
         else : subtask = [testcase]
         if(result == None):
             for sub in subtask:
-                ans = ans + '['
+                if contestMode : ans = ans + '['
                 if perfect == False:
                     for x in range(lastTest, int(sub)):
                         ans = ans + 'S'
-                    ans = ans + ']'
+                    if contestMode : ans = ans + ']'
                     lastTest = int(sub)
                     continue
                 for x in range(lastTest, int(sub)):
@@ -206,7 +206,7 @@ while True:
                     val = ('Running in testcase ' + str(x+1), submission[0])
                     mycursor.execute(sql, val)
                     mydb.commit()
-                ans = ans + ']'
+                if contestMode : ans = ans + ']'
                 lastTest = int(sub)
         else:
             ans = result
