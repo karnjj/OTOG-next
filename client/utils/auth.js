@@ -41,6 +41,8 @@ export const logout = userData => {
 
 export const withAuthSync = WrappedComponent => {
 	const Wrapper = props => {
+		const token = props.token
+		const userData = props.userData
 		const syncLogout = event => {
 			if (event.key === 'logout') {
 				console.log('logged out from storage!')
@@ -54,14 +56,22 @@ export const withAuthSync = WrappedComponent => {
 				window.localStorage.removeItem('logout')
 			}
 		}, [])
-		return <WrappedComponent {...props} />
+		return (
+			<AuthProvider value={userData}>
+				<TokenProvider value={token}>
+					<WrappedComponent {...props} />
+				</TokenProvider>
+			</AuthProvider>
+		)
 	}
 	Wrapper.getInitialProps = async ctx => {
-		const componentProps = 
+		const componentProps =
 			WrappedComponent.getInitialProps &&
 			(await WrappedComponent.getInitialProps(ctx))
-		return {...componentProps}
-	  }
+		const { token } = nextCookie(ctx)
+		const userData = await auth(token)
+		return { ...componentProps, token, userData }
+	}
 	return Wrapper
 }
 
@@ -85,14 +95,14 @@ export const withAdminAuth = WrappedComponent => {
 		return isAdmin(userData) ? (
 			<WrappedComponent {...props} />
 		) : (
-			<Error statusCode={404} />
-		)
+				<Error statusCode={404} />
+			)
 	}
 	Wrapper.getInitialProps = async ctx => {
-		const componentProps = 
+		const componentProps =
 			WrappedComponent.getInitialProps &&
 			(await WrappedComponent.getInitialProps(ctx))
-		return {...componentProps}
-	  }
+		return { ...componentProps }
+	}
 	return withAuthSync(Wrapper)
 }
