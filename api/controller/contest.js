@@ -34,6 +34,10 @@ function getContestWithId(req,res) {
 	let sql = `select * from Contest where idContest = ?`
 	db.query(sql, [idContest], (err, result) => {
 		if (err) throw err
+		if(result[0] === undefined) {
+			res.status(404).json({})
+			return
+		}
 		const problem = JSON.parse(result[0].problems)
 		problem.sort((a, b) => a - b);
 		let sql = `SELECT id_Prob,name,P.score,group_concat(distinct CASE WHEN R.score = 100 THEN user_id ELSE null END SEPARATOR ' ') 
