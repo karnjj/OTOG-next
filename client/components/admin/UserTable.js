@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuthContext, useTokenContext } from '../../utils/auth'
 import fetch from 'isomorphic-unfetch'
 
-import { Table, ButtonGroup, Button, Modal, Form } from 'react-bootstrap'
+import { Table, ButtonGroup, Button, Modal, Form, Toast } from 'react-bootstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -12,12 +12,31 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 export const NewUser = () => {
+	const token = useTokenContext()
 	const [show, setShow] = useState(false)
+	const [showErr, setShowErr] = useState(false);
+	const [username, setUsername] = useState('')
+	const [sname, setSname] = useState('')
+	const [password, setPassword] = useState('')
 	const handleShow = () => setShow(true)
 	const handleClose = () => setShow(false)
+	const toggleShowErr = () => setShowErr(!showErr);
+	const handleChangeUserame = e => setUsername(e.target.value)
+	const handleChangePassword = e => setPassword(e.target.value)
+	const handleChangeSname = e => setSname(e.target.value)
 	const onSubmit = async event => {
 		event.preventDefault()
-		handleClose()
+		const data = { username, password, sname }
+		const url = `${process.env.API_URL}/api/admin/user`
+		const respone = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': token ? token : ''
+			},
+			body: JSON.stringify(data)
+		})
+		if (respone.ok) handleClose(), window.location.reload(false)
 	}
 	return (
 		<>
@@ -30,11 +49,11 @@ export const NewUser = () => {
 				</Modal.Header>
 				<Modal.Body>
 					<Form>
-						<Form.Control placeholder='Username' />
+						<Form.Control placeholder='Username' onChange={handleChangeUserame} />
 						<br />
-						<Form.Control placeholder='Password' type='password' />
+						<Form.Control placeholder='Password' type='password' onChange={handleChangePassword} />
 						<br />
-						<Form.Control placeholder='Display Name' />
+						<Form.Control placeholder='Display Name' onChange={handleChangeSname} />
 					</Form>
 				</Modal.Body>
 				<Modal.Footer>
@@ -48,13 +67,27 @@ export const NewUser = () => {
 }
 
 const ConfigUser = props => {
-	const { handleShow } = props
+	const token = useTokenContext()
+	const { handleShow, idUser } = props
+	const handleDelete = async () => {
+		if (confirm(`Delete user id : ${idUser}`)) {
+			const url = `${process.env.API_URL}/api/admin/user/${idUser}`
+			const respone = await fetch(url, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': token ? token : ''
+				}
+			})
+			if (respone.ok) window.location.reload(false)
+		}
+	}
 	return (
 		<ButtonGroup>
 			<Button variant='info' onClick={handleShow}>
 				<FontAwesomeIcon icon={faPencilAlt} />
 			</Button>
-			<Button variant='danger'>
+			<Button variant='danger' onClick={handleDelete}>
 				<FontAwesomeIcon icon={faTrash} />
 			</Button>
 		</ButtonGroup>
@@ -89,8 +122,10 @@ const EditModal = props => {
 		const url = `${process.env.API_URL}/api/admin/user/${idUser}`
 		const respone = await fetch(url, {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json',
-						'Authorization': token ? token : '' },
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': token ? token : ''
+			},
 			body: JSON.stringify(data)
 		})
 		if (respone.ok) handleClose(), window.location.reload(false)
@@ -117,7 +152,7 @@ const EditModal = props => {
 					<br />
 					<Form.Label>New Password : </Form.Label>
 					<Form.Control
-						placeholder='Password'
+						placeholder='New Password'
 						onChange={handleChangePassword}
 					/>
 					<br />

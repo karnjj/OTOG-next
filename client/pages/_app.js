@@ -6,7 +6,7 @@ import { register, unregister } from 'next-offline/runtime'
 
 import breakpoints from '../styles/breakpoints'
 import 'bootstrap/dist/css/bootstrap.min.css'
-
+import "react-datepicker/dist/react-datepicker.css";
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { createGlobalStyle } from 'styled-components'
