@@ -151,7 +151,7 @@ const MiniSubmission = props => {
 }
 
 const TaskCard = props => {
-	const { idContest, id_Prob, index, name, whopass } = props
+	const { idContest, id_Prob, index, name, whopass, sname } = props
 	const userData = useAuthContext()
 	const [selectedFile, setSelectedFile] = useState(undefined)
 	const [fileName, setFileName] = useState('')
@@ -249,7 +249,7 @@ const TaskCard = props => {
 						/>
 						<ButtonToolbar as={Row}>
 							<ButtonGroup className='ml-auto mr-4'>
-								<Button variant='secondary'>View PDF</Button>
+								<a className='btn btn-secondary' target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>View PDF</a>
 							</ButtonGroup>
 							<ButtonGroup className='mr-auto'>
 								<OrangeButton type='submit' onClick={uploadFile}>
@@ -293,6 +293,15 @@ const NoContest = props => {
 		</CenteredDiv>
 	)
 }
+
+const NoLogin = props => {
+	return (
+		<CenteredDiv>
+			<h1>กรุณาเข้าสู่ระบบเพื่อแข่งขัน</h1>
+		</CenteredDiv>
+	)
+}
+
 const HoldingContest = props => {
 	const { idContest, endTime } = props
 	const [tasks, setTasks] = useState([])
@@ -304,7 +313,7 @@ const HoldingContest = props => {
 			headers['Authorization'] = userData ? userData.id : ''
 			const res = await fetch(url, { headers })
 			const json = await res.json()
-			setTasks(json.problem)
+			if(json.problem != undefined) setTasks(json.problem)
 		}
 		fetchData()
 	}, [])
@@ -330,6 +339,7 @@ const HoldingContest = props => {
 }
 
 const Contest = ({isContest}) => {
+	const userData = useAuthContext()
 	var start,end,idContest,isAboutToStart,isHolding,isJustEnd = null
 	if(isContest) {
 		start = isContest.time_start
@@ -352,7 +362,7 @@ const Contest = ({isContest}) => {
 				<Container fluid as={Row}>
 					<Col xs={0} md={1} lg={2} />
 					<Col xs={12} md={10} lg={8}>
-						{isAboutToStart ? (
+						{userData ? (isAboutToStart ? (
 							<Countdown startTime={start} />
 						) : isHolding ? (
 							<HoldingContest endTime={end} idContest={idContest} />
@@ -360,6 +370,8 @@ const Contest = ({isContest}) => {
 							<EndingContest />
 						) : (
 							<NoContest />
+						)): (
+							<NoLogin />
 						)}
 					</Col>
 					<Col xs={0} md={1} lg={2} />

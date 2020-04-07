@@ -39,7 +39,7 @@ const Submission = () => {
 				<Title icon={faPuzzlePiece} title='Submission' />
 				<Row className='m-auto align-items-baseline'>
 					<Col className='mr-auto'>
-						{userData && (
+						{userData && lastest && (
 							<div className='d-flex align-items-baseline'>
 								<b>ส่งข้อล่าสุด :</b>
 								<Alink
