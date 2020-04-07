@@ -3,7 +3,7 @@ import { withAuthSync, useTokenContext, isAdmin } from '../utils/auth'
 
 import fetch from 'isomorphic-unfetch'
 
-import { Row, Col, Form, Container } from 'react-bootstrap'
+import { Row, Col, Form, Container, InputGroup, Button } from 'react-bootstrap'
 import { useAuthContext } from '../utils/auth'
 import OrangeButton from '../components/OrangeButton'
 import ProbTable from '../components/ProbTable'
@@ -53,24 +53,25 @@ const Problem = () => {
 			<Container>
 				<Title icon={faPuzzlePiece} title='Problem' />
 				<Row className='m-auto justify-content-between align-items-baseline'>
-					<Col
-						as={Form.Control}
-						sm={6}
-						md={8}
-						placeholder='ค้นหาโจทย์'
-						value={searchState}
-						onChange={updateSearch}
-					/>
-					{isAdmin(userData) && (
-						<Form>
-							<Form.Check
-								type='switch'
-								id='custom-switch'
-								label='All Problems'
-								onChange={handleCheck}
-							/>
-						</Form>
-					)}
+					<Col as={InputGroup} sm={6} md={8}>
+						<Form.Control
+							placeholder='ค้นหาโจทย์'
+							value={searchState}
+							onChange={updateSearch}
+						/>
+						{isAdmin(userData) && (
+							<InputGroup.Append>
+								<InputGroup.Text>
+									<Form.Check
+										type='switch'
+										id='custom-switch'
+										label='All Problems'
+										onChange={handleCheck}
+									/>
+								</InputGroup.Text>
+							</InputGroup.Append>
+						)}
+					</Col>
 					<Col as={OrangeButton} sm={4} md={3} lg={2} href='submission'>
 						View Submission
 					</Col>
