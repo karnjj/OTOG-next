@@ -19,6 +19,20 @@ async function AllSubmission(req,res) {
 		res.json({result : values[1],lastest : values[0]})
 	})
 }
+
+async function ContestSubmission(req,res) {
+    let submit = await new Promise((resolve, reject) => {
+		var sql =
+			`SELECT idResult,U.sname,P.name,result,timeuse,Result.score,errmsg FROM Result 
+			inner join Problem as P on Result.prob_id = P.id_Prob
+			inner join User as U on Result.user_id = U.idUser
+			where contestmode is not null order by idResult desc limit 100`
+		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
+	})
+	res.json({result : submit})
+}
+
 module.exports = {
-    AllSubmission
+	AllSubmission,
+	ContestSubmission
 }
