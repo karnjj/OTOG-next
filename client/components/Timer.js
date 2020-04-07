@@ -19,10 +19,10 @@ const Timer = ({ countTo, mode, ...props }) => {
 		}
 		return function cleanup() {
 			clearInterval(timer)
-		  }
+		}
 	}, [])
 
-	const secondsToTime = secs => {
+	const secondsToTime = (secs) => {
 		let hour = Math.floor(secs / (60 * 60))
 		let minuteDivisor = secs % (60 * 60)
 		let minute = Math.floor(minuteDivisor / 60)
@@ -31,7 +31,7 @@ const Timer = ({ countTo, mode, ...props }) => {
 		let time = {
 			h: hour,
 			m: minute,
-			s: second
+			s: second,
 		}
 		return time
 	}
@@ -44,7 +44,7 @@ const Timer = ({ countTo, mode, ...props }) => {
 			window.location.reload(false)
 		}
 	}
-	const thCountdown = timeState => {
+	const thCountdown = (timeState) => {
 		const h = `${timeState.h} ชั่วโมง `
 		const m = `${timeState.m} นาที `
 		const s = `${timeState.s} วินาที `
@@ -63,7 +63,7 @@ const Timer = ({ countTo, mode, ...props }) => {
 		<StyledTimer {...props}>{thCountdown(timeState)}</StyledTimer>
 	) : (
 		<StyledTimer {...props}>
-			{timeState.h} hr : {timeState.m} m : {timeState.s} s
+			{timeState.h} h : {timeState.m} m : {timeState.s} s
 		</StyledTimer>
 	)
 }

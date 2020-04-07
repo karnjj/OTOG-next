@@ -6,7 +6,7 @@ import { CustomTr, CustomTable } from './CustomTable'
 import SubmitGroup from './SubmitGroup'
 import ViewCodeButton from './ViewCodeButton'
 
-const ProbTable = props => {
+const ProbTable = (props) => {
 	const userData = useAuthContext()
 	return (
 		<CustomTable>
@@ -28,7 +28,7 @@ const ProbTable = props => {
 	)
 }
 
-const ProbTr = props => {
+const ProbTr = (props) => {
 	const {
 		id_Prob,
 		name,
@@ -37,7 +37,7 @@ const ProbTr = props => {
 		sname,
 		pass,
 		acceptState,
-		wrongState
+		wrongState,
 	} = props
 	const userData = useAuthContext()
 
@@ -53,11 +53,9 @@ const ProbTr = props => {
 			<td>
 				{pass ? (
 					<Popup trigger={<a>{pass.length}</a>} position='left center'>
-						<div>
-							{pass.map((item, i) => (
-								<div key={i}>{item}</div>
-							))}
-						</div>
+						{pass.map((item, i) => (
+							<div key={i}>{item}</div>
+						))}
 					</Popup>
 				) : (
 					<div>0</div>
