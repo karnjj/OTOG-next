@@ -264,10 +264,11 @@ const TaskCard = props => {
 	)
 }
 const Countdown = props => {
-	const { startTime } = props
+	const { startTime, name } = props
 	return (
 		<CenteredDiv>
-			<h1>การแข่งขันกำลังจะเริ่ม</h1>
+			<h1>{name}</h1>
+			<h2>การแข่งขันกำลังจะเริ่ม</h2>
 			<h3>
 				ในอีก <Timer countTo={startTime} mode='th' />
 				...
@@ -303,7 +304,7 @@ const NoLogin = props => {
 }
 
 const HoldingContest = props => {
-	const { idContest, endTime } = props
+	const { idContest, endTime, name } = props
 	const [tasks, setTasks] = useState([])
 	const userData = useAuthContext()
 	useEffect(() => {
@@ -313,7 +314,7 @@ const HoldingContest = props => {
 			headers['Authorization'] = userData ? userData.id : ''
 			const res = await fetch(url, { headers })
 			const json = await res.json()
-			if(json.problem != undefined) setTasks(json.problem)
+			if (json.problem != undefined) setTasks(json.problem)
 		}
 		fetchData()
 	}, [])
@@ -338,10 +339,10 @@ const HoldingContest = props => {
 	)
 }
 
-const Contest = ({isContest}) => {
+const Contest = ({ isContest }) => {
 	const userData = useAuthContext()
-	var start,end,idContest,isAboutToStart,isHolding,isJustEnd = null
-	if(isContest) {
+	var start, end, idContest, isAboutToStart, isHolding, isJustEnd = null
+	if (isContest) {
 		start = isContest.time_start
 		const now = Math.floor(new Date() / 1000)
 		end = isContest.time_end
@@ -363,16 +364,16 @@ const Contest = ({isContest}) => {
 					<Col xs={0} md={1} lg={2} />
 					<Col xs={12} md={10} lg={8}>
 						{userData ? (isAboutToStart ? (
-							<Countdown startTime={start} />
+							<Countdown startTime={start} name={isContest.name} />
 						) : isHolding ? (
-							<HoldingContest endTime={end} idContest={idContest} />
+							<HoldingContest endTime={end} idContest={idContest} name={isContest.name}/>
 						) : isJustEnd ? (
 							<EndingContest />
 						) : (
-							<NoContest />
-						)): (
-							<NoLogin />
-						)}
+										<NoContest />
+									)) : (
+								<NoLogin />
+							)}
 					</Col>
 					<Col xs={0} md={1} lg={2} />
 				</Container>
@@ -399,7 +400,7 @@ Contest.getInitialProps = async ctx => {
 	let headers = { 'Content-Type': 'application/json' }
 	const res = await fetch(url, { headers })
 	const json = await res.json()
-	return { isContest : json[0] }
-  }
+	return { isContest: json[0] }
+}
 
 export default withAuthSync(Contest)

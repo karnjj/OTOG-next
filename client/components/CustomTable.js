@@ -14,6 +14,13 @@ export const Alink = styled.a`
 		cursor: pointer;
 	}
 `
+export const CuntomP = styled.p`
+	color: ${vars.orange};
+	&:hover {
+		color: ${vars.orange};
+		cursor: pointer;
+	}
+`
 export const CustomTr = styled.tr`
 	background: ${customColor};
 	&:hover td {
