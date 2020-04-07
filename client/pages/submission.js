@@ -16,7 +16,7 @@ import { formatWithValidation } from 'next/dist/next-server/lib/utils'
 const Submission = () => {
 	const userData = useAuthContext()
 	//const { name, sname } = props.latestProblem
-	const [lastest, setLastest] = useState({})
+	const [lastest, setLastest] = useState(null)
 	const [results, setResults] = useState([])
 
 	useEffect(() => {

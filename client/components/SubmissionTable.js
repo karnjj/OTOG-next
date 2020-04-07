@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useAuthContext } from '../utils/auth'
+
 import { CustomTr, CustomTable, UserTd } from './CustomTable'
-import { Modal } from 'react-bootstrap'
-import styled from 'styled-components'
+import { Modal, ButtonGroup } from 'react-bootstrap'
 import ViewCodeButton from './ViewCodeButton'
-import { ButtonGroup } from 'react-bootstrap'
-import { CuntomP } from './CustomTable'
+
+import styled from 'styled-components'
+import prism from 'prismjs'
 
 const FontPre = styled.pre`
 	span,
@@ -14,7 +15,7 @@ const FontPre = styled.pre`
 	}
 `
 
-const SubmissionTable = props => {
+const SubmissionTable = (props) => {
 	const userData = useAuthContext()
 	const { results } = props
 	return (
@@ -39,14 +40,27 @@ const SubmissionTable = props => {
 	)
 }
 
-const SubTr = props => {
+const SubTr = (props) => {
 	const userData = useAuthContext()
-	const [show,setShow] = useState(false)
-	const { sname, name, timeuse, score, result, idResult } = props
-	const isAccept = result => result.split('').every(res => res === 'P')
-	const round = num => Math.round(num * 100) / 100
+	const [showError, setShowError] = useState(false)
+	const { sname, name, timeuse, score, result, idResult, errmsg } = props
+
+	const handleShow = () => setShowError(true)
+	const handleClose = () => setShowError(false)
+	const isAccept = (result) =>
+		result
+			.split('')
+			.filter((res) => res !== '[' && res !== ']')
+			.every((res) => res === 'P')
+	const round = (num) => Math.round(num * 100) / 100
 	const canViewCode = (userData, sname) =>
 		userData && (userData.state === 0 || userData.sname === sname)
+
+	useEffect(() => {
+		if (showError) {
+			prism.highlightAll()
+		}
+	}, [showError])
 
 	return (
 		<>
@@ -54,25 +68,31 @@ const SubTr = props => {
 				<td>{idResult}</td>
 				<UserTd>{sname}</UserTd>
 				<td>{name}</td>
-				<td>{(result === 'Compilation Error') && canViewCode(userData, sname) ?
-					<CuntomP onClick={() => setShow(true)}>{result}</CuntomP>  : result}</td>
+				<td>
+					{result === 'Compilation Error' && canViewCode(userData, sname) ? (
+						<a onClick={handleShow}>{result}</a>
+					) : (
+						result
+					)}
+				</td>
 				<td>{timeuse} s</td>
 				<td>{round(score)}</td>
-				{canViewCode(userData, sname) && (
-					<td>
+				<td>
+					{canViewCode(userData, sname) && (
 						<ButtonGroup>
 							<ViewCodeButton {...{ idResult }} />
 						</ButtonGroup>
-					</td>
-				)}
+					)}
+				</td>
 			</CustomTr>
-			<Modal show={show} onHide={() => setShow(false)} centered size='lg'>
+
+			<Modal show={showError} onHide={handleClose} centered size='lg'>
 				<Modal.Header closeButton>
 					<Modal.Title>Error : {idResult}</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<FontPre >
-						<code>{props.errmsg}</code>
+					<FontPre>
+						<code className={`language-cpp`}>{errmsg}</code>
 					</FontPre>
 				</Modal.Body>
 			</Modal>

@@ -11,7 +11,7 @@ import {
 	Form,
 	Col,
 	Row,
-	InputGroup
+	InputGroup,
 } from 'react-bootstrap'
 import { Alink } from '../CustomTable'
 
@@ -22,8 +22,9 @@ import {
 	faEye,
 	faEyeSlash,
 	faTrash,
-	faPlusCircle
+	faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
+
 export const NewContest = () => {
 	const token = useTokenContext()
 	const [show, setShow] = useState(false)
@@ -34,7 +35,7 @@ export const NewContest = () => {
 	const [endDate, setEndDate] = useState(new Date())
 	const handleShow = () => setShow(true)
 	const handleClose = () => setShow(false)
-	const onSubmit = async event => {
+	const onSubmit = async (event) => {
 		event.preventDefault()
 		const start = Math.floor(Date.parse(startDate) / 1000)
 		const end = Math.floor(Date.parse(endDate) / 1000)
@@ -44,11 +45,11 @@ export const NewContest = () => {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': token ? token : ''
+				Authorization: token ? token : '',
 			},
-			body: JSON.stringify(data)
+			body: JSON.stringify(data),
 		})
-		if (response.ok) handleClose(),window.location.reload(false)
+		if (response.ok) handleClose(), window.location.reload(false)
 	}
 	return (
 		<>
@@ -57,7 +58,7 @@ export const NewContest = () => {
 			</Button>
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header closeButton>
-					<Modal.Title>Add New Contest</Modal.Title>
+					<Modal.Title>Create New Contest</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<Form>
@@ -65,19 +66,29 @@ export const NewContest = () => {
 							<Form.Label>Contest Name : </Form.Label>
 							<Form.Control
 								value={name}
-								onChange={e => setName(e.target.value)}
+								onChange={(e) => setName(e.target.value)}
 							/>
 						</Form.Group>
 						<Form.Group>
 							<Form.Label>Choose Mode : </Form.Label>
 							<InputGroup>
-								<Form.Control as='select' onChange={e => setMode(e.target.value)}>
-									<option selected value="unrated">Unrated Contest</option>
-									<option value="rated">Rated Contest</option>
+								<Form.Control
+									as='select'
+									onChange={(e) => setMode(e.target.value)}
+								>
+									<option selected value='unrated'>
+										Unrated Contest
+									</option>
+									<option value='rated'>Rated Contest</option>
 								</Form.Control>
-								<Form.Control as='select' onChange={e => setJudge(e.target.value)}>
-									<option selected value="classic">Classic (Time based)</option>
-									<option value="acm">ACM Mode</option>
+								<Form.Control
+									as='select'
+									onChange={(e) => setJudge(e.target.value)}
+								>
+									<option selected value='classic'>
+										Classic (Time based)
+									</option>
+									<option value='acm'>ACM Mode</option>
 									<option disabled>OTOG Mode</option>
 									<option disabled>Blind Mode</option>
 								</Form.Control>
@@ -85,25 +96,29 @@ export const NewContest = () => {
 						</Form.Group>
 						<Form.Group>
 							<Form.Label>Time : </Form.Label>
-							<InputGroup>
-								<DatePicker
+							<InputGroup as={Row} className='m-auto'>
+								<Form.Control
+									as={DatePicker}
 									selected={startDate}
-									onChange={date => { setStartDate(date), setEndDate(date) }}
+									onChange={(date) => {
+										setStartDate(date), setEndDate(date)
+									}}
 									showTimeSelect
-									timeFormat="HH:mm"
+									timeFormat='HH:mm'
 									timeIntervals={30}
-									timeCaption="time"
-									dateFormat="d/MMMM/yyyy HH:mm"
+									timeCaption='time'
+									dateFormat='d/MMMM/yyyy HH:mm'
 								/>
-								<div>-----></div>
-								<DatePicker
+								<Col xs={1} />
+								<Form.Control
+									as={DatePicker}
 									selected={endDate}
-									onChange={date => setEndDate(date)}
+									onChange={(date) => setEndDate(date)}
 									showTimeSelect
-									timeFormat="HH:mm"
+									timeFormat='HH:mm'
 									timeIntervals={30}
-									timeCaption="time"
-									dateFormat="d/MMMM/yyyy HH:mm"
+									timeCaption='time'
+									dateFormat='d/MMMM/yyyy HH:mm'
 								/>
 							</InputGroup>
 						</Form.Group>
@@ -119,14 +134,14 @@ export const NewContest = () => {
 	)
 }
 
-const ConfigTask = props => {
+const ConfigTask = (props) => {
 	const { id_Prob, see, idContest } = props
 	const [onoff, setOnoff] = useState(undefined)
 	const token = useTokenContext()
 	useEffect(() => {
 		setOnoff(see)
 	}, [see, idContest])
-	const handleChangeState = async event => {
+	const handleChangeState = async (event) => {
 		event.preventDefault()
 		const data = { idProb: id_Prob, state: !onoff }
 		const url = `${process.env.API_URL}/api/admin/contest/${idContest}`
@@ -134,9 +149,9 @@ const ConfigTask = props => {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': token ? token : ''
+				Authorization: token ? token : '',
 			},
-			body: JSON.stringify(data)
+			body: JSON.stringify(data),
 		})
 		if (response.ok) setOnoff(!onoff)
 	}
@@ -147,7 +162,7 @@ const ConfigTask = props => {
 	)
 }
 
-const EditModal = props => {
+const EditModal = (props) => {
 	const token = useTokenContext()
 	const { show, setShow } = props
 	const { id_Prob } = props
@@ -156,13 +171,13 @@ const EditModal = props => {
 	const [memory, setMemory] = useState(props.memory)
 	const [time, setTime] = useState(props.time)
 	const [score, setScore] = useState(props.score)
-	const [testcase,setTestcase] = useState(props.subtask)
+	const [testcase, setTestcase] = useState(props.subtask)
 	const handleClose = () => setShow(false)
 	const [docName, setDocName] = useState('')
 	const [selectedDoc, setSelectedDoc] = useState(undefined)
 	const [testcaseName, setTestcaseName] = useState('')
 	const [selectedTestcase, setSelectedTestcase] = useState(undefined)
-	const selectFile = event => {
+	const selectFile = (event) => {
 		if (event.target.files[0] === undefined) {
 			setSelectedFile(undefined)
 			setFileName('')
@@ -172,33 +187,33 @@ const EditModal = props => {
 			case 'doc':
 				setSelectedDoc(event.target.files[0])
 				setDocName(event.target.files[0].name)
-				break;
+				break
 			case 'testcase':
 				setSelectedTestcase(event.target.files[0])
 				setTestcaseName(event.target.files[0].name)
-				break;
+				break
 		}
 	}
-	const handleChangeName = event => setName(event.target.value)
-	const handleChangeSname = event => setSname(event.target.value)
-	const handleChangeMemory = event => setMemory(Number(event.target.value))
-	const handleChangeTime = event => setTime(Number(event.target.value))
-	const handleChangeScore = event => setScore(Number(event.target.value))
-	const handleChangeTestcase = event => setTestcase(event.target.value)
-	const onSave = async event => {
+	const handleChangeName = (event) => setName(event.target.value)
+	const handleChangeSname = (event) => setSname(event.target.value)
+	const handleChangeMemory = (event) => setMemory(Number(event.target.value))
+	const handleChangeTime = (event) => setTime(Number(event.target.value))
+	const handleChangeScore = (event) => setScore(Number(event.target.value))
+	const handleChangeTestcase = (event) => setTestcase(event.target.value)
+	const onSave = async (event) => {
 		event.preventDefault()
 		const info = { name, sname, memory, time, testcase, score }
 		const data = new FormData()
 		Object.keys(info).map((item) => {
 			data.append(item, info[item])
-		});
+		})
 		data.append('pdf', selectedDoc)
 		data.append('zip', selectedTestcase)
 		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}?option=save`
 		const response = await fetch(url, {
 			method: 'POST',
-			headers: { 'Authorization': token ? token : '' },
-			body: data
+			headers: { Authorization: token ? token : '' },
+			body: data,
 		})
 		if (response.ok) handleClose(), window.location.reload(false)
 	}
@@ -230,7 +245,11 @@ const EditModal = props => {
 				<Form.Group as={Row}>
 					<Col xs={6}>
 						<Form.Label>Testcases</Form.Label>
-						<Form.Control defaultValue={testcase} onChange={handleChangeTestcase} disabled/>
+						<Form.Control
+							defaultValue={testcase}
+							onChange={handleChangeTestcase}
+							disabled
+						/>
 					</Col>
 					<Col xs={6}>
 						<Form.Label>Score</Form.Label>
@@ -266,7 +285,7 @@ const EditModal = props => {
 	)
 }
 
-const TaskTr = props => {
+const TaskTr = (props) => {
 	const { id_Prob, name, sname, memory, time, score } = props
 	const [show, setShow] = useState(false)
 	const handleShow = () => setShow(true)
@@ -293,16 +312,22 @@ const TaskTr = props => {
 	)
 }
 
-export const SelectContest = props => {
+export const SelectContest = (props) => {
 	const { contests, setId } = props
 	return (
 		<Form.Group>
 			<Form.Label>Choose Contest : </Form.Label>
-			<Form.Control as='select' onChange={setId} >
-				<option disabled selected > -- select a contest -- </option>
+			<Form.Control as='select' onChange={setId}>
+				<option disabled selected>
+					{' '}
+					-- select a contest --{' '}
+				</option>
 				{contests.map((contest, index) => {
 					return (
-						<option key={index} value={contest.idContest}> {contest.name}</option>
+						<option key={index} value={contest.idContest}>
+							{' '}
+							{contest.name}
+						</option>
 					)
 				})}
 			</Form.Control>

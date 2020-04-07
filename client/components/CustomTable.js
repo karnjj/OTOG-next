@@ -4,17 +4,10 @@ import { darken } from 'polished'
 
 import { Table } from 'react-bootstrap'
 
-const customColor = props =>
+const customColor = (props) =>
 	props.acceptState ? vars.accept : props.wrongState && vars.wrong
 
 export const Alink = styled.a`
-	color: ${vars.orange};
-	&:hover {
-		color: ${vars.orange};
-		cursor: pointer;
-	}
-`
-export const CuntomP = styled.p`
 	color: ${vars.orange};
 	&:hover {
 		color: ${vars.orange};
@@ -31,7 +24,7 @@ export const CustomTd = styled.td`
 	background: ${customColor};
 `
 const Name = styled.a`
-	color: ${props => {
+	color: ${(props) => {
 		if (props.score >= 2000) {
 			return vars.grandmaster
 		} else if (props.score >= 1800) {
@@ -41,7 +34,7 @@ const Name = styled.a`
 		}
 	}}!important;
 `
-export const UserTd = props => (
+export const UserTd = (props) => (
 	<td>
 		<Name {...props} />
 	</td>
@@ -57,4 +50,6 @@ const CenterTable = styled(Table)`
 		}
 	}
 `
-export const CustomTable = props => <CenterTable responsive hover {...props} />
+export const CustomTable = (props) => (
+	<CenterTable responsive hover {...props} />
+)

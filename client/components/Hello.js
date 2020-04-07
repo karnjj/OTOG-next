@@ -109,7 +109,9 @@ const Hello = () => {
 					</CountButton>
 				))}
 			</ButtonWrapper>
-			<AliveText>ยังมีชีวิตรอด : <CountUp end={onlineUser}/></AliveText>
+			<AliveText>
+				ยังมีชีวิตรอด : <CountUp end={onlineUser} />
+			</AliveText>
 		</>
 	)
 }

@@ -14,14 +14,14 @@ import {
 	ButtonGroup,
 	Table,
 	Badge,
-	useAccordionToggle
+	useAccordionToggle,
 } from 'react-bootstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faTrophy,
 	faChevronDown,
-	faChevronUp
+	faChevronUp,
 } from '@fortawesome/free-solid-svg-icons'
 
 import Title from '../../components/Title'
@@ -55,7 +55,7 @@ const Icon = styled(FontAwesomeIcon)`
 	user-select: none;
 	cursor: pointer;
 `
-const MiniSubmission = props => {
+const MiniSubmission = (props) => {
 	const { idContest, idProb, parentCallback } = props
 	const userData = useAuthContext()
 	const [best, setBest] = useState([])
@@ -68,8 +68,8 @@ const MiniSubmission = props => {
 			const url = `${process.env.API_URL}/api/contest/${idContest}/submission?idProb=${idProb}`
 			const response = await fetch(url, {
 				headers: {
-					authorization: userData ? userData.id : ''
-				}
+					authorization: userData ? userData.id : '',
+				},
 			})
 			const json = await response.json()
 			setBest(json.best_submit)
@@ -100,8 +100,8 @@ const MiniSubmission = props => {
 		const url = `${process.env.API_URL}/api/contest/${idContest}/submission?idProb=${idProb}`
 		const response = await fetch(url, {
 			headers: {
-				authorization: userData.id
-			}
+				authorization: userData.id,
+			},
 		})
 		const json = await response.json()
 		setBest(json.best_submit)
@@ -150,7 +150,7 @@ const MiniSubmission = props => {
 	)
 }
 
-const TaskCard = props => {
+const TaskCard = (props) => {
 	const { idContest, id_Prob, index, name, whopass, sname } = props
 	const userData = useAuthContext()
 	const [selectedFile, setSelectedFile] = useState(undefined)
@@ -160,7 +160,7 @@ const TaskCard = props => {
 	const [idBest, setIdBest] = useState(-1)
 	const [passed, setPassed] = useState(whopass)
 
-	const CustomToggle = props => {
+	const CustomToggle = (props) => {
 		const [isHidden, setIsHidden] = useState(false)
 		const handleClick = useAccordionToggle(props.eventKey, () => {
 			setIsHidden(!isHidden)
@@ -175,7 +175,7 @@ const TaskCard = props => {
 			/>
 		)
 	}
-	const selectFile = event => {
+	const selectFile = (event) => {
 		if (event.target.files[0] !== undefined) {
 			setSelectedFile(event.target.files[0])
 			setFileName(event.target.files[0].name)
@@ -184,7 +184,7 @@ const TaskCard = props => {
 			setFileName('')
 		}
 	}
-	const uploadFile = async e => {
+	const uploadFile = async (e) => {
 		e.preventDefault()
 		if (selectedFile === undefined) return false
 		const data = new FormData()
@@ -194,9 +194,9 @@ const TaskCard = props => {
 		const respone = await fetch(url, {
 			method: 'POST',
 			headers: {
-				authorization: userData ? userData.id : ''
+				authorization: userData ? userData.id : '',
 			},
-			body: data
+			body: data,
 		})
 		if (respone.ok) window.location.reload(false)
 	}
@@ -206,9 +206,9 @@ const TaskCard = props => {
 			const response = await fetch(url, {
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({ id: idBest })
+				body: JSON.stringify({ id: idBest }),
 			})
 			if (response.ok) window.location.reload(false)
 		}
@@ -249,7 +249,13 @@ const TaskCard = props => {
 						/>
 						<ButtonToolbar as={Row}>
 							<ButtonGroup className='ml-auto mr-4'>
-								<a className='btn btn-secondary' target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>View PDF</a>
+								<a
+									className='btn btn-secondary'
+									target='_blank'
+									href={`${process.env.API_URL}/api/docs/${sname}`}
+								>
+									View PDF
+								</a>
 							</ButtonGroup>
 							<ButtonGroup className='mr-auto'>
 								<OrangeButton type='submit' onClick={uploadFile}>
@@ -263,7 +269,7 @@ const TaskCard = props => {
 		</Accordion>
 	)
 }
-const Countdown = props => {
+const Countdown = (props) => {
 	const { startTime, name } = props
 	return (
 		<CenteredDiv>
@@ -276,7 +282,7 @@ const Countdown = props => {
 		</CenteredDiv>
 	)
 }
-const EndingContest = props => {
+const EndingContest = (props) => {
 	return (
 		<CenteredDiv>
 			<h1>การแข่งขันจบแล้ว</h1>
@@ -284,7 +290,7 @@ const EndingContest = props => {
 		</CenteredDiv>
 	)
 }
-const NoContest = props => {
+const NoContest = (props) => {
 	return (
 		<CenteredDiv>
 			<h1>ยังไม่มีการแข่งขัน</h1>
@@ -295,7 +301,7 @@ const NoContest = props => {
 	)
 }
 
-const NoLogin = props => {
+const NoLogin = (props) => {
 	return (
 		<CenteredDiv>
 			<h1>กรุณาเข้าสู่ระบบเพื่อแข่งขัน</h1>
@@ -303,7 +309,7 @@ const NoLogin = props => {
 	)
 }
 
-const HoldingContest = props => {
+const HoldingContest = (props) => {
 	const { idContest, endTime, name } = props
 	const [tasks, setTasks] = useState([])
 	const userData = useAuthContext()
@@ -321,7 +327,7 @@ const HoldingContest = props => {
 
 	return (
 		<>
-			<Title icon={faTrophy} title='Contest Mode' noTop='true' noBot='true'>
+			<Title icon={faTrophy} title={name} noTop='true' noBot='true'>
 				<h2>
 					<Timer countTo={endTime} />
 				</h2>
@@ -339,14 +345,19 @@ const HoldingContest = props => {
 	)
 }
 
-const Contest = ({ isContest }) => {
+const Contest = ({ contest }) => {
 	const userData = useAuthContext()
-	var start, end, idContest, isAboutToStart, isHolding, isJustEnd = null
-	if (isContest) {
-		start = isContest.time_start
+	var start,
+		end,
+		idContest,
+		isAboutToStart,
+		isHolding,
+		isJustEnd = null
+	if (contest) {
+		start = contest.time_start
 		const now = Math.floor(new Date() / 1000)
-		end = isContest.time_end
-		idContest = isContest.idContest
+		end = contest.time_end
+		idContest = contest.idContest
 		isAboutToStart = now < start
 		isHolding = start <= now && now <= end
 		isJustEnd = now - end < 90 * 60
@@ -360,26 +371,32 @@ const Contest = ({ isContest }) => {
 				</Announce>
 			</Container>
 			<StyledJumbotron>
-				<Container fluid as={Row}>
+				<Container fluid as={Row} className='m-auto'>
 					<Col xs={0} md={1} lg={2} />
 					<Col xs={12} md={10} lg={8}>
-						{userData ? (isAboutToStart ? (
-							<Countdown startTime={start} name={isContest.name} />
-						) : isHolding ? (
-							<HoldingContest endTime={end} idContest={idContest} name={isContest.name}/>
-						) : isJustEnd ? (
-							<EndingContest />
+						{userData ? (
+							isAboutToStart ? (
+								<Countdown startTime={start} name={contest.name} />
+							) : isHolding ? (
+								<HoldingContest
+									endTime={end}
+									idContest={idContest}
+									name={contest.name}
+								/>
+							) : isJustEnd ? (
+								<EndingContest />
+							) : (
+								<NoContest />
+							)
 						) : (
-										<NoContest />
-									)) : (
-								<NoLogin />
-							)}
+							<NoLogin />
+						)}
 					</Col>
 					<Col xs={0} md={1} lg={2} />
 				</Container>
 			</StyledJumbotron>
 			<Container>
-				{(isAboutToStart) && (
+				{isAboutToStart && (
 					<Row>
 						<OrangeButton
 							outline='true'
@@ -395,12 +412,12 @@ const Contest = ({ isContest }) => {
 		</>
 	)
 }
-Contest.getInitialProps = async ctx => {
+Contest.getInitialProps = async (ctx) => {
 	const url = `${process.env.API_URL}/api/contest`
 	let headers = { 'Content-Type': 'application/json' }
 	const res = await fetch(url, { headers })
 	const json = await res.json()
-	return { isContest: json[0] }
+	return { contest: json[0] }
 }
 
 export default withAuthSync(Contest)
