@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { withAuthSync, useAuthContext } from '../../utils/auth'
+import { withAuthSync, useAuthContext, isAdmin } from '../../utils/auth'
 
 import {
 	Container,
@@ -10,7 +10,6 @@ import {
 	Col,
 	Form,
 	ButtonToolbar,
-	Button,
 	ButtonGroup,
 	Table,
 	Badge,
@@ -273,8 +272,7 @@ const Countdown = (props) => {
 	const { startTime, name } = props
 	return (
 		<CenteredDiv>
-			<h1>{name}</h1>
-			<h2>การแข่งขันกำลังจะเริ่ม</h2>
+			<h1>การแข่งขัน {name} กำลังจะเริ่ม</h1>
 			<h3>
 				ในอีก <Timer countTo={startTime} mode='th' />
 				...
@@ -374,22 +372,20 @@ const Contest = ({ contest }) => {
 				<Container fluid as={Row} className='m-auto'>
 					<Col xs={0} md={1} lg={2} />
 					<Col xs={12} md={10} lg={8}>
-						{userData ? (
-							isAboutToStart ? (
-								<Countdown startTime={start} name={contest.name} />
-							) : isHolding ? (
-								<HoldingContest
-									endTime={end}
-									idContest={idContest}
-									name={contest.name}
-								/>
-							) : isJustEnd ? (
-								<EndingContest />
-							) : (
-								<NoContest />
-							)
-						) : (
+						{!userData ? (
 							<NoLogin />
+						) : isAboutToStart ? (
+							<Countdown startTime={start} name={contest.name} />
+						) : isHolding ? (
+							<HoldingContest
+								endTime={end}
+								idContest={idContest}
+								name={contest.name}
+							/>
+						) : isJustEnd ? (
+							<EndingContest />
+						) : (
+							<NoContest />
 						)}
 					</Col>
 					<Col xs={0} md={1} lg={2} />
@@ -397,14 +393,21 @@ const Contest = ({ contest }) => {
 			</StyledJumbotron>
 			<Container>
 				{isAboutToStart && (
-					<Row>
-						<OrangeButton
-							outline='true'
-							href='/contest/history'
-							className='ml-auto'
-						>
-							See History
-						</OrangeButton>
+					<Row className='mx-auto'>
+						<Col xs='auto' className='ml-auto'>
+							{isAdmin(userData) && (
+								<OrangeButton outline='true' href='/contest/submission'>
+									See Submission
+								</OrangeButton>
+							)}
+							<OrangeButton
+								outline='true'
+								href='/contest/history'
+								className='ml-3'
+							>
+								See History
+							</OrangeButton>
+						</Col>
 					</Row>
 				)}
 				<Footer br={3} />
