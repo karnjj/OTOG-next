@@ -1,8 +1,21 @@
 const db = require('../models/database').Pool
+const jwt = require('jsonwebtoken');
 
-function getProblem(req,res) {
+var verifyToken = token => {
+	try {
+		let js = jwt.verify(token, process.env.PUBLIC_KEY, {
+			algorithm: "RS256"
+		})
+		return js
+	} catch {
+		return false
+	}
+}
+
+async function getProblem(req,res) {
     let mode = req.query.mode
-	let idUser = req.headers.authorization
+	let token = req.headers.authorization
+	let userData = await verifyToken(token)
 	let whoPassPromise = new Promise((resolve, reject) => {
 		let sql = "select prob_id,GROUP_CONCAT(DISTINCT(sname) SEPARATOR ',') as pass from Result " +
 			"inner join User as U on Result.user_id = U.idUser " +
@@ -12,7 +25,8 @@ function getProblem(req,res) {
 	let problemPromise = new Promise((resolve, reject) => {
 		let sql = '';
 		if (mode == 'firstpage') sql = 'select * from Problem where state = 1 order by see_date desc limit 10'
-		else sql = 'select * from Problem where state = 1 order by id_Prob desc'
+		else if(mode == 'admin' && userData.state == 0) sql = 'select * from Problem order by id_Prob desc'
+		else  sql = 'select * from Problem where state = 1 order by id_Prob desc'
 		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
 	})
 	let PassOrWrongPromise = new Promise((resolve, reject) => {
@@ -20,10 +34,10 @@ function getProblem(req,res) {
 			as lastest from Result where user_id = ? group by prob_id) as R1 
 			inner join Result as R2 on R1.lastest = R2.time and R1.prob_id = R2.prob_id 
 			and R1.user_id = R2.user_id`
-		db.query(sql, [idUser], (err, result) => err ? reject(err) : resolve(result))
+		db.query(sql, [userData.id], (err, result) => err ? reject(err) : resolve(result))
 	})
 	const promiseValue = [whoPassPromise, problemPromise]
-	if (idUser) promiseValue.push(PassOrWrongPromise)
+	if (userData) promiseValue.push(PassOrWrongPromise)
 	Promise.all(promiseValue).then(result => {
 		let whoPass = result[0]
 		let problems = result[1]
