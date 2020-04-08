@@ -7,7 +7,7 @@ import Header from '../../components/Header'
 import OrangeButton from '../../components/OrangeButton'
 import SubmissionTable from '../../components/SubmissionTable'
 
-import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
+import { faTrophy } from '@fortawesome/free-solid-svg-icons'
 
 const Submission = () => {
 	const token = useTokenContext()
@@ -29,7 +29,7 @@ const Submission = () => {
 		<>
 			<Header />
 			<Container>
-				<Title icon={faPuzzlePiece} title='Contest Submission' />
+				<Title icon={faTrophy} title='Contest Submission' />
 				<Row className='m-auto align-items-baseline'>
 					<Col className='mr-auto' />
 					<Col as={OrangeButton} href='/contest' sm={4} md={3} lg={2}>

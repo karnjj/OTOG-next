@@ -7,12 +7,17 @@ import ViewCodeButton from './ViewCodeButton'
 
 import styled from 'styled-components'
 import prism from 'prismjs'
+import vars from '../styles/vars'
 
 const FontPre = styled.pre`
 	span,
 	code {
 		font-family: 'Fira Code', 'Courier New', Courier, monospace;
 	}
+`
+const ResultCode = styled.code`
+	color: ${vars.black};
+	font-size: 16px;
 `
 
 const SubmissionTable = (props) => {
@@ -72,7 +77,7 @@ const SubTr = (props) => {
 					{result === 'Compilation Error' && canViewCode(userData, sname) ? (
 						<a onClick={handleShow}>{result}</a>
 					) : (
-						result
+						<ResultCode>{result}</ResultCode>
 					)}
 				</td>
 				<td>{timeuse} s</td>
