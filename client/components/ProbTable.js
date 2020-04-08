@@ -1,10 +1,15 @@
 import { useAuthContext } from '../utils/auth'
 
-import Popup from 'reactjs-popup'
+import { Popover, OverlayTrigger, Row, Col } from 'react-bootstrap'
 import { CustomTr, CustomTable } from './CustomTable'
 
 import SubmitGroup from './SubmitGroup'
 import ViewCodeButton from './ViewCodeButton'
+import styled from 'styled-components'
+
+const StyledPop = styled(Popover)`
+	max-width: none;
+`
 
 const ProbTable = (props) => {
 	const userData = useAuthContext()
@@ -41,6 +46,12 @@ const ProbTr = (props) => {
 	} = props
 	const userData = useAuthContext()
 
+	const passed = []
+	if (pass) {
+		for (let i = 0; i < pass.length; i += 15) {
+			passed.push(pass.slice(i, i + 15))
+		}
+	}
 	return (
 		<CustomTr {...{ acceptState, wrongState }}>
 			<td>{id_Prob}</td>
@@ -52,13 +63,26 @@ const ProbTr = (props) => {
 			</td>
 			<td>
 				{pass ? (
-					<Popup trigger={<a>{pass.length}</a>} position='left center'>
-						{pass.map((item, i) => (
-							<div key={i}>{item}</div>
-						))}
-					</Popup>
+					<OverlayTrigger
+						placement='top'
+						overlay={
+							<StyledPop>
+								<Popover.Content as={Row}>
+									{passed.map((names, i) => (
+										<Col key={i}>
+											{names.map((name, j) => (
+												<div key={j}>{name}</div>
+											))}
+										</Col>
+									))}
+								</Popover.Content>
+							</StyledPop>
+						}
+					>
+						<a>{pass.length}</a>
+					</OverlayTrigger>
 				) : (
-					<div>0</div>
+					<>0</>
 				)}
 			</td>
 			<td>0</td>
