@@ -1,20 +1,23 @@
 import { useState, useEffect } from 'react'
+import { useAuthContext } from '../utils/auth'
 import { withAuthSync, useTokenContext, isAdmin } from '../utils/auth'
 
 import fetch from 'isomorphic-unfetch'
 
 import { Row, Col, Form, Container, InputGroup } from 'react-bootstrap'
-import { useAuthContext } from '../utils/auth'
+import { CustomTr, CustomTable } from '../components/CustomTable'
 import OrangeButton from '../components/OrangeButton'
-import ProbTable from '../components/ProbTable'
 import Title from '../components/Title'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import Loader from '../components/Loader'
+import SubmitGroup from '../components/SubmitGroup'
+import ViewCodeButton from '../components/ViewCodeButton'
 
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import vars from '../styles/vars'
+
+import Popup from 'reactjs-popup'
 
 const OrangeCheck = styled(Form.Check)`
 	.custom-control-input:checked ~ .custom-control-label::before {
@@ -22,6 +25,73 @@ const OrangeCheck = styled(Form.Check)`
 		border: ${vars.orange};
 	}
 `
+
+const ProbTr = (props) => {
+	const {
+		id_Prob,
+		name,
+		time,
+		memory,
+		sname,
+		pass,
+		acceptState,
+		wrongState,
+	} = props
+	const userData = useAuthContext()
+
+	return (
+		<CustomTr {...{ acceptState, wrongState }}>
+			<td>{id_Prob}</td>
+			<td>
+				<a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
+					{name}
+					<br />({time} วินาที {memory} MB)
+				</a>
+			</td>
+			<td>
+				{pass ? (
+					<Popup trigger={<a>{pass.length}</a>} position='left center'>
+						{pass.map((item, i) => (
+							<div key={i}>{item}</div>
+						))}
+					</Popup>
+				) : (
+					<div>0</div>
+				)}
+			</td>
+			<td>0</td>
+			{userData && (
+				<td>
+					<SubmitGroup {...props}>
+						{(acceptState || wrongState) && <ViewCodeButton {...{ id_Prob }} />}
+					</SubmitGroup>
+				</td>
+			)}
+		</CustomTr>
+	)
+}
+
+const ProbTable = (props) => {
+	const userData = useAuthContext()
+	return (
+		<CustomTable ready={props.problems.length}>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Passed</th>
+					<th>Ratings</th>
+					{userData && <th>Submit</th>}
+				</tr>
+			</thead>
+			<tbody>
+				{props.problems.map((prob, index) => (
+					<ProbTr key={index} {...prob} />
+				))}
+			</tbody>
+		</CustomTable>
+	)
+}
 
 const Problem = () => {
 	const token = useTokenContext()

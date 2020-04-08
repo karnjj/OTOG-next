@@ -56,7 +56,7 @@ const Rating = () => {
 			<Header />
 			<Container>
 				<Title icon={faChartBar} title='Rating' />
-				<Row className='align-items-baseline'>
+				<Row className='mx-auto align-items-baseline'>
 					<Col as='label' md={2}>
 						<b>ค้นหาผู้ใช้ : </b>
 					</Col>
