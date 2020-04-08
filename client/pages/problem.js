@@ -13,6 +13,15 @@ import Footer from '../components/Footer'
 import Loader from '../components/Loader'
 
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
+import styled from 'styled-components'
+import vars from '../styles/vars'
+
+const OrangeCheck = styled(Form.Check)`
+	.custom-control-input:checked ~ .custom-control-label::before {
+		background: ${vars.orange};
+		border: ${vars.orange};
+	}
+`
 
 const Problem = () => {
 	const token = useTokenContext()
@@ -52,32 +61,34 @@ const Problem = () => {
 			<Header />
 			<Container>
 				<Title icon={faPuzzlePiece} title='Problem' />
-				<Row className='mr-0 justify-content-between align-items-baseline'>
-					<Col as={InputGroup} sm={6} md={8}>
-						<Form.Control
-							placeholder='ค้นหาโจทย์'
-							value={searchState}
-							onChange={updateSearch}
-						/>
+				<Row className='mx-auto justify-content-between align-items-baseline'>
+					<Col as={InputGroup} sm={6} md={8} className='px-0'>
 						{isAdmin(userData) && (
-							<InputGroup.Append>
+							<InputGroup.Prepend>
 								<InputGroup.Text>
-									<Form.Check
+									<OrangeCheck
 										type='switch'
 										id='custom-switch'
 										label='แสดงทั้งหมด'
 										onChange={handleCheck}
+										disabled={!taskState.length}
 									/>
 								</InputGroup.Text>
-							</InputGroup.Append>
+							</InputGroup.Prepend>
 						)}
+						<Form.Control
+							placeholder='ค้นหาโจทย์'
+							value={searchState}
+							onChange={updateSearch}
+							disabled={!taskState.length}
+						/>
 					</Col>
 					<Col as={OrangeButton} sm={4} md={3} lg={2} href='submission'>
 						View Submission
 					</Col>
 				</Row>
 				<hr />
-				{taskState.length ? <ProbTable problems={filteredTask} /> : <Loader />}
+				<ProbTable problems={filteredTask} />
 				<Footer />
 			</Container>
 		</>

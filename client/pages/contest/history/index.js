@@ -13,12 +13,12 @@ import { faTrophy, faChartArea } from '@fortawesome/free-solid-svg-icons'
 import fetch from 'isomorphic-unfetch'
 import OrangeButton from '../../../components/OrangeButton'
 
-const ContestTr = props => {
+const ContestTr = (props) => {
 	const { idContest, name, time_start, time_end, mode_grader, judge } = props
 	const now = new Date()
 	const start = new Date(Number(time_start * 1000))
-	const PascalCase = str => str[0].toUpperCase() + str.slice(1)
-	const difftime = timestamp => {
+	const PascalCase = (str) => str[0].toUpperCase() + str.slice(1)
+	const difftime = (timestamp) => {
 		timestamp = Math.floor(timestamp / 60)
 		var int_hours = Math.floor(timestamp / 60)
 		var hours = int_hours.toString()
@@ -64,7 +64,7 @@ const ContestTable = () => {
 		fetchData()
 	}, [])
 	return (
-		<CustomTable>
+		<CustomTable ready={contests.length}>
 			<thead>
 				<tr>
 					<th>#</th>

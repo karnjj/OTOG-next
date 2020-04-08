@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
-import { withAuthSync, useAuthContext, useTokenContext } from '../../../utils/auth'
+import {
+	withAuthSync,
+	useAuthContext,
+	useTokenContext,
+} from '../../../utils/auth'
 import { Container } from 'react-bootstrap'
 
 import Title from '../../../components/Title'
@@ -10,17 +14,18 @@ import {
 	CustomTable,
 	CustomTr,
 	UserTd,
-	CustomTd
+	CustomTd,
 } from '../../../components/CustomTable'
 
 import { faChartArea } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 
-const ScoreTr = props => {
+const ScoreTr = (props) => {
 	const { rank, sname, sumTime, sum, scores, problems } = props
 	const maxSum = problems.reduce((total, prob) => total + prob.score, 0)
-	const score = prob => (scores[prob.id_Prob] ? scores[prob.id_Prob].score : 0)
-	const round = num => Math.round(num * 100) / 100
+	const score = (prob) =>
+		scores[prob.id_Prob] ? scores[prob.id_Prob].score : 0
+	const round = (num) => Math.round(num * 100) / 100
 
 	return (
 		<CustomTr acceptState={sum === maxSum}>
@@ -41,33 +46,33 @@ const ScoreTr = props => {
 	)
 }
 
-const Scoreboard = props => {
+const Scoreboard = (props) => {
 	const { problems, contestants } = props
 	return (
-		!!problems && (
-			<CustomTable>
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>ชื่อผู้เข้าแข่งขัน</th>
-						{problems.map((n, i) => (
-							<th key={i} title={n.name} >ข้อที่ {i + 1}</th>
-						))}
-						<th>คะแนนรวม</th>
-						<th>เวลารวม</th>
-					</tr>
-				</thead>
-				<tbody>
-					{contestants.map((con, index) => (
-						<ScoreTr key={index} problems={problems} {...con} />
+		<CustomTable ready={problems.length}>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>ชื่อผู้เข้าแข่งขัน</th>
+					{problems.map((n, i) => (
+						<th key={i} title={n.name}>
+							ข้อที่ {i + 1}
+						</th>
 					))}
-				</tbody>
-			</CustomTable>
-		)
+					<th>คะแนนรวม</th>
+					<th>เวลารวม</th>
+				</tr>
+			</thead>
+			<tbody>
+				{contestants.map((con, index) => (
+					<ScoreTr key={index} problems={problems} {...con} />
+				))}
+			</tbody>
+		</CustomTable>
 	)
 }
 
-const ContestScoreboard = props => {
+const ContestScoreboard = (props) => {
 	const router = useRouter()
 	const { id } = router.query
 	const userData = useAuthContext()
@@ -81,13 +86,13 @@ const ContestScoreboard = props => {
 			const url2 = `${process.env.API_URL}/api/contest/${id}`
 			const response1 = await fetch(url1, {
 				headers: {
-					authorization: userData ? userData.id : ''
-				}
+					authorization: userData ? userData.id : '',
+				},
 			})
 			const response2 = await fetch(url2, {
 				headers: {
-					authorization: token ? token : ''
-				}
+					authorization: token ? token : '',
+				},
 			})
 			const json1 = await response1.json()
 			const json2 = await response2.json()

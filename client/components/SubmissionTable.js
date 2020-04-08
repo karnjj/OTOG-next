@@ -19,7 +19,7 @@ const SubmissionTable = (props) => {
 	const userData = useAuthContext()
 	const { results } = props
 	return (
-		<CustomTable>
+		<CustomTable ready={results.length}>
 			<thead>
 				<tr>
 					<th>#</th>

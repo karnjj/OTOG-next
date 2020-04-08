@@ -7,7 +7,7 @@ const StyledSpinner = styled(Spinner)`
 `
 
 const Loader = () => (
-	<Row className='mx-auto justify-content-center'>
+	<Row className='mx-auto justify-content-center py-5'>
 		<StyledSpinner animation='border' role='status'>
 			<span className='sr-only'>Loading...</span>
 		</StyledSpinner>

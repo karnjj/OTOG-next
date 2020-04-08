@@ -9,11 +9,9 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
-import styled from 'styled-components'
-import vars from '../styles/vars'
 
 const UserTable = (props) => (
-	<CustomTable>
+	<CustomTable ready={props.users.length}>
 		<thead>
 			<tr>
 				<th>#</th>

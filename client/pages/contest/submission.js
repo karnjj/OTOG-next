@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAuthContext, withAuthSync, useTokenContext, withAdminAuth } from '../../utils/auth'
+import { useTokenContext, withAdminAuth } from '../../utils/auth'
 
 import { Container, Row, Col } from 'react-bootstrap'
 import Title from '../../components/Title'
@@ -31,8 +31,7 @@ const Submission = () => {
 			<Container>
 				<Title icon={faPuzzlePiece} title='Contest Submission' />
 				<Row className='m-auto align-items-baseline'>
-					<Col className='mr-auto'>
-					</Col>
+					<Col className='mr-auto' />
 					<Col as={OrangeButton} href='/contest' sm={4} md={3} lg={2}>
 						View Contest
 					</Col>

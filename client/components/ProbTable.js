@@ -9,7 +9,7 @@ import ViewCodeButton from './ViewCodeButton'
 const ProbTable = (props) => {
 	const userData = useAuthContext()
 	return (
-		<CustomTable>
+		<CustomTable ready={props.problems.length}>
 			<thead>
 				<tr>
 					<th>#</th>
