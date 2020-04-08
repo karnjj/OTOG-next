@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react'
-import { useAuthContext, useTokenContext } from '../../utils/auth'
+import { useTokenContext } from '../../utils/auth'
 import fetch from 'isomorphic-unfetch'
-import styled from 'styled-components'
 import DatePicker from 'react-datepicker'
 import {
 	Table,
-	ButtonGroup,
 	Button,
 	Modal,
 	Form,
@@ -17,11 +15,8 @@ import { Alink } from '../CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-	faPencilAlt,
-	faSyncAlt,
 	faEye,
 	faEyeSlash,
-	faTrash,
 	faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -336,7 +331,6 @@ export const SelectContest = (props) => {
 }
 
 export const TaskTable = ({ idContest }) => {
-	const userData = useAuthContext()
 	const token = useTokenContext()
 	const [tasks, setTasks] = useState([])
 	useEffect(() => {

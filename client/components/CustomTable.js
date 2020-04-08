@@ -1,6 +1,5 @@
 import vars from '../styles/vars'
 import styled from 'styled-components'
-import { darken } from 'polished'
 
 import { Table } from 'react-bootstrap'
 

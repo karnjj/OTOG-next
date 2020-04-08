@@ -3,12 +3,37 @@ import fetch from 'isomorphic-unfetch'
 import { withAuthSync } from '../utils/auth'
 
 import { Container, Col, Row, Form } from 'react-bootstrap'
-import UserTable from '../components/UserTable'
+import { CustomTable, UserTd } from '../components/CustomTable'
 import Title from '../components/Title'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
+import styled from 'styled-components'
+import vars from '../styles/vars'
+
+const UserTable = (props) => (
+	<CustomTable>
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<th>Rating</th>
+				<th>Passed</th>
+			</tr>
+		</thead>
+		<tbody>
+			{props.users.map((user, index) => (
+				<tr key={index}>
+					<td>{index + 1}</td>
+					<UserTd score={user.rating}>{user.sname}</UserTd>
+					<td>{user.rating}</td>
+					<td>0</td>
+				</tr>
+			))}
+		</tbody>
+	</CustomTable>
+)
 
 const Rating = () => {
 	const [userState, setUserState] = useState([])
@@ -22,10 +47,10 @@ const Rating = () => {
 		}
 		fetchData()
 	}, [])
-	const updateSearch = event => {
+	const updateSearch = (event) => {
 		setsearchState(event.target.value.substr(0, 20))
 	}
-	let filteredUser = userState.filter(user => {
+	let filteredUser = userState.filter((user) => {
 		return user.sname.indexOf(searchState) !== -1
 	})
 	return (

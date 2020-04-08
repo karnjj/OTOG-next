@@ -7,25 +7,29 @@ import {
 	ScrollNavbar,
 	HeaderSpace,
 	RowNav,
-	NavLink
+	NavLink,
 } from './CustomNavbar'
 import {
 	faHome,
 	faPuzzlePiece,
 	faTrophy,
 	faChartBar,
-	faSignInAlt
+	faSignInAlt,
 } from '@fortawesome/free-solid-svg-icons'
 
 const Header = () => {
 	const userData = useAuthContext()
 	const router = useRouter()
 	const navLinks = [
-		//name,     favicon,       paths
+		//name, favicon, paths
 		['Main', faHome, ['/']],
 		['Problems', faPuzzlePiece, ['/problem', '/submission']],
-		['Contest', faTrophy, ['/contest', '/contest/history', '/contest/[id]']],
-		['Ratings', faChartBar, ['/rating']]
+		[
+			'Contest',
+			faTrophy,
+			['/contest', '/contest/history', '/contest/[id]', '/contest/submission'],
+		],
+		['Ratings', faChartBar, ['/rating']],
 	]
 	const handleClickLogout = () => logout(userData)
 	return (
@@ -43,7 +47,7 @@ const Header = () => {
 							{...{ name, icon }}
 							path={paths[0]}
 							key={name}
-							active={paths.some(path => path === router.pathname)}
+							active={paths.some((path) => path === router.pathname)}
 						/>
 					))}
 					{userData ? (

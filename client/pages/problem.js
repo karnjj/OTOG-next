@@ -3,7 +3,7 @@ import { withAuthSync, useTokenContext, isAdmin } from '../utils/auth'
 
 import fetch from 'isomorphic-unfetch'
 
-import { Row, Col, Form, Container, InputGroup, Button } from 'react-bootstrap'
+import { Row, Col, Form, Container, InputGroup } from 'react-bootstrap'
 import { useAuthContext } from '../utils/auth'
 import OrangeButton from '../components/OrangeButton'
 import ProbTable from '../components/ProbTable'
@@ -52,7 +52,7 @@ const Problem = () => {
 			<Header />
 			<Container>
 				<Title icon={faPuzzlePiece} title='Problem' />
-				<Row className='m-auto justify-content-between align-items-baseline'>
+				<Row className='mr-0 justify-content-between align-items-baseline'>
 					<Col as={InputGroup} sm={6} md={8}>
 						<Form.Control
 							placeholder='ค้นหาโจทย์'
@@ -65,7 +65,7 @@ const Problem = () => {
 									<Form.Check
 										type='switch'
 										id='custom-switch'
-										label='All Problems'
+										label='แสดงทั้งหมด'
 										onChange={handleCheck}
 									/>
 								</InputGroup.Text>

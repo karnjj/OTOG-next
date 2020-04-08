@@ -1,9 +1,8 @@
 import Router from 'next/router'
 import { useEffect } from 'react'
-const Main = () => {
-    useEffect(()=> {
-        Router.push('/')
-    },[])
-    return <></>
+export default () => {
+	useEffect(() => {
+		Router.push('/')
+	}, [])
+	return null
 }
-export default Main
