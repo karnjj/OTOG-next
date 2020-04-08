@@ -305,7 +305,7 @@ const EditModal = props => {
 				<Form.Group as={Row}>
 					<Col xs={6}>
 						<Form.Label>Testcases</Form.Label>
-						<Form.Control defaultValue={testcase} onChange={handleChangeTestcase} disabled/>
+						<Form.Control defaultValue={testcase} onChange={handleChangeTestcase} />
 					</Col>
 					<Col xs={6}>
 						<Form.Label>Score</Form.Label>
