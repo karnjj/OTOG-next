@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAuthContext, withAuthSync } from '../utils/auth'
+import { useAuthContext, withAuthSync, useTokenContext } from '../utils/auth'
 
 import { Container, Row, Col, Form } from 'react-bootstrap'
 import { Alink } from '../components/CustomTable'
@@ -15,23 +15,26 @@ import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 
 const Submission = () => {
 	const userData = useAuthContext()
+	const token = useTokenContext()
 	//const { name, sname } = props.latestProblem
 	const [lastest, setLastest] = useState(null)
 	const [results, setResults] = useState([])
-
+	const [showAll, setShowAll] = useState(false)
 	useEffect(() => {
 		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/submission`
+			const url = `${process.env.API_URL}/api/submission?mode=${
+				showAll ? `onlyme` : `full`
+			}`
 			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = userData ? userData.id : ''
+			headers['Authorization'] = token ? token : ''
 			const res = await fetch(url, { headers })
 			const json = await res.json()
 			setLastest(json.lastest)
 			setResults(json.result)
 		}
 		fetchData()
-	}, [])
-
+	}, [showAll])
+	const handleCheck = (event) => setShowAll(event.target.checked)
 	return (
 		<>
 			<Header />
@@ -53,13 +56,14 @@ const Submission = () => {
 						</Col>
 					)}
 					<Col sm={4} md={3} lg={2}>
+						{userData &&
 						<OrangeCheck
 							type='switch'
 							id='custom-switch'
-							label='แสดงทั้งหมด'
-							// onChange={handleCheck}
+							label='แสดงเฉพาะฉัน'
+							onChange={handleCheck}
 							// disabled={!taskState.length}
-						/>
+						/>}
 					</Col>
 					<Col as={OrangeButton} href='problem' sm={4} md={3} lg={2}>
 						View Problem
