@@ -10,17 +10,9 @@ import Title from '../components/Title'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ProbTable from '../components/ProbTable'
+import OrangeCheck from '../components/OrangeCheck'
 
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
-import styled from 'styled-components'
-import vars from '../styles/vars'
-
-const OrangeCheck = styled(Form.Check)`
-	.custom-control-input:checked ~ .custom-control-label::before {
-		background: ${vars.orange};
-		border: ${vars.orange};
-	}
-`
 
 const Problem = () => {
 	const token = useTokenContext()

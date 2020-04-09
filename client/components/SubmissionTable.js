@@ -74,11 +74,13 @@ const SubTr = (props) => {
 				<UserTd>{sname}</UserTd>
 				<td>{name}</td>
 				<td>
-					{result === 'Compilation Error' && canViewCode(userData, sname) ? (
-						<a onClick={handleShow}>{result}</a>
-					) : (
-						<ResultCode>{result}</ResultCode>
-					)}
+					<ResultCode>
+						{result === 'Compilation Error' && canViewCode(userData, sname) ? (
+							<a onClick={handleShow}>{result}</a>
+						) : (
+							result
+						)}
+					</ResultCode>
 				</td>
 				<td>{timeuse} s</td>
 				<td>{round(score)}</td>
