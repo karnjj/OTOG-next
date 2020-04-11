@@ -2,6 +2,7 @@ import { Spinner, Row, Table } from 'react-bootstrap'
 import styled, { keyframes } from 'styled-components'
 import { darken } from 'polished'
 import vars from '../styles/vars'
+import { range } from '../utils/array'
 
 const StyledSpinner = styled(Spinner)`
 	color: ${vars.orange};
@@ -17,33 +18,21 @@ const pulse = keyframes`
 		background: ${vars.grey};
 	}
 `
+const Text = styled.div`
+	height: 16px;
+	width: 160px;
+	background: ${vars.grey};
+	animation: ${pulse} 1s ease ${(props) => props.delay + 's'} infinite;
+`
 const AnimationTable = styled(Table)`
 	text-align: center;
 	th {
 		height: 50px;
+		text-align: center;
 	}
 	td {
 		height: 73px;
-	}
-	th {
-		animation: ${pulse} 1s ease infinite;
-	}
-	tbody {
-		tr:nth-child(1) {
-			animation: ${pulse} 1s ease 0.2s infinite;
-		}
-		tr:nth-child(2) {
-			animation: ${pulse} 1s ease 0.4s infinite;
-		}
-		tr:nth-child(3) {
-			animation: ${pulse} 1s ease 0.6s infinite;
-		}
-		tr:nth-child(4) {
-			animation: ${pulse} 1s ease 0.8s infinite;
-		}
-		tr:nth-child(5) {
-			animation: ${pulse} 1s ease 1s infinite;
-		}
+		text-align: center;
 	}
 `
 const Loader = () => (
@@ -58,25 +47,23 @@ export const TableLoader = () => {
 		<AnimationTable responsive>
 			<thead>
 				<tr>
-					<th> </th>
+					{range(5).map((i) => (
+						<th key={i}>
+							<Text delay={i * 0.04} />
+						</th>
+					))}
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td> </td>
-				</tr>
-				<tr>
-					<td> </td>
-				</tr>
-				<tr>
-					<td> </td>
-				</tr>
-				<tr>
-					<td> </td>
-				</tr>
-				<tr>
-					<td> </td>
-				</tr>
+				{range(4).map((i) => (
+					<tr key={i}>
+						{range(5).map((j) => (
+							<td key={j}>
+								<Text delay={j * 0.04 + (i + 1) * 0.2} />
+							</td>
+						))}
+					</tr>
+				))}
 			</tbody>
 		</AnimationTable>
 	)

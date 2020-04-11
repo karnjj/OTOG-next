@@ -84,6 +84,8 @@ const CountButton = styled.li`
 		transform: translateY(3px);
 		box-shadow: 0 2px ${vars.btn_gray};
 	}
+	animation: ${popin} 0.25s ease backwards
+		${(props) => props.index * 0.01 + 's'};
 `
 const ButtonWrapper = styled.ul`
 	display: flex;
@@ -91,21 +93,7 @@ const ButtonWrapper = styled.ul`
 	flex-wrap: wrap;
 	list-style: none;
 	padding: 0;
-	${CountButton}:nth-child(1) {
-		animation: ${popin} 0.25s ease 10ms;
-	}
-	${CountButton}:nth-child(2) {
-		animation: ${popin} 0.25s ease 50ms;
-	}
-	${CountButton}:nth-child(3) {
-		animation: ${popin} 0.25s ease 20ms;
-	}
-	${CountButton}:nth-child(4) {
-		animation: ${popin} 0.25s ease 40ms;
-	}
-	${CountButton}:nth-child(5) {
-		animation: ${popin} 0.25s ease 30ms;
-	}
+	height: 107px;
 `
 
 const Code = styled.code`
@@ -141,12 +129,7 @@ const Welcome = () => (
 
 const Hello = () => {
 	const userData = useAuthContext()
-	const [allProb, setAllProb] = useState(0)
-	const [passProb, setPassProb] = useState(0)
-	const [wrongProb, setWrongProb] = useState(0)
-	const [noSub, setNoSub] = useState(0)
-	const [newProb, setNewProb] = useState(0)
-	const [onlineUser, setOnlineUser] = useState(0)
+	const [data, setData] = useState()
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -154,14 +137,18 @@ const Hello = () => {
 			let headers = { 'Content-Type': 'application/json' }
 			headers['Authorization'] = userData.id
 			const response = await fetch(url, { headers })
-			const { allProblem, userProblem, onlineUser } = await response.json()
+			const probData = await response.json()
+			const { allProblem, userProblem, onlineUser } = probData
 			const { passProb, wrongProb } = userProblem
-			setAllProb(allProblem)
-			setPassProb(passProb)
-			setWrongProb(wrongProb)
-			setNoSub(allProblem - passProb - wrongProb)
-			setNewProb(0)
-			setOnlineUser(onlineUser)
+			setData({
+				allProblem,
+				onlineUser,
+				passProb,
+				wrongProb,
+				noSub: allProblem - passProb - wrongProb,
+				newProb: 0,
+				onlineUser,
+			})
 		}
 		fetchData()
 	}, [])
@@ -169,27 +156,29 @@ const Hello = () => {
 		<>
 			<WelcomeText>สวัสดี {userData.sname}</WelcomeText>
 			<ButtonWrapper>
-				{[
-					//message,  number,     color
-					['ทั้งหมด', allProb, vars.btn_black],
-					['ผ่านแล้ว', passProb, vars.btn_green],
-					['ยังไม่ผ่าน', wrongProb, vars.btn_red],
-					['ยังไม่ส่ง', noSub, vars.btn_orng],
-					['โจทย์วันนี้', newProb, vars.btn_blue],
-				].map(([message, number, color], index) => (
-					<CountButton {...{ color }} key={index}>
-						<Message>{message}</Message>
-						<Number end={number} />
-					</CountButton>
-				))}
+				{data &&
+					[
+						//message,  number,     color
+						['ทั้งหมด', data.allProblem, vars.btn_black],
+						['ผ่านแล้ว', data.passProb, vars.btn_green],
+						['ยังไม่ผ่าน', data.wrongProb, vars.btn_red],
+						['ยังไม่ส่ง', data.noSub, vars.btn_orng],
+						['โจทย์วันนี้', data.newProb, vars.btn_blue],
+					].map(([message, number, color], index) => (
+						<CountButton {...{ color, index }} key={index}>
+							<Message>{message}</Message>
+							<Number end={number} />
+						</CountButton>
+					))}
 			</ButtonWrapper>
 			<AliveText>
-				ยังมีชีวิตรอด : <CountUp end={onlineUser} />
+				ยังมีชีวิตรอด : <CountUp end={data ? data.onlineUser : 0} />
 			</AliveText>
 		</>
 	)
 }
-const Index = () => {
+
+const ProblemTable = () => {
 	const userData = useAuthContext()
 	const [taskState, setTaskState] = useState([])
 
@@ -204,6 +193,11 @@ const Index = () => {
 		}
 		fetchData()
 	}, [])
+	return <ProbTable problems={taskState} />
+}
+
+const Index = () => {
+	const userData = useAuthContext()
 
 	return (
 		<>
@@ -264,7 +258,7 @@ const Index = () => {
 					<Title icon={faPuzzlePiece} title='โจทย์ใหม่' noBot='true' />
 				</div>
 				<hr />
-				<ProbTable problems={taskState} />
+				<ProblemTable />
 				<Footer />
 			</Container>
 		</>

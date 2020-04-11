@@ -51,5 +51,5 @@ const CenterTable = styled(Table)`
 	}
 `
 export const CustomTable = ({ ready = true, ...props }) => {
-	return ready ? <CenterTable responsive hover {...props} /> : <Loader />
+	return ready ? <CenterTable responsive hover {...props} /> : <TableLoader />
 }

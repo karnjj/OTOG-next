@@ -1,6 +1,7 @@
 import { Row, Col } from 'react-bootstrap'
 import styled from 'styled-components'
 import vars from '../styles/vars'
+import { range } from '../utils/array'
 
 const Link = styled.a`
 	color: ${vars.orange};
@@ -12,16 +13,18 @@ const Text = styled.p`
 	text-align: right;
 `
 
-const Footer = props => (
+const Footer = (props) => (
 	<>
-		{[...Array(props.br)].map((n, i) => (
+		{range(props.br).map((i) => (
 			<br key={i} />
 		))}
 		<hr />
 		<Row>
 			<Col md={6}>
 				If you have any problem or suggestion, please{' '}
-				<Link href='https://fb.me/kkuotog' target="_blank" >Contact Us</Link>
+				<Link href='https://fb.me/kkuotog' target='_blank'>
+					Contact Us
+				</Link>
 			</Col>
 			<Col as={Text} md={6}>
 				&copy; 2019 Phakphum Dev Team
