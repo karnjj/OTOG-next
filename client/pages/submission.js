@@ -34,7 +34,10 @@ const Submission = () => {
 		}
 		fetchData()
 	}, [showAll])
-	const handleCheck = (event) => setShowAll(event.target.checked)
+	const handleCheck = (event) => {
+		setResults([])
+		setShowAll(event.target.checked)
+	}
 	return (
 		<>
 			<Header />
@@ -56,14 +59,15 @@ const Submission = () => {
 						</Col>
 					)}
 					<Col sm={4} md={3} lg={2}>
-						{userData &&
-						<OrangeCheck
-							type='switch'
-							id='custom-switch'
-							label='แสดงเฉพาะฉัน'
-							onChange={handleCheck}
-							// disabled={!taskState.length}
-						/>}
+						{userData && (
+							<OrangeCheck
+								type='switch'
+								id='custom-switch'
+								label='แสดงเฉพาะฉัน'
+								onChange={handleCheck}
+								disabled={!results.length}
+							/>
+						)}
 					</Col>
 					<Col as={OrangeButton} href='problem' sm={4} md={3} lg={2}>
 						View Problem

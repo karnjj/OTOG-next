@@ -2,7 +2,7 @@ import vars from '../styles/vars'
 import styled from 'styled-components'
 
 import { Table } from 'react-bootstrap'
-import Loader from './Loader'
+import Loader, { TableLoader } from './Loader'
 
 const customColor = (props) =>
 	props.acceptState ? vars.accept : props.wrongState && vars.wrong

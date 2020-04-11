@@ -71,7 +71,7 @@ const ProbTr = (props) => {
 									{passed.map((names, i) => (
 										<Col key={i}>
 											{names.map((name, j) => (
-												<div key={j}>{name}</div>
+												<div key={j}>• {name}</div>
 											))}
 										</Col>
 									))}

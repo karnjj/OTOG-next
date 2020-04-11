@@ -17,7 +17,7 @@ import {
 	faPuzzlePiece,
 } from '@fortawesome/free-solid-svg-icons'
 
-import styled from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import vars from '../styles/vars'
 
 import CountUp from 'react-countup'
@@ -50,14 +50,18 @@ const Message = styled.h5`
 	font-weight: 600;
 	text-align: center;
 `
-const ButtonWrapper = styled.ul`
-	display: flex;
-	justify-content: center;
-	flex-wrap: wrap;
-	list-style: none;
-	padding: 0;
+const popin = keyframes`
+	0% {
+		transform: scale(0);
+	}
+	90% {
+		transform: scale(1.05);
+	}
+	100% {
+		transform: scale(1);
+	}
 `
-const CountButton = styled.div`
+const CountButton = styled.li`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -79,6 +83,28 @@ const CountButton = styled.div`
 		background: ${(props) => props.color};
 		transform: translateY(3px);
 		box-shadow: 0 2px ${vars.btn_gray};
+	}
+`
+const ButtonWrapper = styled.ul`
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	list-style: none;
+	padding: 0;
+	${CountButton}:nth-child(1) {
+		animation: ${popin} 0.25s ease 10ms;
+	}
+	${CountButton}:nth-child(2) {
+		animation: ${popin} 0.25s ease 50ms;
+	}
+	${CountButton}:nth-child(3) {
+		animation: ${popin} 0.25s ease 20ms;
+	}
+	${CountButton}:nth-child(4) {
+		animation: ${popin} 0.25s ease 40ms;
+	}
+	${CountButton}:nth-child(5) {
+		animation: ${popin} 0.25s ease 30ms;
 	}
 `
 
@@ -192,10 +218,9 @@ const Index = () => {
 							<FontAwesomeIcon icon={faQuestion} /> FAQ
 						</h2>
 						<p>
-							{' '}
 							ไม่รู้ว่าจะเริ่มต้นอย่างไร ทุกอย่างดูงงไปหมด
 							ถ้าหากคุณมีปัญหาเหล่านี้สามารถ หาคำตอบได้จาก
-							คำถามยอดนิยมที่ผู้ใช้ส่วนใหญ่มักจะถามเป็นประจำ{' '}
+							คำถามยอดนิยมที่ผู้ใช้ส่วนใหญ่มักจะถามเป็นประจำ
 						</p>
 						<OrangeButton size='lg' href='#'>
 							Learn More
@@ -208,10 +233,9 @@ const Index = () => {
 							<FontAwesomeIcon icon={faFlagCheckered} /> Get started
 						</h2>
 						<p>
-							{' '}
 							เพิ่งเริ่มการเดินทาง อาจจะอยากได้การต้อนรับที่ดี
 							ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน competitive
-							programming{' '}
+							programming
 						</p>
 						<OrangeButton size='lg' href='problem'>
 							View Problem
@@ -224,10 +248,9 @@ const Index = () => {
 							<FontAwesomeIcon icon={faTrophy} /> Contest
 						</h2>
 						<p>
-							{' '}
 							ทำโจทย์คนเดียวมันอาจจะเหงา ลองมาเข้า contest
 							การแข่งขันอันทรงเกียรติ (?)
-							เพื่อจะได้มีเพื่อนทำโจทย์และแข่งขันไปพร้อมๆกันกับเรา{' '}
+							เพื่อจะได้มีเพื่อนทำโจทย์และแข่งขันไปพร้อม ๆ กันกับเรา
 						</p>
 						<OrangeButton size='lg' href='contest'>
 							Join Contest

@@ -12,23 +12,23 @@ const LoginCard = () => {
 	const [password, setPassword] = useState('')
 	const [sname, setSname] = useState('')
 	const [error, setError] = useState(false)
-	const handleChangeUser = event => {
+	const handleChangeUser = (event) => {
 		setUsername(event.target.value)
 	}
-	const handleChangePass = event => {
+	const handleChangePass = (event) => {
 		setPassword(event.target.value)
-    }
-    const handleChangeSname = event => {
+	}
+	const handleChangeSname = (event) => {
 		setSname(event.target.value)
 	}
-	const handleSubmit = async event => {
+	const handleSubmit = async (event) => {
 		event.preventDefault()
 		const url = `${process.env.API_URL}/api/register`
 		try {
 			const response = await fetch(url, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ username, password, sname })
+				body: JSON.stringify({ username, password, sname }),
 			})
 			if (response.ok) {
 				router.push('/login')
@@ -84,7 +84,7 @@ const LoginCard = () => {
 						placeholder='Password'
 						required
 					/>
-                    <br />
+					<br />
 					<Form.Control
 						type='sname'
 						name='sname'
@@ -99,7 +99,7 @@ const LoginCard = () => {
 						Create User
 					</OrangeButton>
 					<OrangeButton size='lg' href='/login' block>
-						 {`<= Back`}
+						{`< Back`}
 					</OrangeButton>
 				</Form>
 			</Card.Body>
