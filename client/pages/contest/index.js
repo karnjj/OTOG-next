@@ -29,12 +29,43 @@ import Footer from '../../components/Footer'
 import Timer from '../../components/Timer'
 import OrangeButton from '../../components/OrangeButton'
 import ViewCodeButton from '../../components/ViewCodeButton'
-import styled from 'styled-components'
+
+import styled, { keyframes } from 'styled-components'
 import vars from '../../styles/vars'
 
+const popin = keyframes`
+	0% {
+		opacity: 0;
+		transform: scale(0);
+	}
+	80% {
+		transform: scale(1.2);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+`
+const popout = keyframes`
+	0% {
+		transform: translateY(0);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(-50px);
+	}
+`
 const Announce = styled(Container)`
+	position: absolute;
 	text-align: center;
-	padding: 50px 0;
+	cursor: pointer;
+	user-select: none;
+	opacity: ${(props) => (props.show || props.unshow ? 1 : 0)};
+	animation: ${(props) => (props.show ? popin : props.unshow && popout)} 0.4s
+		ease both;
+`
+const StyledAnnouncement = styled(Container)`
+	padding: 50px 0 100px;
 `
 const CenteredDiv = styled.div`
 	text-align: center;
@@ -54,6 +85,33 @@ const Icon = styled(FontAwesomeIcon)`
 	user-select: none;
 	cursor: pointer;
 `
+const Announcement = () => {
+	const [messages, setMessages] = useState([
+		'ญินดีร์ฏ้อณลับสูเก็ดเฎอร์ฌาวไฑย',
+		'จงทำโจทย์ !!!',
+		'Announce Test',
+	])
+	const [currentIndex, setCurrentIndex] = useState(0)
+	const handleClick = () => {
+		setCurrentIndex((currentIndex + 1) % messages.length)
+	}
+	const previousIndex = (currentIndex - 1 + messages.length) % messages.length
+	return (
+		<StyledAnnouncement>
+			{messages.map((message, index) => (
+				<Announce
+					key={index}
+					show={index === currentIndex}
+					unshow={index === previousIndex}
+					onClick={handleClick}
+				>
+					<h1>{message}</h1>
+				</Announce>
+			))}
+		</StyledAnnouncement>
+	)
+}
+
 const MiniSubmission = (props) => {
 	const { idContest, idProb, parentCallback } = props
 	const userData = useAuthContext()
@@ -364,9 +422,7 @@ const Contest = ({ contest }) => {
 		<>
 			<Header />
 			<Container>
-				<Announce>
-					<h1>ญินดีร์ฏ้อณลับสูเก็ดเฎอร์ฌาวไฑย</h1>
-				</Announce>
+				<Announcement />
 			</Container>
 			<StyledJumbotron>
 				<Container fluid as={Row} className='m-auto'>
