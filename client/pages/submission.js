@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useAuthContext, withAuthSync, useTokenContext } from '../utils/auth'
+import {
+	useAuthContext,
+	withAuthSync,
+	useTokenContext,
+	isAdmin,
+} from '../utils/auth'
 
 import { Container, Row, Col } from 'react-bootstrap'
 import { Alink } from '../components/CustomTable'
@@ -19,7 +24,7 @@ const Submission = () => {
 	//const { name, sname } = props.latestProblem
 	const [lastest, setLastest] = useState(null)
 	const [results, setResults] = useState([])
-	const [showOnlyMe, setShowOnlyMe] = useState(true)
+	const [showOnlyMe, setShowOnlyMe] = useState(!isAdmin(userData) && !!userData)
 	useEffect(() => {
 		const fetchData = async () => {
 			const url = `${process.env.API_URL}/api/submission?mode=${
