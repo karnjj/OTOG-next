@@ -1,5 +1,5 @@
 import vars from '../styles/vars'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 import { Table } from 'react-bootstrap'
 import Loader, { TableLoader } from './Loader'
@@ -39,6 +39,16 @@ export const UserTd = (props) => (
 		<Name {...props} />
 	</td>
 )
+const fadein = keyframes`
+	0% {
+		opacity: 0;
+		transform : translateY(5px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+`
 const CenterTable = styled(Table)`
 	text-align: center;
 	th,
@@ -48,6 +58,9 @@ const CenterTable = styled(Table)`
 			color: ${vars.orange};
 			cursor: pointer;
 		}
+	}
+	tr {
+		animation: ${fadein} 0.2s ease;
 	}
 `
 export const CustomTable = ({ ready = true, ...props }) => {
