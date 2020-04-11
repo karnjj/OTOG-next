@@ -40,7 +40,7 @@ const Problem = () => {
 	const updateSearch = (event) => {
 		setsearchState(event.target.value.substr(0, 20))
 	}
-	const handleCheck = (event) => setShowAll(event.target.checked)
+	const handleChange = (event) => setShowAll(event.target.checked)
 
 	let filteredTask = taskState.filter((problem) => {
 		let id = String(problem.id_Prob)
@@ -62,7 +62,7 @@ const Problem = () => {
 										type='switch'
 										id='custom-switch'
 										label='แสดงทั้งหมด'
-										onChange={handleCheck}
+										onChange={handleChange}
 									/>
 								</InputGroup.Text>
 							</InputGroup.Prepend>

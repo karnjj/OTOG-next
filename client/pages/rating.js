@@ -66,7 +66,6 @@ const Rating = () => {
 						placeholder='ค้นหาผู้ใช้'
 						value={searchState}
 						onChange={updateSearch}
-						disabled={!userState.length}
 					/>
 					<Col md={4}></Col>
 				</Row>

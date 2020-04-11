@@ -42,7 +42,7 @@ export const UserTd = (props) => (
 const fadein = keyframes`
 	0% {
 		opacity: 0;
-		transform : translateY(5px);
+		transform : translateY(-5px);
 	}
 	100% {
 		opacity: 1;
@@ -60,7 +60,7 @@ const CenterTable = styled(Table)`
 		}
 	}
 	tr {
-		animation: ${fadein} 0.2s ease;
+		animation: ${fadein} 0.3s ease;
 	}
 `
 export const CustomTable = ({ ready = true, ...props }) => {
