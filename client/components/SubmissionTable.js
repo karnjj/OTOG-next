@@ -25,7 +25,7 @@ const SubmissionTable = (props) => {
 	const { results, canViewCode } = props
 	const showCode = canViewCode || isAdmin(userData)
 	return (
-		<CustomTable ready={results.length}>
+		<CustomTable ready={results !== undefined}>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -38,9 +38,10 @@ const SubmissionTable = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				{results.map((result, index) => (
-					<SubTr key={index} {...result} canViewCode={showCode} />
-				))}
+				{results &&
+					results.map((result, index) => (
+						<SubTr key={index} {...result} canViewCode={showCode} />
+					))}
 			</tbody>
 		</CustomTable>
 	)

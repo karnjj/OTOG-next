@@ -11,10 +11,10 @@ const StyledPop = styled(Popover)`
 	max-width: none;
 `
 
-const ProbTable = (props) => {
+const ProbTable = ({ problems }) => {
 	const userData = useAuthContext()
 	return (
-		<CustomTable ready={props.problems.length}>
+		<CustomTable ready={problems !== undefined}>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -25,9 +25,8 @@ const ProbTable = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				{props.problems.map((prob, index) => (
-					<ProbTr key={index} {...prob} />
-				))}
+				{problems &&
+					problems.map((prob, index) => <ProbTr key={index} {...prob} />)}
 			</tbody>
 		</CustomTable>
 	)

@@ -23,7 +23,7 @@ const Submission = () => {
 	const token = useTokenContext()
 	//const { name, sname } = props.latestProblem
 	const [lastest, setLastest] = useState(null)
-	const [results, setResults] = useState([])
+	const [results, setResults] = useState()
 	const [showOnlyMe, setShowOnlyMe] = useState(!isAdmin(userData) && !!userData)
 	useEffect(() => {
 		const fetchData = async () => {
@@ -40,7 +40,7 @@ const Submission = () => {
 		fetchData()
 	}, [showOnlyMe])
 	const handleCheck = (event) => {
-		setResults([])
+		setResults(undefined)
 		setShowOnlyMe(event.target.checked)
 	}
 	return (
