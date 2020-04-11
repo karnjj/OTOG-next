@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useAuthContext } from '../utils/auth'
+import { useAuthContext, isAdmin } from '../utils/auth'
 
 import { CustomTr, CustomTable, UserTd } from './CustomTable'
 import { Modal, ButtonGroup } from 'react-bootstrap'
@@ -22,7 +22,8 @@ const ResultCode = styled.code`
 
 const SubmissionTable = (props) => {
 	const userData = useAuthContext()
-	const { results, canViewCode = isAdmin(userData) } = props
+	const { results, canViewCode } = props
+	const showCode = canViewCode || isAdmin(userData)
 	return (
 		<CustomTable ready={results.length}>
 			<thead>
@@ -33,12 +34,12 @@ const SubmissionTable = (props) => {
 					<th>Result</th>
 					<th>Time</th>
 					<th>Score</th>
-					{canViewCode && <th>Code</th>}
+					{showCode && <th>Code</th>}
 				</tr>
 			</thead>
 			<tbody>
 				{results.map((result, index) => (
-					<SubTr key={index} {...{ ...result, canViewCode }} />
+					<SubTr key={index} {...result} canViewCode={showCode} />
 				))}
 			</tbody>
 		</CustomTable>
