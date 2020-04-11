@@ -91,13 +91,13 @@ const SubTr = (props) => {
 				</td>
 				<td>{timeuse} s</td>
 				<td>{round(score)}</td>
-				<td>
-					{canViewCode && (
+				{canViewCode && (
+					<td>
 						<ButtonGroup>
 							<ViewCodeButton {...{ idResult }} />
 						</ButtonGroup>
-					)}
-				</td>
+					</td>
+				)}
 			</CustomTr>
 
 			<Modal show={showError} onHide={handleClose} centered size='lg'>
