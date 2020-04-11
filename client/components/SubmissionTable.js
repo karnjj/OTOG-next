@@ -21,8 +21,7 @@ const ResultCode = styled.code`
 `
 
 const SubmissionTable = (props) => {
-	const userData = useAuthContext()
-	const { results } = props
+	const { results, canViewCode } = props
 	return (
 		<CustomTable ready={results.length}>
 			<thead>
@@ -33,12 +32,12 @@ const SubmissionTable = (props) => {
 					<th>Result</th>
 					<th>Time</th>
 					<th>Score</th>
-					{userData && <th>Code</th>}
+					{canViewCode && <th>Code</th>}
 				</tr>
 			</thead>
 			<tbody>
-				{results.map((res, index) => (
-					<SubTr key={index} {...res} />
+				{results.map((result, index) => (
+					<SubTr key={index} {...{ ...result, canViewCode }} />
 				))}
 			</tbody>
 		</CustomTable>
@@ -46,9 +45,17 @@ const SubmissionTable = (props) => {
 }
 
 const SubTr = (props) => {
-	const userData = useAuthContext()
 	const [showError, setShowError] = useState(false)
-	const { sname, name, timeuse, score, result, idResult, errmsg } = props
+	const {
+		sname,
+		name,
+		timeuse,
+		score,
+		result,
+		idResult,
+		errmsg,
+		canViewCode = false,
+	} = props
 
 	const handleShow = () => setShowError(true)
 	const handleClose = () => setShowError(false)
@@ -58,8 +65,6 @@ const SubTr = (props) => {
 			.filter((res) => res !== '[' && res !== ']')
 			.every((res) => res === 'P')
 	const round = (num) => Math.round(num * 100) / 100
-	const canViewCode = (userData, sname) =>
-		userData && (userData.state === 0 || userData.sname === sname)
 
 	useEffect(() => {
 		if (showError) {
@@ -75,7 +80,7 @@ const SubTr = (props) => {
 				<td>{name}</td>
 				<td>
 					<ResultCode>
-						{result === 'Compilation Error' && canViewCode(userData, sname) ? (
+						{result === 'Compilation Error' && canViewCode ? (
 							<a onClick={handleShow}>{result}</a>
 						) : (
 							result
@@ -85,7 +90,7 @@ const SubTr = (props) => {
 				<td>{timeuse} s</td>
 				<td>{round(score)}</td>
 				<td>
-					{canViewCode(userData, sname) && (
+					{canViewCode && (
 						<ButtonGroup>
 							<ViewCodeButton {...{ idResult }} />
 						</ButtonGroup>

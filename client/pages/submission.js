@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useAuthContext, withAuthSync, useTokenContext } from '../utils/auth'
+import {
+	useAuthContext,
+	withAuthSync,
+	useTokenContext,
+	isAdmin,
+} from '../utils/auth'
 
 import { Container, Row, Col, Form } from 'react-bootstrap'
 import { Alink } from '../components/CustomTable'
@@ -19,11 +24,11 @@ const Submission = () => {
 	//const { name, sname } = props.latestProblem
 	const [lastest, setLastest] = useState(null)
 	const [results, setResults] = useState([])
-	const [showAll, setShowAll] = useState(false)
+	const [showOnlyMe, setShowOnlyMe] = useState(true)
 	useEffect(() => {
 		const fetchData = async () => {
 			const url = `${process.env.API_URL}/api/submission?mode=${
-				showAll ? `onlyme` : `full`
+				showOnlyMe ? `onlyme` : `full`
 			}`
 			let headers = { 'Content-Type': 'application/json' }
 			headers['Authorization'] = token ? token : ''
@@ -33,10 +38,10 @@ const Submission = () => {
 			setResults(json.result)
 		}
 		fetchData()
-	}, [showAll])
+	}, [showOnlyMe])
 	const handleCheck = (event) => {
 		setResults([])
-		setShowAll(event.target.checked)
+		setShowOnlyMe(event.target.checked)
 	}
 	return (
 		<>
@@ -64,8 +69,8 @@ const Submission = () => {
 								type='switch'
 								id='custom-switch'
 								label='แสดงเฉพาะฉัน'
+								checked={showOnlyMe}
 								onChange={handleCheck}
-								disabled={!results.length}
 							/>
 						)}
 					</Col>
@@ -74,7 +79,10 @@ const Submission = () => {
 					</Col>
 				</Row>
 				<hr />
-				<SubmissionTable {...{ results }} />
+				<SubmissionTable
+					canViewCode={showOnlyMe || isAdmin(userData)}
+					{...{ results }}
+				/>
 			</Container>
 		</>
 	)
