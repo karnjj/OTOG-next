@@ -86,6 +86,7 @@ const CountButton = styled.li`
 	}
 	animation: ${popin} 0.25s ease backwards
 		${(props) => props.index * 0.01 + 's'};
+	animation-play-state: ${(props) => !props.number && 'pause'};
 `
 const ButtonWrapper = styled.ul`
 	display: flex;
@@ -93,7 +94,6 @@ const ButtonWrapper = styled.ul`
 	flex-wrap: wrap;
 	list-style: none;
 	padding: 0;
-	height: 107px;
 `
 
 const Code = styled.code`
@@ -129,7 +129,7 @@ const Welcome = () => (
 
 const Hello = () => {
 	const userData = useAuthContext()
-	const [data, setData] = useState()
+	const [data, setData] = useState({})
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -156,23 +156,22 @@ const Hello = () => {
 		<>
 			<WelcomeText>สวัสดี {userData.sname}</WelcomeText>
 			<ButtonWrapper>
-				{data &&
-					[
-						//message,  number,     color
-						['ทั้งหมด', data.allProblem, vars.btn_black],
-						['ผ่านแล้ว', data.passProb, vars.btn_green],
-						['ยังไม่ผ่าน', data.wrongProb, vars.btn_red],
-						['ยังไม่ส่ง', data.noSub, vars.btn_orng],
-						['โจทย์วันนี้', data.newProb, vars.btn_blue],
-					].map(([message, number, color], index) => (
-						<CountButton {...{ color, index }} key={index}>
-							<Message>{message}</Message>
-							<Number end={number} />
-						</CountButton>
-					))}
+				{[
+					//message,  number,     color
+					['ทั้งหมด', data.allProblem, vars.btn_black],
+					['ผ่านแล้ว', data.passProb, vars.btn_green],
+					['ยังไม่ผ่าน', data.wrongProb, vars.btn_red],
+					['ยังไม่ส่ง', data.noSub, vars.btn_orng],
+					['โจทย์วันนี้', data.newProb, vars.btn_blue],
+				].map(([message, number, color], index) => (
+					<CountButton {...{ number, color, index }} key={index}>
+						<Message>{message}</Message>
+						<Number end={number ? number : 0} />
+					</CountButton>
+				))}
 			</ButtonWrapper>
 			<AliveText>
-				ยังมีชีวิตรอด : <CountUp end={data ? data.onlineUser : 0} />
+				ยังมีชีวิตรอด : <CountUp end={data.onlineUser ? data.onlineUser : 0} />
 			</AliveText>
 		</>
 	)

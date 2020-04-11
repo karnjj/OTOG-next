@@ -63,7 +63,6 @@ const Problem = () => {
 										id='custom-switch'
 										label='แสดงทั้งหมด'
 										onChange={handleCheck}
-										disabled={!taskState.length}
 									/>
 								</InputGroup.Text>
 							</InputGroup.Prepend>
@@ -72,7 +71,6 @@ const Problem = () => {
 							placeholder='ค้นหาโจทย์'
 							value={searchState}
 							onChange={updateSearch}
-							disabled={!taskState.length}
 						/>
 					</Col>
 					<Col as={OrangeButton} sm={4} md={3} lg={2} href='submission'>

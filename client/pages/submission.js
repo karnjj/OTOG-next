@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react'
-import {
-	useAuthContext,
-	withAuthSync,
-	useTokenContext,
-	isAdmin,
-} from '../utils/auth'
+import { useAuthContext, withAuthSync, useTokenContext } from '../utils/auth'
 
-import { Container, Row, Col, Form } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import { Alink } from '../components/CustomTable'
 
 import Title from '../components/Title'
@@ -79,10 +74,7 @@ const Submission = () => {
 					</Col>
 				</Row>
 				<hr />
-				<SubmissionTable
-					canViewCode={showOnlyMe || isAdmin(userData)}
-					{...{ results }}
-				/>
+				<SubmissionTable canViewCode={showOnlyMe} {...{ results }} />
 			</Container>
 		</>
 	)

@@ -21,7 +21,8 @@ const ResultCode = styled.code`
 `
 
 const SubmissionTable = (props) => {
-	const { results, canViewCode } = props
+	const userData = useAuthContext()
+	const { results, canViewCode = isAdmin(userData) } = props
 	return (
 		<CustomTable ready={results.length}>
 			<thead>
@@ -54,7 +55,7 @@ const SubTr = (props) => {
 		result,
 		idResult,
 		errmsg,
-		canViewCode = false,
+		canViewCode,
 	} = props
 
 	const handleShow = () => setShowError(true)
