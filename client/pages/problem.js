@@ -31,9 +31,9 @@ const ProbButton = styled.button`
 	width: 38px;
 	height: 38px;
 	border-radius: 4px;
-	border: none;
-	margin: 5px;
-	background: ${(props) => props.color};
+	margin: 0 5px;
+	border: 2px ${(props) => props.color} solid;
+	background: ${vars.grey};
 	transition: all 0.15s ease;
 	animation: ${popin} 0.4s cubic-bezier(0.25, 0.25, 0.25, 1.25) backwards;
 	&:active {
