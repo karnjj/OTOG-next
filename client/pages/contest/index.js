@@ -279,10 +279,10 @@ const TaskCard = (props) => {
 	}
 
 	return (
-		<Accordion as={Card} defaultActiveKey='0' className='mb-4'>
+		<Accordion as={Card} defaultActiveKey='0' className='mb-4' border="success">
 			<Card.Header as='h5'>
 				Problem {index} : {name}
-				{solved && <Badge variant='success'>Solved</Badge>}
+				{/*solved && <Badge variant='success'>Solved</Badge>*/}
 				<CustomToggle eventKey='0' />
 				<br />
 				ผ่านแล้ว : {passed}
