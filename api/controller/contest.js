@@ -40,9 +40,9 @@ function getContestWithId(req,res) {
 		}
 		const problem = JSON.parse(result[0].problems)
 		problem.sort((a, b) => a - b);
-		let sql = `SELECT id_Prob,sname,name,P.score,group_concat(distinct CASE WHEN R.score = 100 THEN user_id ELSE null END SEPARATOR ' ') 
+		let sql = `SELECT id_Prob,P.sname,P.name,P.score,group_concat(distinct CASE WHEN R.score = 100 and U.state = 1 THEN user_id ELSE null END SEPARATOR ' ') 
 			as whopass FROM Problem as P left join Result as R on R.prob_id = id_Prob and contestmode is not null 
-			WHERE id_Prob IN (?) group by id_Prob`
+			left join User as U on U.idUser = R.user_id WHERE id_Prob IN (?) group by id_Prob`
 		db.query(sql, [problem], (err, prob) => {
 			if (err) {
 				res.status(404).json({})
