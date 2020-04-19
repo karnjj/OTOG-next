@@ -231,7 +231,7 @@ const EditModal = props => {
 	const [memory, setMemory] = useState(props.memory)
 	const [time, setTime] = useState(props.time)
 	const [score, setScore] = useState(props.score)
-	const [testcase,setTestcase] = useState(props.subtask)
+	const [testcase,setTestcase] = useState(10)
 	const handleClose = () => setShow(false)
 	const [docName, setDocName] = useState('')
 	const [selectedDoc, setSelectedDoc] = useState(undefined)
