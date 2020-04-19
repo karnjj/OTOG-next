@@ -181,9 +181,9 @@ const MiniSubmission = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				{lastest.map((prob, index) => {
+				{(lastest.length != 0) ? lastest.map((prob, index) => {
 					return (
-						<tr key={index}>
+						<tr key={index} >
 							<td>Latest</td>
 							<td>{prob.result}</td>
 							<td>{prob.score}</td>
@@ -192,8 +192,17 @@ const MiniSubmission = (props) => {
 							</td>
 						</tr>
 					)
-				})}
-				{best.map((prob, index) => {
+				}) :
+					<tr key={999}>
+						<td>Latest</td>
+						<td style={{ textAlign: 'center' }}>-</td>
+						<td style={{ textAlign: 'center' }}>-</td>
+						<td style={{ textAlign: 'center' }}>
+							❌
+						</td>
+					</tr>
+				}
+				{(best.length != 0) ? best.map((prob, index) => {
 					return (
 						<tr key={index}>
 							<td>Best</td>
@@ -204,7 +213,16 @@ const MiniSubmission = (props) => {
 							</td>
 						</tr>
 					)
-				})}
+				}) :
+					<tr key={998}>
+						<td>Best</td>
+						<td style={{ textAlign: 'center' }}>-</td>
+						<td style={{ textAlign: 'center' }}>-</td>
+						<td style={{ textAlign: 'center' }}>
+							❌
+						</td>
+					</tr>
+				}
 			</tbody>
 		</Table>
 	)
@@ -279,14 +297,22 @@ const TaskCard = (props) => {
 	}
 
 	return (
-		<Accordion as={Card} defaultActiveKey='0' className='mb-4' border="success">
-			<Card.Header as='h5'>
-				Problem {index} : {name}
-				{/*solved && <Badge variant='success'>Solved</Badge>*/}
-				<CustomToggle eventKey='0' />
-				<br />
-				ผ่านแล้ว : {passed}
-			</Card.Header>
+		<Accordion as={Card} defaultActiveKey='0' className='mb-4' border={solved && "success"}>
+			<Accordion.Toggle as={Card.Header} eventKey="0">
+				<h5>
+					<Row>
+						<Col>
+							Problem {index} : {name}
+						</Col>
+						<Col xs='auto' className='ml-auto'>
+							{solved && <Badge variant='success'>Solved</Badge>}
+						</Col>
+					</Row>
+					{/*solved && <Badge variant='success'>Solved</Badge>*/}
+					{/*<CustomToggle eventKey='0' />*/}
+					ผ่านแล้ว : {passed}
+				</h5>
+			</Accordion.Toggle>
 
 			<Accordion.Collapse eventKey='0'>
 				<Card.Body as={Row}>
@@ -444,8 +470,8 @@ const Contest = ({ contest }) => {
 						) : isJustEnd ? (
 							<EndingContest />
 						) : (
-							<NoContest />
-						)}
+											<NoContest />
+										)}
 					</Col>
 					<Col xs={0} md={1} lg={2} />
 				</Container>
