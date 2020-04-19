@@ -448,7 +448,7 @@ const Contest = ({ contest }) => {
 				</Container>
 			</StyledJumbotron>
 			<Container>
-				{isAboutToStart && (
+				{(isAboutToStart || isAdmin(userData)) && (
 					<Row className='mx-auto'>
 						<Col xs='auto' className='ml-auto'>
 							{isAdmin(userData) && (
