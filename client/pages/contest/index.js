@@ -181,7 +181,7 @@ const MiniSubmission = (props) => {
 				{lastest.map((prob, index) => {
 					return (
 						<tr key={index}>
-							<td>Lastest</td>
+							<td>Latest</td>
 							<td>{prob.result}</td>
 							<td>{prob.score}</td>
 							<td>
