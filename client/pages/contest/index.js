@@ -131,13 +131,16 @@ const MiniSubmission = (props) => {
 			const json = await response.json()
 			setBest(json.best_submit)
 			setLastest(json.lastest_submit)
-			sendData(json.best_submit, json.lastest_submit)
+			sendData(json.lastest_submit, json.best_submit)
 			if (json.lastest_submit[0] !== undefined)
 				if (json.lastest_submit[0].status == 0) {
-					//waitingData = setInterval(fetchNewData, 1000)
+					waitingData = setInterval(fetchNewData, 1000)
 				}
 		}
 		fetchData()
+		return function cleanup() {
+			clearInterval(waitingData)
+		}
 	}, [])
 	const sendData = (lastest, best) => {
 		if (lastest[0] !== undefined)
@@ -157,7 +160,7 @@ const MiniSubmission = (props) => {
 		const url = `${process.env.API_URL}/api/contest/${idContest}/submission?idProb=${idProb}`
 		const response = await fetch(url, {
 			headers: {
-				authorization: userData.id,
+				authorization: userData ? userData.id : '',
 			},
 		})
 		const json = await response.json()
