@@ -25,13 +25,19 @@ export const CustomTd = styled.td`
 `
 const Name = styled.a`
 	color: ${(props) => {
-		if (props.score >= 2000) {
+		if (props.score == 0) {
+			return vars.unrate
+		}else if (props.score >= 2500) {
+			return vars.legendary
+		} else if (props.score >= 2000) {
 			return vars.grandmaster
 		} else if (props.score >= 1800) {
 			return vars.master
-		} else {
+		} else if (props.score >= 1650) {
+			return vars.professional
+		} else if (props.score >= 1500) {
 			return vars.regular
-		}
+		} else return vars.pupil
 	}}!important;
 `
 export const UserTd = (props) => (

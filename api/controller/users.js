@@ -116,10 +116,17 @@ function auth(req,res) {
 }
 
 function getUser(req,res) {
-	let sql = "SELECT sname,rating FROM User inner join Result as R on User.idUser = R.user_id " +
-		"where contestmode is not null and state = 1 group by sname order by rating desc"
+	let sql = "SELECT sname,rating FROM User where rating != 0 and state = 1 order by rating desc"
 	db.query(sql, function (err, result) {
 		if (err) res.status(400).send(err);
+		var rank = 1;
+		for(var i in result) {
+			if(i == 0) result[i].rank = rank;
+			else {
+				if(result[i-1].rating != result[i].rating) result[i].rank = ++rank
+				else result[i].rank = rank
+			}
+		}
 		res.json(result);
 	});
 }

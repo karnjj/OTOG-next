@@ -1,11 +1,12 @@
 export default {
 	//user type
 	legendary: '#ff851b',
-	grandmaster: '#fd971f',
+	grandmaster: '#ff0000',
 	master: '#ae81ff',
 	professional: '#f92672',
 	regular: '#a6e22e',
 	pupil: '#66d9ef',
+	unrate: '#757474',
 	admin: '#000000',
 
 	//normal color
