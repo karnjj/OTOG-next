@@ -44,6 +44,9 @@ const Rating = () => {
 			setUserState(json)
 		}
 		fetchData()
+		return function cleanup() {
+			setUserState([])
+		}
 	}, [])
 	const updateSearch = (event) => {
 		setsearchState(event.target.value.substr(0, 20))
