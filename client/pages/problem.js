@@ -94,7 +94,7 @@ const Problem = () => {
 									<OrangeCheck
 										type='switch'
 										id='custom-switch'
-										label=' '
+										label='ทั้งหมด '
 										onChange={handleChange}
 									/>
 								</InputGroup.Text>
@@ -108,11 +108,13 @@ const Problem = () => {
 					</Col>
 					<Col lg={1} />
 					<Col as={Row} className='justify-content-center' sm={8} md={5} lg={4}>
+						{/*
 						<ProbButton color={vars.btn_black} />
 						<ProbButton color={vars.btn_green} />
 						<ProbButton color={vars.btn_red} />
 						<ProbButton color={vars.btn_orng} />
 						<ProbButton color={vars.btn_blue} />
+						*/}
 					</Col>
 					<Col lg={2} />
 					<Col as={OrangeButton} sm={4} md={3} lg={2} href='submission'>
