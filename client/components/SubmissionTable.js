@@ -53,6 +53,7 @@ const SubTr = (props) => {
 		sname,
 		rating,
 		name,
+		state,
 		timeuse,
 		score,
 		result,
@@ -80,7 +81,10 @@ const SubTr = (props) => {
 		<>
 			<CustomTr acceptState={isAccept(result)}>
 				<td>{idResult}</td>
-				<UserTd score={rating} >{sname}</UserTd>
+				{(state != 0) ? 
+					<UserTd score={rating}>{sname}</UserTd> :
+					<td style={{color:'#000000'}}>{sname}</td>	
+				}
 				<td>{name}</td>
 				<td>
 					<ResultCode>
