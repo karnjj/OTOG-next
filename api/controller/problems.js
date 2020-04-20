@@ -71,7 +71,7 @@ function cntProblem(req,res) {
 		db.query(sql, [idUser], (err, result) => err ? reject(err) : resolve(result))
 	})
 	let allUserOnline = new Promise((resolve, reject) => {
-		let sql = `select count(*) as online from session where expires >= UNIX_TIMESTAMP()`
+		let sql = `select count(*) as online from (select * from session where expires >= UNIX_TIMESTAMP() group by idUser) as X`
 		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
 	})
 	Promise.all([allProblem, allUserDo, allUserOnline]).then((result) => {
