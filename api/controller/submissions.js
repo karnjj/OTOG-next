@@ -43,7 +43,7 @@ async function AllSubmission(req,res) {
 async function ContestSubmission(req,res) {
     let submit = await new Promise((resolve, reject) => {
 		var sql =
-			`SELECT idResult,U.sname,P.name,result,timeuse,Result.score,errmsg FROM Result 
+			`SELECT idResult,U.sname,U.rating,U.state,P.name,result,timeuse,Result.score,errmsg FROM Result 
 			inner join Problem as P on Result.prob_id = P.id_Prob
 			inner join User as U on Result.user_id = U.idUser
 			where contestmode is not null order by idResult desc limit 100`

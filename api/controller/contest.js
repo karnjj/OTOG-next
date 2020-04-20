@@ -67,7 +67,7 @@ function getContestWithId(req,res) {
 
 function getContestHistoryWithId(req,res) {
     const idContest = req.params.idContest
-	let sql = `select U.idUser,sname,R1.prob_id,score,timeuse from 
+	let sql = `select U.rating,U.idUser,sname,R1.prob_id,score,timeuse from 
 		(select user_id,prob_id,max(idResult) as lastest from Result where contestmode = ? group by user_id,prob_id) as R1 
 		inner join Result as R2 on R1.user_id = R2.user_id and R1.prob_id = R2.prob_id and R1.lastest = R2.idResult 
 		inner join User as U on U.idUser = R1.user_id where U.state = 1 order by U.idUser,R1.prob_id`
@@ -80,6 +80,7 @@ function getContestHistoryWithId(req,res) {
 			if(info.scores === undefined) info.scores = {}
 			if(info.scores[data.prob_id] === undefined) info.scores[data.prob_id] = {}
 			info.idUser = data.idUser
+			info.rating = data.rating
 			info.sname = data.sname
 			info.sum +=  Number(Math.floor(data.score))
 			info.sumTime +=  Number(data.timeuse)
