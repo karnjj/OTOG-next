@@ -38,9 +38,6 @@ const popin = keyframes`
 		opacity: 0;
 		transform: scale(0);
 	}
-	80% {
-		transform: scale(1.2);
-	}
 	100% {
 		opacity: 1;
 		transform: scale(1);
@@ -57,6 +54,8 @@ const popout = keyframes`
 `
 const Announce = styled(Container)`
 	position: absolute;
+	margin-top: 50px;
+	padding-right: 45px;
 	text-align: center;
 	cursor: pointer;
 	user-select: none;
@@ -65,7 +64,7 @@ const Announce = styled(Container)`
 		ease both;
 `
 const StyledAnnouncement = styled(Container)`
-	padding: 50px 0 100px;
+	min-height: 150px;
 `
 const CenteredDiv = styled.div`
 	text-align: center;
@@ -89,7 +88,7 @@ const Announcement = () => {
 	const [messages, setMessages] = useState([
 		'ญินดีร์ฏ้อณลับสูเก็ดเฎอร์ฌาวไฑย',
 		'จงทำโจทย์ !!!',
-		'Announce Test',
+		'คิดถึงน้อง ๆ จัง',
 	])
 	const [currentIndex, setCurrentIndex] = useState(0)
 	const handleClick = () => {
@@ -181,48 +180,48 @@ const MiniSubmission = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				{(lastest.length != 0) ? lastest.map((prob, index) => {
-					return (
-						<tr key={index} >
-							<td>Latest</td>
-							<td>{prob.result}</td>
-							<td>{prob.score}</td>
-							<td>
-								<ViewCodeButton mini='true' idResult={prob.idResult} />
-							</td>
-						</tr>
-					)
-				}) :
+				{lastest.length != 0 ? (
+					lastest.map((prob, index) => {
+						return (
+							<tr key={index}>
+								<td>Latest</td>
+								<td>{prob.result}</td>
+								<td>{prob.score}</td>
+								<td>
+									<ViewCodeButton mini='true' idResult={prob.idResult} />
+								</td>
+							</tr>
+						)
+					})
+				) : (
 					<tr key={999}>
 						<td>Latest</td>
 						<td style={{ textAlign: 'center' }}>-</td>
 						<td style={{ textAlign: 'center' }}>-</td>
-						<td style={{ textAlign: 'center' }}>
-							❌
-						</td>
+						<td style={{ textAlign: 'center' }}>❌</td>
 					</tr>
-				}
-				{(best.length != 0) ? best.map((prob, index) => {
-					return (
-						<tr key={index}>
-							<td>Best</td>
-							<td>{prob.result}</td>
-							<td>{prob.score}</td>
-							<td>
-								<ViewCodeButton mini='true' idResult={prob.idResult} />
-							</td>
-						</tr>
-					)
-				}) :
+				)}
+				{best.length != 0 ? (
+					best.map((prob, index) => {
+						return (
+							<tr key={index}>
+								<td>Best</td>
+								<td>{prob.result}</td>
+								<td>{prob.score}</td>
+								<td>
+									<ViewCodeButton mini='true' idResult={prob.idResult} />
+								</td>
+							</tr>
+						)
+					})
+				) : (
 					<tr key={998}>
 						<td>Best</td>
 						<td style={{ textAlign: 'center' }}>-</td>
 						<td style={{ textAlign: 'center' }}>-</td>
-						<td style={{ textAlign: 'center' }}>
-							❌
-						</td>
+						<td style={{ textAlign: 'center' }}>❌</td>
 					</tr>
-				}
+				)}
 			</tbody>
 		</Table>
 	)
@@ -297,8 +296,13 @@ const TaskCard = (props) => {
 	}
 
 	return (
-		<Accordion as={Card} defaultActiveKey='0' className='mb-4' border={solved && "success"}>
-			<Accordion.Toggle as={Card.Header} eventKey="0">
+		<Accordion
+			as={Card}
+			defaultActiveKey='0'
+			className='mb-4'
+			border={solved && 'success'}
+		>
+			<Accordion.Toggle as={Card.Header} eventKey='0'>
 				<h5>
 					<Row>
 						<Col>
@@ -450,9 +454,7 @@ const Contest = ({ contest }) => {
 	return (
 		<>
 			<Header />
-			<Container>
-				<Announcement />
-			</Container>
+			<Announcement />
 			<StyledJumbotron>
 				<Container fluid as={Row} className='m-auto'>
 					<Col xs={0} md={1} lg={2} />
@@ -470,8 +472,8 @@ const Contest = ({ contest }) => {
 						) : isJustEnd ? (
 							<EndingContest />
 						) : (
-											<NoContest />
-										)}
+							<NoContest />
+						)}
 					</Col>
 					<Col xs={0} md={1} lg={2} />
 				</Container>
@@ -495,7 +497,7 @@ const Contest = ({ contest }) => {
 						</Col>
 					</Row>
 				)}
-				<Footer br={3} />
+				<Footer br={!userData ? 6 : 3} />
 			</Container>
 		</>
 	)

@@ -11,7 +11,7 @@ import { faTrophy } from '@fortawesome/free-solid-svg-icons'
 
 const Submission = () => {
 	const token = useTokenContext()
-	const [results, setResults] = useState([])
+	const [results, setResults] = useState()
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -29,13 +29,9 @@ const Submission = () => {
 		<>
 			<Header />
 			<Container>
-				<Title icon={faTrophy} title='Contest Submission' />
-				<Row className='m-auto align-items-baseline'>
-					<Col className='mr-auto' />
-					<Col as={OrangeButton} href='/contest' sm={4} md={3} lg={2}>
-						View Contest
-					</Col>
-				</Row>
+				<Title icon={faTrophy} title='Contest Submission' noBot='true'>
+					<OrangeButton href='/contest'>View Contest</OrangeButton>
+				</Title>
 				<hr />
 				<SubmissionTable {...{ results }} />
 			</Container>

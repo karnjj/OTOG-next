@@ -87,7 +87,7 @@ const Problem = () => {
 			<Container>
 				<Title icon={faPuzzlePiece} title='Problem' />
 				<Row className='mx-auto justify-content-between align-items-center'>
-					<Col as={InputGroup} sm={4} md={3} className='px-0'>
+					<Col as={InputGroup} sm={6} md={8} className='px-0'>
 						{isAdmin(userData) && (
 							<InputGroup.Prepend>
 								<InputGroup.Text>
@@ -106,17 +106,6 @@ const Problem = () => {
 							onChange={updateSearch}
 						/>
 					</Col>
-					<Col lg={1} />
-					<Col as={Row} className='justify-content-center' sm={8} md={5} lg={4}>
-						{/*
-						<ProbButton color={vars.btn_black} />
-						<ProbButton color={vars.btn_green} />
-						<ProbButton color={vars.btn_red} />
-						<ProbButton color={vars.btn_orng} />
-						<ProbButton color={vars.btn_blue} />
-						*/}
-					</Col>
-					<Col lg={2} />
 					<Col as={OrangeButton} sm={4} md={3} lg={2} href='submission'>
 						View Submission
 					</Col>

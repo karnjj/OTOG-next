@@ -20,7 +20,7 @@ const pulse = keyframes`
 `
 const Text = styled.div`
 	height: 16px;
-	width: 160px;
+	max-width: 160px;
 	background: ${vars.grey};
 	animation: ${pulse} 1s ease ${(props) => props.delay + 's'} infinite;
 `
