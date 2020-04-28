@@ -343,6 +343,9 @@ export const TaskTable = ({ idContest }) => {
 			setTasks(json)
 		}
 		fetchData()
+		return function cleanup() {
+			setTasks([])
+		}
 	}, [idContest])
 	return (
 		<Table responsive hover>

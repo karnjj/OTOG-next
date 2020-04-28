@@ -201,6 +201,9 @@ export const UserTable = props => {
 			setUsers(json)
 		}
 		fetchData()
+		return function cleanup() {
+			setUsers([])
+		}
 	}, [])
 
 	return (
