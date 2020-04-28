@@ -37,7 +37,7 @@ const Header = () => {
 			<HeaderSpace />
 			<ScrollNavbar bg='light' expand='sm' fixed='top'>
 				<Navbar.Brand className='mr-auto'>
-					<StyledNavLink href={isAdmin(userData) ? '/admin' : '/'}>
+					<StyledNavLink href={isAdmin(userData) ? '/admin' : '/'} target={isAdmin(userData) && "_blank"}>
 						OTOG<span> - One Tambon One Grader</span>
 					</StyledNavLink>
 				</Navbar.Brand>

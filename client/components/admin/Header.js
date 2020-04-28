@@ -1,6 +1,6 @@
 import { withRouter } from 'next/router'
 
-import { Nav } from 'react-bootstrap'
+import { Nav, Button } from 'react-bootstrap'
 import { NavLink, ScrollNavbar, HeaderSpace } from '../CustomNavbar'
 import {
 	faWrench,
@@ -12,6 +12,10 @@ import {
 
 const Header = props => {
 	const { router } = props
+	const handleClose = () => {
+		window.open("/", "_self")
+		window.close()
+	}
 	return (
 		<>
 			<HeaderSpace />
@@ -29,7 +33,7 @@ const Header = props => {
 							active={path === router.pathname}
 						/>
 					))}
-					<NavLink name='Exit' icon={faTimes} red='true' path='/' />
+					<NavLink name='Exit' icon={faTimes} red='true' onClick={handleClose} />
 				</Nav>
 			</ScrollNavbar>
 		</>
