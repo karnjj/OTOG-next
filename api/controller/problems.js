@@ -91,7 +91,20 @@ function cntProblem(req,res) {
 }
 
 function getDoc(req,res) {
-    res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`);
+	const token = req.cookies.token
+	const userData = verifyToken(token)
+		let sql = `select * from Problem where sname = ?`
+		db.query(sql, [req.params.name], (err, result) => {
+			if(err) {
+				console.log(err);
+				return res.sendStatus(404);
+			}
+			if(result[0] && result[0].state === 1) return res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`)
+			else {
+				if(userData.state === 0) return res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`)
+				else return res.status(401).send('Access denied')
+			}
+		})
 }
 
 module.exports = {

@@ -8,6 +8,7 @@ const problems = require('./problems')
 const contest = require('./contest')
 const submission = require('./submissions')
 const admin = require('./admin')
+const cookieParser = require('cookie-parser')
 var corsOptions = {
   origin: 'http://localhost:3002',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -15,6 +16,7 @@ var corsOptions = {
 router.use(cors())
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
+router.use(cookieParser())
 router.use(logger('dev'));
 
 router.get('/', (req, res) => {
