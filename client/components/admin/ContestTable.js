@@ -243,7 +243,6 @@ const EditModal = (props) => {
 						<Form.Control
 							defaultValue={testcase}
 							onChange={handleChangeTestcase}
-							disabled
 						/>
 					</Col>
 					<Col xs={6}>

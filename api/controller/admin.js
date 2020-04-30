@@ -140,12 +140,14 @@ function editProblem(req, res) {
 				});
 			}
 			if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-			if (data.testcase != 'undefined') fs.writeFile(dir + '/script.php', 'cases = ' + data.testcase + ';', function (err) {
+			if (data.testcase != 'null') fs.writeFile(dir + '/script.php', 'cases = ' + data.testcase + ';', function (err) {
 				if (err) throw err;
 			});
 			var sql = `update Problem set name = ?, sname = ?, 
-				score = ?, time = ?, memory = ? where id_Prob = ${idProb}`
-			db.query(sql, [data.name, data.sname, data.score, data.time, data.memory], (err) => {
+				score = ?, time = ?, memory = ?${data.testcase != 'null' ? `, subtask = ?`: ``} where id_Prob = ${idProb}`
+			var val = [data.name, data.sname, data.score, data.time, data.memory]
+			if (data.testcase != 'null') val.push(data.testcase)
+			db.query(sql, val, (err) => {
 				if (err) throw err
 				res.status(200).send('')
 			})
@@ -164,8 +166,8 @@ function editProblem(req, res) {
 function addProblem(req, res) {
 	const data = req.body
 	const dir = `./grader/source/${req.body.sname}`
+	if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 	if (req.files.zip !== undefined) {
-		if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 		fs.createReadStream(req.files.zip[0].path)
 			.pipe(unzipper.Extract({ path: dir }));
 		fs.unlink(req.files.zip[0].path, function (err) {
@@ -175,13 +177,16 @@ function addProblem(req, res) {
 	if (data.numCase != 'undefined') fs.writeFile(dir + '/script.php', 'cases = ' + data.numCase + ';', function (err) {
 		if (err) throw err;
 	});
-	var sql = "insert into Problem (name, sname, score, time, memory) values ?";
+	var sql = `insert into Problem (name, sname, score, time, memory${(data.numCase != 'undefined') ? `,subtask` : ``}) values ?`
 	var values = [
 		[data.name, data.sname, data.score, data.time, data.memory],
 	]
+	if (data.numCase != 'undefined') values[0].push(data.numCase)
 	db.query(sql, [values], (err) => {
-		if (err) res.status(404).send('')
-		else res.status(200).send('')
+		if (err) {
+			console.log(err);
+			res.status(404).send('')
+		}else res.status(200).send('')
 	})
 }
 function deleteProblem(req, res) {
