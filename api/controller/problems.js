@@ -92,8 +92,6 @@ function cntProblem(req,res) {
 
 function getDoc(req,res) {
 	const token = req.cookies.token
-	console.log(req.cookies);
-	
 	const userData = verifyToken(token)
 		let sql = `select * from Problem where sname = ?`
 		db.query(sql, [req.params.name], (err, result) => {
