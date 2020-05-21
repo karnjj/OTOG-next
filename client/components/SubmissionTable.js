@@ -88,7 +88,7 @@ const SubTr = (props) => {
 					<td style={{color:'#000000'}}>{sname}</td>	
 				}
 				<td>
-					<a target='_blank' href={`${process.env.API_URL}/api/docs/${problemname}`}>
+					<a target='_blank' href={`${process.env.API_URL}/api/docs/${problemname}`} style={{color:'#000000'}}>
 						{name}
 					</a>
 				</td>
