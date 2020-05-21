@@ -71,7 +71,8 @@ function cntProblem(req,res) {
 		db.query(sql, [idUser], (err, result) => err ? reject(err) : resolve(result))
 	})
 	let allUserOnline = new Promise((resolve, reject) => {
-		let sql = `select count(*) as online from (select * from session where expires >= UNIX_TIMESTAMP() group by idUser) as X`
+		let sql = `select sname from session as s inner join User as U on s.idUser = U.idUser 
+			where expires >= UNIX_TIMESTAMP() group by s.idUser`
 		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
 	})
 	Promise.all([allProblem, allUserDo, allUserOnline]).then((result) => {
@@ -85,7 +86,7 @@ function cntProblem(req,res) {
 		res.json({
 			allProblem: result[0][0].allP,
 			userProblem: { passProb, wrongProb },
-			onlineUser: result[2][0].online
+			onlineUser: result[2]
 		})
 	})
 }

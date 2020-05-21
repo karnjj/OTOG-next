@@ -148,7 +148,6 @@ const Hello = () => {
 				wrongProb,
 				noSub: allProblem - passProb - wrongProb,
 				newProb: 0,
-				onlineUser,
 			})
 		}
 		fetchData()
@@ -172,7 +171,7 @@ const Hello = () => {
 				))}
 			</ButtonWrapper>
 			<AliveText>
-				ยังมีชีวิตรอด : <CountUp end={data.onlineUser ? data.onlineUser : 0} />
+				ยังมีชีวิตรอด : <CountUp end={data.onlineUser ? data.onlineUser.length : 0} />
 			</AliveText>
 		</>
 	)
