@@ -54,6 +54,7 @@ const SubTr = (props) => {
 		sname,
 		rating,
 		name,
+		problemname,
 		state,
 		timeuse,
 		score,
@@ -86,7 +87,11 @@ const SubTr = (props) => {
 					<UserTd score={rating}>{sname}</UserTd> :
 					<td style={{color:'#000000'}}>{sname}</td>	
 				}
-				<td>{name}</td>
+				<td>
+					<a target='_blank' href={`${process.env.API_URL}/api/docs/${problemname}`}>
+						{name}
+					</a>
+				</td>
 				<td>
 					<ResultCode>
 						{result === 'Compilation Error' && canViewCode ? (
