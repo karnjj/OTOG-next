@@ -227,6 +227,7 @@ const EditModal = props => {
 	const token = useTokenContext()
 	const { show, setShow } = props
 	const { id_Prob } = props
+	const [isSaving, setIsSaving] = useState(false)
 	const [name, setName] = useState(props.name)
 	const [sname, setSname] = useState(props.sname)
 	const [memory, setMemory] = useState(props.memory)
@@ -263,6 +264,7 @@ const EditModal = props => {
 	const handleChangeTestcase = event => setTestcase(event.target.value)
 	const onSave = async event => {
 		event.preventDefault()
+		setIsSaving(true)
 		const info = { name, sname, memory, time, testcase, score }
 		const data = new FormData()
 		Object.keys(info).map((item) => {
@@ -276,7 +278,11 @@ const EditModal = props => {
 			headers: { 'Authorization': token ? token : '' },
 			body: data
 		})
-		if (response.ok) handleClose(), window.location.reload(false)
+		if (response.ok) props.refreshData().then(()=>{
+			handleClose()
+			setIsSaving(false)
+		})
+
 	}
 
 	return (
@@ -334,7 +340,7 @@ const EditModal = props => {
 				</Form.Group>
 			</Form>
 			<Modal.Footer>
-				<Button variant='success' onClick={onSave}>
+				<Button variant='success' onClick={onSave} disabled={isSaving ? true : false}>
 					Save
 				</Button>
 			</Modal.Footer>
@@ -376,15 +382,20 @@ export const TaskTable = props => {
 	const token = useTokenContext()
 	const [tasks, setTasks] = useState([])
 
+	const fetchData = async () => {
+		console.log('pass');
+		
+		const url = `${process.env.API_URL}/api/admin/problem`
+		let headers = { 'Content-Type': 'application/json' }
+		headers['Authorization'] = token ? token : ''
+		const res = await fetch(url, { headers })
+		const json = await res.json()
+		setTasks(json)
+	}
+
+	const refreshData = () => fetchData()
+
 	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/admin/problem`
-			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = token ? token : ''
-			const res = await fetch(url, { headers })
-			const json = await res.json()
-			setTasks(json)
-		}
 		fetchData()
 		return function cleanup() {
 			setTasks([])
@@ -405,7 +416,7 @@ export const TaskTable = props => {
 			</thead>
 			<tbody>
 				{tasks.map((task, index) => (
-					<TaskTr key={index} {...task} />
+					<TaskTr key={index} {...task} refreshData={refreshData} />
 				))}
 			</tbody>
 		</Table>
