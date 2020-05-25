@@ -10,7 +10,8 @@ import {
 	Form,
 	Col,
 	Row,
-	InputGroup
+	InputGroup,
+	Badge
 } from 'react-bootstrap'
 import { Alink } from '../CustomTable'
 
@@ -342,7 +343,7 @@ const EditModal = props => {
 }
 
 const TaskTr = props => {
-	const { id_Prob, name, sname, memory, time, score } = props
+	const { id_Prob, name, sname, memory, time, score, noTestcase } = props
 	const [show, setShow] = useState(false)
 	const handleShow = () => setShow(true)
 
@@ -356,6 +357,8 @@ const TaskTr = props => {
 				>
 					{name}
 				</Alink>
+				{' '}
+				{(noTestcase) && <Badge variant="warning">No Testcases</Badge>}
 			</td>
 			<td>{time}</td>
 			<td>{memory}</td>

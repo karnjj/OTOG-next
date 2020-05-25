@@ -37,6 +37,13 @@ async function Problems(req, res) {
 	let problem = await new Promise((resolve) => {
 		db.query(sql, (err, result) => resolve(result))
 	})
+	for(var i in problem) {
+		var pathName = `./grader/source/${problem[i].sname}`
+		var casePathName = `./grader/source/${problem[i].sname}/1.in`
+		if (fs.existsSync(pathName) && fs.existsSync(casePathName) ) {
+			problem[i].noTestcase = false;
+		}else problem[i].noTestcase = true;
+	}
 	res.json(problem)
 }
 async function Users(req, res) {
