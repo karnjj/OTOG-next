@@ -27,7 +27,7 @@ const Name = styled.a`
 	color: ${(props) => {
 		if (props.score == 0) {
 			return vars.unrate
-		}else if (props.score >= 2500) {
+		} else if (props.score >= 2500) {
 			return vars.legendary
 		} else if (props.score >= 2000) {
 			return vars.grandmaster

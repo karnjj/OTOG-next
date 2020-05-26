@@ -17,7 +17,7 @@ import {
 	faPuzzlePiece,
 } from '@fortawesome/free-solid-svg-icons'
 
-import styled, { css, keyframes } from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import vars from '../styles/vars'
 
 import CountUp from 'react-countup'
@@ -28,10 +28,23 @@ const WelcomeText = styled.h4`
 	color: ${vars.black};
 	text-align: center;
 `
+const fadein = keyframes`
+	0% {
+		opacity: 0;
+		transform : translateY(-5px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+`
 const AliveText = styled.h6`
 	color: ${vars.black};
 	text-align: center;
-	font-weight: bold;
+	min-height: 4rem;
+	font-weight: 400;
+	max-width: 900px;
+	overflow-wrap: break-word;
 `
 const Number = styled(CountUp)`
 	color: ${vars.white};
@@ -87,14 +100,13 @@ const CountButton = styled.li`
 	animation: ${popin} 0.25s ease backwards
 		${(props) => props.index * 0.01 + 's'};
 	animation-play-state: ${(props) => !props.number && 'pause'};
-	animation-delay: ${(props) => Math.round(Math.random() * 100) + 'ms'};
+	animation-delay: ${() => Math.round(Math.random() * 100) + 'ms'};
 `
 const ButtonWrapper = styled.ul`
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
 	list-style: none;
-	padding: 0;
 `
 
 const Code = styled.code`
@@ -139,7 +151,7 @@ const Hello = () => {
 			headers['Authorization'] = userData.id
 			const response = await fetch(url, { headers })
 			const probData = await response.json()
-			const { allProblem, userProblem, onlineUser } = probData
+			const { allProblem, userProblem, newProb, onlineUser } = probData
 			const { passProb, wrongProb } = userProblem
 			setData({
 				allProblem,
@@ -147,32 +159,42 @@ const Hello = () => {
 				passProb,
 				wrongProb,
 				noSub: allProblem - passProb - wrongProb,
-				newProb: 0,
+				newProb,
 			})
 		}
 		fetchData()
 	}, [])
+
 	return (
 		<>
-			<WelcomeText>สวัสดี {userData.sname}</WelcomeText>
-			<ButtonWrapper>
-				{[
-					//message,  number,     color
-					['ทั้งหมด', data.allProblem, vars.btn_black],
-					['ผ่านแล้ว', data.passProb, vars.btn_green],
-					['ยังไม่ผ่าน', data.wrongProb, vars.btn_red],
-					['ยังไม่ส่ง', data.noSub, vars.btn_orng],
-					['โจทย์วันนี้', data.newProb, vars.btn_blue],
-				].map(([message, number, color], index) => (
-					<CountButton {...{ number, color, index }} key={index}>
-						<Message>{message}</Message>
-						<Number end={number ? number : 0} />
-					</CountButton>
-				))}
-			</ButtonWrapper>
-			<AliveText>
-				ยังมีชีวิตรอด : <CountUp end={data.onlineUser ? data.onlineUser.length : 0} />
-			</AliveText>
+			<Row>
+				<Col as={WelcomeText}>สวัสดี {userData.sname}</Col>
+			</Row>
+			<Row>
+				<Col as={ButtonWrapper}>
+					{[
+						//message,  number,     color
+						['ทั้งหมด', data.allProblem, vars.btn_black],
+						['ผ่านแล้ว', data.passProb, vars.btn_green],
+						['ยังไม่ผ่าน', data.wrongProb, vars.btn_red],
+						['ยังไม่ส่ง', data.noSub, vars.btn_orng],
+						['โจทย์วันนี้', data.newProb, vars.btn_blue],
+					].map(([message, number, color], index) => (
+						<CountButton {...{ number, color, index }} key={index}>
+							<Message>{message}</Message>
+							<Number end={number ? number : 0} />
+						</CountButton>
+					))}
+				</Col>
+			</Row>
+			<Row className='justify-content-center'>
+				<Col as={AliveText}>
+					<b>ยังมีชีวิตรอด : </b>
+					{data.onlineUser
+						? data.onlineUser.map((user) => user.sname).join(', ')
+						: '. . .'}
+				</Col>
+			</Row>
 		</>
 	)
 }
