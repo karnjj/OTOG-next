@@ -233,7 +233,8 @@ const EditModal = props => {
 	const [memory, setMemory] = useState(props.memory)
 	const [time, setTime] = useState(props.time)
 	const [score, setScore] = useState(props.score)
-	const [testcase,setTestcase] = useState(props.subtask)
+	const [rating, setRating] = useState(props.rating)
+	const [testcase, setTestcase] = useState(props.subtask)
 	const handleClose = () => setShow(false)
 	const [docName, setDocName] = useState('')
 	const [selectedDoc, setSelectedDoc] = useState(undefined)
@@ -261,11 +262,12 @@ const EditModal = props => {
 	const handleChangeMemory = event => setMemory(Number(event.target.value))
 	const handleChangeTime = event => setTime(Number(event.target.value))
 	const handleChangeScore = event => setScore(Number(event.target.value))
+	const handleChangeRating = event => setRating(event.target.value)
 	const handleChangeTestcase = event => setTestcase(event.target.value)
 	const onSave = async event => {
 		event.preventDefault()
 		setIsSaving(true)
-		const info = { name, sname, memory, time, testcase, score }
+		const info = { name, sname, memory, time, testcase, score, rating }
 		const data = new FormData()
 		Object.keys(info).map((item) => {
 			data.append(item, info[item])
@@ -278,7 +280,7 @@ const EditModal = props => {
 			headers: { 'Authorization': token ? token : '' },
 			body: data
 		})
-		if (response.ok) props.refreshData().then(()=>{
+		if (response.ok) props.refreshData().then(() => {
 			handleClose()
 			setIsSaving(false)
 		})
@@ -320,6 +322,18 @@ const EditModal = props => {
 					</Col>
 				</Form.Group>
 				<Form.Group>
+					<InputGroup>
+						<InputGroup.Prepend>
+							<InputGroup.Text >Rating</InputGroup.Text>
+						</InputGroup.Prepend>
+						<Form.Control
+							placeholder="eg.1500"
+							defaultValue={rating}
+							onChange={handleChangeRating}
+						/>
+					</InputGroup>
+				</Form.Group>
+				<Form.Group>
 					<Form.File
 						id='doc'
 						label={docName || 'New Document (PDF)'}
@@ -349,7 +363,7 @@ const EditModal = props => {
 }
 
 const TaskTr = props => {
-	const { id_Prob, name, sname, memory, time, score, noTestcase } = props
+	const { id_Prob, name, sname, memory, time, rating, noTestcase } = props
 	const [show, setShow] = useState(false)
 	const handleShow = () => setShow(true)
 
@@ -368,7 +382,7 @@ const TaskTr = props => {
 			</td>
 			<td>{time}</td>
 			<td>{memory}</td>
-			<td>{score}</td>
+			<td>{(rating == null) ? '-' : rating}</td>
 			<td>
 				<ConfigTask {...props} {...{ handleShow }} />
 				<EditModal {...props} {...{ setShow, show }} />
@@ -384,7 +398,7 @@ export const TaskTable = props => {
 
 	const fetchData = async () => {
 		console.log('pass');
-		
+
 		const url = `${process.env.API_URL}/api/admin/problem`
 		let headers = { 'Content-Type': 'application/json' }
 		headers['Authorization'] = token ? token : ''
@@ -410,7 +424,7 @@ export const TaskTable = props => {
 					<th>Name</th>
 					<th>Time</th>
 					<th>Memory</th>
-					<th>Score</th>
+					<th>Rating</th>
 					<th>Config</th>
 				</tr>
 			</thead>
