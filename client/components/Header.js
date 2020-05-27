@@ -1,7 +1,7 @@
 import { logout, useAuthContext, isAdmin } from '../utils/auth'
 import { useRouter } from 'next/router'
-
-import { Navbar } from 'react-bootstrap'
+import { Navbar,NavDropdown } from 'react-bootstrap'
+import styled from 'styled-components'
 import {
 	StyledNavLink,
 	ScrollNavbar,
@@ -15,7 +15,14 @@ import {
 	faTrophy,
 	faChartBar,
 	faSignInAlt,
+	faUser
 } from '@fortawesome/free-solid-svg-icons'
+
+export const ImgProfile = styled.img`
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+`
 
 const Header = () => {
 	const userData = useAuthContext()
@@ -51,12 +58,23 @@ const Header = () => {
 						/>
 					))}
 					{userData ? (
-						<NavLink
-							name='Logout'
-							icon={faSignInAlt}
-							onClick={handleClickLogout}
-							red='true'
-						/>
+						<NavDropdown alignRight title={<ImgProfile src={'/test.png'}/>} id="nav-dropdown" >
+							<NavDropdown.Item eventKey="4.1">
+								<NavLink
+									name='Profile'
+									icon={faUser}
+									path={`/profile/test`}
+								/></NavDropdown.Item>
+							<NavDropdown.Divider />
+							<NavDropdown.Item eventKey="4.2">
+								<NavLink
+									name='Logout'
+									icon={faSignInAlt}
+									onClick={handleClickLogout}
+									red='true'
+								/>
+							</NavDropdown.Item>
+					 	</NavDropdown>
 					) : (
 						<NavLink name='Login' icon={faSignInAlt} path='/login' />
 					)}

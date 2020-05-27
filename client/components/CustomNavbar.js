@@ -16,7 +16,7 @@ export const StyledNavbar = styled(Navbar)`
 	transition: top 0.2s;
 `
 export const StyledNavLink = styled(Nav.Link)`
-	font-size: 1.1rem;
+	font-size: 1.1rem};
 	color: ${vars.gray};
 	span,
 	svg {
