@@ -13,14 +13,14 @@ var verifyToken = token => {
 }
 
 function contest(req,res) {
-	let sql = `select idContest,name,time_start,time_end from Contest where time_end >= UNIX_TIMESTAMP() order by time_start limit 1`
+	let sql = `select idContest,name,time_start,time_end from Contest where time_end >= (UNIX_TIMESTAMP()-3600) order by time_start limit 1`
 	db.query(sql,(err,result) => {
-		res.json(result)
+		res.json({result:result,serverTime:Date.now()})
 	})
 }
 
 function getAllContest(req,res) {
-	let sql = `select * from Contest where time_end < UNIX_TIMESTAMP()`
+	let sql = `select * from Contest where time_end < UNIX_TIMESTAMP() order by idContest desc`
 	db.query(sql, (err, result) => {
 		if (err) throw err
 		res.json(result)

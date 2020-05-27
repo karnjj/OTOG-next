@@ -5,16 +5,14 @@ const StyledTimer = styled.div`
 	display: inline-block;
 `
 
-const Timer = ({ countTo, mode, ...props }) => {
+const Timer = ({ timeLeft, mode, ...props }) => {
 	const [timeState, setTimeState] = useState({})
+	var TimeLeft = timeLeft
 	var timer = 0
 
 	useEffect(() => {
-		let timeNow = Math.floor(Date.now() / 1000)
-		let seconds = countTo - timeNow
-		let timeleft = secondsToTime(seconds)
-		setTimeState(timeleft)
-		if (timer == 0 && countTo > 0) {
+		setTimeState(secondsToTime(TimeLeft))
+		if (timer == 0 && TimeLeft > 0) {
 			timer = setInterval(countdown, 1000)
 		}
 		return function cleanup() {
@@ -36,10 +34,9 @@ const Timer = ({ countTo, mode, ...props }) => {
 		return time
 	}
 	const countdown = () => {
-		let timeNow = Math.floor(Date.now() / 1000)
-		let seconds = countTo - timeNow
-		setTimeState(secondsToTime(seconds))
-		if (seconds <= 0) {
+		TimeLeft-- 
+		setTimeState(secondsToTime(TimeLeft))
+		if (TimeLeft <= 0) {
 			clearInterval(timer)
 			window.location.reload(false)
 		}

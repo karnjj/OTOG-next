@@ -360,22 +360,22 @@ const TaskCard = (props) => {
 	)
 }
 const Countdown = (props) => {
-	const { startTime, name } = props
+	const { timeleft, name } = props
 	return (
 		<CenteredDiv>
 			<h1>การแข่งขัน {name} กำลังจะเริ่ม</h1>
 			<h3>
-				ในอีก <Timer countTo={startTime} mode='th' />
+				ในอีก <Timer timeLeft={timeleft} mode='th' />
 				...
 			</h3>
 		</CenteredDiv>
 	)
 }
-const EndingContest = (props) => {
+const EndingContest = ({idContest}) => {
 	return (
 		<CenteredDiv>
 			<h1>การแข่งขันจบแล้ว</h1>
-			<OrangeButton size='lg'>สรุปผลการแข่งขัน</OrangeButton>
+			<OrangeButton href={`/contest/history/${idContest}`} size='lg'>สรุปผลการแข่งขัน</OrangeButton>
 		</CenteredDiv>
 	)
 }
@@ -399,7 +399,7 @@ const NoLogin = (props) => {
 }
 
 const HoldingContest = (props) => {
-	const { idContest, endTime, name } = props
+	const { idContest, timeleft, name } = props
 	const [tasks, setTasks] = useState([])
 	const userData = useAuthContext()
 	useEffect(() => {
@@ -418,7 +418,7 @@ const HoldingContest = (props) => {
 		<>
 			<Title icon={faTrophy} title={name} noTop='true' noBot='true'>
 				<h2>
-					<Timer countTo={endTime} />
+					<Timer timeLeft={timeleft} />
 				</h2>
 			</Title>
 			<hr />
@@ -434,9 +434,10 @@ const HoldingContest = (props) => {
 	)
 }
 
-const Contest = ({ contest }) => {
+const Contest = ({ contest,serverTime }) => {
 	const userData = useAuthContext()
 	var start,
+		now,
 		end,
 		idContest,
 		isAboutToStart,
@@ -444,12 +445,12 @@ const Contest = ({ contest }) => {
 		isJustEnd = null
 	if (contest) {
 		start = contest.time_start
-		const now = Math.floor(new Date() / 1000)
+		now = Math.floor(serverTime / 1000)
 		end = contest.time_end
 		idContest = contest.idContest
 		isAboutToStart = now < start
 		isHolding = start <= now && now <= end
-		isJustEnd = now - end < 90 * 60
+		isJustEnd = now - end < 60 * 60
 	}
 	return (
 		<>
@@ -462,15 +463,17 @@ const Contest = ({ contest }) => {
 						{!userData ? (
 							<NoLogin />
 						) : isAboutToStart ? (
-							<Countdown startTime={start} name={contest.name} />
+							<Countdown timeleft={start - now} name={contest.name} />
 						) : isHolding ? (
 							<HoldingContest
-								endTime={end}
+								timeleft={end - now}
 								idContest={idContest}
 								name={contest.name}
 							/>
 						) : isJustEnd ? (
-							<EndingContest />
+							<EndingContest 
+								idContest={idContest}
+							/>
 						) : (
 							<NoContest />
 						)}
@@ -507,7 +510,7 @@ Contest.getInitialProps = async (ctx) => {
 	let headers = { 'Content-Type': 'application/json' }
 	const res = await fetch(url, { headers })
 	const json = await res.json()
-	return { contest: json[0] }
+	return { contest: json.result[0],serverTime:json.serverTime }
 }
 
 export default withAuthSync(Contest)
