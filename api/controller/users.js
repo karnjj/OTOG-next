@@ -41,6 +41,14 @@ var storage = multer.diskStorage({
 })
 const multerConfig = multer({ storage: storage })
 
+function test(req,res) {
+	let sql = 'select history from User where username = "karnj"'
+	db.query(sql, (err, result) => {
+		var data = JSON.parse(result[0].history)
+		res.status(200).send(data)
+	})
+}
+
 async function login(req,res){
     var hash = sha256.create();
 	var username = req.body.username;
@@ -164,6 +172,7 @@ function viewSouceCode(req,res) {
 }
 
 module.exports = {
+	test,
     login,
     logout,
     register,
