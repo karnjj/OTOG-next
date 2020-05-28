@@ -7,7 +7,16 @@ import OrangeButton from '../components/OrangeButton'
 import styled from 'styled-components'
 import router from 'next/router'
 
-const LoginCard = () => {
+const CenteredContainer = styled(Container)`
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`
+const StyledCard = styled(Card)`
+	min-width: 325px;
+`
+const RegisterCard = () => {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [sname, setSname] = useState('')
@@ -51,11 +60,10 @@ const LoginCard = () => {
 	}
 
 	return (
-		<Card>
+		<StyledCard>
 			<Card.Header>
 				<div className='text-center font-weight-bold'>
-					{' '}
-					OTOG - One Tambon One Grader{' '}
+					OTOG - One Tambon One Grader
 				</div>
 			</Card.Header>
 			<Card.Body>
@@ -103,24 +111,14 @@ const LoginCard = () => {
 					</OrangeButton>
 				</Form>
 			</Card.Body>
-		</Card>
+		</StyledCard>
 	)
 }
 
-const PaddedForm = styled(Container)`
-	padding: 150px 0;
-`
-
-const Login = () => (
-	<PaddedForm>
-		<Row>
-			<Col xs={1} md={3} lg={4} />
-			<Col xs={10} md={6} lg={4}>
-				<LoginCard />
-			</Col>
-			<Col xs={1} md={3} lg={4} />
-		</Row>
-	</PaddedForm>
+const Register = () => (
+	<CenteredContainer>
+		<RegisterCard />
+	</CenteredContainer>
 )
 
-export default Login
+export default Register

@@ -110,6 +110,8 @@ const ButtonWrapper = styled.ul`
 `
 
 const Code = styled.code`
+	padding: 0 8px;
+	font-size: 2.4rem;
 	font-weight: bold;
 	color: ${(props) => props.color};
 `
@@ -125,11 +127,10 @@ const StyledWelcome = styled.div`
 const Welcome = () => (
 	<StyledWelcome>
 		<h1>
-			Welcome to
-			<Code color={vars.green}> O</Code>
-			<Code color={vars.red}> T</Code>
-			<Code color={vars.orange}> O</Code>
-			<Code color={vars.blue}> G</Code>
+			Welcome to <Code color={vars.green}>O</Code>
+			<Code color={vars.red}>T</Code>
+			<Code color={vars.orange}>O</Code>
+			<Code color={vars.blue}>G</Code>
 		</h1>
 		<h1>Become a god of competitive programming.</h1>
 		<h3>Learn how to code and build algorithms efficiently.</h3>
@@ -227,8 +228,8 @@ const Index = () => {
 				<Container>{userData ? <Hello /> : <Welcome />}</Container>
 			</Jumbotron>
 			<Container>
-				<Row>
-					<Col md={4} className='px-5 p-md-3'>
+				<Row xs={1} md={3}>
+					<Col className='px-5 p-md-3'>
 						<h2>
 							<FontAwesomeIcon icon={faQuestion} /> FAQ
 						</h2>
@@ -243,7 +244,7 @@ const Index = () => {
 						<br />
 						<br />
 					</Col>
-					<Col md={4} className='px-5 p-md-3'>
+					<Col className='px-5 p-md-3'>
 						<h2>
 							<FontAwesomeIcon icon={faFlagCheckered} /> Get started
 						</h2>
@@ -258,7 +259,7 @@ const Index = () => {
 						<br />
 						<br />
 					</Col>
-					<Col md={4} className='px-5 p-md-3'>
+					<Col className='px-5 p-md-3'>
 						<h2>
 							<FontAwesomeIcon icon={faTrophy} /> Contest
 						</h2>
