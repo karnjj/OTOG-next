@@ -150,10 +150,13 @@ function editProblem(req, res) {
 			if (data.testcase != 'null') fs.writeFile(dir + '/script.php', 'cases = ' + data.testcase + ';', function (err) {
 				if (err) throw err;
 			});
+			data.rating = (data.rating == 'null' || data.rating == '') ? null : Number(data.rating)
 			var sql = `update Problem set name = ?, sname = ?, 
-				score = ?, time = ?, memory = ?${data.testcase != 'null' ? `, subtask = ?`: ``} where id_Prob = ${idProb}`
+				score = ?, time = ?, memory = ?${data.testcase != 'null' ? `, subtask = ?`: ``} 
+				, rating = ? where id_Prob = ${idProb}`
 			var val = [data.name, data.sname, data.score, data.time, data.memory]
 			if (data.testcase != 'null') val.push(data.testcase)
+			val.push(data.rating)
 			db.query(sql, val, (err) => {
 				if (err) throw err
 				res.status(200).send('')

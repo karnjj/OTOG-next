@@ -39,6 +39,7 @@ const ProbTr = (props) => {
 		time,
 		memory,
 		sname,
+		rating,
 		pass,
 		acceptState,
 		wrongState,
@@ -84,7 +85,7 @@ const ProbTr = (props) => {
 					<>0</>
 				)}
 			</td>
-			<td>0</td>
+			<td>{(rating ? rating : '-')}</td>
 			{userData && (
 				<td>
 					<SubmitGroup {...props}>

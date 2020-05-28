@@ -238,9 +238,11 @@ const Index = () => {
 							ถ้าหากคุณมีปัญหาเหล่านี้สามารถ หาคำตอบได้จาก
 							คำถามยอดนิยมที่ผู้ใช้ส่วนใหญ่มักจะถามเป็นประจำ
 						</p>
-						<OrangeButton size='lg' href='#'>
-							Learn More
-						</OrangeButton>
+						<a href='https://medium.com/otog/complete-guide-to-otog-22f88a349e78' target='_blank'>
+							<OrangeButton size='lg'>
+								Learn More
+							</OrangeButton>
+						</a>
 						<br />
 						<br />
 					</Col>
