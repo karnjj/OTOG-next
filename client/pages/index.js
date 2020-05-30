@@ -193,7 +193,7 @@ const Hello = () => {
 					<b>ยังมีชีวิตรอด : </b>
 					{data.onlineUser
 						? data.onlineUser.map((user) => user.sname).join(', ')
-						: '. . .'}
+						: 'Loading...'}
 				</Col>
 			</Row>
 		</>
@@ -238,10 +238,11 @@ const Index = () => {
 							ถ้าหากคุณมีปัญหาเหล่านี้สามารถ หาคำตอบได้จาก
 							คำถามยอดนิยมที่ผู้ใช้ส่วนใหญ่มักจะถามเป็นประจำ
 						</p>
-						<a href='https://medium.com/otog/complete-guide-to-otog-22f88a349e78' target='_blank'>
-							<OrangeButton size='lg'>
-								Learn More
-							</OrangeButton>
+						<a
+							href='https://medium.com/otog/complete-guide-to-otog-22f88a349e78'
+							target='_blank'
+						>
+							<OrangeButton size='lg'>Learn More</OrangeButton>
 						</a>
 						<br />
 						<br />

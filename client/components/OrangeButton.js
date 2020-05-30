@@ -6,15 +6,15 @@ import { Button } from 'react-bootstrap'
 import { darken } from 'polished'
 
 const StyledButton = styled(Button)`
-	color: ${props => (props.outline ? vars.orange : vars.white)};
-	background: ${props => (props.outline ? vars.white : vars.orange)};
+	color: ${(props) => (props.outline ? vars.orange : vars.white)};
+	background: ${(props) => (props.outline ? vars.white : vars.orange)};
 	border: 1px solid ${vars.orange};
-	padding: ${props => `6px ${6 + props.expand}px`};
+	padding: ${(props) => `6px ${6 + props.expand}px`};
 	a {
-		color: ${props => (props.outline ? vars.orange : vars.white)};
+		color: ${(props) => (props.outline ? vars.orange : vars.white)};
 	}
 	&:hover {
-		color: ${props => (props.outline ? vars.white : vars.black)};
+		color: ${(props) => (props.outline ? vars.white : vars.black)};
 		background: ${vars.orange};
 	}
 	&:active,
