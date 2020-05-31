@@ -1,8 +1,8 @@
 export default {
 	//user type
 	legendary: '#ff851b',
-	grandmaster: '#ff0000',
-	master: '#ae81ff',
+	grandmaster: '#ae81ff',
+	master: '#ff0000',
 	professional: '#f92672',
 	regular: '#a6e22e',
 	pupil: '#66d9ef',
