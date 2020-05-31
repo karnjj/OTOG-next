@@ -371,11 +371,13 @@ const Countdown = (props) => {
 		</CenteredDiv>
 	)
 }
-const EndingContest = ({idContest}) => {
+const EndingContest = ({ idContest }) => {
 	return (
 		<CenteredDiv>
 			<h1>การแข่งขันจบแล้ว</h1>
-			<OrangeButton href={`/contest/history/${idContest}`} size='lg'>สรุปผลการแข่งขัน</OrangeButton>
+			<OrangeButton href={`/contest/history/${idContest}`} size='lg'>
+				สรุปผลการแข่งขัน
+			</OrangeButton>
 		</CenteredDiv>
 	)
 }
@@ -434,7 +436,7 @@ const HoldingContest = (props) => {
 	)
 }
 
-const Contest = ({ contest,serverTime }) => {
+const Contest = ({ contest, serverTime }) => {
 	const userData = useAuthContext()
 	var start,
 		now,
@@ -471,9 +473,7 @@ const Contest = ({ contest,serverTime }) => {
 								name={contest.name}
 							/>
 						) : isJustEnd ? (
-							<EndingContest 
-								idContest={idContest}
-							/>
+							<EndingContest idContest={idContest} />
 						) : (
 							<NoContest />
 						)}
@@ -505,12 +505,13 @@ const Contest = ({ contest,serverTime }) => {
 		</>
 	)
 }
+
 Contest.getInitialProps = async (ctx) => {
 	const url = `${process.env.API_URL}/api/contest`
 	let headers = { 'Content-Type': 'application/json' }
 	const res = await fetch(url, { headers })
 	const json = await res.json()
-	return { contest: json.result[0],serverTime:json.serverTime }
+	return { contest: json.result[0], serverTime: json.serverTime }
 }
 
 export default withAuthSync(Contest)
