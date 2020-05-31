@@ -23,7 +23,7 @@ export const CustomTr = styled.tr`
 export const CustomTd = styled.td`
 	background: ${customColor};
 `
-const Name = styled.a`
+export const Name = styled.text`
 	color: ${(props) => {
 		if (props.score == 0) {
 			return vars.unrate
