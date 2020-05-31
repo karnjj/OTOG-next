@@ -1,6 +1,7 @@
 import { logout, useAuthContext, isAdmin } from '../utils/auth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import styled from 'styled-components'
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import {
 	ScrollNavbar,
@@ -18,6 +19,12 @@ import {
 	faUser,
 	faUserCircle,
 } from '@fortawesome/free-solid-svg-icons'
+
+export const ImgProfile = styled.img`
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+`
 
 const Header = () => {
 	const userData = useAuthContext()
@@ -60,9 +67,9 @@ const Header = () => {
 					{userData ? (
 						<NavDropdown
 							alignRight
-							title={<NavTitle icon={faUserCircle} name={userData.username} />}
+							title={<ImgProfile src={`${process.env.API_URL}/api/avatar/${userData.id}`}/>}
 						>
-							<Link href={`/profile/test`} passHref>
+							<Link href={`/profile/${userData.id}`} passHref>
 								<NavDropdown.Item>
 									<NavTitle name='Profile' icon={faUser} noShrink='true' />
 								</NavDropdown.Item>
