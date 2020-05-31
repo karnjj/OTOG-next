@@ -7,13 +7,13 @@ import {
 	faTasks,
 	faUserCog,
 	faTrophy,
-	faTimes
+	faTimes,
 } from '@fortawesome/free-solid-svg-icons'
 
-const Header = props => {
+const Header = (props) => {
 	const { router } = props
 	const handleClose = () => {
-		window.open("/", "_self")
+		window.open('/', '_self')
 		window.close()
 	}
 	return (
@@ -25,7 +25,7 @@ const Header = props => {
 						['Main', faWrench, '/admin'],
 						['Task', faTasks, '/admin/task'],
 						['User', faUserCog, '/admin/user'],
-						['Contest', faTrophy, '/admin/contest']
+						['Contest', faTrophy, '/admin/contest'],
 					].map(([name, icon, path], index) => (
 						<NavLink
 							{...{ name, icon, path }}
@@ -33,7 +33,12 @@ const Header = props => {
 							active={path === router.pathname}
 						/>
 					))}
-					<NavLink name='Exit' icon={faTimes} red='true' onClick={handleClose} />
+					<NavLink
+						name='Exit'
+						icon={faTimes}
+						red='true'
+						onClick={handleClose}
+					/>
 				</Nav>
 			</ScrollNavbar>
 		</>
