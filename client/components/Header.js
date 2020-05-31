@@ -58,12 +58,12 @@ const Header = () => {
 						/>
 					))}
 					{userData ? (
-						<NavDropdown alignRight title={<ImgProfile src={'/test.png'}/>} id="nav-dropdown" >
+						<NavDropdown alignRight title={<ImgProfile src={`${process.env.API_URL}/api/avatar/${userData.id}`}/>} id="nav-dropdown" >
 							<NavDropdown.Item eventKey="4.1">
 								<NavLink
 									name='Profile'
 									icon={faUser}
-									path={`/profile/test`}
+									path={`/profile/${userData.id}`}
 								/></NavDropdown.Item>
 							<NavDropdown.Divider />
 							<NavDropdown.Item eventKey="4.2">

@@ -41,12 +41,19 @@ var storage = multer.diskStorage({
 })
 const multerConfig = multer({ storage: storage })
 
-function test(req,res) {
-	let sql = 'select history from User where username = "karnj"'
-	db.query(sql, (err, result) => {
-		var data = JSON.parse(result[0].history)
-		res.status(200).send(data)
+function getUserData(req,res) {
+	var idUser = req.params.id
+	let sql = 'select sname,rating,history from User where idUser = ?'
+	db.query(sql, [idUser], (err, result) => {
+		res.status(200).json(result[0])
 	})
+}
+
+function avatar(req,res) {
+	var idUser = req.params.id
+	var dir = `${process.cwd()}/profile/${idUser}/avatar.png`
+	if (!fs.existsSync(dir)) dir = `${process.cwd()}/profile/default128.png`
+	return res.sendFile(dir) 
 }
 
 async function login(req,res){
@@ -65,7 +72,7 @@ async function login(req,res){
 	if (!result) res.status(401).send('Username not found!!')
 	else if (result.password != hash.hex()) res.status(401).send('Password incorrect!!')
 	else {
-		var data = { username: result.username, id: result.idUser, sname: result.sname, state: result.state }
+		var data = { username: result.username, id: result.idUser, sname: result.sname, state: result.state , rating: result.rating}
 		let token = jwt.sign(data, process.env.SECRET_KEY, {
 			algorithm: "RS256",
 			expiresIn: '3h'
@@ -171,8 +178,10 @@ function viewSouceCode(req,res) {
 	})
 }
 
+
 module.exports = {
-	test,
+	getUserData,
+	avatar,
     login,
     logout,
     register,
