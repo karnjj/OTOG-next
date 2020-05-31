@@ -23,7 +23,8 @@ router.get('/', (req, res) => {
   res.send('OTOG API Service')
 })
 //Users
-router.get('/test', users.test)
+router.get('/profile/:id', users.getUserData)
+router.get('/avatar/:id', users.avatar)
 router.post('/login', users.login)
 router.post('/register', users.register)
 router.get('/logout', users.logout)
