@@ -3,8 +3,8 @@ import fetch from 'isomorphic-unfetch'
 import { withAuthSync } from '../utils/auth'
 
 import { Container, Col, Row, Form } from 'react-bootstrap'
-import { CustomTable, UserTd } from '../components/CustomTable'
-import Title from '../components/Title'
+import { CustomTable } from '../components/CustomTable'
+import { Title, Name } from '../components/CustomText'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
@@ -24,7 +24,9 @@ const UserTable = (props) => (
 			{props.users.map((user, index) => (
 				<tr key={index}>
 					<td>{user.rank}</td>
-					<UserTd score={user.rating}>{user.sname}</UserTd>
+					<td>
+						<Name {...user} />
+					</td>
 					<td>{user.rating}</td>
 					<td>0</td>
 				</tr>
@@ -58,7 +60,7 @@ const Rating = () => {
 		<>
 			<Header />
 			<Container>
-				<Title icon={faChartBar} title='Rating' />
+				<Title icon={faChartBar} text='Rating' />
 				<Row className='mx-auto align-items-baseline'>
 					<Col as='label' md={2}>
 						<b>ค้นหาผู้ใช้ : </b>

@@ -7,9 +7,8 @@ import {
 } from '../utils/auth'
 
 import { Container, Row, Col } from 'react-bootstrap'
-import { Alink } from '../components/CustomTable'
 
-import Title from '../components/Title'
+import { Title, Alink } from '../components/CustomText'
 import Header from '../components/Header'
 import OrangeButton from '../components/OrangeButton'
 import SubmissionTable from '../components/SubmissionTable'
@@ -47,7 +46,7 @@ const Submission = () => {
 		<>
 			<Header />
 			<Container>
-				<Title icon={faPuzzlePiece} title='Submission' />
+				<Title icon={faPuzzlePiece} text='Submission' />
 				<Row className='m-auto align-items-center justify-content-between'>
 					<Col xs={0} className='mr-auto' />
 					{userData && lastest && (

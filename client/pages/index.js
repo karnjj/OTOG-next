@@ -3,7 +3,7 @@ import { withAuthSync, useAuthContext } from '../utils/auth'
 import fetch from 'isomorphic-unfetch'
 
 import { Jumbotron, Container, Row, Col } from 'react-bootstrap'
-import Title from '../components/Title'
+import { Title } from '../components/CustomText'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ProbTable from '../components/ProbTable'

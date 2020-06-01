@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { Modal,Button } from 'react-bootstrap'
+import { Modal, Button } from 'react-bootstrap'
 import OrangeButton from './OrangeButton'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -16,7 +16,7 @@ const FontPre = styled.pre`
 	}
 `
 
-const ViewCodeButton = props => {
+const ViewCodeButton = (props) => {
 	const { idResult, id_Prob, mini } = props
 	const userData = useAuthContext()
 	const token = useTokenContext()

@@ -6,7 +6,7 @@ import fetch from 'isomorphic-unfetch'
 
 import { Row, Col, Form, Container, InputGroup } from 'react-bootstrap'
 import OrangeButton from '../components/OrangeButton'
-import Title from '../components/Title'
+import { Title } from '../components/CustomText'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ProbTable from '../components/ProbTable'
@@ -85,7 +85,7 @@ const Problem = () => {
 		<>
 			<Header />
 			<Container>
-				<Title icon={faPuzzlePiece} title='Problem' />
+				<Title icon={faPuzzlePiece} text='Problem' />
 				<Row className='mx-auto justify-content-between align-items-center'>
 					<Col as={InputGroup} sm={6} md={8} className='px-0'>
 						{isAdmin(userData) && (

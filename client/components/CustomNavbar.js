@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 
-import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import { Nav, Navbar } from 'react-bootstrap'
 
 import vars from '../styles/vars'
 import styled from 'styled-components'
@@ -12,7 +12,7 @@ export const RowNav = styled(Nav)`
 	flex-direction: row;
 `
 export const StyledNavbar = styled(Navbar)`
-	top: ${(props) => props.hide && '-58px'};
+	top: ${(props) => props.hide && '-62px'};
 	transition: top 0.2s;
 `
 export const StyledNavTitle = styled.div`
@@ -31,19 +31,14 @@ export const StyledNavTitle = styled.div`
 		}
 	}
 `
-export const Icon = styled(FontAwesomeIcon)`
-	${down('xl')} {
-		margin: 0 10px;
-	}
-`
 export const HeaderSpace = styled.div`
 	display: block;
-	margin-bottom: 58px;
+	margin-bottom: 62px;
 `
 
 export const NavTitle = ({ name, icon, children, ...rest }) => (
 	<StyledNavTitle {...rest}>
-		{icon && <Icon {...{ icon }} />}
+		{icon && <FontAwesomeIcon {...{ icon }} />}
 		<span> {name}</span>
 		{children}
 	</StyledNavTitle>

@@ -3,6 +3,7 @@ import { useAuthContext, isAdmin } from '../utils/auth'
 
 import { CustomTr, CustomTable, UserTd } from './CustomTable'
 import { Modal, ButtonGroup } from 'react-bootstrap'
+import { Name } from './CustomText'
 import ViewCodeButton from './ViewCodeButton'
 
 import styled from 'styled-components'
@@ -39,9 +40,11 @@ const SubmissionTable = (props) => {
 			</thead>
 			<tbody>
 				{results &&
-					results.map((result, index) => (
-						(result.see || isAdmin(userData)) && <SubTr key={index} {...result} canViewCode={showCode} />
-					)
+					results.map(
+						(result, index) =>
+							(result.see || isAdmin(userData)) && (
+								<SubTr key={index} {...result} canViewCode={showCode} />
+							)
 					)}
 			</tbody>
 		</CustomTable>
@@ -83,12 +86,19 @@ const SubTr = (props) => {
 		<>
 			<CustomTr acceptState={isAccept(result)}>
 				<td>{idResult}</td>
-				{(state != 0) ? 
-					<UserTd score={rating}>{sname}</UserTd> :
-					<td style={{color:'#000000'}}>{sname}</td>	
-				}
+				{state != 0 ? (
+					<td>
+						<Name {...{ sname, rating }} />
+					</td>
+				) : (
+					<td style={{ color: '#000000' }}>{sname}</td>
+				)}
 				<td>
-					<a target='_blank' href={`${process.env.API_URL}/api/docs/${problemname}`} style={{color:'#000000'}}>
+					<a
+						target='_blank'
+						href={`${process.env.API_URL}/api/docs/${problemname}`}
+						style={{ color: '#000000' }}
+					>
 						{name}
 					</a>
 				</td>
