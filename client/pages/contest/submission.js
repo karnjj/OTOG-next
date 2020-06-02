@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTokenContext, withAdminAuth } from '../../utils/auth'
 
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import { Title } from '../../components/CustomText'
 import Header from '../../components/Header'
 import OrangeButton from '../../components/OrangeButton'

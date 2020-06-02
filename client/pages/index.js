@@ -190,9 +190,7 @@ const Hello = () => {
 			<Row className='justify-content-center'>
 				<Col as={AliveText}>
 					<b>ยังมีชีวิตรอด : </b>
-					{data.onlineUser
-						? data.onlineUser.map((user) => user.sname).join(', ')
-						: '. . .'}
+					{data.onlineUser?.map((user) => user.sname).join(', ') ?? '. . .'}
 				</Col>
 			</Row>
 		</>
@@ -276,7 +274,7 @@ const Index = () => {
 				</Row>
 				<div>
 					<i className='glyphicon glyphicon-asterisk'></i>
-					<Title icon={faPuzzlePiece} title='โจทย์ใหม่' noBot='true' />
+					<Title icon={faPuzzlePiece} text='โจทย์ใหม่' noBot='true' />
 				</div>
 				<hr />
 				<ProblemTable />

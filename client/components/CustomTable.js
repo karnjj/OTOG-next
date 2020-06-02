@@ -1,9 +1,11 @@
+import { useState, useEffect } from 'react'
+
 import vars from '../styles/vars'
 import styled, { keyframes } from 'styled-components'
 
 import { Table } from 'react-bootstrap'
-import Loader, { TableLoader } from './Loader'
-import { Alink, Name } from './CustomText'
+import { TableLoader } from './Loader'
+import { Name } from './CustomText'
 
 const customColor = (props) =>
 	props.acceptState ? vars.accept : props.wrongState && vars.wrong

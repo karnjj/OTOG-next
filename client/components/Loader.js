@@ -36,7 +36,7 @@ const AnimationTable = styled(Table)`
 	}
 `
 const Loader = () => (
-	<Row className='mx-auto justify-content-center py-5'>
+	<Row className='justify-content-center py-5'>
 		<StyledSpinner animation='border' role='status'>
 			<span className='sr-only'>Loading...</span>
 		</StyledSpinner>
@@ -44,28 +44,20 @@ const Loader = () => (
 )
 export const TableLoader = () => {
 	return (
-		<AnimationTable responsive>
-			<thead>
-				<tr>
-					{range(5).map((i) => (
-						<th key={i}>
-							<Text delay={i * 0.04} />
-						</th>
-					))}
-				</tr>
-			</thead>
-			<tbody>
-				{range(4).map((i) => (
-					<tr key={i}>
-						{range(5).map((j) => (
-							<td key={j}>
-								<Text delay={j * 0.04 + (i + 1) * 0.2} />
-							</td>
+		<>
+			<AnimationTable responsive>
+				<thead>
+					<tr>
+						{range(5).map((i) => (
+							<th key={i}>
+								<Text delay={i * 0.04} />
+							</th>
 						))}
 					</tr>
-				))}
-			</tbody>
-		</AnimationTable>
+				</thead>
+			</AnimationTable>
+			<Loader />
+		</>
 	)
 }
 export default Loader

@@ -33,7 +33,7 @@ export const StyledNavTitle = styled.div`
 `
 export const HeaderSpace = styled.div`
 	display: block;
-	margin-bottom: 62px;
+	margin-bottom: 58px;
 `
 
 export const NavTitle = ({ name, icon, children, ...rest }) => (
