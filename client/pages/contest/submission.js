@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useTokenContext, withAdminAuth } from '../../utils/auth'
 
-import { Container, Row, Col } from 'react-bootstrap'
-import Title from '../../components/Title'
+import { Container } from 'react-bootstrap'
+import { Title } from '../../components/CustomText'
 import Header from '../../components/Header'
 import OrangeButton from '../../components/OrangeButton'
 import SubmissionTable from '../../components/SubmissionTable'
@@ -29,7 +29,7 @@ const Submission = () => {
 		<>
 			<Header />
 			<Container>
-				<Title icon={faTrophy} title='Contest Submission' noBot='true'>
+				<Title icon={faTrophy} text='Contest Submission' noBot='true'>
 					<OrangeButton href='/contest'>View Contest</OrangeButton>
 				</Title>
 				<hr />

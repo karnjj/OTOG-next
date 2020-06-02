@@ -1,36 +1,21 @@
 import { Row, Col } from 'react-bootstrap'
-import styled from 'styled-components'
-import vars from '../styles/vars'
+import { Alink } from '../components/CustomText'
 import { range } from '../utils/array'
 
-const Link = styled.a`
-	color: ${vars.orange};
-	&:hover {
-		color: ${vars.orange};
-	}
-`
-const Text = styled.p`
-	text-align: right;
-`
-
-const Footer = (props) => (
+export default (props) => (
 	<>
 		{range(props.br).map((i) => (
 			<br key={i} />
 		))}
 		<hr />
-		<Row>
-			<Col md={6}>
+		<Row sm={1} className='mb-3'>
+			<Col md='auto' className='mr-auto'>
 				If you have any problem or suggestion, please{' '}
-				<Link href='https://fb.me/kkuotog' target='_blank'>
+				<Alink href='https://fb.me/kkuotog' target='_blank'>
 					Contact Us
-				</Link>
+				</Alink>
 			</Col>
-			<Col as={Text} md={6}>
-				&copy; 2019 Phakphum Dev Team
-			</Col>
+			<Col md='auto'>&copy; 2019 Phakphum Dev Team</Col>
 		</Row>
 	</>
 )
-
-export default Footer

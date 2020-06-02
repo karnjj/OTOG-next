@@ -1,8 +1,8 @@
 import { logout, useAuthContext, isAdmin } from '../utils/auth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import styled from 'styled-components'
-import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
+
+import { Navbar, NavDropdown, Image } from 'react-bootstrap'
 import {
 	ScrollNavbar,
 	HeaderSpace,
@@ -20,13 +20,7 @@ import {
 	faUserCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
-export const ImgProfile = styled.img`
-	width: 32px;
-	height: 32px;
-	border-radius: 50%;
-`
-
-const Header = () => {
+export default () => {
 	const userData = useAuthContext()
 	const router = useRouter()
 	const navLinks = [
@@ -55,6 +49,7 @@ const Header = () => {
 					{navLinks.map(([name, icon, paths, exact]) => (
 						<NavLink
 							{...{ name, icon }}
+							className='mx-2 mx-xl-0'
 							path={paths[0]}
 							key={name}
 							active={paths.some((path) =>
@@ -67,9 +62,20 @@ const Header = () => {
 					{userData ? (
 						<NavDropdown
 							alignRight
-							title={<ImgProfile src={`${process.env.API_URL}/api/avatar/${userData.id}`}/>}
+							title={
+								<Image
+									className='ml-2 ml-xl-0'
+									src={`${process.env.API_URL}/api/avatar/${userData.id}`}
+									style={{ width: '30px', height: '30px' }}
+									roundedCircle
+								/>
+							}
 						>
-							<Link href={`/profile/${userData.id}`} passHref>
+							<Link
+								href='/profile/[id]'
+								as={`/profile/${userData.id}`}
+								passHref
+							>
 								<NavDropdown.Item>
 									<NavTitle name='Profile' icon={faUser} noShrink='true' />
 								</NavDropdown.Item>
@@ -93,4 +99,3 @@ const Header = () => {
 		</>
 	)
 }
-export default Header

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { withAuthSync } from '../../../utils/auth'
 
 import { Container } from 'react-bootstrap'
-import Title from '../../../components/Title'
+import { Title } from '../../../components/CustomText'
 import Header from '../../../components/Header'
 import Footer from '../../../components/Footer'
 import { CustomTable, CustomTr } from '../../../components/CustomTable'
@@ -89,7 +89,7 @@ const History = () => {
 		<>
 			<Header />
 			<Container>
-				<Title icon={faTrophy} noBot='true' title='Contest History' />
+				<Title icon={faTrophy} text='Contest History' />
 				<hr />
 				<ContestTable />
 				<Footer />

@@ -23,7 +23,7 @@ import {
 	faChevronUp,
 } from '@fortawesome/free-solid-svg-icons'
 
-import Title from '../../components/Title'
+import { Title } from '../../components/CustomText'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import Timer from '../../components/Timer'
