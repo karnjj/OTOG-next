@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react'
-
 import vars from '../styles/vars'
 import styled, { keyframes } from 'styled-components'
 

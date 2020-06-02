@@ -9,20 +9,21 @@ const StyledSpinner = styled(Spinner)`
 `
 const pulse = keyframes`
 	0% {
-		background: ${vars.grey};
+		opacity: 0.3;
 	}
 	25% {
-		background: ${darken(0.1, vars.grey)};
+		opacity: 1;
 	}
 	50% {
-		background: ${vars.grey};
+		opacity: 0.3;
 	}
 `
 const Text = styled.div`
 	height: 16px;
 	max-width: 160px;
-	background: ${vars.grey};
-	animation: ${pulse} 1s ease ${(props) => props.delay + 's'} infinite;
+	background: ${darken(0.03, vars.grey)};
+	opacity: 0.3;
+	animation: ${pulse} 1s ease ${(props) => props.delay + 'ms'} infinite;
 `
 const AnimationTable = styled(Table)`
 	text-align: center;
@@ -44,20 +45,28 @@ const Loader = () => (
 )
 export const TableLoader = () => {
 	return (
-		<>
-			<AnimationTable responsive>
-				<thead>
-					<tr>
-						{range(5).map((i) => (
-							<th key={i}>
-								<Text delay={i * 0.04} />
-							</th>
+		<AnimationTable responsive>
+			<thead>
+				<tr>
+					{range(5).map((i) => (
+						<th key={i}>
+							<Text delay={i * 20} />
+						</th>
+					))}
+				</tr>
+			</thead>
+			<tbody>
+				{range(5).map((i) => (
+					<tr key={i}>
+						{range(5).map((j) => (
+							<td key={j}>
+								<Text delay={j * 20 + (i + 1) * 100} />
+							</td>
 						))}
 					</tr>
-				</thead>
-			</AnimationTable>
-			<Loader />
-		</>
+				))}
+			</tbody>
+		</AnimationTable>
 	)
 }
 export default Loader
