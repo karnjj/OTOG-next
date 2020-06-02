@@ -21,8 +21,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 export const ImgProfile = styled.img`
-	width: 30px;
-	height: 30px;
+	width: 32px;
+	height: 32px;
 	border-radius: 50%;
 `
 
