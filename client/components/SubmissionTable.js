@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuthContext, isAdmin } from '../utils/auth'
 
-import { Alink, CustomTr, CustomTable, UserTd } from './CustomTable'
+import { CustomTr, CustomTable } from './CustomTable'
 import { Modal, ButtonGroup } from 'react-bootstrap'
 import { Name } from './CustomText'
 import ViewCodeButton from './ViewCodeButton'
@@ -99,7 +99,7 @@ const SubTr = (props) => {
 						style={{ color: '#000000' }}
 					>
 						{name}
-					</Alink>
+					</a>
 				</td>
 				<td>
 					<ResultCode>
