@@ -1,4 +1,0 @@
-[submodule "api/ogogi"]
-	path = api/ogogi
-	url = https://github.com/pannxe/ogogi.git
-	branch = no-cmdMode
