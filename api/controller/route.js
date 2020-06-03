@@ -22,11 +22,9 @@ router.use(logger('dev'));
 router.get('/', (req, res) => {
   res.send('OTOG API Service')
 })
-router.post('/test', (req, res) => {
-  console.log(req.body);
-  res.status(200).send('')
-})
 //Users
+router.get('/profile/:id', users.getUserData)
+router.get('/avatar/:id', users.avatar)
 router.post('/login', users.login)
 router.post('/register', users.register)
 router.get('/logout', users.logout)

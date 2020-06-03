@@ -5,16 +5,21 @@ import styled from 'styled-components'
 import { Button } from 'react-bootstrap'
 import { darken } from 'polished'
 
-const StyledButton = styled(Button)`
-	color: ${(props) => (props.outline ? vars.orange : vars.white)};
-	background: ${(props) => (props.outline ? vars.white : vars.orange)};
+const StyledButton = styled(Button).attrs((props) => ({
+	primary: props.outline ? vars.white : vars.orange,
+	secondary: props.outline ? vars.orange : vars.white,
+	tertiary: props.outline ? vars.black : vars.black,
+	padsize: props.expand && `6px ${6 + props.expand}px`,
+}))`
+	color: ${(props) => props.secondary};
+	background: ${(props) => props.primary};
 	border: 1px solid ${vars.orange};
-	padding: ${(props) => `6px ${6 + props.expand}px`};
+	padding: ${(props) => props.padsize};
 	a {
-		color: ${(props) => (props.outline ? vars.orange : vars.white)};
+		color: ${(props) => props.secondary};
 	}
 	&:hover {
-		color: ${(props) => (props.outline ? vars.white : vars.black)};
+		color: ${(props) => props.tertiary};
 		background: ${vars.orange};
 	}
 	&:active,

@@ -2,18 +2,12 @@ import vars from '../styles/vars'
 import styled, { keyframes } from 'styled-components'
 
 import { Table } from 'react-bootstrap'
-import Loader, { TableLoader } from './Loader'
+import { TableLoader } from './Loader'
+import { Name } from './CustomText'
 
 const customColor = (props) =>
 	props.acceptState ? vars.accept : props.wrongState && vars.wrong
 
-export const Alink = styled.a`
-	color: ${vars.orange};
-	&:hover {
-		color: ${vars.orange};
-		cursor: pointer;
-	}
-`
 export const CustomTr = styled.tr`
 	background: ${customColor};
 	&:hover td {
@@ -22,23 +16,6 @@ export const CustomTr = styled.tr`
 `
 export const CustomTd = styled.td`
 	background: ${customColor};
-`
-const Name = styled.a`
-	color: ${(props) => {
-		if (props.score == 0) {
-			return vars.unrate
-		} else if (props.score >= 2500) {
-			return vars.legendary
-		} else if (props.score >= 2000) {
-			return vars.grandmaster
-		} else if (props.score >= 1800) {
-			return vars.master
-		} else if (props.score >= 1650) {
-			return vars.professional
-		} else if (props.score >= 1500) {
-			return vars.regular
-		} else return vars.pupil
-	}}!important;
 `
 export const UserTd = (props) => (
 	<td>

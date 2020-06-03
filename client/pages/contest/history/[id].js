@@ -6,7 +6,7 @@ import {
 } from '../../../utils/auth'
 import { Container } from 'react-bootstrap'
 
-import Title from '../../../components/Title'
+import { Title, Name } from '../../../components/CustomText'
 import Header from '../../../components/Header'
 import Footer from '../../../components/Footer'
 import OrangeButton from '../../../components/OrangeButton'
@@ -21,7 +21,7 @@ import { faChartArea } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 
 const ScoreTr = (props) => {
-	const { rank, sname, sumTime, sum, scores, problems,rating } = props
+	const { rank, sname, sumTime, sum, scores, problems, rating } = props
 	const maxSum = problems.reduce((total, prob) => total + prob.score, 0)
 	const score = (prob) =>
 		scores[prob.id_Prob] ? scores[prob.id_Prob].score : 0
@@ -30,7 +30,9 @@ const ScoreTr = (props) => {
 	return (
 		<CustomTr acceptState={sum === maxSum}>
 			<td>{rank}</td>
-			<UserTd score={rating}>{sname}</UserTd>
+			<td>
+				<Name {...{ rating, sname }} />
+			</td>
 			{problems.map((prob, index) => (
 				<CustomTd
 					key={index}
@@ -106,7 +108,7 @@ const ContestScoreboard = (props) => {
 		<>
 			<Header />
 			<Container>
-				<Title icon={faChartArea} noBot='true' title={`Scoreboard #${id}`}>
+				<Title icon={faChartArea} noBot='true' text={`Scoreboard #${id}`}>
 					<OrangeButton href='/contest/history'>View Contest</OrangeButton>
 				</Title>
 				<hr />

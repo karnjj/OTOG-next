@@ -12,53 +12,53 @@ export const RowNav = styled(Nav)`
 	flex-direction: row;
 `
 export const StyledNavbar = styled(Navbar)`
-	top: ${props => props.hide && '-68px'};
+	top: ${(props) => props.hide && '-62px'};
 	transition: top 0.2s;
 `
-export const StyledNavLink = styled(Nav.Link)`
+export const StyledNavTitle = styled.div`
+	display: inline-block;
 	font-size: 1.1rem;
-	color: ${vars.gray};
+	a {
+		text-decoration: none !important;
+	}
 	span,
 	svg {
-		color: ${props => props.red && vars.red};
-	}
-	&:hover {
-		color: ${vars.gray};
+		color: ${(props) => props.red && vars.red};
 	}
 	${down('xl')} {
 		& > span {
-			display: none;
+			display: ${(props) => !props.noShrink && 'none'};
 		}
-	}
-`
-export const Icon = styled(FontAwesomeIcon)`
-	${down('xl')} {
-		margin: 0 10px;
 	}
 `
 export const HeaderSpace = styled.div`
 	display: block;
-	margin-bottom: 68px;
+	margin-bottom: 58px;
 `
 
-export const NavLink = props => {
-	const { name, icon, path, ...rest } = props
+export const NavTitle = ({ name, icon, children, ...rest }) => (
+	<StyledNavTitle {...rest}>
+		{icon && <FontAwesomeIcon {...{ icon }} />}
+		<span> {name}</span>
+		{children}
+	</StyledNavTitle>
+)
+
+export const NavLink = ({ path, target, active, ...rest }) => {
 	return path ? (
 		<Link href={path} passHref>
-			<StyledNavLink {...rest}>
-				<Icon {...{ icon }}></Icon>
-				<span> {name}</span>
-			</StyledNavLink>
+			<Nav.Link {...{ active }}>
+				<NavTitle {...rest} />
+			</Nav.Link>
 		</Link>
 	) : (
-		<StyledNavLink {...rest}>
-			<Icon {...{ icon }}></Icon>
-			<span> {name}</span>
-		</StyledNavLink>
+		<Nav.Link>
+			<NavTitle {...rest} />
+		</Nav.Link>
 	)
 }
 
-export const ScrollNavbar = props => {
+export const ScrollNavbar = (props) => {
 	const [hidden, setHidden] = useState(0)
 	const prevScroll = useRef(0)
 	const onScroll = () => {
