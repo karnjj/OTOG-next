@@ -3,7 +3,7 @@ import { Line } from 'react-chartjs-2'
 import 'chartjs-plugin-annotation'
 
 var ticks = [2500, 2000, 1800, 1650, 1500]
-var datas = [
+var datas = [/*
 	{
 		x: 1570539600000,
 		y: 1500,
@@ -48,7 +48,7 @@ var datas = [
 		x: 1571585200000,
 		y: 2700,
 		name: 'contest #3',
-	},
+	},*/
 ]
 var annotations = [
 	{
