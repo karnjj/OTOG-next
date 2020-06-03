@@ -25,8 +25,9 @@ const ProbTable = ({ problems }) => {
 				</tr>
 			</thead>
 			<tbody>
-				{problems &&
-					problems.map((prob, index) => <ProbTr key={index} {...prob} />)}
+				{problems?.map((prob, index) => (
+					<ProbTr key={index} {...prob} />
+				))}
 			</tbody>
 		</CustomTable>
 	)
@@ -85,7 +86,7 @@ const ProbTr = (props) => {
 					<>0</>
 				)}
 			</td>
-			<td>{(rating ? rating : '-')}</td>
+			<td>{rating ? rating : '-'}</td>
 			{userData && (
 				<td>
 					<SubmitGroup {...props}>

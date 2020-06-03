@@ -110,6 +110,8 @@ const ButtonWrapper = styled.ul`
 `
 
 const Code = styled.code`
+	padding: 0 8px;
+	font-size: 2.4rem;
 	font-weight: bold;
 	color: ${(props) => props.color};
 `
@@ -125,11 +127,10 @@ const StyledWelcome = styled.div`
 const Welcome = () => (
 	<StyledWelcome>
 		<h1>
-			Welcome to
-			<Code color={vars.green}> O</Code>
-			<Code color={vars.red}> T</Code>
-			<Code color={vars.orange}> O</Code>
-			<Code color={vars.blue}> G</Code>
+			Welcome to <Code color={vars.green}>O</Code>
+			<Code color={vars.red}>T</Code>
+			<Code color={vars.orange}>O</Code>
+			<Code color={vars.blue}>G</Code>
 		</h1>
 		<h1>Become a god of competitive programming.</h1>
 		<h3>Learn how to code and build algorithms efficiently.</h3>
@@ -225,8 +226,8 @@ const Index = () => {
 				<Container>{userData ? <Hello /> : <Welcome />}</Container>
 			</Jumbotron>
 			<Container>
-				<Row>
-					<Col md={4} className='px-5 p-md-3'>
+				<Row xs={1} md={3}>
+					<Col className='px-5 p-md-3'>
 						<h2>
 							<FontAwesomeIcon icon={faQuestion} /> FAQ
 						</h2>
@@ -235,13 +236,16 @@ const Index = () => {
 							ถ้าหากคุณมีปัญหาเหล่านี้สามารถ หาคำตอบได้จาก
 							คำถามยอดนิยมที่ผู้ใช้ส่วนใหญ่มักจะถามเป็นประจำ
 						</p>
-						<OrangeButton size='lg' href='#'>
-							Learn More
-						</OrangeButton>
+						<a
+							href='https://medium.com/otog/complete-guide-to-otog-22f88a349e78'
+							target='_blank'
+						>
+							<OrangeButton size='lg'>Learn More</OrangeButton>
+						</a>
 						<br />
 						<br />
 					</Col>
-					<Col md={4} className='px-5 p-md-3'>
+					<Col className='px-5 p-md-3'>
 						<h2>
 							<FontAwesomeIcon icon={faFlagCheckered} /> Get started
 						</h2>
@@ -256,7 +260,7 @@ const Index = () => {
 						<br />
 						<br />
 					</Col>
-					<Col md={4} className='px-5 p-md-3'>
+					<Col className='px-5 p-md-3'>
 						<h2>
 							<FontAwesomeIcon icon={faTrophy} /> Contest
 						</h2>
