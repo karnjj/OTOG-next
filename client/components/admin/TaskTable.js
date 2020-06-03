@@ -13,7 +13,7 @@ import {
 	InputGroup,
 	Badge
 } from 'react-bootstrap'
-import { Alink } from '../CustomTable'
+import { Alink } from '../CustomText'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
