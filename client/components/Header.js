@@ -75,6 +75,7 @@ export default () => {
 								href='/profile/[id]'
 								as={`/profile/${userData.id}`}
 								passHref
+								prefetch={false}
 							>
 								<NavDropdown.Item>
 									<NavTitle name='Profile' icon={faUser} noShrink='true' />

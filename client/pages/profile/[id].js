@@ -9,20 +9,8 @@ import { Title, ColoredText } from '../../components/CustomText'
 import { userClass } from '../../utils/user'
 import { useRouter } from 'next/router'
 
-const Rating = () => {
-	const [info, setInfo] = useState({})
-	const userData = useAuthContext()
-	const router = useRouter()
-	const { id } = router.query
-	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/profile/${id}`
-			const response = await fetch(url)
-			const json = await response.json()
-			setInfo(json)
-		}
-		fetchData()
-	}, [])
+const Rating = ({infoUser, id}) => {
+	const [info, setInfo] = useState(infoUser)
 	return (
 		<>
 			<Header />
@@ -100,4 +88,14 @@ const Rating = () => {
 	)
 }
 
+Rating.getInitialProps = async ({query}) => {
+	const id = query.id
+	const url = `${process.env.API_URL}/api/profile/${id}`
+	const response = await fetch(url)
+	const json = await response.json()
+	return { infoUser: json, id: id }
+}
+
 export default withAuthSync(Rating)
+
+
