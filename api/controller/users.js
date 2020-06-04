@@ -43,9 +43,9 @@ const multerConfig = multer({ storage: storage })
 
 function getUserData(req,res) {
 	var idUser = req.params.id
-	let sql = 'select sname,rating,history from User where idUser = ?'
+	let sql = 'select sname,rating,history,state from User where idUser = ?'
 	db.query(sql, [idUser], (err, result) => {
-		res.status(200).json(result[0])
+		res.status(200).json(result[0] ? result[0] : {})
 	})
 }
 

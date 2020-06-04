@@ -1,5 +1,9 @@
+import unfetch from "isomorphic-unfetch"
+
 export const userClass = (rating) => {
-    if (rating == 0) {
+    if (rating == -1 ) {
+        return 'Admin'
+    }else if (rating == 0) {
         return 'Unrate'
     } else if (rating >= 2500) {
         return 'Legendary'

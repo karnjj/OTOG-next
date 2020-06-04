@@ -7,7 +7,6 @@ import Footer from '../../components/Footer'
 import Graph from '../../components/Graph'
 import { Title, ColoredText } from '../../components/CustomText'
 import { userClass } from '../../utils/user'
-import { useRouter } from 'next/router'
 
 const Rating = ({infoUser, id}) => {
 	const [info, setInfo] = useState(infoUser)
@@ -22,16 +21,16 @@ const Rating = ({infoUser, id}) => {
 							<Card.Body>
 								<Card.Text as='div' className='pl-3 pb-3'>
 									<h1>
-										<ColoredText rating={info.rating}>{info.sname}</ColoredText>
+										<ColoredText rating={(info.state == 0) ? '-1' : info.rating}>{info.sname}</ColoredText>
 									</h1>
 									<h5>
-										<ColoredText rating={info.rating}>
-											{userClass(info.rating)}
+										<ColoredText rating={(info.state == 0) ? '-1' : info.rating}>
+											{userClass((info.state == 0) ? -1 : info.rating)}
 										</ColoredText>
 									</h5>
 									<h5>
 										Rating :{' '}
-										<ColoredText rating={info.rating}>
+										<ColoredText rating={(info.state == 0) ? '-1' : info.rating}>
 											{info.rating}
 										</ColoredText>{' '}
 										(max : <ColoredText rating={0}>-</ColoredText>)
