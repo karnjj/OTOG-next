@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Row, Col } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components'
@@ -14,8 +15,7 @@ export const Title = ({ icon, text, children }) => (
 	</Row>
 )
 
-export const ColoredText = styled.div`
-	display: inline-block;
+export const ColoredText = styled.a`
 	color: ${(props) => {
 		if (props.state === 0) {
 			return vars.admin
@@ -35,11 +35,13 @@ export const ColoredText = styled.div`
 	}}!important;
 `
 
-export const Name = ({ sname, children, ...rest }) => (
-	<ColoredText {...rest}>
-		{sname}
-		{children}
-	</ColoredText>
+export const Name = ({ sname, children, userId, ...rest }) => (
+	<Link href='profile/[id]' as={`profile/${userId ?? 0}`} passHref>
+		<ColoredText {...rest}>
+			{sname}
+			{children}
+		</ColoredText>
+	</Link>
 )
 
 export const Alink = styled.a`

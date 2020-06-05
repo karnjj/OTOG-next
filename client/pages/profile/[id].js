@@ -2,7 +2,7 @@ import { withAuthSync } from '../../utils/auth'
 import { userClass } from '../../utils/user'
 
 import { Container, Col, Row, Card } from 'react-bootstrap'
-import { Title, Name, ColoredText } from '../../components/CustomText'
+import { Title, ColoredText } from '../../components/CustomText'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import Graph from '../../components/Graph'
@@ -21,7 +21,7 @@ const GraphCard = ({ userInfo }) => (
 		<Card.Body>
 			<Card.Text as='div' className='pl-3 pb-3'>
 				<h1>
-					<Name {...userInfo} />
+					<ColoredText {...userInfo}>{userInfo.sname}</ColoredText>
 				</h1>
 				<h5>
 					<ColoredText {...userInfo}>{userClass(userInfo)}</ColoredText>
