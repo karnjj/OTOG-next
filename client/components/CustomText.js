@@ -6,7 +6,7 @@ import vars from '../styles/vars'
 
 export const Title = ({ icon, text, children }) => (
 	<Row className='pt-5 pb-3'>
-		<Col className='mr-auto'>
+		<Col xs='auto' className='mr-auto'>
 			<h2>
 				<FontAwesomeIcon icon={icon} /> {text}
 			</h2>

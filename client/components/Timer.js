@@ -45,7 +45,7 @@ const Timer = ({ timeLeft, mode, ...props }) => {
 		const h = `${timeState.h} ชั่วโมง `
 		const m = `${timeState.m} นาที `
 		const s = `${timeState.s} วินาที `
-		const day = Math.floor(timeState.h / 24)
+		const day = Math.ceil(timeState.h / 24)
 		if (day) {
 			return `${day} วัน`
 		}

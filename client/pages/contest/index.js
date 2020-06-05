@@ -374,7 +374,11 @@ const EndingContest = ({ idContest }) => {
 	return (
 		<CenteredDiv>
 			<h1>การแข่งขันจบแล้ว</h1>
-			<OrangeButton href={`/contest/history/${idContest}`} size='lg'>
+			<OrangeButton
+				href='/contest/history/[id]'
+				dynamic={`/contest/history/${idContest}`}
+				size='lg'
+			>
 				สรุปผลการแข่งขัน
 			</OrangeButton>
 		</CenteredDiv>
@@ -416,8 +420,8 @@ const HoldingContest = (props) => {
 	}, [])
 
 	return (
-		<>
-			<Title icon={faTrophy} title={name} noTop='true' noBot='true'>
+		<Container>
+			<Title icon={faTrophy} text={name} noTop='true' noBot='true'>
 				<h2>
 					<Timer timeLeft={timeleft} />
 				</h2>
@@ -431,7 +435,7 @@ const HoldingContest = (props) => {
 					{...task}
 				/>
 			))}
-		</>
+		</Container>
 	)
 }
 
@@ -452,6 +456,7 @@ const Contest = ({ contest, serverTime }) => {
 		isAboutToStart = now < start
 		isHolding = start <= now && now <= end
 		isJustEnd = now - end < 60 * 60
+		isHolding = true
 	}
 	return (
 		<PageLayout noContainer>
@@ -459,7 +464,7 @@ const Contest = ({ contest, serverTime }) => {
 			<StyledJumbotron>
 				<Container fluid>
 					<Row className='d-flex justify-content-center'>
-						<Col xs={12} md={10} lg={8}>
+						<Col xs={12} lg={isHolding && 10} xl={isHolding && 8}>
 							{!userData ? (
 								<NoLogin />
 							) : isAboutToStart ? (
