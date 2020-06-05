@@ -131,7 +131,7 @@ function auth(req,res) {
 }
 
 function getUser(req,res) {
-	let sql = "SELECT sname,rating FROM User where state != 0 order by rating desc"
+	let sql = "SELECT sname,rating,state FROM User where state != 0 order by rating desc"
 	db.query(sql, function (err, result) {
 		if (err) res.status(400).send(err);
 		var prev = -1;
