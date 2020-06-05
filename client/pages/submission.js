@@ -47,22 +47,27 @@ const Submission = () => {
 			<Header />
 			<Container>
 				<Title icon={faPuzzlePiece} text='Submission' />
-				<Row className='m-auto align-items-center justify-content-between'>
-					<Col xs={0} className='mr-auto' />
-					{userData && lastest && (
-						<Col className='align-items-baseline'>
-							<b>ส่งข้อล่าสุด :</b>
-							<Alink
-								target='_blank'
-								className='mx-4'
-								href={`${process.env.API_URL}/api/docs/${lastest.sname}`}
-							>
-								{lastest.name}
-							</Alink>
-							<SubmitGroup {...lastest} />
-						</Col>
-					)}
-					<Col sm={4} md={3} lg={2}>
+				<Row className='align-items-baseline'>
+					<Col
+						xs={{ span: 12, order: 'last' }}
+						md={{ span: 'auto', order: 'first' }}
+						className='d-flex align-items-baseline justify-content-center justify-content-md-start mt-2 mt-md-0'
+					>
+						{userData && lastest && (
+							<>
+								<b>ส่งข้อล่าสุด :</b>
+								<Alink
+									target='_blank'
+									className='mx-4'
+									href={`${process.env.API_URL}/api/docs/${lastest.sname}`}
+								>
+									{lastest.name}
+								</Alink>
+								<SubmitGroup {...lastest} />
+							</>
+						)}
+					</Col>
+					<Col xs md='auto' className='ml-auto d-flex align-item-center'>
 						{userData && (
 							<OrangeCheck
 								type='switch'
@@ -73,8 +78,10 @@ const Submission = () => {
 							/>
 						)}
 					</Col>
-					<Col as={OrangeButton} href='problem' sm={4} md={3} lg={2}>
-						View Problem
+					<Col xs md={4} lg={2}>
+						<OrangeButton href='problem' className='w-100'>
+							View Problem
+						</OrangeButton>
 					</Col>
 				</Row>
 				<hr />
