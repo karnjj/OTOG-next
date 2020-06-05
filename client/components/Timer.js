@@ -34,7 +34,7 @@ const Timer = ({ timeLeft, mode, ...props }) => {
 		return time
 	}
 	const countdown = () => {
-		TimeLeft-- 
+		TimeLeft--
 		setTimeState(secondsToTime(TimeLeft))
 		if (TimeLeft <= 0) {
 			clearInterval(timer)
@@ -45,6 +45,10 @@ const Timer = ({ timeLeft, mode, ...props }) => {
 		const h = `${timeState.h} ชั่วโมง `
 		const m = `${timeState.m} นาที `
 		const s = `${timeState.s} วินาที `
+		const day = Math.floor(timeState.h / 24)
+		if (day) {
+			return `${day} วัน`
+		}
 		if (timeState.h) {
 			if (timeState.m) {
 				return h + m + s
@@ -56,7 +60,7 @@ const Timer = ({ timeLeft, mode, ...props }) => {
 			return s
 		}
 	}
-	return mode === 'th' ? (
+	return mode == 'th' ? (
 		<StyledTimer {...props}>{thCountdown(timeState)}</StyledTimer>
 	) : (
 		<StyledTimer {...props}>
