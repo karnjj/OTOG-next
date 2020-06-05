@@ -17,7 +17,7 @@ export const Title = ({ icon, text, children }) => (
 export const ColoredText = styled.div`
 	display: inline-block;
 	color: ${(props) => {
-		if (props.rating == -1 ) {
+		if (props.state === 0) {
 			return vars.admin
 		} else if (props.rating == 0) {
 			return vars.unrate
