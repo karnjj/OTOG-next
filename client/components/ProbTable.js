@@ -15,7 +15,7 @@ const StyledPop = styled(Popover)`
 const ProbTable = ({ problems }) => {
 	const userData = useAuthContext()
 	return (
-		<CustomTable ready={problems !== undefined}>
+		<CustomTable ready={problems ? true : false}>
 			<thead>
 				<tr>
 					<th>#</th>

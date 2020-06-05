@@ -1,8 +1,17 @@
+import { Alink } from './CustomText'
 import { logout, useAuthContext, isAdmin } from '../utils/auth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-import { Nav, Navbar, NavDropdown, Image } from 'react-bootstrap'
+import {
+	Row,
+	Col,
+	Container,
+	Nav,
+	Navbar,
+	NavDropdown,
+	Image,
+} from 'react-bootstrap'
 import {
 	ScrollNavbar,
 	HeaderSpace,
@@ -25,7 +34,7 @@ const ProfileImage = styled(Image)`
 	height: 28px;
 	margin: -2px 0;
 `
-export default () => {
+export const Header = () => {
 	const userData = useAuthContext()
 	const router = useRouter()
 	const navLinks = [
@@ -113,3 +122,39 @@ export default () => {
 		</>
 	)
 }
+
+export const Footer = () => (
+	<>
+		<hr />
+		<Row sm={1} className='mb-3'>
+			<Col md='auto' className='mr-auto'>
+				If you have any problem or suggestion, please{' '}
+				<Alink href='https://fb.me/kkuotog' target='_blank'>
+					Contact Us
+				</Alink>
+			</Col>
+			<Col md='auto'>&copy; 2019 Phakphum Dev Team</Col>
+		</Row>
+	</>
+)
+
+const FullWindowLayout = styled.div`
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+`
+
+export default ({ noContainer, noFooter, children }) => (
+	<FullWindowLayout>
+		<div>
+			<Header />
+			{noContainer ? <>{children}</> : <Container>{children}</Container>}
+		</div>
+		{!noFooter && (
+			<Container>
+				<Footer />
+			</Container>
+		)}
+	</FullWindowLayout>
+)

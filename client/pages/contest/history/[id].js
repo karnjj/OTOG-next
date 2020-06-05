@@ -4,11 +4,9 @@ import {
 	useAuthContext,
 	useTokenContext,
 } from '../../../utils/auth'
-import { Container } from 'react-bootstrap'
 
 import { Title, Name } from '../../../components/CustomText'
-import Header from '../../../components/Header'
-import Footer from '../../../components/Footer'
+import PageLayout from '../../../components/PageLayout'
 import OrangeButton from '../../../components/OrangeButton'
 import {
 	CustomTable,
@@ -105,17 +103,13 @@ const ContestScoreboard = (props) => {
 	}, [])
 
 	return (
-		<>
-			<Header />
-			<Container>
-				<Title icon={faChartArea} noBot='true' text={`Scoreboard #${id}`}>
-					<OrangeButton href='/contest/history'>View Contest</OrangeButton>
-				</Title>
-				<hr />
-				<Scoreboard {...{ contestants, problems }} />
-				<Footer />
-			</Container>
-		</>
+		<PageLayout>
+			<Title icon={faChartArea} noBot='true' text={`Scoreboard #${id}`}>
+				<OrangeButton href='/contest/history'>View Contest</OrangeButton>
+			</Title>
+			<hr />
+			<Scoreboard {...{ contestants, problems }} />
+		</PageLayout>
 	)
 }
 

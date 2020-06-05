@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useTokenContext, withAdminAuth } from '../../utils/auth'
 
-import { Container } from 'react-bootstrap'
 import { Title } from '../../components/CustomText'
-import Header from '../../components/Header'
+import PageLayout from '../../components/PageLayout'
 import OrangeButton from '../../components/OrangeButton'
 import SubmissionTable from '../../components/SubmissionTable'
 
@@ -26,16 +25,13 @@ const Submission = () => {
 	}, [])
 
 	return (
-		<>
-			<Header />
-			<Container>
-				<Title icon={faTrophy} text='Contest Submission' noBot='true'>
-					<OrangeButton href='/contest'>View Contest</OrangeButton>
-				</Title>
-				<hr />
-				<SubmissionTable {...{ results }} />
-			</Container>
-		</>
+		<PageLayout noFooter>
+			<Title icon={faTrophy} text='Contest Submission' noBot='true'>
+				<OrangeButton href='/contest'>View Contest</OrangeButton>
+			</Title>
+			<hr />
+			<SubmissionTable {...{ results }} />
+		</PageLayout>
 	)
 }
 

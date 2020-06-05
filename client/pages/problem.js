@@ -7,8 +7,7 @@ import fetch from 'isomorphic-unfetch'
 import { Row, Col, Form, Container, InputGroup } from 'react-bootstrap'
 import OrangeButton from '../components/OrangeButton'
 import { Title } from '../components/CustomText'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import PageLayout from '../components/PageLayout'
 import ProbTable from '../components/ProbTable'
 import OrangeCheck from '../components/OrangeCheck'
 
@@ -82,41 +81,37 @@ const Problem = () => {
 			)
 		})
 	return (
-		<>
-			<Header />
-			<Container>
-				<Title icon={faPuzzlePiece} text='Problem' />
-				<Row>
-					<Col as={InputGroup} xs sm={6} md={8}>
-						{isAdmin(userData) && (
-							<InputGroup.Prepend>
-								<InputGroup.Text>
-									<OrangeCheck
-										type='switch'
-										id='custom-switch'
-										label='ทั้งหมด '
-										onChange={handleChange}
-									/>
-								</InputGroup.Text>
-							</InputGroup.Prepend>
-						)}
-						<Form.Control
-							placeholder='ค้นหาโจทย์'
-							value={searchState}
-							onChange={updateSearch}
-						/>
-					</Col>
-					<Col xs sm={4} md={3} lg={2} className='ml-auto'>
-						<OrangeButton href='submission' className='w-100'>
-							View Submission
-						</OrangeButton>
-					</Col>
-				</Row>
-				<hr />
-				<ProbTable problems={filteredTask} />
-				<Footer />
-			</Container>
-		</>
+		<PageLayout>
+			<Title icon={faPuzzlePiece} text='Problem' />
+			<Row>
+				<Col as={InputGroup} xs sm={6} md={8}>
+					{isAdmin(userData) && (
+						<InputGroup.Prepend>
+							<InputGroup.Text>
+								<OrangeCheck
+									type='switch'
+									id='custom-switch'
+									label='ทั้งหมด '
+									onChange={handleChange}
+								/>
+							</InputGroup.Text>
+						</InputGroup.Prepend>
+					)}
+					<Form.Control
+						placeholder='ค้นหาโจทย์'
+						value={searchState}
+						onChange={updateSearch}
+					/>
+				</Col>
+				<Col xs sm={4} md={3} lg={2} className='ml-auto'>
+					<OrangeButton href='submission' className='w-100'>
+						View Submission
+					</OrangeButton>
+				</Col>
+			</Row>
+			<hr />
+			<ProbTable problems={filteredTask} />
+		</PageLayout>
 	)
 }
 

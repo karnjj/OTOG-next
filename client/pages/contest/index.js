@@ -24,8 +24,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { Title } from '../../components/CustomText'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
+import PageLayout from '../../components/PageLayout'
 import Timer from '../../components/Timer'
 import OrangeButton from '../../components/OrangeButton'
 import ViewCodeButton from '../../components/ViewCodeButton'
@@ -455,30 +454,29 @@ const Contest = ({ contest, serverTime }) => {
 		isJustEnd = now - end < 60 * 60
 	}
 	return (
-		<>
-			<Header />
+		<PageLayout noContainer>
 			<Announcement />
 			<StyledJumbotron>
-				<Container fluid as={Row} className='m-auto'>
-					<Col xs={0} md={1} lg={2} />
-					<Col xs={12} md={10} lg={8}>
-						{!userData ? (
-							<NoLogin />
-						) : isAboutToStart ? (
-							<Countdown timeleft={start - now} name={contest.name} />
-						) : isHolding ? (
-							<HoldingContest
-								timeleft={end - now}
-								idContest={idContest}
-								name={contest.name}
-							/>
-						) : isJustEnd ? (
-							<EndingContest idContest={idContest} />
-						) : (
-							<NoContest />
-						)}
-					</Col>
-					<Col xs={0} md={1} lg={2} />
+				<Container fluid>
+					<Row className='d-flex justify-content-center'>
+						<Col xs={12} md={10} lg={8}>
+							{!userData ? (
+								<NoLogin />
+							) : isAboutToStart ? (
+								<Countdown timeleft={start - now} name={contest.name} />
+							) : isHolding ? (
+								<HoldingContest
+									timeleft={end - now}
+									idContest={idContest}
+									name={contest.name}
+								/>
+							) : isJustEnd ? (
+								<EndingContest idContest={idContest} />
+							) : (
+								<NoContest />
+							)}
+						</Col>
+					</Row>
 				</Container>
 			</StyledJumbotron>
 			<Container>
@@ -500,9 +498,8 @@ const Contest = ({ contest, serverTime }) => {
 						</Col>
 					</Row>
 				)}
-				<Footer br={!userData ? 6 : 3} />
 			</Container>
-		</>
+		</PageLayout>
 	)
 }
 

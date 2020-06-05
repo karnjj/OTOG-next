@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
 import { withAuthSync } from '../../../utils/auth'
 
-import { Container } from 'react-bootstrap'
 import { Title } from '../../../components/CustomText'
-import Header from '../../../components/Header'
-import Footer from '../../../components/Footer'
+import PageLayout from '../../../components/PageLayout'
 import { CustomTable, CustomTr } from '../../../components/CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -86,15 +84,11 @@ const ContestTable = () => {
 
 const History = () => {
 	return (
-		<>
-			<Header />
-			<Container>
-				<Title icon={faTrophy} text='Contest History' />
-				<hr />
-				<ContestTable />
-				<Footer />
-			</Container>
-		</>
+		<PageLayout>
+			<Title icon={faTrophy} text='Contest History' />
+			<hr />
+			<ContestTable />
+		</PageLayout>
 	)
 }
 export default withAuthSync(History)

@@ -5,8 +5,7 @@ import { withAuthSync } from '../utils/auth'
 import { Container, Col, Row, Form } from 'react-bootstrap'
 import { CustomTable } from '../components/CustomTable'
 import { Title, Name } from '../components/CustomText'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import PageLayout from '../components/PageLayout'
 
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
 
@@ -57,28 +56,24 @@ const Rating = () => {
 		return user.sname.indexOf(searchState) !== -1
 	})
 	return (
-		<>
-			<Header />
-			<Container>
-				<Title icon={faChartBar} text='Rating' />
-				<Row className='mx-auto align-items-baseline'>
-					<Col as='label' md={2}>
-						<b>ค้นหาผู้ใช้ : </b>
-					</Col>
-					<Col
-						as={Form.Control}
-						md={6}
-						placeholder='ค้นหาผู้ใช้'
-						value={searchState}
-						onChange={updateSearch}
-					/>
-					<Col md={4}></Col>
-				</Row>
-				<hr />
-				<UserTable users={filteredUser} />
-				<Footer />
-			</Container>
-		</>
+		<PageLayout>
+			<Title icon={faChartBar} text='Rating' />
+			<Row className='mx-auto align-items-baseline'>
+				<Col as='label' md={2}>
+					<b>ค้นหาผู้ใช้ : </b>
+				</Col>
+				<Col
+					as={Form.Control}
+					md={6}
+					placeholder='ค้นหาผู้ใช้'
+					value={searchState}
+					onChange={updateSearch}
+				/>
+				<Col md={4}></Col>
+			</Row>
+			<hr />
+			<UserTable users={filteredUser} />
+		</PageLayout>
 	)
 }
 export default withAuthSync(Rating)

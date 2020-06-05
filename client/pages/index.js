@@ -4,8 +4,7 @@ import fetch from 'isomorphic-unfetch'
 
 import { Jumbotron, Container, Row, Col } from 'react-bootstrap'
 import { Title } from '../components/CustomText'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import PageLayout from '../components/PageLayout'
 import ProbTable from '../components/ProbTable'
 import OrangeButton from '../components/OrangeButton'
 
@@ -200,7 +199,7 @@ const Hello = () => {
 
 const ProblemTable = () => {
 	const userData = useAuthContext()
-	const [taskState, setTaskState] = useState([])
+	const [taskState, setTaskState] = useState()
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -220,8 +219,7 @@ const Index = () => {
 	const userData = useAuthContext()
 
 	return (
-		<>
-			<Header />
+		<PageLayout noContainer>
 			<Jumbotron>
 				<Container>{userData ? <Hello /> : <Welcome />}</Container>
 			</Jumbotron>
@@ -282,9 +280,8 @@ const Index = () => {
 				</div>
 				<hr />
 				<ProblemTable />
-				<Footer />
 			</Container>
-		</>
+		</PageLayout>
 	)
 }
 export default withAuthSync(Index)

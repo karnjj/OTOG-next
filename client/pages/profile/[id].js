@@ -3,8 +3,7 @@ import { userClass } from '../../utils/user'
 
 import { Container, Col, Row, Card } from 'react-bootstrap'
 import { Title, ColoredText } from '../../components/CustomText'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
+import PageLayout from '../../components/PageLayout'
 import Graph from '../../components/Graph'
 
 import styled from 'styled-components'
@@ -78,26 +77,22 @@ const ImageCard = ({ userInfo, id }) => (
 )
 
 const Rating = (props) => (
-	<>
-		<Header />
-		<Container>
-			<Title icon={faUser} text='Profile' />
-			<hr />
-			<Row xs={1} lg={2}>
-				<Col lg={7} xl={8} className='mb-3 mb-lg-0'>
-					<GraphCard {...props} />
-				</Col>
-				<Col
-					lg={5}
-					xl={4}
-					className='d-flex justify-content-center align-item-center py-3'
-				>
-					<ImageCard {...props} />
-				</Col>
-			</Row>
-			<Footer />
-		</Container>
-	</>
+	<PageLayout>
+		<Title icon={faUser} text='Profile' />
+		<hr />
+		<Row xs={1} lg={2}>
+			<Col lg={7} xl={8} className='mb-3 mb-lg-0'>
+				<GraphCard {...props} />
+			</Col>
+			<Col
+				lg={5}
+				xl={4}
+				className='d-flex justify-content-center align-item-center py-3'
+			>
+				<ImageCard {...props} />
+			</Col>
+		</Row>
+	</PageLayout>
 )
 
 Rating.getInitialProps = async ({ query }) => {
