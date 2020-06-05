@@ -3,7 +3,6 @@ import styled, { keyframes } from 'styled-components'
 
 import { Table } from 'react-bootstrap'
 import { TableLoader } from './Loader'
-import { Name } from './CustomText'
 
 const customColor = (props) =>
 	props.acceptState ? vars.accept : props.wrongState && vars.wrong
@@ -17,11 +16,6 @@ export const CustomTr = styled.tr`
 export const CustomTd = styled.td`
 	background: ${customColor};
 `
-export const UserTd = (props) => (
-	<td>
-		<Name {...props} />
-	</td>
-)
 const fadein = keyframes`
 	0% {
 		opacity: 0;
@@ -32,8 +26,7 @@ const fadein = keyframes`
 `
 const CenterTable = styled(Table)`
 	text-align: center;
-	th,
-	a {
+	th {
 		color: ${vars.orange};
 		&:hover {
 			color: ${vars.orange};
@@ -41,7 +34,7 @@ const CenterTable = styled(Table)`
 		}
 	}
 	tr {
-		animation: ${fadein} 0.3s ease;
+		animation: ${fadein} 0.5s ease;
 	}
 `
 export const CustomTable = ({ ready = true, ...props }) => {

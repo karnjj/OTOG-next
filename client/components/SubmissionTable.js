@@ -3,7 +3,7 @@ import { useAuthContext, isAdmin } from '../utils/auth'
 
 import { CustomTr, CustomTable } from './CustomTable'
 import { Modal, ButtonGroup } from 'react-bootstrap'
-import { Name } from './CustomText'
+import { Name, Alink } from './CustomText'
 import ViewCodeButton from './ViewCodeButton'
 
 import styled from 'styled-components'
@@ -90,16 +90,16 @@ const SubTr = (props) => {
 						<Name {...{ sname, rating }} />
 					</td>
 				) : (
-					<td style={{ color: '#000000' }}>{sname}</td>
+					<td>{sname}</td>
 				)}
 				<td>
-					<a
+					<Alink
+						black
 						target='_blank'
 						href={`${process.env.API_URL}/api/docs/${problemname}`}
-						style={{ color: '#000000' }}
 					>
 						{name}
-					</a>
+					</Alink>
 				</td>
 				<td>
 					<ResultCode>

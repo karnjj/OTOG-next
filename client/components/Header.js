@@ -64,9 +64,9 @@ export default () => {
 							alignRight
 							title={
 								<Image
-									className='ml-2 ml-xl-0'
+									className='mx-1 ml-xl-0'
 									src={`${process.env.API_URL}/api/avatar/${userData.id}`}
-									style={{ width: '30px', height: '30px' }}
+									style={{ width: '25px', height: '25px' }}
 									roundedCircle
 								/>
 							}
