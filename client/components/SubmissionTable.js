@@ -26,7 +26,7 @@ const SubmissionTable = (props) => {
 	const { results, canViewCode } = props
 	const showCode = canViewCode || isAdmin(userData)
 	return (
-		<CustomTable ready={results ?? false}>
+		<CustomTable ready={results ? true : false}>
 			<thead>
 				<tr>
 					<th>#</th>

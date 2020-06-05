@@ -19,6 +19,13 @@ import {
 	faUser,
 	faUserCircle,
 } from '@fortawesome/free-solid-svg-icons'
+import styled from 'styled-components'
+
+const ProfileImage = styled(Image)`
+	width: 28px;
+	height: 28px;
+	margin: -2px 0;
+`
 
 export default () => {
 	const userData = useAuthContext()
@@ -63,10 +70,9 @@ export default () => {
 						<NavDropdown
 							alignRight
 							title={
-								<Image
+								<ProfileImage
 									className='mx-1 ml-xl-0'
 									src={`${process.env.API_URL}/api/avatar/${userData.id}`}
-									style={{ width: '25px', height: '25px' }}
 									roundedCircle
 								/>
 							}

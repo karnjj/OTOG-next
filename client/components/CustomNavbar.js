@@ -12,7 +12,7 @@ export const RowNav = styled(Nav)`
 	flex-direction: row;
 `
 export const StyledNavbar = styled(Navbar)`
-	top: ${(props) => props.hide && '-62px'};
+	top: ${(props) => props.hide && '-58px'};
 	transition: top 0.2s;
 `
 export const StyledNavTitle = styled.div`
