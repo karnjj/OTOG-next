@@ -47,14 +47,14 @@ const Submission = () => {
 			<Header />
 			<Container>
 				<Title icon={faPuzzlePiece} text='Submission' />
-				<Row className='align-items-baseline'>
+				<Row className='align-items-center'>
 					<Col
 						xs={{ span: 12, order: 'last' }}
 						md={{ span: 'auto', order: 'first' }}
 						className='d-flex align-items-baseline justify-content-center justify-content-md-start mt-2 mt-md-0'
 					>
 						{userData && lastest && (
-							<>
+							<div>
 								<b>ส่งข้อล่าสุด :</b>
 								<Alink
 									target='_blank'
@@ -64,7 +64,7 @@ const Submission = () => {
 									{lastest.name}
 								</Alink>
 								<SubmitGroup {...lastest} />
-							</>
+							</div>
 						)}
 					</Col>
 					<Col xs md='auto' className='ml-auto d-flex align-item-center'>

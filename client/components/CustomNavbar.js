@@ -5,14 +5,10 @@ import { Nav, Navbar } from 'react-bootstrap'
 
 import vars from '../styles/vars'
 import styled from 'styled-components'
-import { down } from 'styled-breakpoints'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-export const RowNav = styled(Nav)`
-	flex-direction: row;
-`
 export const StyledNavbar = styled(Navbar)`
-	top: ${(props) => props.hide && '-58px'};
+	top: ${(props) => props.hide && '-56px'};
 	transition: top 0.2s;
 `
 export const StyledNavTitle = styled.div`
@@ -25,23 +21,21 @@ export const StyledNavTitle = styled.div`
 	svg {
 		color: ${(props) => props.red && vars.red};
 	}
-	${down('xl')} {
-		& > span {
-			display: ${(props) => !props.noShrink && 'none'};
-		}
-	}
 `
 export const HeaderSpace = styled.div`
 	display: block;
-	margin-bottom: 58px;
+	padding-top: 56px;
 `
 
 export const NavTitle = ({ name, icon, children, ...rest }) => (
 	<StyledNavTitle {...rest}>
 		{icon && <FontAwesomeIcon {...{ icon }} />}
-		<span> {name}</span>
+		<NavText> {name}</NavText>
 		{children}
 	</StyledNavTitle>
+)
+export const NavText = (props) => (
+	<span className='d-inline d-sm-none d-lg-inline' {...props} />
 )
 
 export const NavLink = ({ path, target, active, ...rest }) => {
