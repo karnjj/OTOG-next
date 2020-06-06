@@ -45,9 +45,9 @@ export const Name = ({ sname, children, userId, ...rest }) => (
 )
 
 export const Alink = styled.a`
-	color: ${(props) => (props.black ? vars.black : vars.orange)};
+	color: ${(props) => (props.black ? vars.black : vars.orange)}!important;
 	&:hover {
-		color: ${vars.orange};
-		cursor: pointer;
+		color: ${vars.orange}!important;
+		cursor: pointer !important;
 	}
 `

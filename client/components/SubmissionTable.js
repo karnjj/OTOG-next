@@ -104,7 +104,9 @@ const SubTr = (props) => {
 				<td>
 					<ResultCode>
 						{result === 'Compilation Error' && canViewCode ? (
-							<a onClick={handleShow}>{result}</a>
+							<Alink black onClick={handleShow}>
+								{result}
+							</Alink>
 						) : (
 							result
 						)}
