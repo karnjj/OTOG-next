@@ -103,11 +103,10 @@ export const Header = () => {
 									</NavDropdown.Item>
 								</Link>
 								<NavDropdown.Divider />
-								<NavDropdown.Item>
+								<NavDropdown.Item onClick={handleClickLogout}>
 									<NavTitle
 										name='Logout'
 										icon={faSignInAlt}
-										onClick={handleClickLogout}
 										red='true'
 										noShrink='true'
 									/>
