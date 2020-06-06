@@ -51,10 +51,8 @@ const popout = keyframes`
 		transform: translateY(-50px);
 	}
 `
-const Announce = styled(Container)`
+const Announce = styled.div`
 	position: absolute;
-	margin-top: 50px;
-	padding-right: 45px;
 	text-align: center;
 	cursor: pointer;
 	user-select: none;
@@ -63,6 +61,9 @@ const Announce = styled(Container)`
 		ease both;
 `
 const StyledAnnouncement = styled(Container)`
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	min-height: 150px;
 `
 const CenteredDiv = styled.div`
@@ -303,16 +304,14 @@ const TaskCard = (props) => {
 		>
 			<Accordion.Toggle as={Card.Header} eventKey='0'>
 				<h5>
-					<Row>
-						<Col>
+					<Row xs={1}>
+						<Col md>
 							Problem {index} : {name}
 						</Col>
 						<Col xs='auto' className='ml-auto'>
 							{solved && <Badge variant='success'>Solved</Badge>}
 						</Col>
 					</Row>
-					{/*solved && <Badge variant='success'>Solved</Badge>*/}
-					{/*<CustomToggle eventKey='0' />*/}
 					ผ่านแล้ว : {passed}
 				</h5>
 			</Accordion.Toggle>
@@ -327,7 +326,7 @@ const TaskCard = (props) => {
 						/>
 					</Col>
 					<Col xs={0} lg={1} />
-					<Col>
+					<Col style={{ maxWidth: '350px' }} className='mx-auto'>
 						<Form.File
 							as={Col}
 							className='mb-4'
@@ -456,7 +455,6 @@ const Contest = ({ contest, serverTime }) => {
 		isAboutToStart = now < start
 		isHolding = start <= now && now <= end
 		isJustEnd = now - end < 60 * 60
-		isHolding = true
 	}
 	return (
 		<PageLayout noContainer>
@@ -464,7 +462,7 @@ const Contest = ({ contest, serverTime }) => {
 			<StyledJumbotron>
 				<Container fluid>
 					<Row className='d-flex justify-content-center'>
-						<Col xs={12} lg={isHolding && 10} xl={isHolding && 8}>
+						<Col xs={12} lg={isHolding ? 10 : 12} xl={isHolding ? 8 : 12}>
 							{!userData ? (
 								<NoLogin />
 							) : isAboutToStart ? (
