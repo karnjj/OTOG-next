@@ -28,9 +28,9 @@ const StyledButton = styled(Button).attrs((props) => ({
 	}
 `
 
-const OrangeButton = ({ href, dynamic, target, prefetch, ...props }) =>
+const OrangeButton = ({ href, dynamic, prefetch, ...props }) =>
 	href ? (
-		<Link href={href} as={dynamic} target={target} prefetch={prefetch}>
+		<Link href={href} as={dynamic} prefetch={prefetch}>
 			<StyledButton variant='warning' {...props} />
 		</Link>
 	) : (

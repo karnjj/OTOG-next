@@ -25,7 +25,7 @@ const Submission = () => {
 	}, [])
 
 	return (
-		<PageLayout noFooter>
+		<PageLayout>
 			<Title icon={faTrophy} text='Contest Submission' noBot='true'>
 				<OrangeButton href='/contest'>View Contest</OrangeButton>
 			</Title>

@@ -20,10 +20,12 @@ import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 const Submission = () => {
 	const userData = useAuthContext()
 	const token = useTokenContext()
-	//const { name, sname } = props.latestProblem
+	const isLogin = !!userData
+
 	const [lastest, setLastest] = useState(null)
-	const [results, setResults] = useState()
-	const [showOnlyMe, setShowOnlyMe] = useState(!isAdmin(userData) && !!userData)
+	const [results, setResults] = useState(null)
+	const [showOnlyMe, setShowOnlyMe] = useState(!isAdmin(userData) && isLogin)
+
 	useEffect(() => {
 		const fetchData = async () => {
 			const url = `${process.env.API_URL}/api/submission?mode=${
@@ -38,12 +40,14 @@ const Submission = () => {
 		}
 		fetchData()
 	}, [showOnlyMe])
+
 	const handleCheck = (event) => {
-		setResults(undefined)
+		setResults(null)
 		setShowOnlyMe(event.target.checked)
 	}
+
 	return (
-		<PageLayout noFooter>
+		<PageLayout>
 			<Title icon={faPuzzlePiece} text='Submission' />
 			<Row className='align-items-center'>
 				<Col
@@ -76,7 +80,7 @@ const Submission = () => {
 						/>
 					)}
 				</Col>
-				<Col xs md={4} lg={2}>
+				<Col xs={4} md={3} lg={2}>
 					<OrangeButton href='problem' className='w-100'>
 						View Problem
 					</OrangeButton>

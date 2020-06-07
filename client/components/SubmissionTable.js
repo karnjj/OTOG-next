@@ -25,8 +25,9 @@ const SubmissionTable = (props) => {
 	const userData = useAuthContext()
 	const { results, canViewCode } = props
 	const showCode = canViewCode || isAdmin(userData)
+	console.log(results)
 	return (
-		<CustomTable ready={results ? true : false}>
+		<CustomTable ready={!!results}>
 			<thead>
 				<tr>
 					<th>#</th>

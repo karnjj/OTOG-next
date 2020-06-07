@@ -36,7 +36,7 @@ const AnimationTable = styled(Table)`
 		text-align: center;
 	}
 `
-const Loader = () => (
+export const Loader = () => (
 	<Row className='justify-content-center py-5'>
 		<StyledSpinner animation='border' role='status'>
 			<span className='sr-only'>Loading...</span>

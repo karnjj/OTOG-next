@@ -23,9 +23,10 @@ import {
 	faChevronUp,
 } from '@fortawesome/free-solid-svg-icons'
 
-import { Title } from '../../components/CustomText'
+import { Title, Alink } from '../../components/CustomText'
 import PageLayout from '../../components/PageLayout'
 import Timer from '../../components/Timer'
+import { Loader } from '../../components/Loader'
 import OrangeButton from '../../components/OrangeButton'
 import ViewCodeButton from '../../components/ViewCodeButton'
 
@@ -79,6 +80,9 @@ const CenteredDiv = styled.div`
 `
 const StyledJumbotron = styled(Jumbotron)`
 	background: ${vars.grey};
+	min-height: 40vh;
+	display: flex;
+	align-items: center;
 `
 const Icon = styled(FontAwesomeIcon)`
 	user-select: none;
@@ -361,7 +365,9 @@ const Countdown = (props) => {
 	const { timeleft, name } = props
 	return (
 		<CenteredDiv>
-			<h1>การแข่งขัน {name} กำลังจะเริ่ม</h1>
+			<h1>
+				การแข่งขัน <Alink>{name}</Alink> กำลังจะเริ่ม
+			</h1>
 			<h3>
 				ในอีก <Timer timeLeft={timeleft} mode='th' />
 				...
@@ -404,8 +410,9 @@ const NoLogin = (props) => {
 
 const HoldingContest = (props) => {
 	const { idContest, timeleft, name } = props
-	const [tasks, setTasks] = useState([])
+	const [tasks, setTasks] = useState(null)
 	const userData = useAuthContext()
+
 	useEffect(() => {
 		const fetchData = async () => {
 			const url = `${process.env.API_URL}/api/contest/${idContest}`
@@ -426,14 +433,14 @@ const HoldingContest = (props) => {
 				</h2>
 			</Title>
 			<hr />
-			{tasks.map((task, index) => (
+			{tasks?.map((task, index) => (
 				<TaskCard
 					key={index}
 					idContest={idContest}
 					index={index + 1}
 					{...task}
 				/>
-			))}
+			)) ?? <Loader />}
 		</Container>
 	)
 }
@@ -457,8 +464,7 @@ const Contest = ({ contest, serverTime }) => {
 		isJustEnd = now - end < 60 * 60
 	}
 	return (
-		<PageLayout noContainer>
-			<Announcement />
+		<PageLayout container={false} fluid className='justify-content-center'>
 			<StyledJumbotron>
 				<Container fluid>
 					<Row className='d-flex justify-content-center'>

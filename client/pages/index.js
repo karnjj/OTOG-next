@@ -219,7 +219,7 @@ const Index = () => {
 	const userData = useAuthContext()
 
 	return (
-		<PageLayout noContainer>
+		<PageLayout container={false}>
 			<Jumbotron>
 				<Container>{userData ? <Hello /> : <Welcome />}</Container>
 			</Jumbotron>

@@ -144,16 +144,24 @@ const FullWindowLayout = styled.div`
 	justify-content: space-between;
 `
 
-export default ({ noContainer, noFooter, children }) => (
-	<FullWindowLayout>
-		<div>
-			<Header />
-			{noContainer ? <>{children}</> : <Container>{children}</Container>}
-		</div>
-		{!noFooter && (
+export default ({ container = true, children, ...rest }) => {
+	return container ? (
+		<FullWindowLayout>
+			<div>
+				<Header />
+				<Container {...rest}>{children}</Container>
+			</div>
 			<Container>
 				<Footer />
 			</Container>
-		)}
-	</FullWindowLayout>
-)
+		</FullWindowLayout>
+	) : (
+		<FullWindowLayout>
+			<Header />
+			<div {...rest}>{children}</div>
+			<Container>
+				<Footer />
+			</Container>
+		</FullWindowLayout>
+	)
+}
