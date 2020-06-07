@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components'
 import vars from '../styles/vars'
 
-export const Title = ({ icon, text, children }) => (
-	<Row className='pt-5 pb-3'>
+export const Title = ({ icon, text, paddingTop = true, children }) => (
+	<Row className={`${paddingTop ? 'pt-5' : ''} pb-3`}>
 		<Col xs='auto' className='mr-auto'>
 			<h2>
 				<FontAwesomeIcon icon={icon} /> {text}

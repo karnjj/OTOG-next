@@ -427,7 +427,7 @@ const HoldingContest = (props) => {
 
 	return (
 		<Container>
-			<Title icon={faTrophy} text={name} noTop='true' noBot='true'>
+			<Title icon={faTrophy} text={name} paddingTop={false}>
 				<h2>
 					<Timer timeLeft={timeleft} />
 				</h2>

@@ -113,7 +113,12 @@ export const Header = () => {
 								</NavDropdown.Item>
 							</NavDropdown>
 						) : (
-							<NavLink name='Login' icon={faSignInAlt} path='/login' />
+							<NavLink
+								name='Login'
+								className='mx-2 mx-xl-0'
+								icon={faSignInAlt}
+								path='/login'
+							/>
 						)}
 					</Nav>
 				</Navbar.Collapse>
