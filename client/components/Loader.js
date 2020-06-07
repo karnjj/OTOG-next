@@ -23,7 +23,7 @@ const Text = styled.div`
 	max-width: 160px;
 	background: ${darken(0.03, vars.grey)};
 	opacity: 0.3;
-	animation: ${pulse} 1s ease ${(props) => props.delay + 'ms'} infinite;
+	animation: ${pulse} 1s ease ${(props) => props.delay + 500 + 'ms'} infinite;
 `
 const AnimationTable = styled(Table)`
 	text-align: center;
