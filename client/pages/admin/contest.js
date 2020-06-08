@@ -1,4 +1,4 @@
-import { Container, Row, Col, Card } from 'react-bootstrap'
+import { Button, Container, Row, Col, Card } from 'react-bootstrap'
 import { withAdminAuth } from '../../utils/auth'
 import {
 	NewContest,
@@ -6,6 +6,11 @@ import {
 	SelectContest,
 } from '../../components/admin/ContestTable'
 import Header from '../../components/admin/Header'
+import { AnnounceEditor } from '../../components/Announce'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
+
 import { useState } from 'react'
 import nextCookie from 'next-cookies'
 
@@ -39,6 +44,13 @@ const Contest = (props) => {
 						<NewContest />
 						<hr />
 						<SelectContest {...{ contests }} setId={selectIdContest} />
+						{idContest ? (
+							<AnnounceEditor idContest={idContest} />
+						) : (
+							<Button variant='info' disabled>
+								<FontAwesomeIcon icon={faPencilAlt} />
+							</Button>
+						)}
 						<hr />
 						<Note />
 						<br />
@@ -51,6 +63,7 @@ const Contest = (props) => {
 		</>
 	)
 }
+
 Contest.getInitialProps = async (ctx) => {
 	const { token } = nextCookie(ctx)
 	const url = `${process.env.API_URL}/api/admin/contest`

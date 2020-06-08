@@ -11,6 +11,7 @@ import TaskCard from '../../components/TaskCard'
 import Timer from '../../components/Timer'
 import { Loader } from '../../components/Loader'
 import OrangeButton from '../../components/OrangeButton'
+import Announce from '../../components/Announce'
 
 import styled, { keyframes } from 'styled-components'
 import vars from '../../styles/vars'
@@ -34,21 +35,7 @@ const popout = keyframes`
 		transform: translateY(-50px);
 	}
 `
-const Announce = styled.div`
-	position: absolute;
-	text-align: center;
-	cursor: pointer;
-	user-select: none;
-	opacity: ${(props) => (props.show || props.unshow ? 1 : 0)};
-	animation: ${(props) => (props.show ? popin : props.unshow && popout)} 0.4s
-		ease both;
-`
-const StyledAnnouncement = styled(Container)`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	min-height: 150px;
-`
+
 const CenteredDiv = styled.div`
 	text-align: center;
 	h1 {
@@ -66,47 +53,19 @@ const StyledJumbotron = styled(Jumbotron)`
 	display: flex;
 	align-items: center;
 `
-const Announcement = () => {
-	const [messages, setMessages] = useState([
-		'ญินดีร์ฏ้อณลับสูเก็ดเฎอร์ฌาวไฑย',
-		'จงทำโจทย์ !!!',
-		'คิดถึงน้อง ๆ จัง',
-	])
-	const [currentIndex, setCurrentIndex] = useState(0)
-	const handleClick = () => {
-		setCurrentIndex((currentIndex + 1) % messages.length)
-	}
-	const previousIndex = (currentIndex - 1 + messages.length) % messages.length
-	return (
-		<StyledAnnouncement>
-			{messages.map((message, index) => (
-				<Announce
-					key={index}
-					show={index === currentIndex}
-					unshow={index === previousIndex}
-					onClick={handleClick}
-				>
-					<h1>{message}</h1>
-				</Announce>
-			))}
-		</StyledAnnouncement>
-	)
-}
 
-const Countdown = (props) => {
-	const { timeleft, name } = props
-	return (
-		<CenteredDiv>
-			<h1>
-				การแข่งขัน <Alink>{name}</Alink> กำลังจะเริ่ม
-			</h1>
-			<h3>
-				ในอีก <Timer timeLeft={timeleft} mode='th' />
-				...
-			</h3>
-		</CenteredDiv>
-	)
-}
+const Countdown = ({ timeleft, name, idContest }) => (
+	<CenteredDiv>
+		<h1>
+			การแข่งขัน <Announce {...{ idContest }}>{name}</Announce> กำลังจะเริ่ม
+		</h1>
+		<h3>
+			ในอีก <Timer timeLeft={timeleft} mode='th' />
+			...
+		</h3>
+	</CenteredDiv>
+)
+
 const EndingContest = ({ idContest }) => {
 	return (
 		<CenteredDiv>
@@ -204,7 +163,11 @@ const Contest = ({ contest, serverTime }) => {
 							{!userData ? (
 								<NoLogin />
 							) : isAboutToStart ? (
-								<Countdown timeleft={start - now} name={contest.name} />
+								<Countdown
+									timeleft={start - now}
+									idContest={idContest}
+									name={contest.name}
+								/>
 							) : isHolding ? (
 								<HoldingContest
 									timeleft={end - now}

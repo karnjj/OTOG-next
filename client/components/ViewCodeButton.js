@@ -12,7 +12,7 @@ import { useAuthContext, useTokenContext } from '../utils/auth'
 const FontPre = styled.pre`
 	span,
 	code {
-		font-family: 'Fira Code', 'Courier New', Courier, monospace;
+		font-family: 'Fira Code', monospace, 'Courier New', Courier;
 	}
 `
 

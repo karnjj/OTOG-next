@@ -12,6 +12,7 @@ import {
 import ViewCodeButton from './ViewCodeButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import styled from 'styled-components'
 
 const Icon = styled(FontAwesomeIcon)`
 	user-select: none;

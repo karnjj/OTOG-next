@@ -2,16 +2,9 @@ import { useState, useEffect } from 'react'
 import { useTokenContext } from '../../utils/auth'
 import fetch from 'isomorphic-unfetch'
 import DatePicker from 'react-datepicker'
-import {
-	Table,
-	Button,
-	Modal,
-	Form,
-	Col,
-	Row,
-	InputGroup,
-} from 'react-bootstrap'
+import { Button, Modal, Form, Col, Row, InputGroup } from 'react-bootstrap'
 import { Alink } from '../CustomText'
+import { CustomTable } from '../CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -313,13 +306,11 @@ export const SelectContest = (props) => {
 			<Form.Label>Choose Contest : </Form.Label>
 			<Form.Control as='select' onChange={setId}>
 				<option disabled selected>
-					{' '}
-					-- select a contest --{' '}
+					select a contest
 				</option>
 				{contests.map((contest, index) => {
 					return (
 						<option key={index} value={contest.idContest}>
-							{' '}
 							{contest.name}
 						</option>
 					)
@@ -331,7 +322,8 @@ export const SelectContest = (props) => {
 
 export const TaskTable = ({ idContest }) => {
 	const token = useTokenContext()
-	const [tasks, setTasks] = useState([])
+	const [tasks, setTasks] = useState(null)
+
 	useEffect(() => {
 		const fetchData = async () => {
 			const url = `${process.env.API_URL}/api/admin/contest/${idContest}`
@@ -343,11 +335,12 @@ export const TaskTable = ({ idContest }) => {
 		}
 		fetchData()
 		return function cleanup() {
-			setTasks([])
+			setTasks(null)
 		}
 	}, [idContest])
+
 	return (
-		<Table responsive hover>
+		<CustomTable ready={!!tasks}>
 			<thead className='thead-light'>
 				<tr>
 					<th>#</th>
@@ -359,10 +352,10 @@ export const TaskTable = ({ idContest }) => {
 				</tr>
 			</thead>
 			<tbody>
-				{tasks.map((task, index) => (
+				{tasks?.map((task, index) => (
 					<TaskTr key={index} {...task} idContest={idContest} />
 				))}
 			</tbody>
-		</Table>
+		</CustomTable>
 	)
 }

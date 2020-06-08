@@ -27,6 +27,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "import": "0.0.6",
+    "is-hotkey": "^0.1.6",
     "isomorphic-unfetch": "^3.0.0",
     "js-cookie": "^2.2.1",
     "jwt-decode": "^2.2.0",
@@ -45,6 +46,9 @@
     "react-dom": "^16.13.1",
     "react-pure-loaders": "^3.0.1",
     "reactjs-popup": "^1.5.0",
+    "slate": "^0.58.3",
+    "slate-history": "^0.58.3",
+    "slate-react": "^0.58.3",
     "socket.io-client": "^2.3.0",
     "styled-breakpoints": "^8.1.1",
     "styled-components": "^5.1.0"
