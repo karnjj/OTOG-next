@@ -5,7 +5,7 @@ import { Container, Row, Jumbotron, Col } from 'react-bootstrap'
 
 import { faTrophy } from '@fortawesome/free-solid-svg-icons'
 
-import { Title, Alink } from '../../components/CustomText'
+import { Title } from '../../components/CustomText'
 import PageLayout from '../../components/PageLayout'
 import TaskCard from '../../components/TaskCard'
 import Timer from '../../components/Timer'
@@ -81,12 +81,16 @@ const EndingContest = ({ idContest }) => {
 	)
 }
 const NoContest = (props) => {
+	const userData = useAuthContext()
 	return (
 		<CenteredDiv>
 			<h1>ยังไม่มีการแข่งขัน</h1>
-			<OrangeButton href='/contest/history' className='ml-auto'>
+			<OrangeButton href='/contest/history' className='mr-2'>
 				See Contest History
 			</OrangeButton>
+			{isAdmin(userData) && (
+				<OrangeButton href='/contest/submission'>See Submission</OrangeButton>
+			)}
 		</CenteredDiv>
 	)
 }
@@ -99,8 +103,7 @@ const NoLogin = (props) => {
 	)
 }
 
-const HoldingContest = (props) => {
-	const { idContest, timeleft, name } = props
+const HoldingContest = ({ idContest, timeleft, name }) => {
 	const [tasks, setTasks] = useState(null)
 	const userData = useAuthContext()
 
@@ -132,6 +135,26 @@ const HoldingContest = (props) => {
 					{...task}
 				/>
 			)) ?? <Loader />}
+			{isAdmin(userData) && (
+				<Row>
+					<Col className='d-flex justify-content-end'>
+						<OrangeButton
+							outline='true'
+							href='/contest/submission'
+							className='mr-3'
+						>
+							See Submission
+						</OrangeButton>
+						<OrangeButton
+							outline='true'
+							href='/contest/history/[id]'
+							dynamic={`/contest/history/[${idContest}]`}
+						>
+							Live Scoreboard
+						</OrangeButton>
+					</Col>
+				</Row>
+			)}
 		</Container>
 	)
 }
@@ -154,6 +177,7 @@ const Contest = ({ contest, serverTime }) => {
 		isHolding = start <= now && now <= end
 		isJustEnd = now - end < 60 * 60
 	}
+
 	return (
 		<PageLayout container={false} fluid className='justify-content-center'>
 			<StyledJumbotron>
@@ -183,26 +207,6 @@ const Contest = ({ contest, serverTime }) => {
 					</Row>
 				</Container>
 			</StyledJumbotron>
-			<Container>
-				{(isAboutToStart || isAdmin(userData)) && (
-					<Row className='mx-auto'>
-						<Col xs='auto' className='ml-auto'>
-							{isAdmin(userData) && (
-								<OrangeButton outline='true' href='/contest/submission'>
-									See Submission
-								</OrangeButton>
-							)}
-							<OrangeButton
-								outline='true'
-								href='/contest/history'
-								className='ml-3'
-							>
-								See History
-							</OrangeButton>
-						</Col>
-					</Row>
-				)}
-			</Container>
 		</PageLayout>
 	)
 }
