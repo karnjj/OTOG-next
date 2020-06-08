@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react'
+import { withAuthSync, useAuthContext, isAdmin } from '../utils/auth'
+
 import {
+	Row,
+	Col,
 	Card,
 	Accordion,
 	Form,
@@ -9,7 +13,9 @@ import {
 	Badge,
 	useAccordionToggle,
 } from 'react-bootstrap'
+import OrangeButton from './OrangeButton'
 import ViewCodeButton from './ViewCodeButton'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
