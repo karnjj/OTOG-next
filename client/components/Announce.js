@@ -13,6 +13,7 @@ import {
 	faBold,
 	faItalic,
 	faUnderline,
+	faLink,
 	faCode,
 	faHeading,
 	faQuoteLeft,
@@ -36,6 +37,13 @@ const Code = styled.code`
 `
 
 const Leaf = ({ attributes, children, leaf }) => {
+	if (leaf.link) {
+		children = (
+			<Alink target='_blank' href={leaf.text}>
+				{children}
+			</Alink>
+		)
+	}
 	if (leaf.bold) {
 		children = <strong>{children}</strong>
 	}
@@ -183,7 +191,6 @@ export const AnnounceEditor = ({ idContest }) => {
 			event.preventDefault()
 			editor.insertText('\n')
 		}
-		console.log(JSON.stringify(value))
 	}
 
 	return (
@@ -207,6 +214,7 @@ export const AnnounceEditor = ({ idContest }) => {
 								<MarkButton format='bold' icon={faBold} />
 								<MarkButton format='italic' icon={faItalic} />
 								<MarkButton format='underline' icon={faUnderline} />
+								<MarkButton format='link' icon={faLink} />
 								<MarkButton format='code' icon={faCode} />
 							</ButtonGroup>
 							<ButtonGroup className='mr-2'>
@@ -257,6 +265,16 @@ export default ({ value, idContest, children }) => {
 			],
 		},
 		{ type: 'block-quote', children: [{ text: 'Baka ! Hentai ' }] },
+		{
+			type: 'paragraph',
+			children: [
+				{ text: 'https://otog.cf/contest', underline: true, link: true },
+			],
+		},
+		{
+			type: 'paragraph',
+			children: [{ text: '', underline: true, link: true }],
+		},
 	]
 	const [show, setShow] = useState(false)
 	const handleClose = () => setShow(false)
