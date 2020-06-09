@@ -5,6 +5,7 @@ import {
 	useTokenContext,
 	isAdmin,
 } from '../utils/auth'
+import { useGet } from '../utils/api'
 
 import { Row, Col } from 'react-bootstrap'
 
@@ -22,27 +23,13 @@ const Submission = () => {
 	const token = useTokenContext()
 	const isLogin = !!userData
 
-	const [lastest, setLastest] = useState(null)
-	const [results, setResults] = useState(null)
 	const [showOnlyMe, setShowOnlyMe] = useState(!isAdmin(userData) && isLogin)
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/submission?mode=${
-				showOnlyMe ? `onlyme` : `full`
-			}`
-			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = token ? token : ''
-			const res = await fetch(url, { headers })
-			const json = await res.json()
-			setLastest(json.lastest)
-			setResults(json.result)
-		}
-		fetchData()
-	}, [showOnlyMe])
+	const url = `/api/submission?mode=${showOnlyMe ? 'onlyme' : 'full'}`
+	const [submissions] = useGet(url, token, [showOnlyMe])
+	const { result, lastest } = submissions ?? {}
 
 	const handleCheck = (event) => {
-		setResults(null)
 		setShowOnlyMe(event.target.checked)
 	}
 
@@ -87,7 +74,7 @@ const Submission = () => {
 				</Col>
 			</Row>
 			<hr />
-			<SubmissionTable canViewCode={showOnlyMe} {...{ results }} />
+			<SubmissionTable canViewCode={showOnlyMe} results={result} />
 		</PageLayout>
 	)
 }
