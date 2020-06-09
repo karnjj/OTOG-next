@@ -55,6 +55,7 @@ const Rating = () => {
 	let filteredUser = userState.filter((user) => {
 		return user.sname.indexOf(searchState) !== -1
 	})
+
 	return (
 		<PageLayout>
 			<Title icon={faChartBar} text='Rating' />

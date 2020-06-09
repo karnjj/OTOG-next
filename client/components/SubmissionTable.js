@@ -25,7 +25,7 @@ const SubmissionTable = (props) => {
 	const userData = useAuthContext()
 	const { results, canViewCode } = props
 	const showCode = canViewCode || isAdmin(userData)
-	console.log(results)
+
 	return (
 		<CustomTable ready={!!results}>
 			<thead>
@@ -54,9 +54,6 @@ const SubmissionTable = (props) => {
 const SubTr = (props) => {
 	const [showError, setShowError] = useState(false)
 	const {
-		sname,
-		rating,
-		name,
 		problemname,
 		state,
 		timeuse,
@@ -65,6 +62,10 @@ const SubTr = (props) => {
 		idResult,
 		errmsg,
 		canViewCode,
+		name,
+		sname,
+		rating,
+		idUser,
 	} = props
 
 	const handleShow = () => setShowError(true)
@@ -88,7 +89,7 @@ const SubTr = (props) => {
 				<td>{idResult}</td>
 				{state != 0 ? (
 					<td>
-						<Name {...{ sname, rating }} />
+						<Name {...{ sname, rating, idUser }} />
 					</td>
 				) : (
 					<td>{sname}</td>
