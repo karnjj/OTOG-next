@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
-import { useAuthContext } from '../utils/auth'
-import { withAuthSync, useTokenContext, isAdmin } from '../utils/auth'
+import {
+	useAuthContext,
+	withAuthSync,
+	useTokenContext,
+	isAdmin,
+} from '../utils/auth'
+import { useGet } from '../utils/api'
 
-import fetch from 'isomorphic-unfetch'
-
-import { Row, Col, Form, Container, InputGroup } from 'react-bootstrap'
+import { Row, Col, Form, InputGroup } from 'react-bootstrap'
 import OrangeButton from '../components/OrangeButton'
 import { Title } from '../components/CustomText'
 import PageLayout from '../components/PageLayout'
@@ -46,26 +49,13 @@ const ProbButton = styled.button`
 const Problem = () => {
 	const token = useTokenContext()
 	const userData = useAuthContext()
-	const [taskState, setTaskState] = useState()
+
 	const [searchState, setsearchState] = useState('')
 	const [showAll, setShowAll] = useState(false)
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/problem?mode=${
-				showAll ? `admin` : `full`
-			}`
-			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = token ? token : ''
-			const res = await fetch(url, { headers })
-			const json = await res.json()
-			setTaskState(json)
-		}
-		fetchData()
-		return function cleanup() {
-			setTaskState()
-		}
-	}, [showAll])
+	const url = `/api/problem?mode=${showAll ? 'admin' : 'full'}`
+	const [taskState] = useGet(url, token, [showAll])
+
 	const updateSearch = (event) => {
 		setsearchState(event.target.value.substr(0, 20))
 	}

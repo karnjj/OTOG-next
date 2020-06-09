@@ -1,4 +1,5 @@
 import { useEffect, useReducer, useRef } from 'react'
+import fetch from 'isomorphic-unfetch'
 
 const initialState = { data: null, isLoading: false, error: null }
 

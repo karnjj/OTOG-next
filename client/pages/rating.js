@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import fetch from 'isomorphic-unfetch'
+import { useGet } from '../utils/api'
 import { withAuthSync } from '../utils/auth'
 
-import { Container, Col, Row, Form } from 'react-bootstrap'
+import { Col, Row, Form } from 'react-bootstrap'
 import { CustomTable } from '../components/CustomTable'
 import { Title, Name } from '../components/CustomText'
 import PageLayout from '../components/PageLayout'
 
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
 
-const UserTable = (props) => (
-	<CustomTable ready={props.users.length}>
+const UserTable = ({ users }) => (
+	<CustomTable ready={!!users}>
 		<thead>
 			<tr>
 				<th>#</th>
@@ -20,7 +20,7 @@ const UserTable = (props) => (
 			</tr>
 		</thead>
 		<tbody>
-			{props.users.map((user, index) => (
+			{users?.map((user, index) => (
 				<tr key={index}>
 					<td>{user.rank}</td>
 					<td>
@@ -35,24 +35,13 @@ const UserTable = (props) => (
 )
 
 const Rating = () => {
-	const [userState, setUserState] = useState([])
+	const [userState] = useGet('/api/user')
 	const [searchState, setsearchState] = useState('')
-	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/user`
-			const res = await fetch(url)
-			const json = await res.json()
-			setUserState(json)
-		}
-		fetchData()
-		return function cleanup() {
-			setUserState([])
-		}
-	}, [])
+
 	const updateSearch = (event) => {
 		setsearchState(event.target.value.substr(0, 20))
 	}
-	let filteredUser = userState.filter((user) => {
+	const filteredUser = userState?.filter((user) => {
 		return user.sname.indexOf(searchState) !== -1
 	})
 
