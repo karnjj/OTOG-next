@@ -99,7 +99,7 @@ export const Header = () => {
 									prefetch={false}
 								>
 									<NavDropdown.Item>
-										<NavTitle name='Profile' icon={faUser} noShrink='true' />
+										<NavTitle name='Profile' icon={faUser} shrink={false} />
 									</NavDropdown.Item>
 								</Link>
 								<NavDropdown.Divider />
@@ -108,7 +108,7 @@ export const Header = () => {
 										name='Logout'
 										icon={faSignInAlt}
 										red='true'
-										noShrink='true'
+										shrink={false}
 									/>
 								</NavDropdown.Item>
 							</NavDropdown>

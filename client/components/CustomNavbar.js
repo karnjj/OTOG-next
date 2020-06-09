@@ -27,15 +27,15 @@ export const HeaderSpace = styled.div`
 	padding-top: 56px;
 `
 
-export const NavTitle = ({ name, icon, children, ...rest }) => (
+export const NavTitle = ({ name, icon, children, shrink = true, ...rest }) => (
 	<StyledNavTitle {...rest}>
 		{icon && <FontAwesomeIcon {...{ icon }} />}
-		<NavText> {name}</NavText>
+		<NavText shrink={shrink}> {name}</NavText>
 		{children}
 	</StyledNavTitle>
 )
-export const NavText = (props) => (
-	<span className='d-inline d-sm-none d-lg-inline' {...props} />
+export const NavText = ({ shrink, ...rest }) => (
+	<span className={shrink && 'd-inline d-sm-none d-lg-inline'} {...rest} />
 )
 
 export const NavLink = ({ path, target, active, ...rest }) => {
