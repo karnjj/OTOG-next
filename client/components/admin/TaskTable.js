@@ -11,7 +11,7 @@ import {
 	Col,
 	Row,
 	InputGroup,
-	Badge
+	Badge,
 } from 'react-bootstrap'
 import { Alink } from '../CustomText'
 
@@ -22,7 +22,7 @@ import {
 	faEye,
 	faEyeSlash,
 	faTrash,
-	faPlusCircle
+	faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
 export const NewProblem = () => {
@@ -42,7 +42,7 @@ export const NewProblem = () => {
 	const [selectedDoc, setSelectedDoc] = useState(undefined)
 	const [testcaseName, setTestcaseName] = useState('')
 	const [selectedTestcase, setSelectedTestcase] = useState(undefined)
-	const selectFile = event => {
+	const selectFile = (event) => {
 		if (event.target.files[0] === undefined) {
 			setSelectedFile(undefined)
 			setFileName('')
@@ -52,33 +52,33 @@ export const NewProblem = () => {
 			case 'doc':
 				setSelectedDoc(event.target.files[0])
 				setDocName(event.target.files[0].name)
-				break;
+				break
 			case 'testcase':
 				setSelectedTestcase(event.target.files[0])
 				setTestcaseName(event.target.files[0].name)
-				break;
+				break
 		}
 	}
-	const handleChangeName = event => setName(event.target.value)
-	const handleChangeSname = event => setSname(event.target.value)
-	const handleChangeMemory = event => setMemory(Number(event.target.value))
-	const handleChangeTime = event => setTime(Number(event.target.value))
-	const handleChangeNumCase = event => setNumCase(Number(event.target.value))
-	const handleChangeScore = event => setScore(Number(event.target.value))
-	const onSubmit = async event => {
+	const handleChangeName = (event) => setName(event.target.value)
+	const handleChangeSname = (event) => setSname(event.target.value)
+	const handleChangeMemory = (event) => setMemory(Number(event.target.value))
+	const handleChangeTime = (event) => setTime(Number(event.target.value))
+	const handleChangeNumCase = (event) => setNumCase(Number(event.target.value))
+	const handleChangeScore = (event) => setScore(Number(event.target.value))
+	const onSubmit = async (event) => {
 		event.preventDefault()
 		const info = { name, sname, memory, time, numCase, score }
 		const data = new FormData()
 		Object.keys(info).map((item) => {
 			data.append(item, info[item])
-		});
+		})
 		data.append('pdf', selectedDoc)
 		data.append('zip', selectedTestcase)
 		const url = `${process.env.API_URL}/api/admin/problem`
 		const response = await fetch(url, {
 			method: 'POST',
-			headers: { 'Authorization': token ? token : '' },
-			body: data
+			headers: { Authorization: token ? token : '' },
+			body: data,
 		})
 		if (response.ok) handleClose(), window.location.reload(false)
 	}
@@ -167,7 +167,7 @@ export const NewProblem = () => {
 						<hr />
 						<Button variant='success' type='submit' block>
 							Save
-					</Button>
+						</Button>
 					</Form>
 				</Modal.Body>
 			</Modal>
@@ -175,11 +175,11 @@ export const NewProblem = () => {
 	)
 }
 
-const ConfigTask = props => {
+const ConfigTask = (props) => {
 	const token = useTokenContext()
 	const { id_Prob, handleShow, state, sname } = props
 	const [onoff, setOnoff] = useState(state)
-	const handleChangeState = async event => {
+	const handleChangeState = async (event) => {
 		event.preventDefault()
 		const data = { onoff }
 		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}?option=onoff`
@@ -187,9 +187,9 @@ const ConfigTask = props => {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': token ? token : ''
+				Authorization: token ? token : '',
 			},
-			body: JSON.stringify(data)
+			body: JSON.stringify(data),
 		})
 		if (response.ok) setOnoff(!onoff)
 	}
@@ -199,8 +199,8 @@ const ConfigTask = props => {
 			const respone = await fetch(url, {
 				method: 'DELETE',
 				headers: {
-					'Authorization': token ? token : ''
-				}
+					Authorization: token ? token : '',
+				},
 			})
 			if (respone.ok) window.location.reload(false)
 		}
@@ -223,7 +223,7 @@ const ConfigTask = props => {
 	)
 }
 
-const EditModal = props => {
+const EditModal = (props) => {
 	const token = useTokenContext()
 	const { show, setShow } = props
 	const { id_Prob } = props
@@ -240,7 +240,7 @@ const EditModal = props => {
 	const [selectedDoc, setSelectedDoc] = useState(undefined)
 	const [testcaseName, setTestcaseName] = useState('')
 	const [selectedTestcase, setSelectedTestcase] = useState(undefined)
-	const selectFile = event => {
+	const selectFile = (event) => {
 		if (event.target.files[0] === undefined) {
 			setSelectedFile(undefined)
 			setFileName('')
@@ -250,41 +250,41 @@ const EditModal = props => {
 			case 'doc':
 				setSelectedDoc(event.target.files[0])
 				setDocName(event.target.files[0].name)
-				break;
+				break
 			case 'testcase':
 				setSelectedTestcase(event.target.files[0])
 				setTestcaseName(event.target.files[0].name)
-				break;
+				break
 		}
 	}
-	const handleChangeName = event => setName(event.target.value)
-	const handleChangeSname = event => setSname(event.target.value)
-	const handleChangeMemory = event => setMemory(Number(event.target.value))
-	const handleChangeTime = event => setTime(Number(event.target.value))
-	const handleChangeScore = event => setScore(Number(event.target.value))
-	const handleChangeRating = event => setRating(event.target.value)
-	const handleChangeTestcase = event => setTestcase(event.target.value)
-	const onSave = async event => {
+	const handleChangeName = (event) => setName(event.target.value)
+	const handleChangeSname = (event) => setSname(event.target.value)
+	const handleChangeMemory = (event) => setMemory(Number(event.target.value))
+	const handleChangeTime = (event) => setTime(Number(event.target.value))
+	const handleChangeScore = (event) => setScore(Number(event.target.value))
+	const handleChangeRating = (event) => setRating(event.target.value)
+	const handleChangeTestcase = (event) => setTestcase(event.target.value)
+	const onSave = async (event) => {
 		event.preventDefault()
 		setIsSaving(true)
 		const info = { name, sname, memory, time, testcase, score, rating }
 		const data = new FormData()
 		Object.keys(info).map((item) => {
 			data.append(item, info[item])
-		});
+		})
 		data.append('pdf', selectedDoc)
 		data.append('zip', selectedTestcase)
 		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}?option=save`
 		const response = await fetch(url, {
 			method: 'POST',
-			headers: { 'Authorization': token ? token : '' },
-			body: data
+			headers: { Authorization: token ? token : '' },
+			body: data,
 		})
-		if (response.ok) props.refreshData().then(() => {
-			handleClose()
-			setIsSaving(false)
-		})
-
+		if (response.ok)
+			props.refreshData().then(() => {
+				handleClose()
+				setIsSaving(false)
+			})
 	}
 
 	return (
@@ -314,7 +314,10 @@ const EditModal = props => {
 				<Form.Group as={Row}>
 					<Col xs={6}>
 						<Form.Label>Testcases</Form.Label>
-						<Form.Control defaultValue={testcase} onChange={handleChangeTestcase} />
+						<Form.Control
+							defaultValue={testcase}
+							onChange={handleChangeTestcase}
+						/>
 					</Col>
 					<Col xs={6}>
 						<Form.Label>Score</Form.Label>
@@ -324,10 +327,10 @@ const EditModal = props => {
 				<Form.Group>
 					<InputGroup>
 						<InputGroup.Prepend>
-							<InputGroup.Text >Rating</InputGroup.Text>
+							<InputGroup.Text>Rating</InputGroup.Text>
 						</InputGroup.Prepend>
 						<Form.Control
-							placeholder="eg.1500"
+							placeholder='eg.1500'
 							defaultValue={rating}
 							onChange={handleChangeRating}
 						/>
@@ -354,7 +357,11 @@ const EditModal = props => {
 				</Form.Group>
 			</Form>
 			<Modal.Footer>
-				<Button variant='success' onClick={onSave} disabled={isSaving ? true : false}>
+				<Button
+					variant='success'
+					onClick={onSave}
+					disabled={isSaving ? true : false}
+				>
 					Save
 				</Button>
 			</Modal.Footer>
@@ -362,7 +369,7 @@ const EditModal = props => {
 	)
 }
 
-const TaskTr = props => {
+const TaskTr = (props) => {
 	const { id_Prob, name, sname, memory, time, rating, noTestcase } = props
 	const [show, setShow] = useState(false)
 	const handleShow = () => setShow(true)
@@ -376,13 +383,12 @@ const TaskTr = props => {
 					href={`${process.env.API_URL}/api/docs/${sname}`}
 				>
 					{name}
-				</Alink>
-				{' '}
-				{(noTestcase) && <Badge variant="warning">No Testcases</Badge>}
+				</Alink>{' '}
+				{noTestcase && <Badge variant='warning'>No Testcases</Badge>}
 			</td>
 			<td>{time}</td>
 			<td>{memory}</td>
-			<td>{(rating == null) ? '-' : rating}</td>
+			<td>{rating == null ? '-' : rating}</td>
 			<td>
 				<ConfigTask {...props} {...{ handleShow }} />
 				<EditModal {...props} {...{ setShow, show }} />
@@ -391,13 +397,13 @@ const TaskTr = props => {
 	)
 }
 
-export const TaskTable = props => {
+export const TaskTable = (props) => {
 	const userData = useAuthContext()
 	const token = useTokenContext()
 	const [tasks, setTasks] = useState([])
 
 	const fetchData = async () => {
-		console.log('pass');
+		console.log('pass')
 
 		const url = `${process.env.API_URL}/api/admin/problem`
 		let headers = { 'Content-Type': 'application/json' }
