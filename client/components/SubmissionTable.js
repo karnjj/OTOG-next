@@ -42,9 +42,7 @@ const SubmissionTable = (props) => {
 			<tbody>
 				{results?.map(
 					(result, index) =>
-						(result.see || isAdmin(userData)) && (
-							<SubTr key={index} {...result} canViewCode={showCode} />
-						)
+						<SubTr key={index} {...result} canViewCode={showCode} />
 				)}
 			</tbody>
 		</CustomTable>
