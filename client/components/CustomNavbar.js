@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const StyledNavbar = styled(Navbar)`
-	top: ${(props) => props.hide && '-56px'};
+	top: ${(props) => props.hide && '-58px'};
 	transition: top 0.2s;
 `
 export const StyledNavTitle = styled.div`
@@ -24,7 +24,7 @@ export const StyledNavTitle = styled.div`
 `
 export const HeaderSpace = styled.div`
 	display: block;
-	padding-top: 56px;
+	padding-top: 58px;
 `
 
 export const NavTitle = ({ name, icon, children, shrink = true, ...rest }) => (
@@ -35,7 +35,10 @@ export const NavTitle = ({ name, icon, children, shrink = true, ...rest }) => (
 	</StyledNavTitle>
 )
 export const NavText = ({ shrink, ...rest }) => (
-	<span className={shrink && 'd-inline d-sm-none d-lg-inline'} {...rest} />
+	<span
+		className={shrink ? 'd-inline d-sm-none d-lg-inline' : undefined}
+		{...rest}
+	/>
 )
 
 export const NavLink = ({ path, target, active, ...rest }) => {

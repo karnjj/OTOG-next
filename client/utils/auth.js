@@ -5,16 +5,16 @@ import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
 import fetch from 'isomorphic-unfetch'
 import jwt_decode from 'jwt-decode'
-export const isLogin = token => {
+export const isLogin = (token) => {
 	return !!token
 }
 
-export const login = token => {
+export const login = (token) => {
 	cookie.set('token', token, { expires: 3 / 24 })
 	router.push('/')
 }
 
-export const auth = async token => {
+export const auth = async (token) => {
 	/*
 	let url = `${process.env.API_URL}/api/auth`
 	let headers = { 'Content-Type': 'application/json' }
@@ -31,7 +31,7 @@ export const auth = async token => {
 	return token && jwt_decode(token)
 }
 
-export const logout = userData => {
+export const logout = (userData) => {
 	let url = `${process.env.API_URL}/api/logout`
 	let headers = { 'Content-Type': 'application/json' }
 	headers['Authorization'] = userData.id
@@ -41,9 +41,9 @@ export const logout = userData => {
 	window.location.reload(false)
 }
 
-export const withAuthSync = WrappedComponent => {
-	const Wrapper = props => {
-		const syncLogout = event => {
+export const withAuthSync = (WrappedComponent) => {
+	const Wrapper = (props) => {
+		const syncLogout = (event) => {
 			if (event.key === 'logout') {
 				console.log('logged out from storage!')
 				window.location.reload(false)
@@ -64,7 +64,7 @@ export const withAuthSync = WrappedComponent => {
 			</AuthProvider>
 		)
 	}
-	Wrapper.getInitialProps = async ctx => {
+	Wrapper.getInitialProps = async (ctx) => {
 		const componentProps =
 			WrappedComponent.getInitialProps &&
 			(await WrappedComponent.getInitialProps(ctx))
@@ -76,29 +76,29 @@ export const withAuthSync = WrappedComponent => {
 }
 
 export const AuthContext = createContext()
-export const AuthProvider = props => <AuthContext.Provider {...props} />
+export const AuthProvider = (props) => <AuthContext.Provider {...props} />
 export const useAuthContext = () => {
 	return useContext(AuthContext)
 }
 
 export const TokenContext = createContext()
-export const TokenProvider = props => <TokenContext.Provider {...props} />
+export const TokenProvider = (props) => <TokenContext.Provider {...props} />
 export const useTokenContext = () => {
 	return useContext(TokenContext)
 }
 
-export const isAdmin = userData => userData && userData.state === 0
+export const isAdmin = (userData) => !!userData && userData.state === 0
 
-export const withAdminAuth = WrappedComponent => {
-	const Wrapper = props => {
+export const withAdminAuth = (WrappedComponent) => {
+	const Wrapper = (props) => {
 		const userData = useAuthContext()
 		return isAdmin(userData) ? (
 			<WrappedComponent {...props} />
 		) : (
-				<Error statusCode={404} />
-			)
+			<Error statusCode={404} />
+		)
 	}
-	Wrapper.getInitialProps = async ctx => {
+	Wrapper.getInitialProps = async (ctx) => {
 		const componentProps =
 			WrappedComponent.getInitialProps &&
 			(await WrappedComponent.getInitialProps(ctx))

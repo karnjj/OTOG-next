@@ -51,7 +51,7 @@ const Problem = () => {
 	const userData = useAuthContext()
 
 	const [searchState, setsearchState] = useState('')
-	const [showAll, setShowAll] = useState(false)
+	const [showAll, setShowAll] = useState(isAdmin(userData))
 
 	const url = `/api/problem?mode=${showAll ? 'admin' : 'full'}`
 	const [taskState] = useGet(url, token, [showAll])
