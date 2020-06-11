@@ -26,12 +26,12 @@ async function AllSubmission(req, res) {
 	let submitPromise = new Promise((resolve, reject) => {
 		var sql = ''
 		if (mode == 'full')
-			sql = `SELECT idResult,U.sname,U.rating,U.state,P.name,P.state as see,P.sname as problemname,result,timeuse,Result.score,errmsg FROM Result 
+			sql = `SELECT idResult,U.sname,U.rating,U.state,U.idUser as idUser,P.name,P.state as see,P.sname as problemname,result,timeuse,Result.score,errmsg FROM Result 
 			inner join Problem as P on Result.prob_id = P.id_Prob
 			inner join User as U on Result.user_id = U.idUser
 			where contestmode is null order by idResult desc limit 100`
 		else
-			sql = `SELECT idResult,U.sname,U.rating,U.state,P.name,P.state as see,P.sname as problemname,result,timeuse,Result.score,errmsg FROM Result 
+			sql = `SELECT idResult,U.sname,U.rating,U.state,U.idUser as idUser,P.name,P.state as see,P.sname as problemname,result,timeuse,Result.score,errmsg FROM Result 
 			inner join Problem as P on Result.prob_id = P.id_Prob
 			inner join User as U on Result.user_id = U.idUser
 			where contestmode is null and user_id = ? order by idResult desc limit 100`
