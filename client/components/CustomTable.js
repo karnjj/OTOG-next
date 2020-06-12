@@ -24,8 +24,8 @@ const fadein = keyframes`
 		opacity: 1;
 	}
 `
-const CenterTable = styled(Table)`
-	text-align: center;
+const StyledTable = styled(Table)`
+	text-align: ${(props) => props.align};
 	th {
 		color: ${vars.orange};
 		&:hover {
@@ -37,6 +37,10 @@ const CenterTable = styled(Table)`
 		animation: ${fadein} 0.5s ease;
 	}
 `
-export const CustomTable = ({ ready = true, ...props }) => {
-	return ready ? <CenterTable responsive hover {...props} /> : <TableLoader />
+export const CustomTable = ({ ready = true, align = 'center', ...props }) => {
+	return ready ? (
+		<StyledTable responsive hover align={align} {...props} />
+	) : (
+		<TableLoader />
+	)
 }

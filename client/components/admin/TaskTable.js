@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useAuthContext, useTokenContext } from '../../utils/auth'
-import fetch from 'isomorphic-unfetch'
-
+import { useTokenContext } from '../../utils/auth'
+import { useGet } from '../../utils/api'
+import { CustomTable } from '../CustomTable'
 import {
-	Table,
 	ButtonGroup,
 	Button,
 	Modal,
@@ -31,56 +30,61 @@ export const NewProblem = () => {
 	const [show, setShow] = useState(false)
 	const handleShow = () => setShow(true)
 	const handleClose = () => setShow(false)
+	const [data, setData] = useState({})
+	const {
+		name = '',
+		sname = '',
+		numCase = '',
+		memory,
+		time,
+		score,
+		pdf,
+		zip,
+	} = data
 
-	const [name, setName] = useState('')
-	const [sname, setSname] = useState('')
-	const [memory, setMemory] = useState()
-	const [time, setTime] = useState()
-	const [numCase, setNumCase] = useState()
-	const [score, setScore] = useState()
-	const [docName, setDocName] = useState('')
-	const [selectedDoc, setSelectedDoc] = useState(undefined)
-	const [testcaseName, setTestcaseName] = useState('')
-	const [selectedTestcase, setSelectedTestcase] = useState(undefined)
 	const selectFile = (event) => {
 		if (event.target.files[0] === undefined) {
-			setSelectedFile(undefined)
-			setFileName('')
+			setData({ ...data, pdf: undefined, zip: undefined })
 			return
 		}
 		switch (event.target.id) {
 			case 'doc':
-				setSelectedDoc(event.target.files[0])
-				setDocName(event.target.files[0].name)
+				setData({ ...data, pdf: event.target.files[0] })
 				break
 			case 'testcase':
-				setSelectedTestcase(event.target.files[0])
-				setTestcaseName(event.target.files[0].name)
+				setData({ ...data, zip: event.target.files[0] })
 				break
 		}
 	}
-	const handleChangeName = (event) => setName(event.target.value)
-	const handleChangeSname = (event) => setSname(event.target.value)
-	const handleChangeMemory = (event) => setMemory(Number(event.target.value))
-	const handleChangeTime = (event) => setTime(Number(event.target.value))
-	const handleChangeNumCase = (event) => setNumCase(Number(event.target.value))
-	const handleChangeScore = (event) => setScore(Number(event.target.value))
+	const handleChangeName = (event) =>
+		setData({ ...data, name: event.target.value })
+	const handleChangeSname = (event) =>
+		setData({ ...data, sname: event.target.value })
+	const handleChangeMemory = (event) =>
+		setData({ ...data, memory: Number(event.target.value) ?? '' })
+	const handleChangeTime = (event) =>
+		setData({ ...data, time: Number(event.target.value) ?? '' })
+	const handleChangeNumCase = (event) =>
+		setData({ ...data, numCase: Number(event.target.value) ?? '' })
+	const handleChangeScore = (event) =>
+		setData({ ...data, score: Number(event.target.value) ?? '' })
+
 	const onSubmit = async (event) => {
 		event.preventDefault()
-		const info = { name, sname, memory, time, numCase, score }
-		const data = new FormData()
-		Object.keys(info).map((item) => {
-			data.append(item, info[item])
+		const formData = new FormData()
+		Object.keys(data).map((item) => {
+			formData.append(item, data[item])
 		})
-		data.append('pdf', selectedDoc)
-		data.append('zip', selectedTestcase)
 		const url = `${process.env.API_URL}/api/admin/problem`
 		const response = await fetch(url, {
 			method: 'POST',
 			headers: { Authorization: token ? token : '' },
-			body: data,
+			body: formData,
 		})
-		if (response.ok) handleClose(), window.location.reload(false)
+		if (response.ok) {
+			handleClose()
+			window.location.reload(false)
+		}
 	}
 	return (
 		<>
@@ -114,7 +118,7 @@ export const NewProblem = () => {
 						<Form.Group>
 							<Form.File
 								id='doc'
-								label={docName || 'Document (PDF)'}
+								label={pdf?.name ?? 'Document (PDF)'}
 								accept='.pdf'
 								onChange={selectFile}
 								custom
@@ -124,7 +128,7 @@ export const NewProblem = () => {
 						<Form.Group>
 							<Form.File
 								id='testcase'
-								label={testcaseName || 'Testcases (ZIP)'}
+								label={zip?.name ?? 'Testcases (ZIP)'}
 								accept='.zip'
 								onChange={selectFile}
 								custom
@@ -225,66 +229,71 @@ const ConfigTask = (props) => {
 
 const EditModal = (props) => {
 	const token = useTokenContext()
-	const { show, setShow } = props
-	const { id_Prob } = props
 	const [isSaving, setIsSaving] = useState(false)
-	const [name, setName] = useState(props.name)
-	const [sname, setSname] = useState(props.sname)
-	const [memory, setMemory] = useState(props.memory)
-	const [time, setTime] = useState(props.time)
-	const [score, setScore] = useState(props.score)
-	const [rating, setRating] = useState(props.rating)
-	const [testcase, setTestcase] = useState(props.subtask)
+	const { show, setShow, id_Prob, ...rest } = props
+	const [data, setData] = useState(rest)
+	const {
+		name,
+		sname,
+		memory,
+		time,
+		score,
+		rating,
+		subtask: testcase,
+		pdf,
+		zip,
+	} = data
+
 	const handleClose = () => setShow(false)
-	const [docName, setDocName] = useState('')
-	const [selectedDoc, setSelectedDoc] = useState(undefined)
-	const [testcaseName, setTestcaseName] = useState('')
-	const [selectedTestcase, setSelectedTestcase] = useState(undefined)
+
 	const selectFile = (event) => {
 		if (event.target.files[0] === undefined) {
-			setSelectedFile(undefined)
-			setFileName('')
+			setData({ ...data, pdf: undefined, zip: undefined })
 			return
 		}
 		switch (event.target.id) {
 			case 'doc':
-				setSelectedDoc(event.target.files[0])
-				setDocName(event.target.files[0].name)
+				setData({ ...data, pdf: event.target.files[0] })
 				break
 			case 'testcase':
-				setSelectedTestcase(event.target.files[0])
-				setTestcaseName(event.target.files[0].name)
+				setData({ ...data, zip: event.target.files[0] })
 				break
 		}
 	}
-	const handleChangeName = (event) => setName(event.target.value)
-	const handleChangeSname = (event) => setSname(event.target.value)
-	const handleChangeMemory = (event) => setMemory(Number(event.target.value))
-	const handleChangeTime = (event) => setTime(Number(event.target.value))
-	const handleChangeScore = (event) => setScore(Number(event.target.value))
-	const handleChangeRating = (event) => setRating(event.target.value)
-	const handleChangeTestcase = (event) => setTestcase(event.target.value)
+	const handleChangeName = (event) =>
+		setData({ ...data, name: event.target.value })
+	const handleChangeSname = (event) =>
+		setData({ ...data, sname: event.target.value })
+	const handleChangeMemory = (event) =>
+		setData({ ...data, memory: Number(event.target.value) ?? '' })
+	const handleChangeTime = (event) =>
+		setData({ ...data, time: Number(event.target.value) ?? '' })
+	const handleChangeScore = (event) =>
+		setData({ ...data, score: Number(event.target.value) ?? '' })
+	const handleChangeRating = (event) =>
+		setData({ ...data, rating: event.target.value })
+	const handleChangeTestcase = (event) =>
+		setData({ ...data, testcase: event.target.value })
+
 	const onSave = async (event) => {
 		event.preventDefault()
 		setIsSaving(true)
-		const info = { name, sname, memory, time, testcase, score, rating }
-		const data = new FormData()
-		Object.keys(info).map((item) => {
-			data.append(item, info[item])
+		const formData = new FormData()
+		Object.keys(data).map((item) => {
+			formData.append(item, data[item])
 		})
-		data.append('pdf', selectedDoc)
-		data.append('zip', selectedTestcase)
 		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}?option=save`
 		const response = await fetch(url, {
 			method: 'POST',
 			headers: { Authorization: token ? token : '' },
-			body: data,
+			body: formData,
 		})
-		if (response.ok)
+		if (response.ok) {
 			props.refreshData().then(() => {
 				handleClose()
 				setIsSaving(false)
 			})
+		}
 	}
 
 	return (
@@ -303,11 +312,11 @@ const EditModal = (props) => {
 				</Form.Group>
 				<Form.Group as={Row}>
 					<Col xs={6}>
-						<Form.Label>Time</Form.Label>
+						<Form.Label>Time Limit (s)</Form.Label>
 						<Form.Control defaultValue={time} onChange={handleChangeTime} />
 					</Col>
 					<Col xs={6}>
-						<Form.Label>Memory</Form.Label>
+						<Form.Label>Memory (MB)</Form.Label>
 						<Form.Control defaultValue={memory} onChange={handleChangeMemory} />
 					</Col>
 				</Form.Group>
@@ -339,7 +348,7 @@ const EditModal = (props) => {
 				<Form.Group>
 					<Form.File
 						id='doc'
-						label={docName || 'New Document (PDF)'}
+						label={pdf?.name ?? 'New Document (PDF)'}
 						accept='.pdf'
 						onChange={selectFile}
 						custom
@@ -349,7 +358,7 @@ const EditModal = (props) => {
 				<Form.Group>
 					<Form.File
 						id='testcase'
-						label={testcaseName || 'New Testcases (ZIP)'}
+						label={zip?.name ?? 'New Testcases (ZIP)'}
 						accept='.zip'
 						onChange={selectFile}
 						custom
@@ -357,11 +366,7 @@ const EditModal = (props) => {
 				</Form.Group>
 			</Form>
 			<Modal.Footer>
-				<Button
-					variant='success'
-					onClick={onSave}
-					disabled={isSaving ? true : false}
-				>
+				<Button variant='success' onClick={onSave} disabled={isSaving}>
 					Save
 				</Button>
 			</Modal.Footer>
@@ -388,7 +393,7 @@ const TaskTr = (props) => {
 			</td>
 			<td>{time}</td>
 			<td>{memory}</td>
-			<td>{rating == null ? '-' : rating}</td>
+			<td>{rating ?? '-'}</td>
 			<td>
 				<ConfigTask {...props} {...{ handleShow }} />
 				<EditModal {...props} {...{ setShow, show }} />
@@ -397,33 +402,12 @@ const TaskTr = (props) => {
 	)
 }
 
-export const TaskTable = (props) => {
-	const userData = useAuthContext()
+export const TaskTable = () => {
 	const token = useTokenContext()
-	const [tasks, setTasks] = useState([])
-
-	const fetchData = async () => {
-		console.log('pass')
-
-		const url = `${process.env.API_URL}/api/admin/problem`
-		let headers = { 'Content-Type': 'application/json' }
-		headers['Authorization'] = token ? token : ''
-		const res = await fetch(url, { headers })
-		const json = await res.json()
-		setTasks(json)
-	}
-
-	const refreshData = () => fetchData()
-
-	useEffect(() => {
-		fetchData()
-		return function cleanup() {
-			setTasks([])
-		}
-	}, [])
+	const [tasks] = useGet('/api/admin/problem', token)
 
 	return (
-		<Table responsive hover>
+		<CustomTable responsive hover ready={!!tasks} align='left'>
 			<thead className='thead-light'>
 				<tr>
 					<th>#</th>
@@ -435,10 +419,10 @@ export const TaskTable = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				{tasks.map((task, index) => (
-					<TaskTr key={index} {...task} refreshData={refreshData} />
+				{tasks?.map((task, index) => (
+					<TaskTr key={index} {...task} />
 				))}
 			</tbody>
-		</Table>
+		</CustomTable>
 	)
 }

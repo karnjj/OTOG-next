@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef } from 'react'
+import { useEffect, useReducer, useRef, useCallback } from 'react'
 import fetch from 'isomorphic-unfetch'
 
 const initialState = { data: null, isLoading: false, error: null }
@@ -17,7 +17,7 @@ const reducer = (state, action) => {
 	}
 }
 
-export const useGet = (url, auth = '', deps = []) => {
+export const useGet = (url, auth = '', deps = [], auto = true) => {
 	const [state, dispatch] = useReducer(reducer, initialState)
 	const cancelled = useRef(false)
 
@@ -27,23 +27,27 @@ export const useGet = (url, auth = '', deps = []) => {
 		}
 	}, [])
 
-	useEffect(() => {
-		const fetchData = async () => {
-			dispatch({ type: 'loading' })
-			try {
-				const params = {
-					headers: { 'Content-Type': 'application/json', Authorization: auth },
-				}
-				const res = await fetch(`${process.env.API_URL}${url}`, params)
-				const json = await res.json()
-				if (!cancelled.current) {
-					dispatch({ type: 'success', json })
-				}
-			} catch (error) {
-				dispatch({ type: 'error', error })
+	const fetchData = useCallback(async () => {
+		dispatch({ type: 'loading' })
+		try {
+			const params = {
+				headers: { 'Content-Type': 'application/json', Authorization: auth },
 			}
+			const res = await fetch(`${process.env.API_URL}${url}`, params)
+			const json = await res.json()
+			if (!cancelled.current) {
+				dispatch({ type: 'success', json })
+			}
+		} catch (error) {
+			dispatch({ type: 'error', error })
 		}
-		fetchData()
+	})
+
+	useEffect(() => {
+		if (auto) {
+			fetchData()
+		}
 	}, deps)
-	return [state.data, state.isLoading]
+
+	return [state.data, state.isLoading, fetchData]
 }
