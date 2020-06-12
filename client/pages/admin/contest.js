@@ -1,17 +1,15 @@
-import { Button, Container, Row, Col, Card } from 'react-bootstrap'
+import { useState } from 'react'
+import { Container, Row, Col, Card } from 'react-bootstrap'
 import { withAdminAuth } from '../../utils/auth'
 import {
 	NewContest,
 	TaskTable,
 	SelectContest,
+	ContestConfig,
 } from '../../components/admin/ContestTable'
 import Header from '../../components/admin/Header'
 import { AnnounceEditor } from '../../components/Announce'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
-
-import { useState } from 'react'
 import nextCookie from 'next-cookies'
 
 const Note = () => (
@@ -29,8 +27,7 @@ const Note = () => (
 	</Card>
 )
 
-const Contest = (props) => {
-	const { contests } = props
+const Contest = ({ contests }) => {
 	const [idContest, setIdContest] = useState(0)
 	const selectIdContest = (event) => setIdContest(event.target.value)
 	return (
@@ -44,13 +41,8 @@ const Contest = (props) => {
 						<NewContest />
 						<hr />
 						<SelectContest {...{ contests }} setId={selectIdContest} />
-						{idContest ? (
-							<AnnounceEditor idContest={idContest} />
-						) : (
-							<Button variant='info' disabled>
-								<FontAwesomeIcon icon={faPencilAlt} />
-							</Button>
-						)}
+						<AnnounceEditor idContest={idContest} />
+						<ContestConfig idContest={idContest} />
 						<hr />
 						<Note />
 						<br />

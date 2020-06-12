@@ -47,7 +47,7 @@ export const useGet = (url, auth = '', deps = [], auto = true) => {
 		if (auto) {
 			fetchData()
 		}
-	}, deps)
+	}, [auto, ...deps])
 
 	return [state.data, state.isLoading, fetchData]
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTokenContext } from '../../utils/auth'
 import fetch from 'isomorphic-unfetch'
+import { useGet } from '../../utils/api'
 import DatePicker from 'react-datepicker'
 import { Button, Modal, Form, Col, Row, InputGroup } from 'react-bootstrap'
 import { Alink } from '../CustomText'
@@ -8,6 +9,7 @@ import { CustomTable } from '../CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
+	faCog,
 	faEye,
 	faEyeSlash,
 	faPlusCircle,
@@ -122,6 +124,129 @@ export const NewContest = () => {
 	)
 }
 
+export const ContestConfig = ({ idContest }) => {
+	const token = useTokenContext()
+
+	const isSelected = idContest !== 0
+	const [data] = useGet(
+		`/api/admin/contest/${idContest}?mode=config`,
+		token,
+		[idContest],
+		isSelected
+	)
+	const [contestData, setContestData] = useState(data)
+	const { name, mode, judge, startDate, endDate } = contestData ?? {}
+
+	const [show, setShow] = useState(false)
+
+	const handleShow = () => setShow(true)
+	const handleClose = () => setShow(false)
+
+	const handleChangeName = (event) =>
+		setContestData({ ...contestData, name: event.target.value })
+	const handleChangeMode = (event) =>
+		setContestData({ ...contestData, mode: event.target.value })
+	const handleChangeJudge = (event) =>
+		setContestData({ ...contestData, judge: event.target.value })
+	const handleChangeStart = (date) =>
+		setContestData({ ...contestData, startDate: date, endDate: date })
+	const handleChangeEnd = (date) =>
+		setContestData({ ...contestData, endDate: date })
+
+	const onSubmit = async (event) => {
+		event.preventDefault()
+		const url = `${process.env.API_URL}/api/admin/contest/${idContest}?mode=config`
+		const formData = new FormData()
+		Object.keys(contestData).forEach((item) =>
+			formData.append(item, contestData[item])
+		)
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: token ?? '',
+			},
+			body: formData,
+		})
+		if (response.ok) {
+			handleClose()
+			window.location.reload(false)
+		}
+	}
+
+	return (
+		<>
+			<Button
+				variant='warning'
+				className='ml-2'
+				onClick={handleShow}
+				disabled={!isSelected}
+			>
+				<FontAwesomeIcon icon={faCog} />
+			</Button>
+			<Modal show={show} onHide={handleClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Edit Contest #{idContest}</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Form>
+						<Form.Group>
+							<Form.Label>Contest Name : </Form.Label>
+							<Form.Control value={name} onChange={handleChangeName} />
+						</Form.Group>
+						<Form.Group>
+							<Form.Label>Choose Mode : </Form.Label>
+							<InputGroup>
+								<Form.Control as='select' onChange={handleChangeMode}>
+									<option value='unrated'>Unrated Contest</option>
+									<option value='rated'>Rated Contest</option>
+								</Form.Control>
+								<Form.Control as='select' onChange={handleChangeJudge}>
+									<option value='classic'>Classic (Time based)</option>
+									<option value='acm'>ACM Mode</option>
+									<option disabled>OTOG Mode</option>
+									<option disabled>Blind Mode</option>
+								</Form.Control>
+							</InputGroup>
+						</Form.Group>
+						<Form.Group>
+							<Form.Label>Time : </Form.Label>
+							<InputGroup as={Row} className='m-auto'>
+								<Form.Control
+									as={DatePicker}
+									selected={startDate}
+									onChange={handleChangeStart}
+									showTimeSelect
+									timeFormat='HH:mm'
+									timeIntervals={30}
+									timeCaption='time'
+									dateFormat='d/MMMM/yyyy HH:mm'
+								/>
+								<Col xs={1} />
+								<Form.Control
+									as={DatePicker}
+									selected={endDate}
+									onChange={handleChangeEnd}
+									showTimeSelect
+									timeFormat='HH:mm'
+									timeIntervals={30}
+									timeCaption='time'
+									dateFormat='d/MMMM/yyyy HH:mm'
+								/>
+							</InputGroup>
+						</Form.Group>
+					</Form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant='success' onClick={onSubmit}>
+						Save
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
+	)
+}
+
 const ConfigTask = (props) => {
 	const { id_Prob, see, idContest } = props
 	const [onoff, setOnoff] = useState(undefined)
@@ -152,56 +277,50 @@ const ConfigTask = (props) => {
 
 const EditModal = (props) => {
 	const token = useTokenContext()
-	const { show, setShow } = props
-	const { id_Prob } = props
-	const [name, setName] = useState(props.name)
-	const [sname, setSname] = useState(props.sname)
-	const [memory, setMemory] = useState(props.memory)
-	const [time, setTime] = useState(props.time)
-	const [score, setScore] = useState(props.score)
-	const [testcase, setTestcase] = useState(props.subtask)
+	const { show, setShow, id_Prob, ...rest } = props
+
+	const [data, setData] = useState(rest)
+	const { name, sname, memory, time, score, pdf, testcase, zip } = data
+
 	const handleClose = () => setShow(false)
-	const [docName, setDocName] = useState('')
-	const [selectedDoc, setSelectedDoc] = useState(undefined)
-	const [testcaseName, setTestcaseName] = useState('')
-	const [selectedTestcase, setSelectedTestcase] = useState(undefined)
 	const selectFile = (event) => {
 		if (event.target.files[0] === undefined) {
-			setSelectedFile(undefined)
-			setFileName('')
+			setData({ ...data, pdf: undefined, zip: undefined })
 			return
 		}
 		switch (event.target.id) {
 			case 'doc':
-				setSelectedDoc(event.target.files[0])
-				setDocName(event.target.files[0].name)
+				setData({ ...data, pdf: event.target.files[0] })
 				break
 			case 'testcase':
-				setSelectedTestcase(event.target.files[0])
-				setTestcaseName(event.target.files[0].name)
+				setData({ ...data, zip: event.target.files[0] })
 				break
 		}
 	}
-	const handleChangeName = (event) => setName(event.target.value)
-	const handleChangeSname = (event) => setSname(event.target.value)
-	const handleChangeMemory = (event) => setMemory(Number(event.target.value))
-	const handleChangeTime = (event) => setTime(Number(event.target.value))
-	const handleChangeScore = (event) => setScore(Number(event.target.value))
-	const handleChangeTestcase = (event) => setTestcase(event.target.value)
+	const handleChangeName = (event) =>
+		setData({ ...data, name: event.target.value })
+	const handleChangeSname = (event) =>
+		setData({ ...data, sname: event.target.value })
+	const handleChangeMemory = (event) =>
+		setData({ ...data, memory: Number(event.target.value) ?? '' })
+	const handleChangeTime = (event) =>
+		setData({ ...data, time: Number(event.target.value) ?? '' })
+	const handleChangeScore = (event) =>
+		setData({ ...data, score: Number(event.target.value) ?? '' })
+	const handleChangeTestcase = (event) =>
+		setData({ ...data, testcase: event.target.value })
+
 	const onSave = async (event) => {
 		event.preventDefault()
-		const info = { name, sname, memory, time, testcase, score }
-		const data = new FormData()
+		const formData = new FormData()
 		Object.keys(info).map((item) => {
-			data.append(item, info[item])
+			formData.append(item, info[item])
 		})
-		data.append('pdf', selectedDoc)
-		data.append('zip', selectedTestcase)
 		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}?option=save`
 		const response = await fetch(url, {
 			method: 'POST',
 			headers: { Authorization: token ? token : '' },
-			body: data,
+			body: formData,
 		})
 		if (response.ok) handleClose(), window.location.reload(false)
 	}
@@ -246,7 +365,7 @@ const EditModal = (props) => {
 				<Form.Group>
 					<Form.File
 						id='doc'
-						label={docName || 'New Document (PDF)'}
+						label={pdf?.name ?? 'New Document (PDF)'}
 						accept='.pdf'
 						onChange={selectFile}
 						custom
@@ -256,7 +375,7 @@ const EditModal = (props) => {
 				<Form.Group>
 					<Form.File
 						id='testcase'
-						label={testcaseName || 'New Testcases (ZIP)'}
+						label={zip?.name ?? 'New Testcases (ZIP)'}
 						accept='.zip'
 						onChange={selectFile}
 						custom
@@ -299,45 +418,27 @@ const TaskTr = (props) => {
 	)
 }
 
-export const SelectContest = (props) => {
-	const { contests, setId } = props
-	return (
-		<Form.Group>
-			<Form.Label>Choose Contest : </Form.Label>
-			<Form.Control as='select' onChange={setId}>
-				<option disabled selected>
-					select a contest
-				</option>
-				{contests.map((contest, index) => {
-					return (
-						<option key={index} value={contest.idContest}>
-							{contest.name}
-						</option>
-					)
-				})}
-			</Form.Control>
-		</Form.Group>
-	)
-}
+export const SelectContest = ({ contests, setId }) => (
+	<Form.Group>
+		<Form.Label>Choose Contest : </Form.Label>
+		<Form.Control as='select' onChange={setId}>
+			<option disabled selected>
+				select a contest
+			</option>
+			{contests?.map((contest, index) => {
+				return (
+					<option key={index} value={contest.idContest}>
+						{contest.name}
+					</option>
+				)
+			})}
+		</Form.Control>
+	</Form.Group>
+)
 
 export const TaskTable = ({ idContest }) => {
 	const token = useTokenContext()
-	const [tasks, setTasks] = useState(null)
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/admin/contest/${idContest}`
-			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = token ? token : ''
-			const res = await fetch(url, { headers })
-			const json = await res.json()
-			setTasks(json)
-		}
-		fetchData()
-		return function cleanup() {
-			setTasks(null)
-		}
-	}, [idContest])
+	const [tasks] = useGet(`/api/admin/contest/${idContest}`, token)
 
 	return (
 		<CustomTable ready={!!tasks}>
