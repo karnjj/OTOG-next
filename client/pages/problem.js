@@ -82,6 +82,7 @@ const Problem = () => {
 									type='switch'
 									id='custom-switch'
 									label='ทั้งหมด '
+									checked={showAll}
 									onChange={handleChange}
 								/>
 							</InputGroup.Text>

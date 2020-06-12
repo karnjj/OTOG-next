@@ -195,7 +195,7 @@ export const AnnounceEditor = ({ idContest }) => {
 
 	return (
 		<>
-			<Button variant='info' onClick={handleShow}>
+			<Button variant='info' onClick={handleShow} disabled={idContest === 0}>
 				<FontAwesomeIcon icon={faPencilAlt} />
 			</Button>
 
