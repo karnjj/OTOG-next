@@ -17,24 +17,21 @@ const reducer = (state, action) => {
 	}
 }
 
+export const fetchData = async (url, auth = '') => {
+	const params = {
+		headers: { 'Content-Type': 'application/json', Authorization: auth },
+	}
+	const res = await fetch(`${process.env.API_URL}${url}`, params)
+	return await res.json()
+}
+
 export const useGet = (url, auth = '', deps = [], auto = true) => {
 	const [state, dispatch] = useReducer(reducer, initialState)
 	const cancelled = useRef(false)
-
-	useEffect(() => {
-		return () => {
-			cancelled.current = true
-		}
-	}, [])
-
-	const fetchData = useCallback(async () => {
+	const execute = useCallback(async () => {
 		dispatch({ type: 'loading' })
 		try {
-			const params = {
-				headers: { 'Content-Type': 'application/json', Authorization: auth },
-			}
-			const res = await fetch(`${process.env.API_URL}${url}`, params)
-			const json = await res.json()
+			const json = await fetchData(url, auth)
 			if (!cancelled.current) {
 				dispatch({ type: 'success', json })
 			}
@@ -44,10 +41,16 @@ export const useGet = (url, auth = '', deps = [], auto = true) => {
 	})
 
 	useEffect(() => {
-		if (auto) {
-			fetchData()
+		return () => {
+			cancelled.current = true
 		}
-	}, [auto, ...deps])
+	}, [])
 
-	return [state.data, state.isLoading, fetchData]
+	useEffect(() => {
+		if (auto) {
+			execute()
+		}
+	}, [auto, url, ...deps])
+
+	return [state.data, state.isLoading, execute]
 }
