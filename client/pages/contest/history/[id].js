@@ -19,7 +19,7 @@ import { faChartArea } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 
 const ScoreTr = (props) => {
-	const { rank, sname, sumTime, sum, scores, problems, rating } = props
+	const { rank, sname, sumTime, sum, scores, problems, rating, idUser } = props
 	const maxSum = problems.reduce((total, prob) => total + prob.score, 0)
 	const score = (prob) =>
 		scores[prob.id_Prob] ? scores[prob.id_Prob].score : 0
@@ -29,7 +29,7 @@ const ScoreTr = (props) => {
 		<CustomTr acceptState={sum === maxSum}>
 			<td>{rank}</td>
 			<td>
-				<Name {...{ rating, sname }} />
+				<Name {...{ rating, sname, idUser}} />
 			</td>
 			{problems.map((prob, index) => (
 				<CustomTd
