@@ -148,7 +148,7 @@ const HoldingContest = ({ idContest, timeleft, name }) => {
 						<OrangeButton
 							outline='true'
 							href='/contest/history/[id]'
-							dynamic={`/contest/history/[${idContest}]`}
+							dynamic={`/contest/history/${idContest}`}
 						>
 							Live Scoreboard
 						</OrangeButton>
