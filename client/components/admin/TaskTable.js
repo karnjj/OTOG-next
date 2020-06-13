@@ -43,10 +43,6 @@ export const NewProblem = () => {
 	} = data
 
 	const selectFile = (event) => {
-		if (event.target.files[0] === undefined) {
-			setData({ ...data, pdf: undefined, zip: undefined })
-			return
-		}
 		switch (event.target.id) {
 			case 'doc':
 				setData({ ...data, pdf: event.target.files[0] })
@@ -230,7 +226,7 @@ const ConfigTask = (props) => {
 const EditModal = (props) => {
 	const token = useTokenContext()
 	const [isSaving, setIsSaving] = useState(false)
-	const { show, setShow, id_Prob, ...rest } = props
+	const { show, setShow, id_Prob, refreshData, ...rest } = props
 	const [data, setData] = useState(rest)
 	const {
 		name,
@@ -247,10 +243,6 @@ const EditModal = (props) => {
 	const handleClose = () => setShow(false)
 
 	const selectFile = (event) => {
-		if (event.target.files[0] === undefined) {
-			setData({ ...data, pdf: undefined, zip: undefined })
-			return
-		}
 		switch (event.target.id) {
 			case 'doc':
 				setData({ ...data, pdf: event.target.files[0] })
@@ -289,10 +281,7 @@ const EditModal = (props) => {
 			body: formData,
 		})
 		if (response.ok) {
-			props.refreshData().then(() => {
-				handleClose()
-				setIsSaving(false)
-			})
+			refreshData()
 		}
 	}
 
@@ -404,7 +393,7 @@ const TaskTr = (props) => {
 
 export const TaskTable = () => {
 	const token = useTokenContext()
-	const [tasks] = useGet('/api/admin/problem', token)
+	const [tasks, , execute] = useGet('/api/admin/problem', token)
 
 	return (
 		<CustomTable responsive hover ready={!!tasks} align='left'>
@@ -420,7 +409,7 @@ export const TaskTable = () => {
 			</thead>
 			<tbody>
 				{tasks?.map((task, index) => (
-					<TaskTr key={index} {...task} />
+					<TaskTr key={index} {...task} refreshData={execute} />
 				))}
 			</tbody>
 		</CustomTable>
