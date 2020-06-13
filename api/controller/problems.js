@@ -94,18 +94,24 @@ function cntProblem(req,res) {
 function getDoc(req,res) {
 	const token = req.cookies.token
 	const userData = verifyToken(token)
+	let getProblem = new Promise((resolve, reject) => {
 		let sql = `select * from Problem where sname = ?`
-		db.query(sql, [req.params.name], (err, result) => {
-			if(err) {
-				console.log(err);
-				return res.sendStatus(404);
-			}
-			if(result[0] && result[0].state === 1) return res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`)
-			else {
-				if(userData.state === 0) return res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`)
-				else return res.status(401).send('Access denied')
-			}
-		})
+		db.query(sql, [req.params.name], (err, result) => err ? reject(err) : resolve(result))
+	})
+	let getContest = new Promise((resolve, reject) => {
+		let sql = `select idContest,name,problems from Contest where time_end >= (UNIX_TIMESTAMP()) and time_start <= (UNIX_TIMESTAMP())`
+		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
+	})
+	Promise.all([getProblem, getContest]).then((result) => {
+		var probData = result[0][0]
+		var holdingCon = result[1][0]
+		var probInCon = holdingCon ? JSON.parse(holdingCon.problems) : []
+		if(probData && probData.state === 1) return res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`)
+		else {
+			if(userData.state === 0 || probInCon.includes(probData.id_Prob)) return res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`)
+			else return res.status(401).send('Access denied')
+		}
+	})
 }
 
 module.exports = {
