@@ -42,7 +42,7 @@ const Submission = () => {
 					md={{ span: 'auto', order: 'first' }}
 					className='d-flex align-items-baseline justify-content-center justify-content-md-start mt-2 mt-md-0'
 				>
-					{userData && lastest && (
+					{lastest && (showOnlyMe || isAdmin(userData)) && (
 						<div>
 							<b>ส่งข้อล่าสุด :</b>
 							<Alink
