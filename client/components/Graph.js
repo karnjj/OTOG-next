@@ -3,54 +3,7 @@ import { Line } from 'react-chartjs-2'
 import 'chartjs-plugin-annotation'
 
 var ticks = [2500, 2000, 1800, 1650, 1500]
-var datas = [
-	/*
-	{
-		x: 1570539600000,
-		y: 1500,
-		name: 'contest #1',
-	},
-	{
-		x: 1570885200000,
-		y: 2000,
-		name: 'contest #2',
-	},
-	{
-		x: 1570985200000,
-		y: 1950,
-		name: 'contest #3',
-	},
-	{
-		x: 1571085200000,
-		y: 2100,
-		name: 'contest #3',
-	},
-	{
-		x: 1571185200000,
-		y: 2300,
-		name: 'contest #3',
-	},
-	{
-		x: 1571285200000,
-		y: 2500,
-		name: 'contest #3',
-	},
-	{
-		x: 1571385200000,
-		y: 2600,
-		name: 'contest #3',
-	},
-	{
-		x: 1571485200000,
-		y: 2650,
-		name: 'contest #3',
-	},
-	{
-		x: 1571585200000,
-		y: 2700,
-		name: 'contest #3',
-	},*/
-]
+var datas = []
 var annotations = [
 	{
 		drawTime: 'beforeDatasetsDraw',
@@ -144,30 +97,30 @@ const changeUnit = (arr) => {
 	else if (diff < 12 * 30 * 24 * 3600 * 1000) return 'quarter'
 	else return 'year'
 }
+const Data = (datas) => ({
+		datasets: [
+			{
+				fill: false,
+				lineTension: 0.1,
+				borderCapStyle: 'round',
+				borderDash: [],
+				borderDashOffset: 0.0,
+				borderJoinStyle: 'miter',
+				pointBorderColor: 'rgba(75,192,192,1)',
+				pointBackgroundColor: '#fff',
+				pointBorderWidth: 1,
+				pointHoverRadius: 5,
+				pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+				pointHoverBorderColor: 'rgba(220,220,220,1)',
+				pointHoverBorderWidth: 3,
+				pointRadius: 5,
+				pointHitRadius: 10,
+				data: datas,
+			},
+		],
+	})
 
-const data = {
-	datasets: [
-		{
-			fill: false,
-			lineTension: 0.1,
-			borderCapStyle: 'round',
-			borderDash: [],
-			borderDashOffset: 0.0,
-			borderJoinStyle: 'miter',
-			pointBorderColor: 'rgba(75,192,192,1)',
-			pointBackgroundColor: '#fff',
-			pointBorderWidth: 1,
-			pointHoverRadius: 5,
-			pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-			pointHoverBorderColor: 'rgba(220,220,220,1)',
-			pointHoverBorderWidth: 3,
-			pointRadius: 5,
-			pointHitRadius: 10,
-			data: datas,
-		},
-	],
-}
-const option = {
+const option = (datas) => ({
 	legend: {
 		display: false,
 	},
@@ -176,14 +129,14 @@ const option = {
 		callbacks: {
 			title: function (tooltipItem, data) {
 				var param = data.datasets[0].data[tooltipItem[0].index]
-				return param.name
+				return `• ${param.id} ${param.conName}`
 			},
 			label: function (tooltipItem, data) {
 				var param = data.datasets[0].data[tooltipItem.index]
-				return `rating = ${param.y}`
+				return [`Rank: ${param.rank}`,`Rating: ${param.y}`]
 			},
 		},
-		backgroundColor: '#FFF',
+		backgroundColor: 'rgba(255,255,255,0.83)',
 		titleFontSize: 16,
 		titleFontColor: '#ff851b',
 		bodyFontColor: '#000',
@@ -236,11 +189,11 @@ const option = {
 	annotation: {
 		annotations: annotations,
 	},
-}
-const Graph = (props) => {
+})
+const Graph = ({ history }) => {
 	return (
 		<div>
-			<Line data={data} options={option} />
+			<Line data={Data(history?? [])} options={option(history?? [])} />
 		</div>
 	)
 }

@@ -32,7 +32,7 @@ const GraphCard = ({ userInfo }) => (
 				<h5>Contest Participated : -</h5>
 				<h5>Problem Solved : -</h5>
 			</Card.Text>
-			<Graph />
+			<Graph {...userInfo}/>
 		</Card.Body>
 	</CustomCard>
 )
