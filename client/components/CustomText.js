@@ -36,7 +36,7 @@ export const ColoredText = styled.a`
 `
 
 export const Name = ({ sname, children, idUser, ...rest }) => (
-	<Link href='/profile/[id]' as={`/profile/${idUser ?? 0}`} passHref replace>
+	<Link href='/profile/[id]' as={`/profile/${idUser ?? 0}`} passHref>
 		<ColoredText {...rest}>
 			{sname}
 			{children}
