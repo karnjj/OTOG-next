@@ -25,8 +25,9 @@ async function getProblem(req,res) {
 	let problemPromise = new Promise((resolve, reject) => {
 		let sql = '';
 		if (mode == 'firstpage') sql = 'select * from Problem where state = 1 order by see_date desc limit 10'
+		else if(userData.id === 1074) sql = 'select * from Problem order by id_Prob desc'
 		else if(mode == 'admin' && userData.state == 0) sql = 'select * from Problem order by id_Prob desc'
-		else  sql = 'select * from Problem where state = 1 order by id_Prob desc'
+		else sql = 'select * from Problem where state = 1 order by id_Prob desc'
 		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
 	})
 	let PassOrWrongPromise = new Promise((resolve, reject) => {
