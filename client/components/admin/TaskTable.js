@@ -235,7 +235,7 @@ const EditModal = (props) => {
 		time,
 		score,
 		rating,
-		subtask: testcase,
+		subtask,
 		pdf,
 		zip,
 	} = data
@@ -264,8 +264,8 @@ const EditModal = (props) => {
 		setData({ ...data, score: Number(event.target.value) ?? '' })
 	const handleChangeRating = (event) =>
 		setData({ ...data, rating: event.target.value })
-	const handleChangeTestcase = (event) =>
-		setData({ ...data, testcase: event.target.value })
+	const handleChangeSubtask = (event) =>
+		setData({ ...data, subtask: event.target.value })
 
 	const onSave = async (event) => {
 		event.preventDefault()
@@ -313,8 +313,8 @@ const EditModal = (props) => {
 					<Col xs={6}>
 						<Form.Label>Testcases</Form.Label>
 						<Form.Control
-							defaultValue={testcase}
-							onChange={handleChangeTestcase}
+							defaultValue={subtask}
+							onChange={handleChangeSubtask}
 						/>
 					</Col>
 					<Col xs={6}>
