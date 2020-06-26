@@ -14,11 +14,11 @@ import OrangeCheck from '../components/OrangeCheck'
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 
 const Submission = () => {
-	const { token, isLogin, isAdmin } = useAuthContext()
+	const { isLogin, isAdmin } = useAuthContext()
 	const [showOnlyMe, setShowOnlyMe] = useState(!isAdmin && isLogin)
 
 	const url = `/api/submission?mode=${showOnlyMe ? 'onlyme' : 'full'}`
-	const [submissions] = useGet(url, token, [showOnlyMe])
+	const [submissions] = useGet(url, [showOnlyMe])
 	const { result, lastest } = submissions ?? {}
 
 	const handleCheck = (event) => setShowOnlyMe(event.target.checked)

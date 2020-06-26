@@ -15,6 +15,7 @@ import Announce from '../../components/Announce'
 
 import styled, { keyframes } from 'styled-components'
 import vars from '../../styles/vars'
+import { httpGet } from '../../utils/api'
 
 const popin = keyframes`
 	0% {
@@ -104,20 +105,9 @@ const NoLogin = (props) => {
 }
 
 const HoldingContest = ({ idContest, timeleft, name }) => {
-	const [tasks, setTasks] = useState(null)
-	const { userData, isAdmin } = useAuthContext()
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/contest/${idContest}`
-			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = userData ? userData.id : ''
-			const res = await fetch(url, { headers })
-			const json = await res.json()
-			if (json.problem != undefined) setTasks(json.problem)
-		}
-		fetchData()
-	}, [])
+	const { isAdmin } = useAuthContext()
+	const [data] = useGet(`/api/contest/${idContest}`)
+	const { tasks } = data ?? {}
 
 	return (
 		<Container>
@@ -207,10 +197,7 @@ const Contest = ({ contest, serverTime }) => {
 }
 
 Contest.getInitialProps = async (ctx) => {
-	const url = `${process.env.API_URL}/api/contest`
-	let headers = { 'Content-Type': 'application/json' }
-	const res = await fetch(url, { headers })
-	const json = await res.json()
+	const json = await httpGet('/api/contest')
 	return { contest: json.result[0], serverTime: json.serverTime }
 }
 

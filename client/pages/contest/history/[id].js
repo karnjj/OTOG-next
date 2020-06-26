@@ -8,6 +8,7 @@ import { CustomTable, CustomTr, UserTd, CustomTd } from '../../../components/Cus
 
 import { faChartArea } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
+import { useGet } from '../../../utils/api'
 
 const ScoreTr = (props) => {
 	const { rank, sname, sumTime, sum, scores, problems, rating, idUser } = props
@@ -36,15 +37,14 @@ const ScoreTr = (props) => {
 	)
 }
 
-const Scoreboard = (props) => {
-	const { problems, contestants } = props
+const Scoreboard = ({ problems, contestants }) => {
 	return (
-		<CustomTable ready={problems.length}>
+		<CustomTable ready={!!problems}>
 			<thead>
 				<tr>
 					<th>#</th>
 					<th>ชื่อผู้เข้าแข่งขัน</th>
-					{problems.map((n, i) => (
+					{problems?.map((n, i) => (
 						<th key={i} title={n.name}>
 							ข้อที่ {i + 1}
 						</th>
@@ -54,7 +54,7 @@ const Scoreboard = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				{contestants.map((con, index) => (
+				{contestants?.map((con, index) => (
 					<ScoreTr key={index} problems={problems} {...con} />
 				))}
 			</tbody>
@@ -65,31 +65,8 @@ const Scoreboard = (props) => {
 const ContestScoreboard = (props) => {
 	const router = useRouter()
 	const { id } = router.query
-	const { userData, token } = useAuthContext()
-	const [contestants, setContestants] = useState([])
-	const [problems, setProblems] = useState([])
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const url1 = `${process.env.API_URL}/api/contest/history/${id}`
-			const url2 = `${process.env.API_URL}/api/contest/${id}`
-			const response1 = await fetch(url1, {
-				headers: {
-					authorization: userData ? userData.id : '',
-				},
-			})
-			const response2 = await fetch(url2, {
-				headers: {
-					authorization: token ? token : '',
-				},
-			})
-			const json1 = await response1.json()
-			const json2 = await response2.json()
-			setContestants(json1)
-			setProblems(json2.problem)
-		}
-		fetchData()
-	}, [])
+	const [{ contestants }] = useGet(`/api/contest/history/${id}`)
+	const [{ problems }] = useGet(`/api/contest/${id}`)
 
 	return (
 		<PageLayout>
@@ -97,7 +74,7 @@ const ContestScoreboard = (props) => {
 				<OrangeButton href="/contest/history">View Contest</OrangeButton>
 			</Title>
 			<hr />
-			<Scoreboard {...{ contestants, problems }} />
+			<Scoreboard contestants={contestants} problems={problems} />
 		</PageLayout>
 	)
 }

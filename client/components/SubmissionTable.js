@@ -21,9 +21,8 @@ const ResultCode = styled.code`
 	font-size: 16px;
 `
 
-const SubmissionTable = (props) => {
+const SubmissionTable = ({ results, canViewCode }) => {
 	const { isAdmin } = useAuthContext()
-	const { results, canViewCode } = props
 	const showCode = canViewCode || isAdmin
 
 	return (

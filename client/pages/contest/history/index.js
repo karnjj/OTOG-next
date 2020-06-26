@@ -10,6 +10,7 @@ import { faTrophy, faChartArea } from '@fortawesome/free-solid-svg-icons'
 
 import fetch from 'isomorphic-unfetch'
 import OrangeButton from '../../../components/OrangeButton'
+import { useGet } from '../../../utils/api'
 
 const ContestTr = (props) => {
 	const { idContest, name, time_start, time_end, mode_grader, judge } = props
@@ -37,8 +38,8 @@ const ContestTr = (props) => {
 				{time_end < now.valueOf() && (
 					<OrangeButton
 						expand={4}
-						outline='true'
-						href='/contest/history/[id]'
+						outline="true"
+						href="/contest/history/[id]"
 						dynamic={`/contest/history/${idContest}`}
 					>
 						<FontAwesomeIcon icon={faChartArea} />
@@ -50,19 +51,10 @@ const ContestTr = (props) => {
 }
 
 const ContestTable = () => {
-	const [contests, setContests] = useState([])
+	const [contests] = useGet('/api/contest/history')
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/contest/history`
-			const response = await fetch(url)
-			const data = await response.json()
-			setContests(data)
-		}
-		fetchData()
-	}, [])
 	return (
-		<CustomTable ready={contests.length}>
+		<CustomTable ready={!!contests}>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -74,7 +66,7 @@ const ContestTable = () => {
 				</tr>
 			</thead>
 			<tbody>
-				{contests.map((con, index) => (
+				{contests?.map((con, index) => (
 					<ContestTr key={index} {...con} />
 				))}
 			</tbody>
@@ -85,7 +77,7 @@ const ContestTable = () => {
 const History = () => {
 	return (
 		<PageLayout>
-			<Title icon={faTrophy} text='Contest History' />
+			<Title icon={faTrophy} text="Contest History" />
 			<hr />
 			<ContestTable />
 		</PageLayout>

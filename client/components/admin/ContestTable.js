@@ -120,12 +120,9 @@ export const NewContest = () => {
 }
 
 export const ContestConfig = ({ idContest }) => {
-	const { token } = useAuthContext()
-
 	const isSelected = idContest !== 0
 	const [data] = useGet(
 		`/api/admin/contest/${idContest}?mode=config`,
-		token,
 		[idContest],
 		isSelected
 	)
@@ -429,8 +426,7 @@ export const SelectContest = ({ contests, setId }) => (
 )
 
 export const TaskTable = ({ idContest }) => {
-	const { token } = useAuthContext()
-	const [tasks] = useGet(`/api/admin/contest/${idContest}`, token)
+	const [tasks] = useGet(`/api/admin/contest/${idContest}`)
 
 	return (
 		<CustomTable ready={!!tasks}>

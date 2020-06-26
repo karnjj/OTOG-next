@@ -5,26 +5,23 @@ import fetch from 'isomorphic-unfetch'
 import { Table, ButtonGroup, Button, Modal, Form, Toast } from 'react-bootstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-	faPencilAlt,
-	faTrash,
-	faUserPlus
-} from '@fortawesome/free-solid-svg-icons'
+import { faPencilAlt, faTrash, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { useGet } from '../../utils/api'
 
 export const NewUser = () => {
 	const token = useTokenContext()
 	const [show, setShow] = useState(false)
-	const [showErr, setShowErr] = useState(false);
+	const [showErr, setShowErr] = useState(false)
 	const [username, setUsername] = useState('')
 	const [sname, setSname] = useState('')
 	const [password, setPassword] = useState('')
 	const handleShow = () => setShow(true)
 	const handleClose = () => setShow(false)
-	const toggleShowErr = () => setShowErr(!showErr);
-	const handleChangeUserame = e => setUsername(e.target.value)
-	const handleChangePassword = e => setPassword(e.target.value)
-	const handleChangeSname = e => setSname(e.target.value)
-	const onSubmit = async event => {
+	const toggleShowErr = () => setShowErr(!showErr)
+	const handleChangeUserame = (e) => setUsername(e.target.value)
+	const handleChangePassword = (e) => setPassword(e.target.value)
+	const handleChangeSname = (e) => setSname(e.target.value)
+	const onSubmit = async (event) => {
 		event.preventDefault()
 		const data = { username, password, sname }
 		const url = `${process.env.API_URL}/api/admin/user`
@@ -32,15 +29,15 @@ export const NewUser = () => {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': token ? token : ''
+				Authorization: token ? token : '',
 			},
-			body: JSON.stringify(data)
+			body: JSON.stringify(data),
 		})
 		if (respone.ok) handleClose(), window.location.reload(false)
 	}
 	return (
 		<>
-			<Button variant='success' size='lg' onClick={handleShow}>
+			<Button variant="success" size="lg" onClick={handleShow}>
 				<FontAwesomeIcon icon={faUserPlus} /> New User
 			</Button>
 			<Modal show={show} onHide={handleClose}>
@@ -49,15 +46,25 @@ export const NewUser = () => {
 				</Modal.Header>
 				<Modal.Body>
 					<Form>
-						<Form.Control placeholder='Username' onChange={handleChangeUserame} />
+						<Form.Control
+							placeholder="Username"
+							onChange={handleChangeUserame}
+						/>
 						<br />
-						<Form.Control placeholder='Password' type='password' onChange={handleChangePassword} />
+						<Form.Control
+							placeholder="Password"
+							type="password"
+							onChange={handleChangePassword}
+						/>
 						<br />
-						<Form.Control placeholder='Display Name' onChange={handleChangeSname} />
+						<Form.Control
+							placeholder="Display Name"
+							onChange={handleChangeSname}
+						/>
 					</Form>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant='success' onClick={onSubmit}>
+					<Button variant="success" onClick={onSubmit}>
 						Save
 					</Button>
 				</Modal.Footer>
@@ -66,7 +73,7 @@ export const NewUser = () => {
 	)
 }
 
-const ConfigUser = props => {
+const ConfigUser = (props) => {
 	const token = useTokenContext()
 	const { handleShow, idUser } = props
 	const handleDelete = async () => {
@@ -76,25 +83,25 @@ const ConfigUser = props => {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
-					'Authorization': token ? token : ''
-				}
+					Authorization: token ? token : '',
+				},
 			})
 			if (respone.ok) window.location.reload(false)
 		}
 	}
 	return (
 		<ButtonGroup>
-			<Button variant='info' onClick={handleShow}>
+			<Button variant="info" onClick={handleShow}>
 				<FontAwesomeIcon icon={faPencilAlt} />
 			</Button>
-			<Button variant='danger' onClick={handleDelete}>
+			<Button variant="danger" onClick={handleDelete}>
 				<FontAwesomeIcon icon={faTrash} />
 			</Button>
 		</ButtonGroup>
 	)
 }
 
-const EditModal = props => {
+const EditModal = (props) => {
 	const token = useTokenContext()
 	const { show, setShow } = props
 	const { idUser } = props
@@ -104,19 +111,19 @@ const EditModal = props => {
 	const [password, setPassword] = useState('')
 	const handleClose = () => setShow(false)
 
-	const handleChangeUserame = event => {
+	const handleChangeUserame = (event) => {
 		setUsername(event.target.value)
 	}
-	const handleChangeSname = event => {
+	const handleChangeSname = (event) => {
 		setSname(event.target.value)
 	}
-	const handleChangeState = event => {
+	const handleChangeState = (event) => {
 		setState(Number(event.target.value))
 	}
-	const handleChangePassword = event => {
+	const handleChangePassword = (event) => {
 		setPassword(event.target.value)
 	}
-	const onSave = async event => {
+	const onSave = async (event) => {
 		event.preventDefault()
 		const data = { username, sname, state, password }
 		const url = `${process.env.API_URL}/api/admin/user/${idUser}`
@@ -124,9 +131,9 @@ const EditModal = props => {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': token ? token : ''
+				Authorization: token ? token : '',
 			},
-			body: JSON.stringify(data)
+			body: JSON.stringify(data),
 		})
 		if (respone.ok) handleClose(), window.location.reload(false)
 	}
@@ -152,14 +159,14 @@ const EditModal = props => {
 					<br />
 					<Form.Label>New Password : </Form.Label>
 					<Form.Control
-						placeholder='New Password'
+						placeholder="New Password"
 						onChange={handleChangePassword}
 					/>
 					<br />
 				</Form>
 			</Modal.Body>
 			<Modal.Footer>
-				<Button variant='success' onClick={onSave}>
+				<Button variant="success" onClick={onSave}>
 					Save
 				</Button>
 			</Modal.Footer>
@@ -167,7 +174,7 @@ const EditModal = props => {
 	)
 }
 
-const UserTr = props => {
+const UserTr = (props) => {
 	const { idUser, username, sname, state } = props
 	const [show, setShow] = useState(false)
 	const handleShow = () => setShow(true)
@@ -186,29 +193,14 @@ const UserTr = props => {
 	)
 }
 
-export const UserTable = props => {
+export const UserTable = (props) => {
 	const userData = useAuthContext()
 	const token = useTokenContext()
-	const [users, setUsers] = useState([])
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/admin/user`
-			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = token ? token : ''
-			const res = await fetch(url, { headers })
-			const json = await res.json()
-			setUsers(json)
-		}
-		fetchData()
-		return function cleanup() {
-			setUsers([])
-		}
-	}, [])
+	const [users] = useGet('/api/admin/user')
 
 	return (
 		<Table responsive hover>
-			<thead className='thead-light'>
+			<thead className="thead-light">
 				<tr>
 					<th>#</th>
 					<th>Username</th>

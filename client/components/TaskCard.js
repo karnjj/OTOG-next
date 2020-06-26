@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { withAuthSync, useAuthContext } from '../utils/auth'
+import { useAuthContext } from '../utils/auth'
 
 import {
 	Row,
@@ -19,67 +19,40 @@ import ViewCodeButton from './ViewCodeButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
+import { useGet } from '../utils/api'
 
 const Icon = styled(FontAwesomeIcon)`
 	user-select: none;
 	cursor: pointer;
 `
-const MiniSubmission = (props) => {
-	const { idContest, idProb, parentCallback } = props
-	const { userData } = useAuthContext()
-	const [best, setBest] = useState([])
-	const [lastest, setLastest] = useState([])
-	const [SC, setSC] = useState('test')
+const MiniSubmission = ({ idContest, idProb, parentCallback }) => {
+	const url = `/api/contest/${idContest}/submission?idProb=${idProb}`
+	const [data, isFetching, fetchData] = useGet(url, [], false)
 
-	var waitingData = 0
+	const { best_submit, lastest_submit } = data ?? {}
+	const latest = lastest_submit && lastest_submit[0]
+	const best = best_submit && best_submit[0]
+
+	if (!!latest) {
+		parentCallback(latest.score, best.idResult)
+	}
+
 	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/contest/${idContest}/submission?idProb=${idProb}`
-			const response = await fetch(url, {
-				headers: {
-					authorization: userData ? userData.id : '',
-				},
-			})
-			const json = await response.json()
-			setBest(json.best_submit)
-			setLastest(json.lastest_submit)
-			sendData(json.lastest_submit, json.best_submit)
-			if (json.lastest_submit[0] !== undefined)
-				if (json.lastest_submit[0].status == 0) {
-					waitingData = setInterval(fetchNewData, 1000)
-				}
-		}
-		fetchData()
-		return function cleanup() {
-			clearInterval(waitingData)
-		}
-	}, [])
-	const sendData = (lastest, best) => {
-		if (lastest[0] !== undefined) parentCallback(lastest[0].score, best[0].idResult)
-	}
-	/*
-    const HideSc = event => {
-        this.setState({showSc : event})
-    }
-    const ShowBest = () => {
-        this.setState({showSc : true, SC : this.state.best[0].scode})
-    }
-    const ShowLast = () => {
-        this.setState({showSc : true, SC : this.state.lastest[0].scode })
-    }*/
-	const fetchNewData = async () => {
-		const url = `${process.env.API_URL}/api/contest/${idContest}/submission?idProb=${idProb}`
-		const response = await fetch(url, {
-			headers: {
-				authorization: userData ? userData.id : '',
-			},
-		})
-		const json = await response.json()
-		setBest(json.best_submit)
-		setLastest(json.lastest_submit)
-		sendData(json.lastest_submit, json.best_submit)
-		if (json.lastest_submit[0].status == 1) clearInterval(waitingData)
-	}
+		const isGrading = !isFetching && latest?.status === 0
+		const timeout = isGrading && setTimeout(fetchData, 1000)
+		return () => clearTimeout(timeout)
+	}, [isFetching])
+
+	const CustomRow = ({ label, result = '-', score = '-', idResult }) => (
+		<tr>
+			<td>{label}</td>
+			<td>{result}</td>
+			<td>{score}</td>
+			<td>
+				{idResult ? <ViewCodeButton mini="true" idResult={idResult} /> : '❌'}
+			</td>
+		</tr>
+	)
 
 	return (
 		<Table size="sm" bordered hover>
@@ -92,54 +65,8 @@ const MiniSubmission = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				{lastest.length != 0 ? (
-					lastest.map((prob, index) => {
-						return (
-							<tr key={index}>
-								<td>Latest</td>
-								<td>{prob.result}</td>
-								<td>{prob.score}</td>
-								<td>
-									<ViewCodeButton
-										mini="true"
-										idResult={prob.idResult}
-									/>
-								</td>
-							</tr>
-						)
-					})
-				) : (
-					<tr key={999}>
-						<td>Latest</td>
-						<td style={{ textAlign: 'center' }}>-</td>
-						<td style={{ textAlign: 'center' }}>-</td>
-						<td style={{ textAlign: 'center' }}>❌</td>
-					</tr>
-				)}
-				{best.length != 0 ? (
-					best.map((prob, index) => {
-						return (
-							<tr key={index}>
-								<td>Best</td>
-								<td>{prob.result}</td>
-								<td>{prob.score}</td>
-								<td>
-									<ViewCodeButton
-										mini="true"
-										idResult={prob.idResult}
-									/>
-								</td>
-							</tr>
-						)
-					})
-				) : (
-					<tr key={998}>
-						<td>Best</td>
-						<td style={{ textAlign: 'center' }}>-</td>
-						<td style={{ textAlign: 'center' }}>-</td>
-						<td style={{ textAlign: 'center' }}>❌</td>
-					</tr>
-				)}
+				<CustomRow label="Latest" {...latest} />
+				<CustomRow label="Best" {...best} />
 			</tbody>
 		</Table>
 	)

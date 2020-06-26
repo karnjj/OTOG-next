@@ -11,10 +11,11 @@ import Header from '../../components/admin/Header'
 import { AnnounceEditor } from '../../components/Announce'
 
 import nextCookie from 'next-cookies'
+import { httpGet } from '../../utils/api'
 
 const Note = () => (
 	<Card>
-		<Card.Header as='h6'>Note</Card.Header>
+		<Card.Header as="h6">Note</Card.Header>
 		<Card.Body>
 			<Card.Text>
 				1. <b>Double Click</b> to edit problems in this page.
@@ -58,11 +59,7 @@ const Contest = ({ contests }) => {
 
 Contest.getInitialProps = async (ctx) => {
 	const { token } = nextCookie(ctx)
-	const url = `${process.env.API_URL}/api/admin/contest`
-	let headers = { 'Content-Type': 'application/json' }
-	headers['Authorization'] = token ? token : ''
-	const res = await fetch(url, { headers })
-	const json = await res.json()
-	return { contests: json }
+	return await httpGet('/api/admin/contest', token)
 }
+
 export default withAdminAuth(Contest)

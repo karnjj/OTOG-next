@@ -42,13 +42,13 @@ const ProbButton = styled.button`
 `
 
 const Problem = () => {
-	const { token, isAdmin } = useAuthContext()
+	const { isAdmin } = useAuthContext()
 
 	const [searchState, setsearchState] = useState('')
 	const [showAll, setShowAll] = useState(isAdmin)
 
 	const url = `/api/problem?mode=${showAll ? 'admin' : 'full'}`
-	const [taskState] = useGet(url, token, [showAll])
+	const [taskState] = useGet(url, [showAll])
 
 	const updateSearch = (event) => {
 		setsearchState(event.target.value.substr(0, 20))
@@ -60,8 +60,7 @@ const Problem = () => {
 		taskState.filter((problem) => {
 			let id = String(problem.id_Prob)
 			return (
-				problem.name.indexOf(searchState) !== -1 ||
-				id.indexOf(searchState) !== -1
+				problem.name.indexOf(searchState) !== -1 || id.indexOf(searchState) !== -1
 			)
 		})
 

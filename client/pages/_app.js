@@ -1,7 +1,5 @@
 import Head from 'next/head'
 import { ThemeProvider } from 'styled-components'
-import { AuthProvider, auth, TokenProvider } from '../utils/auth'
-import nextCookie from 'next-cookies'
 import { register, unregister } from 'next-offline/runtime'
 
 import breakpoints from '../styles/breakpoints'
@@ -50,8 +48,7 @@ const GlobalStyle = createGlobalStyle`
     } */
 `
 
-const MyApp = (props) => {
-	const { Component, pageProps } = props
+const MyApp = ({ Component, pageProps }) => {
 	useEffect(() => {
 		unregister()
 	}, [])
@@ -59,15 +56,15 @@ const MyApp = (props) => {
 		<>
 			<Head>
 				<title>OTOG - One Tambon One Grader</title>
-				<link rel='manifest' href='/manifest.json' />
-				<link rel='shortcut icon' href='/logo196.png' />
-				<link rel='apple-touch-icon' href='/logoIOS.png' />
-				<meta name='viewport' content='width=device-width, initial-scale=1' />
+				<link rel="manifest" href="/manifest.json" />
+				<link rel="shortcut icon" href="/logo196.png" />
+				<link rel="apple-touch-icon" href="/logoIOS.png" />
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<link
-					href='https://fonts.googleapis.com/css?family=Fira+Code&display=swap'
-					rel='stylesheet'
+					href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap"
+					rel="stylesheet"
 				/>
-				<meta name='theme-color' content='#ff851b' />
+				<meta name="theme-color" content="#ff851b" />
 			</Head>
 			<ThemeProvider theme={{ breakpoints }}>
 				<GlobalStyle />

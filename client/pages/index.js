@@ -22,6 +22,7 @@ import vars from '../styles/vars'
 import CountUp from 'react-countup'
 import { lighten } from 'polished'
 import { down } from 'styled-breakpoints'
+import { useGet } from '../utils/api'
 
 const WelcomeText = styled.h4`
 	color: ${vars.black};
@@ -96,8 +97,7 @@ const CountButton = styled.li`
 		transform: translateY(3px);
 		box-shadow: 0 2px ${vars.btn_gray};
 	}
-	animation: ${popin} 0.25s ease backwards
-		${(props) => props.index * 0.01 + 's'};
+	animation: ${popin} 0.25s ease backwards ${(props) => props.index * 0.01 + 's'};
 	animation-play-state: ${(props) => !props.number && 'pause'};
 	animation-delay: ${() => Math.round(Math.random() * 100) + 'ms'};
 `
@@ -142,28 +142,10 @@ const Welcome = () => (
 
 const Hello = () => {
 	const { userData } = useAuthContext()
-	const [data, setData] = useState({})
-
-	useEffect(() => {
-		const fetchData = async () => {
-			let url = `${process.env.API_URL}/api/countProblem`
-			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = userData.id
-			const response = await fetch(url, { headers })
-			const probData = await response.json()
-			const { allProblem, userProblem, newProb, onlineUser } = probData
-			const { passProb, wrongProb } = userProblem
-			setData({
-				allProblem,
-				onlineUser,
-				passProb,
-				wrongProb,
-				noSub: allProblem - passProb - wrongProb,
-				newProb,
-			})
-		}
-		fetchData()
-	}, [])
+	const [data] = useGet('/api/countProblem')
+	const { allProblem, userProblem, newProb, onlineUser } = data ?? {}
+	const { passProb, wrongProb } = userProblem ?? {}
+	const noSub = allProblem - passProb - wrongProb
 
 	return (
 		<>
@@ -174,11 +156,11 @@ const Hello = () => {
 				<Col as={ButtonWrapper}>
 					{[
 						//message,  number,     color
-						['ทั้งหมด', data.allProblem, vars.btn_black],
-						['ผ่านแล้ว', data.passProb, vars.btn_green],
-						['ยังไม่ผ่าน', data.wrongProb, vars.btn_red],
-						['ยังไม่ส่ง', data.noSub, vars.btn_orng],
-						['โจทย์วันนี้', data.newProb, vars.btn_blue],
+						['ทั้งหมด', allProblem, vars.btn_black],
+						['ผ่านแล้ว', passProb, vars.btn_green],
+						['ยังไม่ผ่าน', wrongProb, vars.btn_red],
+						['ยังไม่ส่ง', noSub, vars.btn_orng],
+						['โจทย์วันนี้', newProb, vars.btn_blue],
 					].map(([message, number, color], index) => (
 						<CountButton {...{ number, color, index }} key={index}>
 							<Message>{message}</Message>
@@ -190,8 +172,7 @@ const Hello = () => {
 			<Row className="justify-content-center">
 				<Col as={AliveText}>
 					<b>ยังมีชีวิตรอด : </b>
-					{data.onlineUser?.map((user) => user.sname).join(', ') ??
-						'. . .'}
+					{onlineUser?.map((user) => user.sname).join(', ') ?? '. . .'}
 				</Col>
 			</Row>
 		</>
@@ -199,21 +180,8 @@ const Hello = () => {
 }
 
 const ProblemTable = () => {
-	const { userData } = useAuthContext()
-	const [taskState, setTaskState] = useState()
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const url = `${process.env.API_URL}/api/problem?mode=firstpage`
-			let headers = { 'Content-Type': 'application/json' }
-			headers['Authorization'] = userData ? userData.id : ''
-			const res = await fetch(url, { headers })
-			const json = await res.json()
-			setTaskState(json)
-		}
-		fetchData()
-	}, [])
-	return <ProbTable problems={taskState} />
+	const [tasks] = useGet('/api/problem?mode=firstpage')
+	return <ProbTable problems={tasks} />
 }
 
 const Index = () => {
@@ -246,13 +214,12 @@ const Index = () => {
 					</Col>
 					<Col className="px-5 p-md-3">
 						<h2>
-							<FontAwesomeIcon icon={faFlagCheckered} /> Get
-							started
+							<FontAwesomeIcon icon={faFlagCheckered} /> Get started
 						</h2>
 						<p>
 							เพิ่งเริ่มการเดินทาง อาจจะอยากได้การต้อนรับที่ดี
-							ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน
-							competitive programming
+							ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน competitive
+							programming
 						</p>
 						<OrangeButton size="lg" href="problem">
 							View Problem
@@ -267,8 +234,7 @@ const Index = () => {
 						<p>
 							ทำโจทย์คนเดียวมันอาจจะเหงา ลองมาเข้า contest
 							การแข่งขันอันทรงเกียรติ (?)
-							เพื่อจะได้มีเพื่อนทำโจทย์และแข่งขันไปพร้อม ๆ
-							กันกับเรา
+							เพื่อจะได้มีเพื่อนทำโจทย์และแข่งขันไปพร้อม ๆ กันกับเรา
 						</p>
 						<OrangeButton size="lg" href="contest">
 							Join Contest
