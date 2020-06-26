@@ -1,13 +1,10 @@
 import { useEffect, useContext, createContext } from 'react'
 import Error from 'next/error'
-import router, { useRouter } from 'next/router'
+import router from 'next/router'
 import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
 import fetch from 'isomorphic-unfetch'
 import jwt_decode from 'jwt-decode'
-export const isLogin = (token) => {
-	return !!token
-}
 
 export const login = (token) => {
 	cookie.set('token', token, { expires: 3 / 24 })
@@ -42,7 +39,7 @@ export const logout = (userData) => {
 }
 
 export const withAuthSync = (WrappedComponent) => {
-	const Wrapper = (props) => {
+	const Wrapper = ({ authData, ...props }) => {
 		const syncLogout = (event) => {
 			if (event.key === 'logout') {
 				console.log('logged out from storage!')
@@ -57,20 +54,22 @@ export const withAuthSync = (WrappedComponent) => {
 			}
 		}, [])
 		return (
-			<AuthProvider value={props.userData}>
-				<TokenProvider value={props.token}>
-					<WrappedComponent {...props} />
-				</TokenProvider>
+			<AuthProvider value={authData}>
+				<WrappedComponent {...props} />
 			</AuthProvider>
 		)
 	}
+
 	Wrapper.getInitialProps = async (ctx) => {
 		const componentProps =
 			WrappedComponent.getInitialProps &&
 			(await WrappedComponent.getInitialProps(ctx))
 		const { token } = nextCookie(ctx)
 		const userData = await auth(token)
-		return { ...componentProps, token, userData }
+		const isLogin = !!token
+		const isAdmin = userData?.state === 0
+		const authData = { token, userData, isLogin, isAdmin }
+		return { ...componentProps, authData }
 	}
 	return Wrapper
 }
@@ -81,18 +80,10 @@ export const useAuthContext = () => {
 	return useContext(AuthContext)
 }
 
-export const TokenContext = createContext()
-export const TokenProvider = (props) => <TokenContext.Provider {...props} />
-export const useTokenContext = () => {
-	return useContext(TokenContext)
-}
-
-export const isAdmin = (userData) => !!userData && userData.state === 0
-
 export const withAdminAuth = (WrappedComponent) => {
 	const Wrapper = (props) => {
-		const userData = useAuthContext()
-		return isAdmin(userData) ? (
+		const { isAdmin } = useAuthContext()
+		return isAdmin ? (
 			<WrappedComponent {...props} />
 		) : (
 			<Error statusCode={404} />

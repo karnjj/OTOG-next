@@ -9,9 +9,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
 import { route } from 'next/dist/next-server/server/router'
 
-const SubmitGroup = props => {
+const SubmitGroup = (props) => {
 	const { name, id_Prob, children } = props
-	const userData = useAuthContext()
+	const { userData } = useAuthContext()
 
 	const [show, setShow] = useState(false)
 	const [fileName, setFileName] = useState('')
@@ -20,9 +20,9 @@ const SubmitGroup = props => {
 
 	const handleShow = () => setShow(true)
 	const handleClose = () => setShow(false)
-	const selectLang = event => setFileLang(event.target.value)
+	const selectLang = (event) => setFileLang(event.target.value)
 
-	const selectFile = event => {
+	const selectFile = (event) => {
 		if (event.target.files[0] !== undefined) {
 			setSelectedFile(event.target.files[0])
 			setFileName(event.target.files[0].name)
@@ -31,7 +31,7 @@ const SubmitGroup = props => {
 			setFileName('')
 		}
 	}
-	const uploadFile = async e => {
+	const uploadFile = async (e) => {
 		e.preventDefault()
 		if (selectedFile === undefined) return false
 		const data = new FormData()
@@ -41,11 +41,14 @@ const SubmitGroup = props => {
 		const respone = await fetch(url, {
 			method: 'POST',
 			headers: {
-				authorization: userData.id
+				authorization: userData.id,
 			},
-			body: data
+			body: data,
 		})
-		if (respone.ok) (router.pathname === '/submission') ? window.location.reload(false) : router.push('/submission')
+		if (respone.ok)
+			router.pathname === '/submission'
+				? window.location.reload(false)
+				: router.push('/submission')
 	}
 
 	return (
@@ -65,21 +68,21 @@ const SubmitGroup = props => {
 					<Form.Group>
 						<Form.File
 							label={fileName || 'Choose file'}
-							accept='.c,.cpp'
+							accept=".c,.cpp"
 							onChange={selectFile}
 							custom
 						/>
 					</Form.Group>
 					<Form.Group>
 						<Form.Label>Choose Language</Form.Label>
-						<Form.Control as='select' onChange={selectLang}>
+						<Form.Control as="select" onChange={selectLang}>
 							<option>C++</option>
 							<option>C</option>
 						</Form.Control>
 					</Form.Group>
 				</Form>
 				<Modal.Footer>
-					<OrangeButton type='submit' onClick={uploadFile}>
+					<OrangeButton type="submit" onClick={uploadFile}>
 						Submit
 					</OrangeButton>
 				</Modal.Footer>

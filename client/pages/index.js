@@ -134,14 +134,14 @@ const Welcome = () => (
 		<h1>Become a god of competitive programming.</h1>
 		<h3>Learn how to code and build algorithms efficiently.</h3>
 		<br />
-		<OrangeButton size='lg' href='register' target='_blank'>
+		<OrangeButton size="lg" href="register" target="_blank">
 			Sign Up
 		</OrangeButton>
 	</StyledWelcome>
 )
 
 const Hello = () => {
-	const userData = useAuthContext()
+	const { userData } = useAuthContext()
 	const [data, setData] = useState({})
 
 	useEffect(() => {
@@ -187,10 +187,11 @@ const Hello = () => {
 					))}
 				</Col>
 			</Row>
-			<Row className='justify-content-center'>
+			<Row className="justify-content-center">
 				<Col as={AliveText}>
 					<b>ยังมีชีวิตรอด : </b>
-					{data.onlineUser?.map((user) => user.sname).join(', ') ?? '. . .'}
+					{data.onlineUser?.map((user) => user.sname).join(', ') ??
+						'. . .'}
 				</Col>
 			</Row>
 		</>
@@ -198,7 +199,7 @@ const Hello = () => {
 }
 
 const ProblemTable = () => {
-	const userData = useAuthContext()
+	const { userData } = useAuthContext()
 	const [taskState, setTaskState] = useState()
 
 	useEffect(() => {
@@ -216,16 +217,16 @@ const ProblemTable = () => {
 }
 
 const Index = () => {
-	const userData = useAuthContext()
+	const { isLogin } = useAuthContext()
 
 	return (
 		<PageLayout container={false}>
 			<Jumbotron>
-				<Container>{userData ? <Hello /> : <Welcome />}</Container>
+				<Container>{isLogin ? <Hello /> : <Welcome />}</Container>
 			</Jumbotron>
 			<Container>
 				<Row xs={1} md={3}>
-					<Col className='px-5 p-md-3'>
+					<Col className="px-5 p-md-3">
 						<h2>
 							<FontAwesomeIcon icon={faQuestion} /> FAQ
 						</h2>
@@ -235,39 +236,41 @@ const Index = () => {
 							คำถามยอดนิยมที่ผู้ใช้ส่วนใหญ่มักจะถามเป็นประจำ
 						</p>
 						<a
-							href='https://medium.com/otog/complete-guide-to-otog-22f88a349e78'
-							target='_blank'
+							href="https://medium.com/otog/complete-guide-to-otog-22f88a349e78"
+							target="_blank"
 						>
-							<OrangeButton size='lg'>Learn More</OrangeButton>
+							<OrangeButton size="lg">Learn More</OrangeButton>
 						</a>
 						<br />
 						<br />
 					</Col>
-					<Col className='px-5 p-md-3'>
+					<Col className="px-5 p-md-3">
 						<h2>
-							<FontAwesomeIcon icon={faFlagCheckered} /> Get started
+							<FontAwesomeIcon icon={faFlagCheckered} /> Get
+							started
 						</h2>
 						<p>
 							เพิ่งเริ่มการเดินทาง อาจจะอยากได้การต้อนรับที่ดี
-							ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน competitive
-							programming
+							ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน
+							competitive programming
 						</p>
-						<OrangeButton size='lg' href='problem'>
+						<OrangeButton size="lg" href="problem">
 							View Problem
 						</OrangeButton>
 						<br />
 						<br />
 					</Col>
-					<Col className='px-5 p-md-3'>
+					<Col className="px-5 p-md-3">
 						<h2>
 							<FontAwesomeIcon icon={faTrophy} /> Contest
 						</h2>
 						<p>
 							ทำโจทย์คนเดียวมันอาจจะเหงา ลองมาเข้า contest
 							การแข่งขันอันทรงเกียรติ (?)
-							เพื่อจะได้มีเพื่อนทำโจทย์และแข่งขันไปพร้อม ๆ กันกับเรา
+							เพื่อจะได้มีเพื่อนทำโจทย์และแข่งขันไปพร้อม ๆ
+							กันกับเรา
 						</p>
-						<OrangeButton size='lg' href='contest'>
+						<OrangeButton size="lg" href="contest">
 							Join Contest
 						</OrangeButton>
 						<br />
@@ -275,8 +278,8 @@ const Index = () => {
 					</Col>
 				</Row>
 				<div>
-					<i className='glyphicon glyphicon-asterisk'></i>
-					<Title icon={faPuzzlePiece} text='โจทย์ใหม่' noBot='true' />
+					<i className="glyphicon glyphicon-asterisk"></i>
+					<Title icon={faPuzzlePiece} text="โจทย์ใหม่" noBot="true" />
 				</div>
 				<hr />
 				<ProblemTable />

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useAuthContext, isAdmin } from '../utils/auth'
+import { useAuthContext } from '../utils/auth'
 
 import { CustomTr, CustomTable } from './CustomTable'
 import { Modal, ButtonGroup } from 'react-bootstrap'
@@ -22,9 +22,9 @@ const ResultCode = styled.code`
 `
 
 const SubmissionTable = (props) => {
-	const userData = useAuthContext()
+	const { isAdmin } = useAuthContext()
 	const { results, canViewCode } = props
-	const showCode = canViewCode || isAdmin(userData)
+	const showCode = canViewCode || isAdmin
 
 	return (
 		<CustomTable ready={!!results}>
@@ -40,10 +40,9 @@ const SubmissionTable = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				{results?.map(
-					(result, index) =>
-						<SubTr key={index} {...result} canViewCode={showCode} />
-				)}
+				{results?.map((result, index) => (
+					<SubTr key={index} {...result} canViewCode={showCode} />
+				))}
 			</tbody>
 		</CustomTable>
 	)
@@ -95,7 +94,7 @@ const SubTr = (props) => {
 				<td>
 					<Alink
 						black
-						target='_blank'
+						target="_blank"
 						href={`${process.env.API_URL}/api/docs/${problemname}`}
 					>
 						{name}
@@ -123,7 +122,7 @@ const SubTr = (props) => {
 				)}
 			</CustomTr>
 
-			<Modal show={showError} onHide={handleClose} centered size='lg'>
+			<Modal show={showError} onHide={handleClose} centered size="lg">
 				<Modal.Header closeButton>
 					<Modal.Title>Error : {idResult}</Modal.Title>
 				</Modal.Header>

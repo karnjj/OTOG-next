@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { withAuthSync, useAuthContext, isAdmin } from '../../utils/auth'
+import { withAuthSync, useAuthContext } from '../../utils/auth'
 
 import { Container, Row, Jumbotron, Col } from 'react-bootstrap'
 
@@ -60,7 +60,7 @@ const Countdown = ({ timeleft, name, idContest }) => (
 			การแข่งขัน <Announce {...{ idContest }}>{name}</Announce> กำลังจะเริ่ม
 		</h1>
 		<h3>
-			ในอีก <Timer timeLeft={timeleft} mode='th' />
+			ในอีก <Timer timeLeft={timeleft} mode="th" />
 			...
 		</h3>
 	</CenteredDiv>
@@ -71,9 +71,9 @@ const EndingContest = ({ idContest }) => {
 		<CenteredDiv>
 			<h1>การแข่งขันจบแล้ว</h1>
 			<OrangeButton
-				href='/contest/history/[id]'
+				href="/contest/history/[id]"
 				dynamic={`/contest/history/${idContest}`}
-				size='lg'
+				size="lg"
 			>
 				สรุปผลการแข่งขัน
 			</OrangeButton>
@@ -81,15 +81,15 @@ const EndingContest = ({ idContest }) => {
 	)
 }
 const NoContest = (props) => {
-	const userData = useAuthContext()
+	const { isAdmin } = useAuthContext()
 	return (
 		<CenteredDiv>
 			<h1>ยังไม่มีการแข่งขัน</h1>
-			<OrangeButton href='/contest/history' className='mr-2'>
+			<OrangeButton href="/contest/history" className="mr-2">
 				See Contest History
 			</OrangeButton>
-			{isAdmin(userData) && (
-				<OrangeButton href='/contest/submission'>See Submission</OrangeButton>
+			{isAdmin && (
+				<OrangeButton href="/contest/submission">See Submission</OrangeButton>
 			)}
 		</CenteredDiv>
 	)
@@ -105,7 +105,7 @@ const NoLogin = (props) => {
 
 const HoldingContest = ({ idContest, timeleft, name }) => {
 	const [tasks, setTasks] = useState(null)
-	const userData = useAuthContext()
+	const { userData, isAdmin } = useAuthContext()
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -128,26 +128,21 @@ const HoldingContest = ({ idContest, timeleft, name }) => {
 			</Title>
 			<hr />
 			{tasks?.map((task, index) => (
-				<TaskCard
-					key={index}
-					idContest={idContest}
-					index={index + 1}
-					{...task}
-				/>
+				<TaskCard key={index} idContest={idContest} index={index + 1} {...task} />
 			)) ?? <Loader />}
-			{isAdmin(userData) && (
+			{isAdmin && (
 				<Row>
-					<Col className='d-flex justify-content-end'>
+					<Col className="d-flex justify-content-end">
 						<OrangeButton
-							outline='true'
-							href='/contest/submission'
-							className='mr-3'
+							outline="true"
+							href="/contest/submission"
+							className="mr-3"
 						>
 							See Submission
 						</OrangeButton>
 						<OrangeButton
-							outline='true'
-							href='/contest/history/[id]'
+							outline="true"
+							href="/contest/history/[id]"
 							dynamic={`/contest/history/${idContest}`}
 						>
 							Live Scoreboard
@@ -160,7 +155,7 @@ const HoldingContest = ({ idContest, timeleft, name }) => {
 }
 
 const Contest = ({ contest, serverTime }) => {
-	const userData = useAuthContext()
+	const { isLogin } = useAuthContext()
 	var start,
 		now,
 		end,
@@ -179,12 +174,12 @@ const Contest = ({ contest, serverTime }) => {
 	}
 
 	return (
-		<PageLayout container={false} fluid className='justify-content-center'>
+		<PageLayout container={false} fluid className="justify-content-center">
 			<StyledJumbotron>
 				<Container fluid>
-					<Row className='d-flex justify-content-center'>
+					<Row className="d-flex justify-content-center">
 						<Col xs={12} lg={isHolding ? 10 : 12} xl={isHolding ? 8 : 12}>
-							{!userData ? (
+							{!isLogin ? (
 								<NoLogin />
 							) : isAboutToStart ? (
 								<Countdown

@@ -1,10 +1,5 @@
 import { useState, useEffect } from 'react'
-import {
-	useAuthContext,
-	withAuthSync,
-	useTokenContext,
-	isAdmin,
-} from '../utils/auth'
+import { useAuthContext, withAuthSync } from '../utils/auth'
 import { useGet } from '../utils/api'
 
 import { Row, Col, Form, InputGroup } from 'react-bootstrap'
@@ -47,11 +42,10 @@ const ProbButton = styled.button`
 `
 
 const Problem = () => {
-	const token = useTokenContext()
-	const userData = useAuthContext()
+	const { token, isAdmin } = useAuthContext()
 
 	const [searchState, setsearchState] = useState('')
-	const [showAll, setShowAll] = useState(isAdmin(userData))
+	const [showAll, setShowAll] = useState(isAdmin)
 
 	const url = `/api/problem?mode=${showAll ? 'admin' : 'full'}`
 	const [taskState] = useGet(url, token, [showAll])
@@ -70,18 +64,19 @@ const Problem = () => {
 				id.indexOf(searchState) !== -1
 			)
 		})
+
 	return (
 		<PageLayout>
-			<Title icon={faPuzzlePiece} text='Problem' />
+			<Title icon={faPuzzlePiece} text="Problem" />
 			<Row>
 				<Col as={InputGroup} xs sm={6} md={8}>
-					{isAdmin(userData) && (
+					{isAdmin && (
 						<InputGroup.Prepend>
 							<InputGroup.Text>
 								<OrangeCheck
-									type='switch'
-									id='custom-switch'
-									label='ทั้งหมด '
+									type="switch"
+									id="custom-switch"
+									label="ทั้งหมด "
 									checked={showAll}
 									onChange={handleChange}
 								/>
@@ -89,13 +84,13 @@ const Problem = () => {
 						</InputGroup.Prepend>
 					)}
 					<Form.Control
-						placeholder='ค้นหาโจทย์'
+						placeholder="ค้นหาโจทย์"
 						value={searchState}
 						onChange={updateSearch}
 					/>
 				</Col>
-				<Col xs sm={4} md={3} lg={2} className='ml-auto'>
-					<OrangeButton href='submission' className='w-100'>
+				<Col xs sm={4} md={3} lg={2} className="ml-auto">
+					<OrangeButton href="submission" className="w-100">
 						View Submission
 					</OrangeButton>
 				</Col>

@@ -13,7 +13,7 @@ const StyledPop = styled(Popover)`
 `
 
 const ProbTable = ({ problems }) => {
-	const userData = useAuthContext()
+	const { isLogin } = useAuthContext()
 	return (
 		<CustomTable ready={problems ? true : false}>
 			<thead>
@@ -22,7 +22,7 @@ const ProbTable = ({ problems }) => {
 					<th>Name</th>
 					<th>Passed</th>
 					<th>Ratings</th>
-					{userData && <th>Submit</th>}
+					{isLogin && <th>Submit</th>}
 				</tr>
 			</thead>
 			<tbody>
@@ -46,7 +46,7 @@ const ProbTr = (props) => {
 		acceptState,
 		wrongState,
 	} = props
-	const userData = useAuthContext()
+	const { isLogin } = useAuthContext()
 
 	const passed = []
 	if (pass) {
@@ -58,10 +58,7 @@ const ProbTr = (props) => {
 		<CustomTr {...{ acceptState, wrongState }}>
 			<td>{id_Prob}</td>
 			<td>
-				<Alink
-					target='_blank'
-					href={`${process.env.API_URL}/api/docs/${sname}`}
-				>
+				<Alink target="_blank" href={`${process.env.API_URL}/api/docs/${sname}`}>
 					{name}
 					<br />({time} วินาที {memory} MB)
 				</Alink>
@@ -69,7 +66,7 @@ const ProbTr = (props) => {
 			<td>
 				{pass ? (
 					<OverlayTrigger
-						placement='top'
+						placement="top"
 						overlay={
 							<StyledPop>
 								<Popover.Content as={Row}>
@@ -91,10 +88,12 @@ const ProbTr = (props) => {
 				)}
 			</td>
 			<td>{rating ? rating : '-'}</td>
-			{userData && (
+			{isLogin && (
 				<td>
 					<SubmitGroup {...props}>
-						{(acceptState || wrongState) && <ViewCodeButton {...{ id_Prob }} />}
+						{(acceptState || wrongState) && (
+							<ViewCodeButton {...{ id_Prob }} />
+						)}
 					</SubmitGroup>
 				</td>
 			)}

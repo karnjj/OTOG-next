@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useTokenContext } from '../../utils/auth'
+import { useAuthContext } from '../../utils/auth'
 import fetch from 'isomorphic-unfetch'
 import { useGet } from '../../utils/api'
 import DatePicker from 'react-datepicker'
@@ -8,15 +8,10 @@ import { Alink } from '../CustomText'
 import { CustomTable } from '../CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-	faCog,
-	faEye,
-	faEyeSlash,
-	faPlusCircle,
-} from '@fortawesome/free-solid-svg-icons'
+import { faCog, faEye, faEyeSlash, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 
 export const NewContest = () => {
-	const token = useTokenContext()
+	const { token } = useAuthContext()
 	const [show, setShow] = useState(false)
 	const [name, setName] = useState('')
 	const [mode, setMode] = useState('unrated')
@@ -43,7 +38,7 @@ export const NewContest = () => {
 	}
 	return (
 		<>
-			<Button variant='success' size='lg' onClick={handleShow}>
+			<Button variant="success" size="lg" onClick={handleShow}>
 				<FontAwesomeIcon icon={faPlusCircle} /> New Contest
 			</Button>
 			<Modal show={show} onHide={handleClose}>
@@ -63,22 +58,22 @@ export const NewContest = () => {
 							<Form.Label>Choose Mode : </Form.Label>
 							<InputGroup>
 								<Form.Control
-									as='select'
+									as="select"
 									onChange={(e) => setMode(e.target.value)}
 								>
-									<option selected value='unrated'>
+									<option selected value="unrated">
 										Unrated Contest
 									</option>
-									<option value='rated'>Rated Contest</option>
+									<option value="rated">Rated Contest</option>
 								</Form.Control>
 								<Form.Control
-									as='select'
+									as="select"
 									onChange={(e) => setJudge(e.target.value)}
 								>
-									<option selected value='classic'>
+									<option selected value="classic">
 										Classic (Time based)
 									</option>
-									<option value='acm'>ACM Mode</option>
+									<option value="acm">ACM Mode</option>
 									<option disabled>OTOG Mode</option>
 									<option disabled>Blind Mode</option>
 								</Form.Control>
@@ -86,7 +81,7 @@ export const NewContest = () => {
 						</Form.Group>
 						<Form.Group>
 							<Form.Label>Time : </Form.Label>
-							<InputGroup as={Row} className='m-auto'>
+							<InputGroup as={Row} className="m-auto">
 								<Form.Control
 									as={DatePicker}
 									selected={startDate}
@@ -94,10 +89,10 @@ export const NewContest = () => {
 										setStartDate(date), setEndDate(date)
 									}}
 									showTimeSelect
-									timeFormat='HH:mm'
+									timeFormat="HH:mm"
 									timeIntervals={30}
-									timeCaption='time'
-									dateFormat='d/MMMM/yyyy HH:mm'
+									timeCaption="time"
+									dateFormat="d/MMMM/yyyy HH:mm"
 								/>
 								<Col xs={1} />
 								<Form.Control
@@ -105,17 +100,17 @@ export const NewContest = () => {
 									selected={endDate}
 									onChange={(date) => setEndDate(date)}
 									showTimeSelect
-									timeFormat='HH:mm'
+									timeFormat="HH:mm"
 									timeIntervals={30}
-									timeCaption='time'
-									dateFormat='d/MMMM/yyyy HH:mm'
+									timeCaption="time"
+									dateFormat="d/MMMM/yyyy HH:mm"
 								/>
 							</InputGroup>
 						</Form.Group>
 					</Form>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant='success' onClick={onSubmit}>
+					<Button variant="success" onClick={onSubmit}>
 						Save
 					</Button>
 				</Modal.Footer>
@@ -125,7 +120,7 @@ export const NewContest = () => {
 }
 
 export const ContestConfig = ({ idContest }) => {
-	const token = useTokenContext()
+	const { token } = useAuthContext()
 
 	const isSelected = idContest !== 0
 	const [data] = useGet(
@@ -150,8 +145,7 @@ export const ContestConfig = ({ idContest }) => {
 		setContestData({ ...contestData, judge: event.target.value })
 	const handleChangeStart = (date) =>
 		setContestData({ ...contestData, startDate: date, endDate: date })
-	const handleChangeEnd = (date) =>
-		setContestData({ ...contestData, endDate: date })
+	const handleChangeEnd = (date) => setContestData({ ...contestData, endDate: date })
 
 	const onSubmit = async (event) => {
 		event.preventDefault()
@@ -177,8 +171,8 @@ export const ContestConfig = ({ idContest }) => {
 	return (
 		<>
 			<Button
-				variant='warning'
-				className='ml-2'
+				variant="warning"
+				className="ml-2"
 				onClick={handleShow}
 				disabled={!isSelected}
 			>
@@ -197,13 +191,13 @@ export const ContestConfig = ({ idContest }) => {
 						<Form.Group>
 							<Form.Label>Choose Mode : </Form.Label>
 							<InputGroup>
-								<Form.Control as='select' onChange={handleChangeMode}>
-									<option value='unrated'>Unrated Contest</option>
-									<option value='rated'>Rated Contest</option>
+								<Form.Control as="select" onChange={handleChangeMode}>
+									<option value="unrated">Unrated Contest</option>
+									<option value="rated">Rated Contest</option>
 								</Form.Control>
-								<Form.Control as='select' onChange={handleChangeJudge}>
-									<option value='classic'>Classic (Time based)</option>
-									<option value='acm'>ACM Mode</option>
+								<Form.Control as="select" onChange={handleChangeJudge}>
+									<option value="classic">Classic (Time based)</option>
+									<option value="acm">ACM Mode</option>
 									<option disabled>OTOG Mode</option>
 									<option disabled>Blind Mode</option>
 								</Form.Control>
@@ -211,16 +205,16 @@ export const ContestConfig = ({ idContest }) => {
 						</Form.Group>
 						<Form.Group>
 							<Form.Label>Time : </Form.Label>
-							<InputGroup as={Row} className='m-auto'>
+							<InputGroup as={Row} className="m-auto">
 								<Form.Control
 									as={DatePicker}
 									selected={startDate}
 									onChange={handleChangeStart}
 									showTimeSelect
-									timeFormat='HH:mm'
+									timeFormat="HH:mm"
 									timeIntervals={30}
-									timeCaption='time'
-									dateFormat='d/MMMM/yyyy HH:mm'
+									timeCaption="time"
+									dateFormat="d/MMMM/yyyy HH:mm"
 								/>
 								<Col xs={1} />
 								<Form.Control
@@ -228,17 +222,17 @@ export const ContestConfig = ({ idContest }) => {
 									selected={endDate}
 									onChange={handleChangeEnd}
 									showTimeSelect
-									timeFormat='HH:mm'
+									timeFormat="HH:mm"
 									timeIntervals={30}
-									timeCaption='time'
-									dateFormat='d/MMMM/yyyy HH:mm'
+									timeCaption="time"
+									dateFormat="d/MMMM/yyyy HH:mm"
 								/>
 							</InputGroup>
 						</Form.Group>
 					</Form>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant='success' onClick={onSubmit}>
+					<Button variant="success" onClick={onSubmit}>
 						Save
 					</Button>
 				</Modal.Footer>
@@ -250,7 +244,7 @@ export const ContestConfig = ({ idContest }) => {
 const ConfigTask = (props) => {
 	const { id_Prob, see, idContest } = props
 	const [onoff, setOnoff] = useState(undefined)
-	const token = useTokenContext()
+	const { token } = useAuthContext()
 	useEffect(() => {
 		setOnoff(see)
 	}, [see, idContest])
@@ -276,7 +270,7 @@ const ConfigTask = (props) => {
 }
 
 const EditModal = (props) => {
-	const token = useTokenContext()
+	const { token } = useAuthContext()
 	const { show, setShow, id_Prob, ...rest } = props
 
 	const [data, setData] = useState(rest)
@@ -297,10 +291,8 @@ const EditModal = (props) => {
 				break
 		}
 	}
-	const handleChangeName = (event) =>
-		setData({ ...data, name: event.target.value })
-	const handleChangeSname = (event) =>
-		setData({ ...data, sname: event.target.value })
+	const handleChangeName = (event) => setData({ ...data, name: event.target.value })
+	const handleChangeSname = (event) => setData({ ...data, sname: event.target.value })
 	const handleChangeMemory = (event) =>
 		setData({ ...data, memory: Number(event.target.value) ?? '' })
 	const handleChangeTime = (event) =>
@@ -346,7 +338,10 @@ const EditModal = (props) => {
 					</Col>
 					<Col xs={6}>
 						<Form.Label>Memory</Form.Label>
-						<Form.Control defaultValue={memory} onChange={handleChangeMemory} />
+						<Form.Control
+							defaultValue={memory}
+							onChange={handleChangeMemory}
+						/>
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
@@ -364,9 +359,9 @@ const EditModal = (props) => {
 				</Form.Group>
 				<Form.Group>
 					<Form.File
-						id='doc'
+						id="doc"
 						label={pdf?.name ?? 'New Document (PDF)'}
-						accept='.pdf'
+						accept=".pdf"
 						onChange={selectFile}
 						custom
 						required
@@ -374,16 +369,16 @@ const EditModal = (props) => {
 				</Form.Group>
 				<Form.Group>
 					<Form.File
-						id='testcase'
+						id="testcase"
 						label={zip?.name ?? 'New Testcases (ZIP)'}
-						accept='.zip'
+						accept=".zip"
 						onChange={selectFile}
 						custom
 					/>
 				</Form.Group>
 			</Form>
 			<Modal.Footer>
-				<Button variant='success' onClick={onSave}>
+				<Button variant="success" onClick={onSave}>
 					Save
 				</Button>
 			</Modal.Footer>
@@ -400,10 +395,7 @@ const TaskTr = (props) => {
 		<tr onDoubleClick={handleShow}>
 			<td>{id_Prob}</td>
 			<td>
-				<Alink
-					target='_blank'
-					href={`${process.env.API_URL}/api/docs/${sname}`}
-				>
+				<Alink target="_blank" href={`${process.env.API_URL}/api/docs/${sname}`}>
 					{name}
 				</Alink>
 			</td>
@@ -421,7 +413,7 @@ const TaskTr = (props) => {
 export const SelectContest = ({ contests, setId }) => (
 	<Form.Group>
 		<Form.Label>Choose Contest : </Form.Label>
-		<Form.Control as='select' onChange={setId}>
+		<Form.Control as="select" onChange={setId}>
 			<option disabled selected>
 				select a contest
 			</option>
@@ -437,12 +429,12 @@ export const SelectContest = ({ contests, setId }) => (
 )
 
 export const TaskTable = ({ idContest }) => {
-	const token = useTokenContext()
+	const { token } = useAuthContext()
 	const [tasks] = useGet(`/api/admin/contest/${idContest}`, token)
 
 	return (
 		<CustomTable ready={!!tasks}>
-			<thead className='thead-light'>
+			<thead className="thead-light">
 				<tr>
 					<th>#</th>
 					<th>Name</th>

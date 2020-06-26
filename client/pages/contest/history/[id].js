@@ -1,19 +1,10 @@
 import { useEffect, useState } from 'react'
-import {
-	withAuthSync,
-	useAuthContext,
-	useTokenContext,
-} from '../../../utils/auth'
+import { withAuthSync, useAuthContext } from '../../../utils/auth'
 
 import { Title, Name } from '../../../components/CustomText'
 import PageLayout from '../../../components/PageLayout'
 import OrangeButton from '../../../components/OrangeButton'
-import {
-	CustomTable,
-	CustomTr,
-	UserTd,
-	CustomTd,
-} from '../../../components/CustomTable'
+import { CustomTable, CustomTr, UserTd, CustomTd } from '../../../components/CustomTable'
 
 import { faChartArea } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
@@ -21,15 +12,14 @@ import { useRouter } from 'next/router'
 const ScoreTr = (props) => {
 	const { rank, sname, sumTime, sum, scores, problems, rating, idUser } = props
 	const maxSum = problems.reduce((total, prob) => total + prob.score, 0)
-	const score = (prob) =>
-		scores[prob.id_Prob] ? scores[prob.id_Prob].score : 0
+	const score = (prob) => (scores[prob.id_Prob] ? scores[prob.id_Prob].score : 0)
 	const round = (num) => Math.round(num * 100) / 100
 
 	return (
 		<CustomTr acceptState={sum === maxSum}>
 			<td>{rank}</td>
 			<td>
-				<Name {...{ rating, sname, idUser}} />
+				<Name {...{ rating, sname, idUser }} />
 			</td>
 			{problems.map((prob, index) => (
 				<CustomTd
@@ -75,8 +65,7 @@ const Scoreboard = (props) => {
 const ContestScoreboard = (props) => {
 	const router = useRouter()
 	const { id } = router.query
-	const userData = useAuthContext()
-	const token = useTokenContext()
+	const { userData, token } = useAuthContext()
 	const [contestants, setContestants] = useState([])
 	const [problems, setProblems] = useState([])
 
@@ -104,8 +93,8 @@ const ContestScoreboard = (props) => {
 
 	return (
 		<PageLayout>
-			<Title icon={faChartArea} noBot='true' text={`Scoreboard #${id}`}>
-				<OrangeButton href='/contest/history'>View Contest</OrangeButton>
+			<Title icon={faChartArea} noBot="true" text={`Scoreboard #${id}`}>
+				<OrangeButton href="/contest/history">View Contest</OrangeButton>
 			</Title>
 			<hr />
 			<Scoreboard {...{ contestants, problems }} />

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { withAuthSync, useAuthContext, isAdmin } from '../utils/auth'
+import { withAuthSync, useAuthContext } from '../utils/auth'
 
 import {
 	Row,
@@ -26,7 +26,7 @@ const Icon = styled(FontAwesomeIcon)`
 `
 const MiniSubmission = (props) => {
 	const { idContest, idProb, parentCallback } = props
-	const userData = useAuthContext()
+	const { userData } = useAuthContext()
 	const [best, setBest] = useState([])
 	const [lastest, setLastest] = useState([])
 	const [SC, setSC] = useState('test')
@@ -55,8 +55,7 @@ const MiniSubmission = (props) => {
 		}
 	}, [])
 	const sendData = (lastest, best) => {
-		if (lastest[0] !== undefined)
-			parentCallback(lastest[0].score, best[0].idResult)
+		if (lastest[0] !== undefined) parentCallback(lastest[0].score, best[0].idResult)
 	}
 	/*
     const HideSc = event => {
@@ -83,7 +82,7 @@ const MiniSubmission = (props) => {
 	}
 
 	return (
-		<Table size='sm' bordered hover>
+		<Table size="sm" bordered hover>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -101,7 +100,10 @@ const MiniSubmission = (props) => {
 								<td>{prob.result}</td>
 								<td>{prob.score}</td>
 								<td>
-									<ViewCodeButton mini='true' idResult={prob.idResult} />
+									<ViewCodeButton
+										mini="true"
+										idResult={prob.idResult}
+									/>
 								</td>
 							</tr>
 						)
@@ -122,7 +124,10 @@ const MiniSubmission = (props) => {
 								<td>{prob.result}</td>
 								<td>{prob.score}</td>
 								<td>
-									<ViewCodeButton mini='true' idResult={prob.idResult} />
+									<ViewCodeButton
+										mini="true"
+										idResult={prob.idResult}
+									/>
 								</td>
 							</tr>
 						)
@@ -159,7 +164,7 @@ export default (props) => {
 			<Accordion.Toggle
 				{...props}
 				as={Icon}
-				className='float-right'
+				className="float-right"
 				icon={isHidden ? faChevronDown : faChevronUp}
 				onClick={handleClick}
 			/>
@@ -211,25 +216,25 @@ export default (props) => {
 	return (
 		<Accordion
 			as={Card}
-			defaultActiveKey='0'
-			className='mb-4'
+			defaultActiveKey="0"
+			className="mb-4"
 			border={solved && 'success'}
 		>
-			<Accordion.Toggle as={Card.Header} eventKey='0'>
+			<Accordion.Toggle as={Card.Header} eventKey="0">
 				<h5>
 					<Row xs={1}>
 						<Col md>
 							Problem {index} : {name}
 						</Col>
-						<Col xs='auto' className='ml-auto'>
-							{solved && <Badge variant='success'>Solved</Badge>}
+						<Col xs="auto" className="ml-auto">
+							{solved && <Badge variant="success">Solved</Badge>}
 						</Col>
 					</Row>
 					ผ่านแล้ว : {passed}
 				</h5>
 			</Accordion.Toggle>
 
-			<Accordion.Collapse eventKey='0'>
+			<Accordion.Collapse eventKey="0">
 				<Card.Body as={Row}>
 					<Col>
 						<MiniSubmission
@@ -239,27 +244,27 @@ export default (props) => {
 						/>
 					</Col>
 					<Col xs={0} lg={1} />
-					<Col style={{ maxWidth: '350px' }} className='mx-auto'>
+					<Col style={{ maxWidth: '350px' }} className="mx-auto">
 						<Form.File
 							as={Col}
-							className='mb-4'
+							className="mb-4"
 							label={fileName || 'Choose file'}
-							accept='.c,.cpp'
+							accept=".c,.cpp"
 							onChange={selectFile}
 							custom
 						/>
 						<ButtonToolbar as={Row}>
-							<ButtonGroup className='ml-auto mr-4'>
+							<ButtonGroup className="ml-auto mr-4">
 								<a
-									className='btn btn-secondary'
-									target='_blank'
+									className="btn btn-secondary"
+									target="_blank"
 									href={`${process.env.API_URL}/api/docs/${sname}`}
 								>
 									View PDF
 								</a>
 							</ButtonGroup>
-							<ButtonGroup className='mr-auto'>
-								<OrangeButton type='submit' onClick={uploadFile}>
+							<ButtonGroup className="mr-auto">
+								<OrangeButton type="submit" onClick={uploadFile}>
 									Submit
 								</OrangeButton>
 							</ButtonGroup>

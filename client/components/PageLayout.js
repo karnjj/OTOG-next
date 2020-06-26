@@ -1,24 +1,10 @@
 import { Alink } from './CustomText'
-import { logout, useAuthContext, isAdmin } from '../utils/auth'
+import { logout, useAuthContext } from '../utils/auth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-import {
-	Row,
-	Col,
-	Container,
-	Nav,
-	Navbar,
-	NavDropdown,
-	Image,
-} from 'react-bootstrap'
-import {
-	ScrollNavbar,
-	HeaderSpace,
-	NavLink,
-	NavTitle,
-	NavText,
-} from './CustomNavbar'
+import { Row, Col, Container, Nav, Navbar, NavDropdown, Image } from 'react-bootstrap'
+import { ScrollNavbar, HeaderSpace, NavLink, NavTitle, NavText } from './CustomNavbar'
 import {
 	faHome,
 	faPuzzlePiece,
@@ -35,7 +21,7 @@ const ProfileImage = styled(Image)`
 	margin: -2px 0;
 `
 export const Header = () => {
-	const userData = useAuthContext()
+	const { userData, isLogin, isAdmin } = useAuthContext()
 	const router = useRouter()
 	const navLinks = [
 		//name, icon, paths, exact
@@ -48,30 +34,24 @@ export const Header = () => {
 	return (
 		<>
 			<HeaderSpace />
-			<ScrollNavbar
-				collapseOnSelect
-				expand='md'
-				bg='light'
-				expand='sm'
-				fixed='top'
-			>
-				<Link href={isAdmin(userData) ? '/admin' : '/'} passHref>
+			<ScrollNavbar collapseOnSelect expand="md" bg="light" expand="sm" fixed="top">
+				<Link href={isAdmin ? '/admin' : '/'} passHref>
 					<Navbar.Brand
-						className='mr-auto'
-						target={isAdmin(userData) ? '_blank' : undefined}
+						className="mr-auto"
+						target={isAdmin ? '_blank' : undefined}
 					>
 						<NavTitle>
 							OTOG<NavText> - One Tambon One Grader</NavText>
 						</NavTitle>
 					</Navbar.Brand>
 				</Link>
-				<Navbar.Toggle aria-controls='responsive-navbar-nav' />
-				<Navbar.Collapse id='responsive-navbar-nav'>
-					<Nav className='ml-auto'>
+				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
+				<Navbar.Collapse id="responsive-navbar-nav">
+					<Nav className="ml-auto">
 						{navLinks.map(([name, icon, paths, exact]) => (
 							<NavLink
 								{...{ name, icon }}
-								className='mx-2 mx-xl-0'
+								className="mx-2 mx-xl-0"
 								path={paths[0]}
 								key={name}
 								active={paths.some((path) =>
@@ -81,43 +61,47 @@ export const Header = () => {
 								)}
 							/>
 						))}
-						{userData ? (
+						{isLogin ? (
 							<NavDropdown
 								alignRight
 								title={
 									<ProfileImage
-										className='mx-1 ml-xl-0'
+										className="mx-1 ml-xl-0"
 										src={`${process.env.API_URL}/api/avatar/${userData.id}`}
 										roundedCircle
 									/>
 								}
 							>
 								<Link
-									href='/profile/[id]'
+									href="/profile/[id]"
 									as={`/profile/${userData.id}`}
 									passHref
 									prefetch={false}
 								>
 									<NavDropdown.Item>
-										<NavTitle name='Profile' icon={faUser} shrink={false} />
+										<NavTitle
+											name="Profile"
+											icon={faUser}
+											shrink={false}
+										/>
 									</NavDropdown.Item>
 								</Link>
 								<NavDropdown.Divider />
 								<NavDropdown.Item onClick={handleClickLogout}>
 									<NavTitle
-										name='Logout'
+										name="Logout"
 										icon={faSignInAlt}
-										red='true'
+										red="true"
 										shrink={false}
 									/>
 								</NavDropdown.Item>
 							</NavDropdown>
 						) : (
 							<NavLink
-								name='Login'
-								className='mx-2 mx-xl-0'
+								name="Login"
+								className="mx-2 mx-xl-0"
 								icon={faSignInAlt}
-								path='/login'
+								path="/login"
 							/>
 						)}
 					</Nav>
@@ -130,14 +114,14 @@ export const Header = () => {
 export const Footer = () => (
 	<>
 		<hr />
-		<Row sm={1} className='mb-3'>
-			<Col md='auto' className='mr-auto'>
+		<Row sm={1} className="mb-3">
+			<Col md="auto" className="mr-auto">
 				If you have any problem or suggestion, please{' '}
-				<Alink href='https://fb.me/kkuotog' target='_blank'>
+				<Alink href="https://fb.me/kkuotog" target="_blank">
 					Contact Us
 				</Alink>
 			</Col>
-			<Col md='auto'>&copy; 2019 Phakphum Dev Team</Col>
+			<Col md="auto">&copy; 2019 Phakphum Dev Team</Col>
 		</Row>
 	</>
 )
