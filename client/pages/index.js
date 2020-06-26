@@ -1,7 +1,4 @@
-import { useState, useEffect } from 'react'
 import { withAuthSync, useAuthContext } from '../utils/auth'
-import fetch from 'isomorphic-unfetch'
-
 import { Jumbotron, Container, Row, Col } from 'react-bootstrap'
 import { Title } from '../components/CustomText'
 import PageLayout from '../components/PageLayout'
@@ -10,10 +7,10 @@ import OrangeButton from '../components/OrangeButton'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-	faQuestion,
-	faFlagCheckered,
-	faTrophy,
-	faPuzzlePiece,
+  faQuestion,
+  faFlagCheckered,
+  faTrophy,
+  faPuzzlePiece,
 } from '@fortawesome/free-solid-svg-icons'
 
 import styled, { keyframes } from 'styled-components'
@@ -25,8 +22,8 @@ import { down } from 'styled-breakpoints'
 import { useGet } from '../utils/api'
 
 const WelcomeText = styled.h4`
-	color: ${vars.black};
-	text-align: center;
+  color: ${vars.black};
+  text-align: center;
 `
 const fadein = keyframes`
 	0% {
@@ -39,29 +36,29 @@ const fadein = keyframes`
 	}
 `
 const AliveText = styled.h6`
-	color: ${vars.black};
-	text-align: center;
-	min-height: 4rem;
-	font-weight: 400;
-	max-width: 900px;
-	overflow-wrap: break-word;
+  color: ${vars.black};
+  text-align: center;
+  min-height: 4rem;
+  font-weight: 400;
+  max-width: 900px;
+  overflow-wrap: break-word;
 `
 const Number = styled(CountUp)`
-	color: ${vars.white};
-	font-family: Calibri;
-	font-size: 50px;
-	margin-top: -5px;
-	font-weight: 100;
-	text-align: center;
+  color: ${vars.white};
+  font-family: Calibri;
+  font-size: 50px;
+  margin-top: -5px;
+  font-weight: 100;
+  text-align: center;
 `
 const Message = styled.h5`
-	color: ${vars.white};
-	font-family: Calibri;
-	font-size: 15px;
-	margin-top: 10px;
-	margin-bottom: 0px;
-	font-weight: 600;
-	text-align: center;
+  color: ${vars.white};
+  font-family: Calibri;
+  font-size: 15px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  font-weight: 600;
+  text-align: center;
 `
 const popin = keyframes`
 	0% {
@@ -75,182 +72,183 @@ const popin = keyframes`
 	}
 `
 const CountButton = styled.li`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	user-select: none;
-	cursor: pointer;
-	background: ${(props) => lighten(0.05, props.color)};
-	box-shadow: 0 5px ${vars.btn_gray};
-	border-radius: 1rem;
-	width: 128px;
-	height: 95px;
-	padding: 20px;
-	margin: 6px 3px;
-	transition: background-color 0.1s;
-	&:hover {
-		background: ${(props) => lighten(0.08, props.color)};
-	}
-	&:active {
-		background: ${(props) => props.color};
-		transform: translateY(3px);
-		box-shadow: 0 2px ${vars.btn_gray};
-	}
-	animation: ${popin} 0.25s ease backwards ${(props) => props.index * 0.01 + 's'};
-	animation-play-state: ${(props) => !props.number && 'pause'};
-	animation-delay: ${() => Math.round(Math.random() * 100) + 'ms'};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  cursor: pointer;
+  background: ${(props) => lighten(0.05, props.color)};
+  box-shadow: 0 5px ${vars.btn_gray};
+  border-radius: 1rem;
+  width: 128px;
+  height: 95px;
+  padding: 20px;
+  margin: 6px 3px;
+  transition: background-color 0.1s;
+  &:hover {
+    background: ${(props) => lighten(0.08, props.color)};
+  }
+  &:active {
+    background: ${(props) => props.color};
+    transform: translateY(3px);
+    box-shadow: 0 2px ${vars.btn_gray};
+  }
+  animation: ${popin} 0.25s ease backwards
+    ${(props) => props.index * 0.01 + 's'};
+  animation-play-state: ${(props) => !props.number && 'pause'};
+  animation-delay: ${() => Math.round(Math.random() * 100) + 'ms'};
 `
 const ButtonWrapper = styled.ul`
-	display: flex;
-	justify-content: center;
-	flex-wrap: wrap;
-	list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  list-style: none;
 `
 
 const Code = styled.code`
-	padding: 0 8px;
-	font-size: 2.4rem;
-	font-weight: bold;
-	color: ${(props) => props.color};
+  padding: 0 8px;
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: ${(props) => props.color};
 `
 const StyledWelcome = styled.div`
-	${down('xl')} {
-		text-align: center;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
+  ${down('xl')} {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `
 
 const Welcome = () => (
-	<StyledWelcome>
-		<h1>
-			Welcome to <Code color={vars.green}>O</Code>
-			<Code color={vars.red}>T</Code>
-			<Code color={vars.orange}>O</Code>
-			<Code color={vars.blue}>G</Code>
-		</h1>
-		<h1>Become a god of competitive programming.</h1>
-		<h3>Learn how to code and build algorithms efficiently.</h3>
-		<br />
-		<OrangeButton size="lg" href="register" target="_blank">
-			Sign Up
-		</OrangeButton>
-	</StyledWelcome>
+  <StyledWelcome>
+    <h1>
+      Welcome to <Code color={vars.green}>O</Code>
+      <Code color={vars.red}>T</Code>
+      <Code color={vars.orange}>O</Code>
+      <Code color={vars.blue}>G</Code>
+    </h1>
+    <h1>Become a god of competitive programming.</h1>
+    <h3>Learn how to code and build algorithms efficiently.</h3>
+    <br />
+    <OrangeButton size='lg' href='register' target='_blank'>
+      Sign Up
+    </OrangeButton>
+  </StyledWelcome>
 )
 
 const Hello = () => {
-	const { userData } = useAuthContext()
-	const [data] = useGet('/api/countProblem')
-	const { allProblem, userProblem, newProb, onlineUser } = data ?? {}
-	const { passProb, wrongProb } = userProblem ?? {}
-	const noSub = allProblem - passProb - wrongProb
+  const { userData } = useAuthContext()
+  const [data] = useGet('/api/countProblem')
+  const { allProblem, userProblem, newProb, onlineUser } = data ?? {}
+  const { passProb, wrongProb } = userProblem ?? {}
+  const noSub = allProblem - passProb - wrongProb
 
-	return (
-		<>
-			<Row>
-				<Col as={WelcomeText}>สวัสดี {userData.sname}</Col>
-			</Row>
-			<Row>
-				<Col as={ButtonWrapper}>
-					{[
-						//message,  number,     color
-						['ทั้งหมด', allProblem, vars.btn_black],
-						['ผ่านแล้ว', passProb, vars.btn_green],
-						['ยังไม่ผ่าน', wrongProb, vars.btn_red],
-						['ยังไม่ส่ง', noSub, vars.btn_orng],
-						['โจทย์วันนี้', newProb, vars.btn_blue],
-					].map(([message, number, color], index) => (
-						<CountButton {...{ number, color, index }} key={index}>
-							<Message>{message}</Message>
-							<Number end={number ? number : 0} />
-						</CountButton>
-					))}
-				</Col>
-			</Row>
-			<Row className="justify-content-center">
-				<Col as={AliveText}>
-					<b>ยังมีชีวิตรอด : </b>
-					{onlineUser?.map((user) => user.sname).join(', ') ?? '. . .'}
-				</Col>
-			</Row>
-		</>
-	)
+  return (
+    <>
+      <Row>
+        <Col as={WelcomeText}>สวัสดี {userData.sname}</Col>
+      </Row>
+      <Row>
+        <Col as={ButtonWrapper}>
+          {[
+            //message,  number,     color
+            ['ทั้งหมด', allProblem, vars.btn_black],
+            ['ผ่านแล้ว', passProb, vars.btn_green],
+            ['ยังไม่ผ่าน', wrongProb, vars.btn_red],
+            ['ยังไม่ส่ง', noSub, vars.btn_orng],
+            ['โจทย์วันนี้', newProb, vars.btn_blue],
+          ].map(([message, number, color], index) => (
+            <CountButton {...{ number, color, index }} key={index}>
+              <Message>{message}</Message>
+              <Number end={number ? number : 0} />
+            </CountButton>
+          ))}
+        </Col>
+      </Row>
+      <Row className='justify-content-center'>
+        <Col as={AliveText}>
+          <b>ยังมีชีวิตรอด : </b>
+          {onlineUser?.map((user) => user.sname).join(', ') ?? '. . .'}
+        </Col>
+      </Row>
+    </>
+  )
 }
 
 const ProblemTable = () => {
-	const [tasks] = useGet('/api/problem?mode=firstpage')
-	return <ProbTable problems={tasks} />
+  const [tasks] = useGet('/api/problem?mode=firstpage')
+  return <ProbTable problems={tasks} />
 }
 
 const Index = () => {
-	const { isLogin } = useAuthContext()
+  const { isLogin } = useAuthContext()
 
-	return (
-		<PageLayout container={false}>
-			<Jumbotron>
-				<Container>{isLogin ? <Hello /> : <Welcome />}</Container>
-			</Jumbotron>
-			<Container>
-				<Row xs={1} md={3}>
-					<Col className="px-5 p-md-3">
-						<h2>
-							<FontAwesomeIcon icon={faQuestion} /> FAQ
-						</h2>
-						<p>
-							ไม่รู้ว่าจะเริ่มต้นอย่างไร ทุกอย่างดูงงไปหมด
-							ถ้าหากคุณมีปัญหาเหล่านี้สามารถ หาคำตอบได้จาก
-							คำถามยอดนิยมที่ผู้ใช้ส่วนใหญ่มักจะถามเป็นประจำ
-						</p>
-						<a
-							href="https://medium.com/otog/complete-guide-to-otog-22f88a349e78"
-							target="_blank"
-						>
-							<OrangeButton size="lg">Learn More</OrangeButton>
-						</a>
-						<br />
-						<br />
-					</Col>
-					<Col className="px-5 p-md-3">
-						<h2>
-							<FontAwesomeIcon icon={faFlagCheckered} /> Get started
-						</h2>
-						<p>
-							เพิ่งเริ่มการเดินทาง อาจจะอยากได้การต้อนรับที่ดี
-							ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน competitive
-							programming
-						</p>
-						<OrangeButton size="lg" href="problem">
-							View Problem
-						</OrangeButton>
-						<br />
-						<br />
-					</Col>
-					<Col className="px-5 p-md-3">
-						<h2>
-							<FontAwesomeIcon icon={faTrophy} /> Contest
-						</h2>
-						<p>
-							ทำโจทย์คนเดียวมันอาจจะเหงา ลองมาเข้า contest
-							การแข่งขันอันทรงเกียรติ (?)
-							เพื่อจะได้มีเพื่อนทำโจทย์และแข่งขันไปพร้อม ๆ กันกับเรา
-						</p>
-						<OrangeButton size="lg" href="contest">
-							Join Contest
-						</OrangeButton>
-						<br />
-						<br />
-					</Col>
-				</Row>
-				<div>
-					<i className="glyphicon glyphicon-asterisk"></i>
-					<Title icon={faPuzzlePiece} text="โจทย์ใหม่" noBot="true" />
-				</div>
-				<hr />
-				<ProblemTable />
-			</Container>
-		</PageLayout>
-	)
+  return (
+    <PageLayout container={false}>
+      <Jumbotron>
+        <Container>{isLogin ? <Hello /> : <Welcome />}</Container>
+      </Jumbotron>
+      <Container>
+        <Row xs={1} md={3}>
+          <Col className='px-5 p-md-3'>
+            <h2>
+              <FontAwesomeIcon icon={faQuestion} /> FAQ
+            </h2>
+            <p>
+              ไม่รู้ว่าจะเริ่มต้นอย่างไร ทุกอย่างดูงงไปหมด
+              ถ้าหากคุณมีปัญหาเหล่านี้สามารถ หาคำตอบได้จาก
+              คำถามยอดนิยมที่ผู้ใช้ส่วนใหญ่มักจะถามเป็นประจำ
+            </p>
+            <a
+              href='https://medium.com/otog/complete-guide-to-otog-22f88a349e78'
+              target='_blank'
+            >
+              <OrangeButton size='lg'>Learn More</OrangeButton>
+            </a>
+            <br />
+            <br />
+          </Col>
+          <Col className='px-5 p-md-3'>
+            <h2>
+              <FontAwesomeIcon icon={faFlagCheckered} /> Get started
+            </h2>
+            <p>
+              เพิ่งเริ่มการเดินทาง อาจจะอยากได้การต้อนรับที่ดี
+              ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน competitive
+              programming
+            </p>
+            <OrangeButton size='lg' href='problem'>
+              View Problem
+            </OrangeButton>
+            <br />
+            <br />
+          </Col>
+          <Col className='px-5 p-md-3'>
+            <h2>
+              <FontAwesomeIcon icon={faTrophy} /> Contest
+            </h2>
+            <p>
+              ทำโจทย์คนเดียวมันอาจจะเหงา ลองมาเข้า contest
+              การแข่งขันอันทรงเกียรติ (?)
+              เพื่อจะได้มีเพื่อนทำโจทย์และแข่งขันไปพร้อม ๆ กันกับเรา
+            </p>
+            <OrangeButton size='lg' href='contest'>
+              Join Contest
+            </OrangeButton>
+            <br />
+            <br />
+          </Col>
+        </Row>
+        <div>
+          <i className='glyphicon glyphicon-asterisk'></i>
+          <Title icon={faPuzzlePiece} text='โจทย์ใหม่' noBot='true' />
+        </div>
+        <hr />
+        <ProblemTable />
+      </Container>
+    </PageLayout>
+  )
 }
 export default withAuthSync(Index)
