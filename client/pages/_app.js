@@ -49,29 +49,29 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const MyApp = ({ Component, pageProps }) => {
-	useEffect(() => {
-		unregister()
-	}, [])
-	return (
-		<>
-			<Head>
-				<title>OTOG - One Tambon One Grader</title>
-				<link rel="manifest" href="/manifest.json" />
-				<link rel="shortcut icon" href="/logo196.png" />
-				<link rel="apple-touch-icon" href="/logoIOS.png" />
-				<meta name="viewport" content="width=device-width, initial-scale=1" />
-				<link
-					href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap"
-					rel="stylesheet"
-				/>
-				<meta name="theme-color" content="#ff851b" />
-			</Head>
-			<ThemeProvider theme={{ breakpoints }}>
-				<GlobalStyle />
-				<Component {...pageProps} />
-			</ThemeProvider>
-		</>
-	)
+  useEffect(() => {
+    unregister()
+  }, [])
+  return (
+    <>
+      <Head>
+        <title>OTOG - One Tambon One Grader</title>
+        <link rel='manifest' href='/manifest.json' />
+        <link rel='shortcut icon' href='/logo196.png' />
+        <link rel='apple-touch-icon' href='/logoIOS.png' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link
+          href='https://fonts.googleapis.com/css?family=Fira+Code&display=swap'
+          rel='stylesheet'
+        />
+        <meta name='theme-color' content='#ff851b' />
+      </Head>
+      <ThemeProvider theme={{ breakpoints }}>
+        <GlobalStyle />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </>
+  )
 }
 
 export default MyApp
