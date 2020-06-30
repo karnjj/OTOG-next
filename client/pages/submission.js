@@ -18,26 +18,26 @@ const Submission = () => {
 	const [showOnlyMe, setShowOnlyMe] = useState(!isAdmin && isLogin)
 
 	const url = `/api/submission?mode=${showOnlyMe ? 'onlyme' : 'full'}`
-	const [submissions] = useGet(url, [showOnlyMe])
-	const { result, lastest } = submissions ?? {}
+	const [submissions, isLoading] = useGet(url, [showOnlyMe])
+	const { result: results, lastest } = submissions ?? {}
 
 	const handleCheck = (event) => setShowOnlyMe(event.target.checked)
 
 	return (
 		<PageLayout>
-			<Title icon={faPuzzlePiece} text="Submission" />
-			<Row className="align-items-center">
+			<Title icon={faPuzzlePiece} text='Submission' />
+			<Row className='align-items-center'>
 				<Col
 					xs={{ span: 12, order: 'last' }}
 					md={{ span: 'auto', order: 'first' }}
-					className="d-flex align-items-baseline justify-content-center justify-content-md-start mt-2 mt-md-0"
+					className='d-flex align-items-baseline justify-content-center justify-content-md-start mt-2 mt-md-0'
 				>
 					{lastest && (showOnlyMe || isAdmin) && (
 						<div>
 							<b>ส่งข้อล่าสุด :</b>
 							<Alink
-								target="_blank"
-								className="mx-4"
+								target='_blank'
+								className='mx-4'
 								href={`${process.env.API_URL}/api/docs/${lastest.sname}`}
 							>
 								{lastest.name}
@@ -46,25 +46,29 @@ const Submission = () => {
 						</div>
 					)}
 				</Col>
-				<Col xs md="auto" className="ml-auto d-flex align-item-center">
+				<Col xs md='auto' className='ml-auto d-flex align-item-center'>
 					{isLogin && (
 						<OrangeCheck
-							type="switch"
-							id="custom-switch"
-							label="แสดงเฉพาะฉัน"
+							type='switch'
+							id='custom-switch'
+							label='แสดงเฉพาะฉัน'
 							checked={showOnlyMe}
 							onChange={handleCheck}
 						/>
 					)}
 				</Col>
 				<Col xs={4} md={3} lg={2}>
-					<OrangeButton href="problem" className="w-100">
+					<OrangeButton href='problem' className='w-100'>
 						View Problem
 					</OrangeButton>
 				</Col>
 			</Row>
 			<hr />
-			<SubmissionTable canViewCode={showOnlyMe} results={result} />
+			<SubmissionTable
+				isLoading={isLoading}
+				canViewCode={showOnlyMe}
+				results={results}
+			/>
 		</PageLayout>
 	)
 }

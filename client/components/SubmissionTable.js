@@ -21,12 +21,12 @@ const ResultCode = styled.code`
 	font-size: 16px;
 `
 
-const SubmissionTable = ({ results, canViewCode }) => {
+const SubmissionTable = ({ isLoading, results, canViewCode }) => {
 	const { isAdmin } = useAuthContext()
 	const showCode = canViewCode || isAdmin
 
 	return (
-		<CustomTable ready={!!results}>
+		<CustomTable ready={!!results && !isLoading}>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -93,7 +93,7 @@ const SubTr = (props) => {
 				<td>
 					<Alink
 						black
-						target="_blank"
+						target='_blank'
 						href={`${process.env.API_URL}/api/docs/${problemname}`}
 					>
 						{name}
@@ -121,7 +121,7 @@ const SubTr = (props) => {
 				)}
 			</CustomTr>
 
-			<Modal show={showError} onHide={handleClose} centered size="lg">
+			<Modal show={showError} onHide={handleClose} centered size='lg'>
 				<Modal.Header closeButton>
 					<Modal.Title>Error : {idResult}</Modal.Title>
 				</Modal.Header>

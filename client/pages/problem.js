@@ -49,7 +49,7 @@ const Problem = () => {
 	const [showAll, setShowAll] = useState(isAdmin)
 
 	const url = `/api/problem?mode=${showAll ? 'admin' : 'full'}`
-	const [taskState] = useGet(url, [showAll])
+	const [taskState, isLoading] = useGet(url, [showAll])
 
 	const handleChange = (event) => setShowAll(event.target.checked)
 
@@ -90,7 +90,7 @@ const Problem = () => {
 				</Col>
 			</Row>
 			<hr />
-			<ProbTable problems={filteredTask} />
+			<ProbTable isLoading={isLoading} problems={filteredTask} />
 		</PageLayout>
 	)
 }

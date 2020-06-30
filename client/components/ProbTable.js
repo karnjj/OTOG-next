@@ -12,10 +12,11 @@ const StyledPop = styled(Popover)`
 	max-width: none;
 `
 
-const ProbTable = ({ problems }) => {
+const ProbTable = ({ isLoading, problems }) => {
 	const { isLogin } = useAuthContext()
+
 	return (
-		<CustomTable ready={problems ? true : false}>
+		<CustomTable ready={!!problems && !isLoading}>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -58,7 +59,10 @@ const ProbTr = (props) => {
 		<CustomTr {...{ acceptState, wrongState }}>
 			<td>{id_Prob}</td>
 			<td>
-				<Alink target="_blank" href={`${process.env.API_URL}/api/docs/${sname}`}>
+				<Alink
+					target='_blank'
+					href={`${process.env.API_URL}/api/docs/${sname}`}
+				>
 					{name}
 					<br />({time} วินาที {memory} MB)
 				</Alink>
@@ -66,7 +70,7 @@ const ProbTr = (props) => {
 			<td>
 				{pass ? (
 					<OverlayTrigger
-						placement="top"
+						placement='top'
 						overlay={
 							<StyledPop>
 								<Popover.Content as={Row}>
@@ -91,9 +95,7 @@ const ProbTr = (props) => {
 			{isLogin && (
 				<td>
 					<SubmitGroup {...props}>
-						{(acceptState || wrongState) && (
-							<ViewCodeButton {...{ id_Prob }} />
-						)}
+						{(acceptState || wrongState) && <ViewCodeButton {...{ id_Prob }} />}
 					</SubmitGroup>
 				</td>
 			)}
