@@ -4,7 +4,12 @@ import { withAuthSync, useAuthContext } from '../../../utils/auth'
 import { Title, Name } from '../../../components/CustomText'
 import PageLayout from '../../../components/PageLayout'
 import OrangeButton from '../../../components/OrangeButton'
-import { CustomTable, CustomTr, UserTd, CustomTd } from '../../../components/CustomTable'
+import {
+	CustomTable,
+	CustomTr,
+	UserTd,
+	CustomTd,
+} from '../../../components/CustomTable'
 
 import { faChartArea } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
@@ -13,7 +18,8 @@ import { useGet } from '../../../utils/api'
 const ScoreTr = (props) => {
 	const { rank, sname, sumTime, sum, scores, problems, rating, idUser } = props
 	const maxSum = problems.reduce((total, prob) => total + prob.score, 0)
-	const score = (prob) => (scores[prob.id_Prob] ? scores[prob.id_Prob].score : 0)
+	const score = (prob) =>
+		scores[prob.id_Prob] ? scores[prob.id_Prob].score : 0
 	const round = (num) => Math.round(num * 100) / 100
 
 	return (
@@ -65,13 +71,14 @@ const Scoreboard = ({ problems, contestants }) => {
 const ContestScoreboard = (props) => {
 	const router = useRouter()
 	const { id } = router.query
-	const [{ contestants }] = useGet(`/api/contest/history/${id}`)
-	const [{ problems }] = useGet(`/api/contest/${id}`)
+	const [contestants] = useGet(`/api/contest/history/${id}`)
+	const [contestData] = useGet(`/api/contest/${id}`)
+	const { problem: problems } = contestData ?? {}
 
 	return (
 		<PageLayout>
-			<Title icon={faChartArea} noBot="true" text={`Scoreboard #${id}`}>
-				<OrangeButton href="/contest/history">View Contest</OrangeButton>
+			<Title icon={faChartArea} noBot='true' text={`Scoreboard #${id}`}>
+				<OrangeButton href='/contest/history'>View Contest</OrangeButton>
 			</Title>
 			<hr />
 			<Scoreboard contestants={contestants} problems={problems} />

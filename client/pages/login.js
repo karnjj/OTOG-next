@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import fetch from 'isomorphic-unfetch'
 import { login } from '../utils/auth'
 
@@ -6,6 +5,7 @@ import { Container, Card, Form, Alert } from 'react-bootstrap'
 import OrangeButton from '../components/OrangeButton'
 
 import styled from 'styled-components'
+import { useInput, useSwitch } from '../utils'
 
 const CenteredContainer = styled(Container)`
 	height: 100vh;
@@ -18,15 +18,10 @@ const StyledCard = styled(Card)`
 `
 
 const LoginCard = () => {
-	const [username, setUsername] = useState('')
-	const [password, setPassword] = useState('')
-	const [error, setError] = useState(false)
-	const handleChangeUser = (event) => {
-		setUsername(event.target.value)
-	}
-	const handleChangePass = (event) => {
-		setPassword(event.target.value)
-	}
+	const [username, inputUsername] = useInput()
+	const [password, inputPassword] = useInput()
+	const [error, showAlert, closeAlert] = useSwitch(false)
+
 	const handleSubmit = async (event) => {
 		event.preventDefault()
 		const url = `${process.env.API_URL}/api/login`
@@ -43,7 +38,7 @@ const LoginCard = () => {
 				console.log('Login failed.')
 				let error = new Error(response.statusText)
 				console.log(error)
-				setError(true)
+				showAlert()
 			}
 		} catch (error) {
 			console.error(
@@ -52,9 +47,6 @@ const LoginCard = () => {
 			)
 			throw new Error(error)
 		}
-	}
-	const closeAlert = () => {
-		setError(false)
 	}
 
 	return (
@@ -78,19 +70,17 @@ const LoginCard = () => {
 					<Form.Control
 						type='username'
 						name='username'
-						value={username}
-						onChange={handleChangeUser}
 						placeholder='Username'
 						required
+						{...inputUsername}
 					/>
 					<br />
 					<Form.Control
 						type='password'
 						name='password'
-						value={password}
-						onChange={handleChangePass}
 						placeholder='Password'
 						required
+						{...inputPassword}
 					/>
 					<br />
 					<br />

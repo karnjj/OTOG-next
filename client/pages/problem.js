@@ -13,6 +13,7 @@ import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 
 import styled, { keyframes } from 'styled-components'
 import vars from '../styles/vars'
+import { useInput } from '../utils'
 
 const popin = keyframes`
 	0% {
@@ -44,15 +45,12 @@ const ProbButton = styled.button`
 const Problem = () => {
 	const { isAdmin } = useAuthContext()
 
-	const [searchState, setsearchState] = useState('')
+	const [problemSearch, inputProblemSearch] = useInput()
 	const [showAll, setShowAll] = useState(isAdmin)
 
 	const url = `/api/problem?mode=${showAll ? 'admin' : 'full'}`
 	const [taskState] = useGet(url, [showAll])
 
-	const updateSearch = (event) => {
-		setsearchState(event.target.value.substr(0, 20))
-	}
 	const handleChange = (event) => setShowAll(event.target.checked)
 
 	let filteredTask =
@@ -60,36 +58,33 @@ const Problem = () => {
 		taskState.filter((problem) => {
 			let id = String(problem.id_Prob)
 			return (
-				problem.name.indexOf(searchState) !== -1 || id.indexOf(searchState) !== -1
+				problem.name.indexOf(problemSearch.substr(0, 20)) !== -1 ||
+				id.indexOf(problemSearch.substr(0, 20)) !== -1
 			)
 		})
 
 	return (
 		<PageLayout>
-			<Title icon={faPuzzlePiece} text="Problem" />
+			<Title icon={faPuzzlePiece} text='Problem' />
 			<Row>
 				<Col as={InputGroup} xs sm={6} md={8}>
 					{isAdmin && (
 						<InputGroup.Prepend>
 							<InputGroup.Text>
 								<OrangeCheck
-									type="switch"
-									id="custom-switch"
-									label="ทั้งหมด "
+									type='switch'
+									id='custom-switch'
+									label='ทั้งหมด '
 									checked={showAll}
 									onChange={handleChange}
 								/>
 							</InputGroup.Text>
 						</InputGroup.Prepend>
 					)}
-					<Form.Control
-						placeholder="ค้นหาโจทย์"
-						value={searchState}
-						onChange={updateSearch}
-					/>
+					<Form.Control placeholder='ค้นหาโจทย์' {...inputProblemSearch} />
 				</Col>
-				<Col xs sm={4} md={3} lg={2} className="ml-auto">
-					<OrangeButton href="submission" className="w-100">
+				<Col xs sm={4} md={3} lg={2} className='ml-auto'>
+					<OrangeButton href='submission' className='w-100'>
 						View Submission
 					</OrangeButton>
 				</Col>

@@ -1,26 +1,25 @@
-import { useState, useEffect } from 'react'
-import { useAuthContext, useTokenContext } from '../../utils/auth'
+import { useAuthContext } from '../../utils/auth'
 import fetch from 'isomorphic-unfetch'
 
-import { Table, ButtonGroup, Button, Modal, Form, Toast } from 'react-bootstrap'
+import { ButtonGroup, Button, Modal, Form } from 'react-bootstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencilAlt, faTrash, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import {
+	faPencilAlt,
+	faTrash,
+	faUserPlus,
+} from '@fortawesome/free-solid-svg-icons'
 import { useGet } from '../../utils/api'
+import { useSwitch, useInput } from '../../utils'
+import { CustomTable } from '../CustomTable'
 
 export const NewUser = () => {
-	const token = useTokenContext()
-	const [show, setShow] = useState(false)
-	const [showErr, setShowErr] = useState(false)
-	const [username, setUsername] = useState('')
-	const [sname, setSname] = useState('')
-	const [password, setPassword] = useState('')
-	const handleShow = () => setShow(true)
-	const handleClose = () => setShow(false)
-	const toggleShowErr = () => setShowErr(!showErr)
-	const handleChangeUserame = (e) => setUsername(e.target.value)
-	const handleChangePassword = (e) => setPassword(e.target.value)
-	const handleChangeSname = (e) => setSname(e.target.value)
+	const { token } = useAuthContext()
+	const [show, handleShow, handleClose] = useSwitch(false)
+	const [username, inputUsername] = useInput()
+	const [password, inputPassword] = useInput()
+	const [sname, inputSname] = useInput()
+
 	const onSubmit = async (event) => {
 		event.preventDefault()
 		const data = { username, password, sname }
@@ -33,11 +32,15 @@ export const NewUser = () => {
 			},
 			body: JSON.stringify(data),
 		})
-		if (respone.ok) handleClose(), window.location.reload(false)
+		if (respone.ok) {
+			handleClose()
+			window.location.reload(false)
+		}
 	}
+
 	return (
 		<>
-			<Button variant="success" size="lg" onClick={handleShow}>
+			<Button variant='success' size='lg' onClick={handleShow}>
 				<FontAwesomeIcon icon={faUserPlus} /> New User
 			</Button>
 			<Modal show={show} onHide={handleClose}>
@@ -46,25 +49,19 @@ export const NewUser = () => {
 				</Modal.Header>
 				<Modal.Body>
 					<Form>
-						<Form.Control
-							placeholder="Username"
-							onChange={handleChangeUserame}
-						/>
+						<Form.Control placeholder='Username' {...inputUsername} />
 						<br />
 						<Form.Control
-							placeholder="Password"
-							type="password"
-							onChange={handleChangePassword}
+							type='password'
+							placeholder='Password'
+							{...inputPassword}
 						/>
 						<br />
-						<Form.Control
-							placeholder="Display Name"
-							onChange={handleChangeSname}
-						/>
+						<Form.Control placeholder='Display Name' {...inputSname} />
 					</Form>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="success" onClick={onSubmit}>
+					<Button variant='success' onClick={onSubmit}>
 						Save
 					</Button>
 				</Modal.Footer>
@@ -73,9 +70,9 @@ export const NewUser = () => {
 	)
 }
 
-const ConfigUser = (props) => {
-	const token = useTokenContext()
-	const { handleShow, idUser } = props
+const ConfigUser = ({ handleShow, idUser }) => {
+	const { token } = useAuthContext()
+
 	const handleDelete = async () => {
 		if (confirm(`Delete user id : ${idUser}`)) {
 			const url = `${process.env.API_URL}/api/admin/user/${idUser}`
@@ -91,10 +88,10 @@ const ConfigUser = (props) => {
 	}
 	return (
 		<ButtonGroup>
-			<Button variant="info" onClick={handleShow}>
+			<Button variant='info' onClick={handleShow}>
 				<FontAwesomeIcon icon={faPencilAlt} />
 			</Button>
-			<Button variant="danger" onClick={handleDelete}>
+			<Button variant='danger' onClick={handleDelete}>
 				<FontAwesomeIcon icon={faTrash} />
 			</Button>
 		</ButtonGroup>
@@ -102,27 +99,13 @@ const ConfigUser = (props) => {
 }
 
 const EditModal = (props) => {
-	const token = useTokenContext()
-	const { show, setShow } = props
-	const { idUser } = props
-	const [username, setUsername] = useState(props.username)
-	const [sname, setSname] = useState(props.sname)
-	const [state, setState] = useState(props.state)
-	const [password, setPassword] = useState('')
-	const handleClose = () => setShow(false)
+	const { token } = useAuthContext()
+	const { show, handleClose, idUser } = props
+	const [username, inputUsername] = useInput(props.username)
+	const [password, inputPassword] = useInput()
+	const [sname, inputSname] = useInput(props.sname)
+	const [state, inputState] = useInput(props.state, (val) => Number(val))
 
-	const handleChangeUserame = (event) => {
-		setUsername(event.target.value)
-	}
-	const handleChangeSname = (event) => {
-		setSname(event.target.value)
-	}
-	const handleChangeState = (event) => {
-		setState(Number(event.target.value))
-	}
-	const handleChangePassword = (event) => {
-		setPassword(event.target.value)
-	}
 	const onSave = async (event) => {
 		event.preventDefault()
 		const data = { username, sname, state, password }
@@ -146,27 +129,21 @@ const EditModal = (props) => {
 			<Modal.Body>
 				<Form>
 					<Form.Label>Username : </Form.Label>
-					<Form.Control
-						defaultValue={username}
-						onChange={handleChangeUserame}
-					/>
+					<Form.Control {...inputUsername} />
 					<br />
 					<Form.Label>Display Name : </Form.Label>
-					<Form.Control defaultValue={sname} onChange={handleChangeSname} />
+					<Form.Control {...inputSname} />
 					<br />
 					<Form.Label>User Level : </Form.Label>
-					<Form.Control defaultValue={state} onChange={handleChangeState} />
+					<Form.Control {...inputState} />
 					<br />
 					<Form.Label>New Password : </Form.Label>
-					<Form.Control
-						placeholder="New Password"
-						onChange={handleChangePassword}
-					/>
+					<Form.Control placeholder='New Password' {...inputPassword} />
 					<br />
 				</Form>
 			</Modal.Body>
 			<Modal.Footer>
-				<Button variant="success" onClick={onSave}>
+				<Button variant='success' onClick={onSave}>
 					Save
 				</Button>
 			</Modal.Footer>
@@ -176,8 +153,7 @@ const EditModal = (props) => {
 
 const UserTr = (props) => {
 	const { idUser, username, sname, state } = props
-	const [show, setShow] = useState(false)
-	const handleShow = () => setShow(true)
+	const [show, handleShow, handleClose] = useSwitch(false)
 
 	return (
 		<tr onDoubleClick={handleShow}>
@@ -187,20 +163,18 @@ const UserTr = (props) => {
 			<td>{state}</td>
 			<td>
 				<ConfigUser {...props} {...{ handleShow }} />
-				<EditModal {...props} {...{ setShow, show }} />
+				<EditModal {...props} {...{ handleClose, show }} />
 			</td>
 		</tr>
 	)
 }
 
 export const UserTable = (props) => {
-	const userData = useAuthContext()
-	const token = useTokenContext()
 	const [users] = useGet('/api/admin/user')
 
 	return (
-		<Table responsive hover>
-			<thead className="thead-light">
+		<CustomTable ready={!!users} align='left'>
+			<thead className='thead-light'>
 				<tr>
 					<th>#</th>
 					<th>Username</th>
@@ -210,10 +184,10 @@ export const UserTable = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				{users.map((task, index) => (
+				{users?.map((task, index) => (
 					<UserTr key={index} {...task} />
 				))}
 			</tbody>
-		</Table>
+		</CustomTable>
 	)
 }

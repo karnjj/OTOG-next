@@ -8,18 +8,23 @@ import { Alink } from '../CustomText'
 import { CustomTable } from '../CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCog, faEye, faEyeSlash, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import {
+	faCog,
+	faEye,
+	faEyeSlash,
+	faPlusCircle,
+} from '@fortawesome/free-solid-svg-icons'
+import { useInput, useSwitch } from '../../utils'
 
 export const NewContest = () => {
 	const { token } = useAuthContext()
-	const [show, setShow] = useState(false)
-	const [name, setName] = useState('')
-	const [mode, setMode] = useState('unrated')
-	const [judge, setJudge] = useState('classic')
+	const [show, handleShow, handleClose] = useSwitch(false)
+	const [name, inputName] = useInput()
+	const [mode, inputMode] = useInput('unrated')
+	const [judge, inputJudge] = useInput('classic')
 	const [startDate, setStartDate] = useState(new Date())
 	const [endDate, setEndDate] = useState(new Date())
-	const handleShow = () => setShow(true)
-	const handleClose = () => setShow(false)
+
 	const onSubmit = async (event) => {
 		event.preventDefault()
 		const start = Math.floor(Date.parse(startDate) / 1000)
@@ -34,11 +39,14 @@ export const NewContest = () => {
 			},
 			body: JSON.stringify(data),
 		})
-		if (response.ok) handleClose(), window.location.reload(false)
+		if (response.ok) {
+			handleClose()
+			window.location.reload(false)
+		}
 	}
 	return (
 		<>
-			<Button variant="success" size="lg" onClick={handleShow}>
+			<Button variant='success' size='lg' onClick={handleShow}>
 				<FontAwesomeIcon icon={faPlusCircle} /> New Contest
 			</Button>
 			<Modal show={show} onHide={handleClose}>
@@ -49,31 +57,22 @@ export const NewContest = () => {
 					<Form>
 						<Form.Group>
 							<Form.Label>Contest Name : </Form.Label>
-							<Form.Control
-								value={name}
-								onChange={(e) => setName(e.target.value)}
-							/>
+							<Form.Control {...inputName} />
 						</Form.Group>
 						<Form.Group>
 							<Form.Label>Choose Mode : </Form.Label>
 							<InputGroup>
-								<Form.Control
-									as="select"
-									onChange={(e) => setMode(e.target.value)}
-								>
-									<option selected value="unrated">
+								<Form.Control as='select' {...inputMode}>
+									<option selected value='unrated'>
 										Unrated Contest
 									</option>
-									<option value="rated">Rated Contest</option>
+									<option value='rated'>Rated Contest</option>
 								</Form.Control>
-								<Form.Control
-									as="select"
-									onChange={(e) => setJudge(e.target.value)}
-								>
-									<option selected value="classic">
+								<Form.Control as='select' {...inputJudge}>
+									<option selected value='classic'>
 										Classic (Time based)
 									</option>
-									<option value="acm">ACM Mode</option>
+									<option value='acm'>ACM Mode</option>
 									<option disabled>OTOG Mode</option>
 									<option disabled>Blind Mode</option>
 								</Form.Control>
@@ -81,7 +80,7 @@ export const NewContest = () => {
 						</Form.Group>
 						<Form.Group>
 							<Form.Label>Time : </Form.Label>
-							<InputGroup as={Row} className="m-auto">
+							<InputGroup as={Row} className='m-auto'>
 								<Form.Control
 									as={DatePicker}
 									selected={startDate}
@@ -89,10 +88,10 @@ export const NewContest = () => {
 										setStartDate(date), setEndDate(date)
 									}}
 									showTimeSelect
-									timeFormat="HH:mm"
+									timeFormat='HH:mm'
 									timeIntervals={30}
-									timeCaption="time"
-									dateFormat="d/MMMM/yyyy HH:mm"
+									timeCaption='time'
+									dateFormat='d/MMMM/yyyy HH:mm'
 								/>
 								<Col xs={1} />
 								<Form.Control
@@ -100,17 +99,17 @@ export const NewContest = () => {
 									selected={endDate}
 									onChange={(date) => setEndDate(date)}
 									showTimeSelect
-									timeFormat="HH:mm"
+									timeFormat='HH:mm'
 									timeIntervals={30}
-									timeCaption="time"
-									dateFormat="d/MMMM/yyyy HH:mm"
+									timeCaption='time'
+									dateFormat='d/MMMM/yyyy HH:mm'
 								/>
 							</InputGroup>
 						</Form.Group>
 					</Form>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="success" onClick={onSubmit}>
+					<Button variant='success' onClick={onSubmit}>
 						Save
 					</Button>
 				</Modal.Footer>
@@ -126,13 +125,11 @@ export const ContestConfig = ({ idContest }) => {
 		[idContest],
 		isSelected
 	)
+
 	const [contestData, setContestData] = useState(data)
 	const { name, mode, judge, startDate, endDate } = contestData ?? {}
 
-	const [show, setShow] = useState(false)
-
-	const handleShow = () => setShow(true)
-	const handleClose = () => setShow(false)
+	const [show, handleShow, handleClose] = useSwitch(false)
 
 	const handleChangeName = (event) =>
 		setContestData({ ...contestData, name: event.target.value })
@@ -142,7 +139,8 @@ export const ContestConfig = ({ idContest }) => {
 		setContestData({ ...contestData, judge: event.target.value })
 	const handleChangeStart = (date) =>
 		setContestData({ ...contestData, startDate: date, endDate: date })
-	const handleChangeEnd = (date) => setContestData({ ...contestData, endDate: date })
+	const handleChangeEnd = (date) =>
+		setContestData({ ...contestData, endDate: date })
 
 	const onSubmit = async (event) => {
 		event.preventDefault()
@@ -168,8 +166,8 @@ export const ContestConfig = ({ idContest }) => {
 	return (
 		<>
 			<Button
-				variant="warning"
-				className="ml-2"
+				variant='warning'
+				className='ml-2'
 				onClick={handleShow}
 				disabled={!isSelected}
 			>
@@ -188,13 +186,13 @@ export const ContestConfig = ({ idContest }) => {
 						<Form.Group>
 							<Form.Label>Choose Mode : </Form.Label>
 							<InputGroup>
-								<Form.Control as="select" onChange={handleChangeMode}>
-									<option value="unrated">Unrated Contest</option>
-									<option value="rated">Rated Contest</option>
+								<Form.Control as='select' onChange={handleChangeMode}>
+									<option value='unrated'>Unrated Contest</option>
+									<option value='rated'>Rated Contest</option>
 								</Form.Control>
-								<Form.Control as="select" onChange={handleChangeJudge}>
-									<option value="classic">Classic (Time based)</option>
-									<option value="acm">ACM Mode</option>
+								<Form.Control as='select' onChange={handleChangeJudge}>
+									<option value='classic'>Classic (Time based)</option>
+									<option value='acm'>ACM Mode</option>
 									<option disabled>OTOG Mode</option>
 									<option disabled>Blind Mode</option>
 								</Form.Control>
@@ -202,16 +200,16 @@ export const ContestConfig = ({ idContest }) => {
 						</Form.Group>
 						<Form.Group>
 							<Form.Label>Time : </Form.Label>
-							<InputGroup as={Row} className="m-auto">
+							<InputGroup as={Row} className='m-auto'>
 								<Form.Control
 									as={DatePicker}
 									selected={startDate}
 									onChange={handleChangeStart}
 									showTimeSelect
-									timeFormat="HH:mm"
+									timeFormat='HH:mm'
 									timeIntervals={30}
-									timeCaption="time"
-									dateFormat="d/MMMM/yyyy HH:mm"
+									timeCaption='time'
+									dateFormat='d/MMMM/yyyy HH:mm'
 								/>
 								<Col xs={1} />
 								<Form.Control
@@ -219,17 +217,17 @@ export const ContestConfig = ({ idContest }) => {
 									selected={endDate}
 									onChange={handleChangeEnd}
 									showTimeSelect
-									timeFormat="HH:mm"
+									timeFormat='HH:mm'
 									timeIntervals={30}
-									timeCaption="time"
-									dateFormat="d/MMMM/yyyy HH:mm"
+									timeCaption='time'
+									dateFormat='d/MMMM/yyyy HH:mm'
 								/>
 							</InputGroup>
 						</Form.Group>
 					</Form>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="success" onClick={onSubmit}>
+					<Button variant='success' onClick={onSubmit}>
 						Save
 					</Button>
 				</Modal.Footer>
@@ -242,9 +240,11 @@ const ConfigTask = (props) => {
 	const { id_Prob, see, idContest } = props
 	const [onoff, setOnoff] = useState(undefined)
 	const { token } = useAuthContext()
+
 	useEffect(() => {
 		setOnoff(see)
 	}, [see, idContest])
+
 	const handleChangeState = async (event) => {
 		event.preventDefault()
 		const data = { idProb: id_Prob, state: !onoff }
@@ -257,8 +257,11 @@ const ConfigTask = (props) => {
 			},
 			body: JSON.stringify(data),
 		})
-		if (response.ok) setOnoff(!onoff)
+		if (response.ok) {
+			setOnoff(!onoff)
+		}
 	}
+
 	return (
 		<Button variant={onoff ? 'light' : 'dark'} onClick={handleChangeState}>
 			<FontAwesomeIcon icon={onoff ? faEye : faEyeSlash} />
@@ -268,12 +271,11 @@ const ConfigTask = (props) => {
 
 const EditModal = (props) => {
 	const { token } = useAuthContext()
-	const { show, setShow, id_Prob, ...rest } = props
+	const { show, handleClose, id_Prob, ...rest } = props
 
 	const [data, setData] = useState(rest)
 	const { name, sname, memory, time, score, pdf, testcase, zip } = data
 
-	const handleClose = () => setShow(false)
 	const selectFile = (event) => {
 		if (event.target.files[0] === undefined) {
 			setData({ ...data, pdf: undefined, zip: undefined })
@@ -288,8 +290,11 @@ const EditModal = (props) => {
 				break
 		}
 	}
-	const handleChangeName = (event) => setData({ ...data, name: event.target.value })
-	const handleChangeSname = (event) => setData({ ...data, sname: event.target.value })
+
+	const handleChangeName = (event) =>
+		setData({ ...data, name: event.target.value })
+	const handleChangeSname = (event) =>
+		setData({ ...data, sname: event.target.value })
 	const handleChangeMemory = (event) =>
 		setData({ ...data, memory: Number(event.target.value) ?? '' })
 	const handleChangeTime = (event) =>
@@ -311,7 +316,10 @@ const EditModal = (props) => {
 			headers: { Authorization: token ? token : '' },
 			body: formData,
 		})
-		if (response.ok) handleClose(), window.location.reload(false)
+		if (response.ok) {
+			handleClose()
+			window.location.reload(false)
+		}
 	}
 
 	return (
@@ -335,10 +343,7 @@ const EditModal = (props) => {
 					</Col>
 					<Col xs={6}>
 						<Form.Label>Memory</Form.Label>
-						<Form.Control
-							defaultValue={memory}
-							onChange={handleChangeMemory}
-						/>
+						<Form.Control defaultValue={memory} onChange={handleChangeMemory} />
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
@@ -356,9 +361,9 @@ const EditModal = (props) => {
 				</Form.Group>
 				<Form.Group>
 					<Form.File
-						id="doc"
+						id='doc'
 						label={pdf?.name ?? 'New Document (PDF)'}
-						accept=".pdf"
+						accept='.pdf'
 						onChange={selectFile}
 						custom
 						required
@@ -366,16 +371,16 @@ const EditModal = (props) => {
 				</Form.Group>
 				<Form.Group>
 					<Form.File
-						id="testcase"
+						id='testcase'
 						label={zip?.name ?? 'New Testcases (ZIP)'}
-						accept=".zip"
+						accept='.zip'
 						onChange={selectFile}
 						custom
 					/>
 				</Form.Group>
 			</Form>
 			<Modal.Footer>
-				<Button variant="success" onClick={onSave}>
+				<Button variant='success' onClick={onSave}>
 					Save
 				</Button>
 			</Modal.Footer>
@@ -385,14 +390,16 @@ const EditModal = (props) => {
 
 const TaskTr = (props) => {
 	const { id_Prob, name, sname, memory, time, score } = props
-	const [show, setShow] = useState(false)
-	const handleShow = () => setShow(true)
+	const [show, handleShow, handleClose] = useSwitch(false)
 
 	return (
 		<tr onDoubleClick={handleShow}>
 			<td>{id_Prob}</td>
 			<td>
-				<Alink target="_blank" href={`${process.env.API_URL}/api/docs/${sname}`}>
+				<Alink
+					target='_blank'
+					href={`${process.env.API_URL}/api/docs/${sname}`}
+				>
 					{name}
 				</Alink>
 			</td>
@@ -401,7 +408,7 @@ const TaskTr = (props) => {
 			<td>{score}</td>
 			<td>
 				<ConfigTask {...props} />
-				<EditModal {...props} {...{ setShow, show }} />
+				<EditModal {...props} {...{ handleClose, show }} />
 			</td>
 		</tr>
 	)
@@ -410,7 +417,7 @@ const TaskTr = (props) => {
 export const SelectContest = ({ contests, setId }) => (
 	<Form.Group>
 		<Form.Label>Choose Contest : </Form.Label>
-		<Form.Control as="select" onChange={setId}>
+		<Form.Control as='select' onChange={setId}>
 			<option disabled selected>
 				select a contest
 			</option>
@@ -429,8 +436,8 @@ export const TaskTable = ({ idContest }) => {
 	const [tasks] = useGet(`/api/admin/contest/${idContest}`)
 
 	return (
-		<CustomTable ready={!!tasks}>
-			<thead className="thead-light">
+		<CustomTable ready={!!tasks} align='left'>
+			<thead className='thead-light'>
 				<tr>
 					<th>#</th>
 					<th>Name</th>

@@ -6,6 +6,7 @@ import OrangeButton from '../components/OrangeButton'
 
 import styled from 'styled-components'
 import router from 'next/router'
+import { useInput, useSwitch } from '../utils'
 
 const CenteredContainer = styled(Container)`
 	height: 100vh;
@@ -17,19 +18,11 @@ const StyledCard = styled(Card)`
 	min-width: 325px;
 `
 const RegisterCard = () => {
-	const [username, setUsername] = useState('')
-	const [password, setPassword] = useState('')
-	const [sname, setSname] = useState('')
-	const [error, setError] = useState(false)
-	const handleChangeUser = (event) => {
-		setUsername(event.target.value)
-	}
-	const handleChangePass = (event) => {
-		setPassword(event.target.value)
-	}
-	const handleChangeSname = (event) => {
-		setSname(event.target.value)
-	}
+	const [username, inputUsername] = useInput()
+	const [password, inputPassword] = useInput()
+	const [sname, inputSname] = useInput()
+	const [error, showAlert, closeAlert] = useSwitch(false)
+
 	const handleSubmit = async (event) => {
 		event.preventDefault()
 		const url = `${process.env.API_URL}/api/register`
@@ -45,7 +38,7 @@ const RegisterCard = () => {
 				console.log('Register failed.')
 				let error = new Error(response.statusText)
 				console.log(error)
-				setError(true)
+				showAlert()
 			}
 		} catch (error) {
 			console.error(
@@ -54,9 +47,6 @@ const RegisterCard = () => {
 			)
 			throw new Error(error)
 		}
-	}
-	const closeAlert = () => {
-		setError(false)
 	}
 
 	return (
@@ -78,28 +68,25 @@ const RegisterCard = () => {
 					<Form.Control
 						type='username'
 						name='username'
-						value={username}
-						onChange={handleChangeUser}
 						placeholder='Username'
 						required
+						{...inputUsername}
 					/>
 					<br />
 					<Form.Control
 						type='password'
 						name='password'
-						value={password}
-						onChange={handleChangePass}
 						placeholder='Password'
 						required
+						{...inputPassword}
 					/>
 					<br />
 					<Form.Control
 						type='sname'
 						name='sname'
-						value={sname}
-						onChange={handleChangeSname}
 						placeholder='Display name'
 						required
+						{...inputSname}
 					/>
 					<br />
 					<br />

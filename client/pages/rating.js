@@ -8,6 +8,7 @@ import { Title, Name } from '../components/CustomText'
 import PageLayout from '../components/PageLayout'
 
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
+import { useInput } from '../utils'
 
 const UserTable = ({ users }) => (
 	<CustomTable ready={!!users}>
@@ -36,14 +37,11 @@ const UserTable = ({ users }) => (
 
 const Rating = () => {
 	const [userState] = useGet('/api/user')
-	const [searchState, setsearchState] = useState('')
+	const [usernameSearch, inputUsernameSearch] = useInput()
 
-	const updateSearch = (event) => {
-		setsearchState(event.target.value.substr(0, 20))
-	}
-	const filteredUser = userState?.filter((user) => {
-		return user.sname.indexOf(searchState) !== -1
-	})
+	const filteredUser = userState?.filter(
+		(user) => user.sname.indexOf(usernameSearch.substr(0, 20)) !== -1
+	)
 
 	return (
 		<PageLayout>
@@ -56,10 +54,9 @@ const Rating = () => {
 					as={Form.Control}
 					md={6}
 					placeholder='ค้นหาผู้ใช้'
-					value={searchState}
-					onChange={updateSearch}
+					{...inputUsernameSearch}
 				/>
-				<Col md={4}></Col>
+				<Col md={4} />
 			</Row>
 			<hr />
 			<UserTable users={filteredUser} />

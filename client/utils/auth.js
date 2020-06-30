@@ -1,4 +1,10 @@
-import { useEffect, useContext, createContext, useMemo, useCallback } from 'react'
+import {
+	useEffect,
+	useContext,
+	createContext,
+	useMemo,
+	useCallback,
+} from 'react'
 import Error from 'next/error'
 import router from 'next/router'
 import nextCookie from 'next-cookies'
@@ -71,7 +77,11 @@ export const useAuthContext = () => useContext(AuthContext)
 export const withAdminAuth = (WrappedComponent) => {
 	const Wrapper = (props) => {
 		const { isAdmin } = useAuthContext()
-		return isAdmin ? <WrappedComponent {...props} /> : <Error statusCode={404} />
+		return isAdmin ? (
+			<WrappedComponent {...props} />
+		) : (
+			<Error statusCode={404} />
+		)
 	}
 	Wrapper.getInitialProps = async (ctx) => {
 		const componentProps =

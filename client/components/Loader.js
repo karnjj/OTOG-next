@@ -2,7 +2,7 @@ import { Spinner, Row, Table } from 'react-bootstrap'
 import styled, { keyframes } from 'styled-components'
 import { darken } from 'polished'
 import vars from '../styles/vars'
-import { range } from '../utils/array'
+import { range } from '../utils'
 
 const StyledSpinner = styled(Spinner)`
 	color: ${vars.orange};

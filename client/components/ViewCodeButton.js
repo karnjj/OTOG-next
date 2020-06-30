@@ -8,6 +8,7 @@ import { faCode } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import prism from 'prismjs'
 import { useAuthContext } from '../utils/auth'
+import { useSwitch } from '../utils'
 
 const FontPre = styled.pre`
 	span,
@@ -16,15 +17,13 @@ const FontPre = styled.pre`
 	}
 `
 
-const ViewCodeButton = (props) => {
-	const { idResult, id_Prob, mini } = props
-	const { userData, token } = useAuthContext()
-	const [show, setShow] = useState(false)
+const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
+	const { token } = useAuthContext()
+	const [show, handleShow, handleClose] = useSwitch(false)
 	const [sourceCode, setSourceCode] = useState('')
 	const [showLineNumber, setShowLineNumber] = useState(true)
 
-	const handleClose = () => setShow(false)
-	const handleShow = async () => {
+	const onShow = async () => {
 		let url = idResult
 			? `${process.env.API_URL}/api/scode?idSubmit=${idResult}`
 			: `${process.env.API_URL}/api/scode?idProb=${id_Prob}`
@@ -33,7 +32,7 @@ const ViewCodeButton = (props) => {
 		const response = await fetch(url, { headers })
 		const data = await response.json()
 		setSourceCode(data.sCode)
-		setShow(true)
+		handleShow()
 	}
 
 	useEffect(() => {
@@ -59,16 +58,16 @@ const ViewCodeButton = (props) => {
 	return (
 		<>
 			{mini ? (
-				<Button size="sm" variant="outline-link" onClick={handleShow}>
+				<Button size='sm' variant='outline-link' onClick={onShow}>
 					🔎
 				</Button>
 			) : (
-				<OrangeButton expand={2} outline="true" onClick={handleShow} icon="true">
+				<OrangeButton expand={2} outline='true' onClick={onShow} icon='true'>
 					<FontAwesomeIcon icon={faCode} />
 				</OrangeButton>
 			)}
 
-			<Modal show={show} onHide={handleClose} centered size="lg">
+			<Modal show={show} onHide={handleClose} centered size='lg'>
 				<Modal.Header closeButton>
 					<Modal.Title>Submission : {idResult}</Modal.Title>
 				</Modal.Header>

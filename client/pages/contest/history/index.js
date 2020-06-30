@@ -38,8 +38,8 @@ const ContestTr = (props) => {
 				{time_end < now.valueOf() && (
 					<OrangeButton
 						expand={4}
-						outline="true"
-						href="/contest/history/[id]"
+						outline='true'
+						href='/contest/history/[id]'
 						dynamic={`/contest/history/${idContest}`}
 					>
 						<FontAwesomeIcon icon={faChartArea} />
@@ -77,7 +77,7 @@ const ContestTable = () => {
 const History = () => {
 	return (
 		<PageLayout>
-			<Title icon={faTrophy} text="Contest History" />
+			<Title icon={faTrophy} text='Contest History' />
 			<hr />
 			<ContestTable />
 		</PageLayout>
