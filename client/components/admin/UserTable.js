@@ -170,7 +170,7 @@ const UserTr = (props) => {
 }
 
 export const UserTable = (props) => {
-	const { users } = useGet('/api/admin/user')
+	const { data: users } = useGet('/api/admin/user')
 
 	return (
 		<CustomTable ready={!!users} align='left'>

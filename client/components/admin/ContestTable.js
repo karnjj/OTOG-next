@@ -119,8 +119,8 @@ export const NewContest = () => {
 }
 
 export const ContestConfig = ({ idContest }) => {
-	const isSelected = idContest !== 0
 	const url = `/api/admin/contest/${idContest}?mode=config`
+	const isSelected = idContest !== 0
 	const { data } = useGet(url, isSelected)
 
 	const [contestData, setContestData] = useState(data)
