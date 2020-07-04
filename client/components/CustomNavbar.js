@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, forwardRef } from 'react'
 
 import { Nav, Navbar } from 'react-bootstrap'
 
@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const StyledNavbar = styled(Navbar)`
-	top: ${(props) => props.hide && '-58px'};
+	top: ${(props) => props.hide && `-${props.height}px`};
 	transition: top 0.2s;
 `
 export const StyledNavTitle = styled.div`
@@ -24,7 +24,7 @@ export const StyledNavTitle = styled.div`
 `
 export const HeaderSpace = styled.div`
 	display: block;
-	padding-top: 58px;
+	padding-top: ${(props) => `${props.height}px`};
 `
 
 export const NavTitle = ({ name, icon, children, shrink = true, ...rest }) => (
@@ -55,7 +55,7 @@ export const NavLink = ({ path, target, active, ...rest }) => {
 	)
 }
 
-export const ScrollNavbar = (props) => {
+export const ScrollNavbar = forwardRef((props, ref) => {
 	const [hidden, setHidden] = useState(0)
 	const prevScroll = useRef(0)
 	const onScroll = () => {
@@ -77,5 +77,12 @@ export const ScrollNavbar = (props) => {
 			window.removeEventListener('scroll', onScroll)
 		}
 	})
-	return <StyledNavbar {...props} hide={hidden} />
-}
+	return (
+		<StyledNavbar
+			{...props}
+			hide={hidden}
+			ref={ref}
+			height={ref?.current.offsetHeight}
+		/>
+	)
+})
