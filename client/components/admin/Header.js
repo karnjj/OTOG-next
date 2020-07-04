@@ -9,18 +9,17 @@ import {
 	faTrophy,
 	faTimes,
 } from '@fortawesome/free-solid-svg-icons'
-import { useRef } from 'react'
 
-const Header = ({ router }) => {
-	const headerRef = useRef({ offsetHeight: 56 })
+const Header = (props) => {
+	const { router } = props
 	const handleClose = () => {
 		window.open('/', '_self')
 		window.close()
 	}
 	return (
 		<>
-			<HeaderSpace height={headerRef.current.offsetHeight} />
-			<ScrollNavbar bg='dark' variant='dark' fixed='top' ref={headerRef}>
+			<HeaderSpace />
+			<ScrollNavbar bg='dark' variant='dark' fixed='top'>
 				<Nav>
 					{[
 						['Main', faWrench, '/admin'],

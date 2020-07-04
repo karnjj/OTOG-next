@@ -28,7 +28,6 @@ import {
 	faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
-import { useRef } from 'react'
 
 const ProfileImage = styled(Image)`
 	width: 28px;
@@ -38,7 +37,6 @@ const ProfileImage = styled(Image)`
 export const Header = () => {
 	const { userData, isLogin, isAdmin } = useAuthContext()
 	const router = useRouter()
-	const headerRef = useRef({ offsetHeight: 56 })
 	const navLinks = [
 		//name, icon, paths, exact
 		['Main', faHome, ['/'], true],
@@ -49,14 +47,13 @@ export const Header = () => {
 	const handleClickLogout = () => logout(userData)
 	return (
 		<>
-			<HeaderSpace height={headerRef.current.offsetHeight} />
+			<HeaderSpace />
 			<ScrollNavbar
 				collapseOnSelect
 				expand='md'
 				bg='light'
 				expand='sm'
 				fixed='top'
-				ref={headerRef}
 			>
 				<Link href={isAdmin ? '/admin' : '/'} passHref>
 					<Navbar.Brand
