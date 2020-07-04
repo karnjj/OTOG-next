@@ -1,22 +1,5 @@
-import { useEffect, useReducer, useRef, useCallback } from 'react'
-import fetch from 'isomorphic-unfetch'
 import { useAuthContext } from './auth'
-
-const initialState = { data: null, isLoading: false, error: null }
-
-const reducer = (state, action) => {
-	// console.log(action.type)
-	switch (action.type) {
-		case 'loading':
-			return { ...state, isLoading: true }
-		case 'success':
-			return { ...state, data: action.json, isLoading: false }
-		case 'error':
-			return { ...state, error: action.error, isLoading: false }
-		default:
-			throw new Error()
-	}
-}
+import useSWR from 'swr'
 
 export const httpGet = async (url, token) => {
 	const params = {
@@ -29,32 +12,13 @@ export const httpGet = async (url, token) => {
 	return await res.json()
 }
 
-export const useGet = (url, deps = [], auto = true) => {
-	const [state, dispatch] = useReducer(reducer, initialState)
+export const useGet = (url, instant = true, options) => {
 	const { token } = useAuthContext()
-
-	const cancelled = useRef(false)
-	useEffect(() => {
-		return () => (cancelled.current = true)
-	}, [])
-
-	const execute = useCallback(async () => {
-		dispatch({ type: 'loading' })
-		try {
-			const json = await httpGet(url, token)
-			if (!cancelled.current) {
-				dispatch({ type: 'success', json })
-			}
-		} catch (error) {
-			dispatch({ type: 'error', error })
-		}
-	}, [auto, url, ...deps])
-
-	useEffect(() => {
-		if (auto) {
-			execute()
-		}
-	}, [auto, url, ...deps])
-
-	return [state.data, state.isLoading, execute]
+	const { data, error, isValidating, mutate } = useSWR(
+		instant ? [url, token] : null,
+		httpGet,
+		options
+	)
+	const isLoading = !data && !error
+	return { data, error, isLoading, isFetching: isValidating, execute: mutate }
 }

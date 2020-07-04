@@ -36,7 +36,7 @@ const UserTable = ({ users }) => (
 )
 
 const Rating = () => {
-	const [userState] = useGet('/api/user')
+	const { data: userState } = useGet('/api/user')
 	const [usernameSearch, inputUsernameSearch] = useInput()
 
 	const filteredUser = userState?.filter(

@@ -45,7 +45,7 @@ const ScoreTr = (props) => {
 
 const Scoreboard = ({ problems, contestants }) => {
 	return (
-		<CustomTable ready={!!problems}>
+		<CustomTable ready={!!problems && !!contestants}>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -71,9 +71,9 @@ const Scoreboard = ({ problems, contestants }) => {
 const ContestScoreboard = (props) => {
 	const router = useRouter()
 	const { id } = router.query
-	const [contestants] = useGet(`/api/contest/history/${id}`)
-	const [contestData] = useGet(`/api/contest/${id}`)
-	const { problem: problems } = contestData ?? {}
+	const { data: contestants } = useGet(`/api/contest/history/${id}`)
+	const { data: contestData = {} } = useGet(`/api/contest/${id}`)
+	const { problem: problems } = contestData
 
 	return (
 		<PageLayout>

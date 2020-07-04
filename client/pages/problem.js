@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAuthContext, withAuthSync } from '../utils/auth'
 import { useGet } from '../utils/api'
 
@@ -49,19 +49,28 @@ const Problem = () => {
 	const [showAll, setShowAll] = useState(isAdmin)
 
 	const url = `/api/problem?mode=${showAll ? 'admin' : 'full'}`
-	const [taskState, isLoading] = useGet(url, [showAll])
+	const { data: tasks = [], isLoading, isFetching } = useGet(url)
 
-	const handleChange = (event) => setShowAll(event.target.checked)
+	//switch reload effect
+	const [loading, setLoading] = useState(isLoading)
+	useEffect(() => {
+		if (!isLoading) {
+			setLoading(false)
+		}
+	}, [isFetching])
 
-	let filteredTask =
-		taskState &&
-		taskState.filter((problem) => {
-			let id = String(problem.id_Prob)
-			return (
-				problem.name.indexOf(problemSearch.substr(0, 20)) !== -1 ||
-				id.indexOf(problemSearch.substr(0, 20)) !== -1
-			)
-		})
+	const handleChange = (event) => {
+		setShowAll(event.target.checked)
+		setLoading(true)
+	}
+
+	let filteredTask = tasks?.filter((problem) => {
+		let id = String(problem.id_Prob)
+		return (
+			problem.name.indexOf(problemSearch.substr(0, 20)) !== -1 ||
+			id.indexOf(problemSearch.substr(0, 20)) !== -1
+		)
+	})
 
 	return (
 		<PageLayout>
@@ -90,7 +99,7 @@ const Problem = () => {
 				</Col>
 			</Row>
 			<hr />
-			<ProbTable isLoading={isLoading} problems={filteredTask} />
+			<ProbTable problems={filteredTask} isLoading={loading} />
 		</PageLayout>
 	)
 }

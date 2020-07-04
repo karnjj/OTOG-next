@@ -27,9 +27,9 @@ const Icon = styled(FontAwesomeIcon)`
 `
 const MiniSubmission = ({ idContest, idProb, parentCallback }) => {
 	const url = `/api/contest/${idContest}/submission?idProb=${idProb}`
-	const [data, isFetching, fetchData] = useGet(url, [], false)
+	const { data = {}, isFetching, execute: fetchData } = useGet(url, false)
 
-	const { best_submit, lastest_submit } = data ?? {}
+	const { best_submit, lastest_submit } = data
 	const latest = lastest_submit && lastest_submit[0]
 	const best = best_submit && best_submit[0]
 
@@ -49,13 +49,13 @@ const MiniSubmission = ({ idContest, idProb, parentCallback }) => {
 			<td>{result}</td>
 			<td>{score}</td>
 			<td>
-				{idResult ? <ViewCodeButton mini="true" idResult={idResult} /> : '❌'}
+				{idResult ? <ViewCodeButton mini='true' idResult={idResult} /> : '❌'}
 			</td>
 		</tr>
 	)
 
 	return (
-		<Table size="sm" bordered hover>
+		<Table size='sm' bordered hover>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -65,8 +65,8 @@ const MiniSubmission = ({ idContest, idProb, parentCallback }) => {
 				</tr>
 			</thead>
 			<tbody>
-				<CustomRow label="Latest" {...latest} />
-				<CustomRow label="Best" {...best} />
+				<CustomRow label='Latest' {...latest} />
+				<CustomRow label='Best' {...best} />
 			</tbody>
 		</Table>
 	)
@@ -91,7 +91,7 @@ export default (props) => {
 			<Accordion.Toggle
 				{...props}
 				as={Icon}
-				className="float-right"
+				className='float-right'
 				icon={isHidden ? faChevronDown : faChevronUp}
 				onClick={handleClick}
 			/>
@@ -143,25 +143,25 @@ export default (props) => {
 	return (
 		<Accordion
 			as={Card}
-			defaultActiveKey="0"
-			className="mb-4"
+			defaultActiveKey='0'
+			className='mb-4'
 			border={solved && 'success'}
 		>
-			<Accordion.Toggle as={Card.Header} eventKey="0">
+			<Accordion.Toggle as={Card.Header} eventKey='0'>
 				<h5>
 					<Row xs={1}>
 						<Col md>
 							Problem {index} : {name}
 						</Col>
-						<Col xs="auto" className="ml-auto">
-							{solved && <Badge variant="success">Solved</Badge>}
+						<Col xs='auto' className='ml-auto'>
+							{solved && <Badge variant='success'>Solved</Badge>}
 						</Col>
 					</Row>
 					ผ่านแล้ว : {passed}
 				</h5>
 			</Accordion.Toggle>
 
-			<Accordion.Collapse eventKey="0">
+			<Accordion.Collapse eventKey='0'>
 				<Card.Body as={Row}>
 					<Col>
 						<MiniSubmission
@@ -171,27 +171,27 @@ export default (props) => {
 						/>
 					</Col>
 					<Col xs={0} lg={1} />
-					<Col style={{ maxWidth: '350px' }} className="mx-auto">
+					<Col style={{ maxWidth: '350px' }} className='mx-auto'>
 						<Form.File
 							as={Col}
-							className="mb-4"
+							className='mb-4'
 							label={fileName || 'Choose file'}
-							accept=".c,.cpp"
+							accept='.c,.cpp'
 							onChange={selectFile}
 							custom
 						/>
 						<ButtonToolbar as={Row}>
-							<ButtonGroup className="ml-auto mr-4">
+							<ButtonGroup className='ml-auto mr-4'>
 								<a
-									className="btn btn-secondary"
-									target="_blank"
+									className='btn btn-secondary'
+									target='_blank'
 									href={`${process.env.API_URL}/api/docs/${sname}`}
 								>
 									View PDF
 								</a>
 							</ButtonGroup>
-							<ButtonGroup className="mr-auto">
-								<OrangeButton type="submit" onClick={uploadFile}>
+							<ButtonGroup className='mr-auto'>
+								<OrangeButton type='submit' onClick={uploadFile}>
 									Submit
 								</OrangeButton>
 							</ButtonGroup>

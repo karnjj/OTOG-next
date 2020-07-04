@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuthContext, withAuthSync } from '../utils/auth'
 import { useGet } from '../utils/api'
 
@@ -18,10 +18,21 @@ const Submission = () => {
 	const [showOnlyMe, setShowOnlyMe] = useState(!isAdmin && isLogin)
 
 	const url = `/api/submission?mode=${showOnlyMe ? 'onlyme' : 'full'}`
-	const [submissions, isLoading] = useGet(url, [showOnlyMe])
+	const { data: submissions, isLoading, isFetching } = useGet(url)
 	const { result: results, lastest } = submissions ?? {}
 
-	const handleCheck = (event) => setShowOnlyMe(event.target.checked)
+	//switch reload effect
+	const [loading, setLoading] = useState(isLoading)
+	useEffect(() => {
+		if (!isLoading) {
+			setLoading(false)
+		}
+	}, [isFetching])
+
+	const handleCheck = (event) => {
+		setShowOnlyMe(event.target.checked)
+		setLoading(true)
+	}
 
 	return (
 		<PageLayout>
@@ -65,7 +76,7 @@ const Submission = () => {
 			</Row>
 			<hr />
 			<SubmissionTable
-				isLoading={isLoading}
+				isLoading={loading}
 				canViewCode={showOnlyMe}
 				results={results}
 			/>

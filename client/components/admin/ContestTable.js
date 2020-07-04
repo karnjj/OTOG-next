@@ -120,11 +120,8 @@ export const NewContest = () => {
 
 export const ContestConfig = ({ idContest }) => {
 	const isSelected = idContest !== 0
-	const [data] = useGet(
-		`/api/admin/contest/${idContest}?mode=config`,
-		[idContest],
-		isSelected
-	)
+	const url = `/api/admin/contest/${idContest}?mode=config`
+	const { data } = useGet(url, isSelected)
 
 	const [contestData, setContestData] = useState(data)
 	const { name, mode, judge, startDate, endDate } = contestData ?? {}
@@ -433,7 +430,7 @@ export const SelectContest = ({ contests, setId }) => (
 )
 
 export const TaskTable = ({ idContest }) => {
-	const [tasks] = useGet(`/api/admin/contest/${idContest}`)
+	const { data: tasks } = useGet(`/api/admin/contest/${idContest}`)
 
 	return (
 		<CustomTable ready={!!tasks} align='left'>

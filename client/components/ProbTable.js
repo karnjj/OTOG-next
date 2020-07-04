@@ -16,7 +16,7 @@ const ProbTable = ({ isLoading, problems }) => {
 	const { isLogin } = useAuthContext()
 
 	return (
-		<CustomTable ready={!!problems && !isLoading}>
+		<CustomTable ready={!isLoading}>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -27,7 +27,7 @@ const ProbTable = ({ isLoading, problems }) => {
 				</tr>
 			</thead>
 			<tbody>
-				{problems?.map((prob, index) => (
+				{problems.map((prob, index) => (
 					<ProbTr key={index} {...prob} />
 				))}
 			</tbody>

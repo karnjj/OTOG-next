@@ -52,7 +52,8 @@
     "slate-react": "^0.58.3",
     "socket.io-client": "^2.3.0",
     "styled-breakpoints": "^8.1.1",
-    "styled-components": "^5.1.0"
+    "styled-components": "^5.1.0",
+    "swr": "^0.2.3"
   },
   "devDependencies": {
     "babel-plugin-prismjs": "^2.0.1"

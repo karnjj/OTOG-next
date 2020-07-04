@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { withAuthSync } from '../../../utils/auth'
 
 import { Title } from '../../../components/CustomText'
@@ -8,7 +7,6 @@ import { CustomTable, CustomTr } from '../../../components/CustomTable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrophy, faChartArea } from '@fortawesome/free-solid-svg-icons'
 
-import fetch from 'isomorphic-unfetch'
 import OrangeButton from '../../../components/OrangeButton'
 import { useGet } from '../../../utils/api'
 
@@ -51,7 +49,7 @@ const ContestTr = (props) => {
 }
 
 const ContestTable = () => {
-	const [contests] = useGet('/api/contest/history')
+	const { data: contests } = useGet('/api/contest/history')
 
 	return (
 		<CustomTable ready={!!contests}>

@@ -381,8 +381,7 @@ const TaskTr = (props) => {
 }
 
 export const TaskTable = () => {
-	const [tasks, , execute] = useGet('/api/admin/problem')
-	console.log(tasks)
+	const { data: tasks, execute } = useGet('/api/admin/problem')
 
 	return (
 		<CustomTable ready={!!tasks} align='left'>
