@@ -7,7 +7,6 @@ import {
 } from 'react'
 import Error from 'next/error'
 import router from 'next/router'
-import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
 import jwt_decode from 'jwt-decode'
 import { http } from './api'

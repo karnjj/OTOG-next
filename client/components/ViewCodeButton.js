@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
 import { Modal, Button } from 'react-bootstrap'
 import OrangeButton from './OrangeButton'
@@ -19,11 +19,17 @@ const FontPre = styled.pre`
 
 const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
 	const [show, handleShow, handleClose] = useSwitch(false)
+	const shown = useRef(false)
+	const onShow = useCallback(() => {
+		shown.current = true
+		handleShow()
+	}, [])
 
 	const url = idResult
 		? `/api/scode?idSubmit=${idResult}`
 		: `/api/scode?idProb=${id_Prob}`
-	const { data: { sourceCode } = {} } = useGet(show && url)
+	const { data = {}, isLoading } = useGet(shown.current && url)
+	const { sCode: sourceCode } = data
 
 	const [showLineNumber, setShowLineNumber] = useState(true)
 	useEffect(() => {
@@ -31,34 +37,32 @@ const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
 			if (window.innerWidth < 768) {
 				if (showLineNumber) {
 					setShowLineNumber(false)
+					console.log('resize')
 				}
 			} else if (!showLineNumber) {
 				setShowLineNumber(true)
+				console.log('resize')
 			}
 		}
 		onResize()
 		window.addEventListener('resize', onResize)
-		if (show) {
+		return () => window.removeEventListener('resize', onResize)
+	}, [show, showLineNumber])
+
+	useEffect(() => {
+		if (!isLoading && show) {
 			prism.highlightAll()
 		}
-		return () => {
-			window.removeEventListener('resize', onResize)
-		}
-	}, [show, showLineNumber])
+	}, [show, showLineNumber, isLoading])
 
 	return (
 		<>
 			{mini ? (
-				<Button size='sm' variant='outline-link' onClick={handleShow}>
+				<Button size='sm' variant='outline-link' onClick={onShow}>
 					🔎
 				</Button>
 			) : (
-				<OrangeButton
-					expand={2}
-					outline='true'
-					onClick={handleShow}
-					icon='true'
-				>
+				<OrangeButton expand={2} outline='true' onClick={onShow} icon='true'>
 					<FontAwesomeIcon icon={faCode} />
 				</OrangeButton>
 			)}

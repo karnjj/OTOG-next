@@ -23,7 +23,7 @@ export const httpPost = async (url, { token, body } = {}, isJson = true) =>
 
 export const useGet = (url, options) => {
 	const { token } = useAuthContext()
-	const fetcher = useCallback((url) => httpGet(url, { token }), [url, token])
+	const fetcher = useCallback((url) => httpGet(url, { token }), [token])
 	const state = useSWR(url, fetcher, options)
 	const { data, error } = state
 	const isLoading = !data && !error
