@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useAuthContext, withAuthSync } from '../utils/auth'
+import { useAuthContext } from '../utils/auth'
 import { useGet } from '../utils/api'
 
 import { Row, Col } from 'react-bootstrap'
@@ -18,8 +18,8 @@ const Submission = () => {
 	const [showOnlyMe, setShowOnlyMe] = useState(!isAdmin && isLogin)
 
 	const url = `/api/submission?mode=${showOnlyMe ? 'onlyme' : 'full'}`
-	const { data: submissions, isLoading, isFetching } = useGet(url)
-	const { result: results, lastest } = submissions ?? {}
+	const { data: submissions = {}, isLoading, isValidating } = useGet(url)
+	const { result: results, lastest } = submissions
 
 	//switch reload effect
 	const [loading, setLoading] = useState(isLoading)
@@ -27,7 +27,7 @@ const Submission = () => {
 		if (!isLoading) {
 			setLoading(false)
 		}
-	}, [isFetching])
+	}, [isValidating])
 
 	const handleCheck = (event) => {
 		setShowOnlyMe(event.target.checked)
@@ -84,4 +84,4 @@ const Submission = () => {
 	)
 }
 
-export default withAuthSync(Submission)
+export default Submission

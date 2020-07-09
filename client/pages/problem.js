@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useAuthContext, withAuthSync } from '../utils/auth'
+import { useAuthContext } from '../utils/auth'
 import { useGet } from '../utils/api'
 
 import { Row, Col, Form, InputGroup } from 'react-bootstrap'
@@ -49,7 +49,7 @@ const Problem = () => {
 	const [showAll, setShowAll] = useState(isAdmin)
 
 	const url = `/api/problem?mode=${showAll ? 'admin' : 'full'}`
-	const { data: tasks = [], isLoading, isFetching } = useGet(url)
+	const { data: tasks = [], isLoading, isValidating } = useGet(url)
 
 	//switch reload effect
 	const [loading, setLoading] = useState(isLoading)
@@ -57,15 +57,15 @@ const Problem = () => {
 		if (!isLoading) {
 			setLoading(false)
 		}
-	}, [isFetching])
+	}, [isValidating])
 
 	const handleChange = (event) => {
 		setShowAll(event.target.checked)
 		setLoading(true)
 	}
 
-	let filteredTask = tasks?.filter((problem) => {
-		let id = String(problem.id_Prob)
+	const filteredTasks = tasks?.filter((problem) => {
+		const id = String(problem.id_Prob)
 		return (
 			problem.name.indexOf(problemSearch.substr(0, 20)) !== -1 ||
 			id.indexOf(problemSearch.substr(0, 20)) !== -1
@@ -99,9 +99,9 @@ const Problem = () => {
 				</Col>
 			</Row>
 			<hr />
-			<ProbTable problems={filteredTask} isLoading={loading} />
+			<ProbTable problems={filteredTasks} isLoading={loading} />
 		</PageLayout>
 	)
 }
 
-export default withAuthSync(Problem)
+export default Problem

@@ -1,5 +1,3 @@
-import { withAuthSync } from '../../../utils/auth'
-
 import { Title } from '../../../components/CustomText'
 import PageLayout from '../../../components/PageLayout'
 import { CustomTable, CustomTr } from '../../../components/CustomTable'
@@ -81,4 +79,4 @@ const History = () => {
 		</PageLayout>
 	)
 }
-export default withAuthSync(History)
+export default History

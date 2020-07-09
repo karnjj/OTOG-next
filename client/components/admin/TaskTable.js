@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuthContext } from '../../utils/auth'
-import { useGet } from '../../utils/api'
+import { useGet, usePost, useHttp } from '../../utils/api'
 import { CustomTable } from '../CustomTable'
 import {
 	ButtonGroup,
@@ -24,33 +24,17 @@ import {
 	faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
 import { useSwitch } from '../../utils'
+import { mutate } from 'swr'
 
 export const NewProblem = () => {
 	const { token } = useAuthContext()
 
 	const [show, handleShow, handleClose] = useSwitch(false)
 	const [data, setData] = useState({})
-	const {
-		name = '',
-		sname = '',
-		numCase = '',
-		memory,
-		time,
-		score,
-		pdf,
-		zip,
-	} = data
+	const { name, sname, numCase, memory, time, score, pdf, zip } = data
 
-	const selectFile = (event) => {
-		switch (event.target.id) {
-			case 'doc':
-				setData({ ...data, pdf: event.target.files[0] })
-				break
-			case 'testcase':
-				setData({ ...data, zip: event.target.files[0] })
-				break
-		}
-	}
+	const selectFile = (event) =>
+		setData({ ...data, [event.target.id]: event.target.files[0] })
 	const handleChangeName = (event) =>
 		setData({ ...data, name: event.target.value })
 	const handleChangeSname = (event) =>
@@ -64,21 +48,15 @@ export const NewProblem = () => {
 	const handleChangeScore = (event) =>
 		setData({ ...data, score: Number(event.target.value) ?? '' })
 
+	const post = usePost('/api/admin/problem')
 	const onSubmit = async (event) => {
 		event.preventDefault()
-		const formData = new FormData()
-		Object.keys(data).map((item) => {
-			formData.append(item, data[item])
-		})
-		const url = `${process.env.API_URL}/api/admin/problem`
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: { Authorization: token ? token : '' },
-			body: formData,
-		})
+		const body = new FormData()
+		Object.keys(data).forEach((item) => body.append(item, data[item]))
+		const response = post(body, false)
 		if (response.ok) {
 			handleClose()
-			window.location.reload(false)
+			mutate('/api/admin/problem')
 		}
 	}
 
@@ -113,7 +91,7 @@ export const NewProblem = () => {
 
 						<Form.Group>
 							<Form.File
-								id='doc'
+								id='pdf'
 								label={pdf?.name ?? 'Document (PDF)'}
 								accept='.pdf'
 								onChange={selectFile}
@@ -123,7 +101,7 @@ export const NewProblem = () => {
 						</Form.Group>
 						<Form.Group>
 							<Form.File
-								id='testcase'
+								id='zip'
 								label={zip?.name ?? 'Testcases (ZIP)'}
 								accept='.zip'
 								onChange={selectFile}
@@ -175,35 +153,35 @@ export const NewProblem = () => {
 	)
 }
 
-const ConfigTask = ({ id_Prob, handleShow, state, sname }) => {
+const ConfigTask = ({ index, id_Prob, handleShow, state, sname }) => {
 	const { token } = useAuthContext()
-	const [onoff, setOnoff] = useState(state)
+	const post = usePost(`/api/admin/problem/${id_Prob}?option=onoff`)
+	const del = useHttp('DELETE', `/api/admin/problem/${id_Prob}?sname=${sname}`)
 
 	const handleChangeState = async (event) => {
 		event.preventDefault()
-		const data = { onoff }
-		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}?option=onoff`
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token ? token : '',
-			},
-			body: JSON.stringify(data),
-		})
-		if (response.ok) setOnoff(!onoff)
+		mutate(
+			'/api/admin/problem',
+			async (tasks) => [
+				...tasks.slice(0, index),
+				{ ...tasks[index], state: !state },
+				...tasks.slice(index + 1),
+			],
+			false
+		)
+		const body = JSON.stringify({ state })
+		const response = await post(body)
+		if (response.ok) {
+			mutate('/api/admin/problem')
+		}
 	}
 
 	const handleDelete = async () => {
 		if (confirm(`Delete problem id : ${id_Prob}`)) {
-			const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}?sname=${sname}`
-			const respone = await fetch(url, {
-				method: 'DELETE',
-				headers: {
-					Authorization: token ? token : '',
-				},
-			})
-			if (respone.ok) window.location.reload(false)
+			const res = await del()
+			if (res.ok) {
+				mutate('/api/admin/problem')
+			}
 		}
 	}
 
@@ -215,8 +193,8 @@ const ConfigTask = ({ id_Prob, handleShow, state, sname }) => {
 			<Button variant='warning'>
 				<FontAwesomeIcon icon={faSyncAlt} />
 			</Button>
-			<Button variant={onoff ? 'light' : 'dark'} onClick={handleChangeState}>
-				<FontAwesomeIcon icon={onoff ? faEye : faEyeSlash} />
+			<Button variant={state ? 'light' : 'dark'} onClick={handleChangeState}>
+				<FontAwesomeIcon icon={state ? faEye : faEyeSlash} />
 			</Button>
 			<Button variant='danger' onClick={handleDelete}>
 				<FontAwesomeIcon icon={faTrash} />
@@ -227,21 +205,13 @@ const ConfigTask = ({ id_Prob, handleShow, state, sname }) => {
 
 const EditModal = (props) => {
 	const { token } = useAuthContext()
-	const { show, handleClose, id_Prob, refreshData, ...rest } = props
+	const { show, handleClose, id_Prob, ...rest } = props
 	const [data, setData] = useState(rest)
 	const { name, sname, memory, time, score, rating, subtask, pdf, zip } = data
 	const [isSaving, handleSaving] = useSwitch(false)
 
-	const selectFile = (event) => {
-		switch (event.target.id) {
-			case 'doc':
-				setData({ ...data, pdf: event.target.files[0] })
-				break
-			case 'testcase':
-				setData({ ...data, zip: event.target.files[0] })
-				break
-		}
-	}
+	const selectFile = (event) =>
+		setData({ ...data, [event.target.id]: event.target.files[0] })
 	const handleChangeName = (event) =>
 		setData({ ...data, name: event.target.value })
 	const handleChangeSname = (event) =>
@@ -257,21 +227,16 @@ const EditModal = (props) => {
 	const handleChangeSubtask = (event) =>
 		setData({ ...data, subtask: event.target.value })
 
+	const post = usePost(`/api/admin/problem/${id_Prob}?option=save`)
 	const onSave = async (event) => {
 		event.preventDefault()
 		handleSaving()
-		const formData = new FormData()
-		Object.keys(data).map((item) => {
-			formData.append(item, data[item])
-		})
-		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}?option=save`
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: { Authorization: token ? token : '' },
-			body: formData,
-		})
+		const body = new FormData()
+		Object.keys(data).forEach((item) => body.append(item, data[item]))
+		const response = await post(body, false)
 		if (response.ok) {
-			refreshData()
+			mutate('/api/admin/problem')
+			handleClose()
 		}
 	}
 
@@ -326,7 +291,7 @@ const EditModal = (props) => {
 				</Form.Group>
 				<Form.Group>
 					<Form.File
-						id='doc'
+						id='pdf'
 						label={pdf?.name ?? 'New Document (PDF)'}
 						accept='.pdf'
 						onChange={selectFile}
@@ -336,7 +301,7 @@ const EditModal = (props) => {
 				</Form.Group>
 				<Form.Group>
 					<Form.File
-						id='testcase'
+						id='zip'
 						label={zip?.name ?? 'New Testcases (ZIP)'}
 						accept='.zip'
 						onChange={selectFile}
@@ -381,7 +346,7 @@ const TaskTr = (props) => {
 }
 
 export const TaskTable = () => {
-	const { data: tasks, execute } = useGet('/api/admin/problem')
+	const { data: tasks } = useGet('/api/admin/problem')
 
 	return (
 		<CustomTable ready={!!tasks} align='left'>
@@ -397,7 +362,7 @@ export const TaskTable = () => {
 			</thead>
 			<tbody>
 				{tasks?.map((task, index) => (
-					<TaskTr key={index} {...task} refreshData={execute} />
+					<TaskTr key={index} index={index} {...task} />
 				))}
 			</tbody>
 		</CustomTable>

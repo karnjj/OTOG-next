@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch'
 import { login } from '../utils/auth'
 
 import { Container, Card, Form, Alert } from 'react-bootstrap'
@@ -6,6 +5,7 @@ import OrangeButton from '../components/OrangeButton'
 
 import styled from 'styled-components'
 import { useInput, useSwitch } from '../utils'
+import { usePost } from '../utils/api'
 
 const CenteredContainer = styled(Container)`
 	height: 100vh;
@@ -21,22 +21,19 @@ const LoginCard = () => {
 	const [username, inputUsername] = useInput()
 	const [password, inputPassword] = useInput()
 	const [error, showAlert, closeAlert] = useSwitch(false)
+	const post = usePost('/api/login')
 
 	const handleSubmit = async (event) => {
 		event.preventDefault()
-		const url = `${process.env.API_URL}/api/login`
 		try {
-			const response = await fetch(url, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ username, password }),
-			})
+			const body = JSON.stringify({ username, password })
+			const response = await post(body)
 			if (response.ok) {
 				const token = await response.json()
 				login(token)
 			} else {
 				console.log('Login failed.')
-				let error = new Error(response.statusText)
+				const error = new Error(response.statusText)
 				console.log(error)
 				showAlert()
 			}

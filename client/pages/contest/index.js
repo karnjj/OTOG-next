@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { withAuthSync, useAuthContext } from '../../utils/auth'
+import { useAuthContext } from '../../utils/auth'
 
 import { Container, Row, Jumbotron, Col } from 'react-bootstrap'
 
@@ -90,7 +90,9 @@ const NoContest = (props) => {
 				See Contest History
 			</OrangeButton>
 			{isAdmin && (
-				<OrangeButton href='/contest/submission'>See Submission</OrangeButton>
+				<OrangeButton href='/contest/submission' variant='outline-primary'>
+					See Submission
+				</OrangeButton>
 			)}
 		</CenteredDiv>
 	)
@@ -106,8 +108,8 @@ const NoLogin = (props) => {
 
 const HoldingContest = ({ idContest, timeleft, name }) => {
 	const { isAdmin } = useAuthContext()
-	const { data } = useGet(`/api/contest/${idContest}`)
-	const { tasks } = data ?? {}
+	const { data = {} } = useGet(`/api/contest/${idContest}`)
+	const { tasks } = data
 
 	return (
 		<Container>
@@ -206,4 +208,4 @@ Contest.getInitialProps = async (ctx) => {
 	return { contest: json.result[0], serverTime: json.serverTime }
 }
 
-export default withAuthSync(Contest)
+export default Contest

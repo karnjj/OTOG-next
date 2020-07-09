@@ -1,24 +1,42 @@
 import { useAuthContext } from './auth'
 import useSWR from 'swr'
+import { useCallback } from 'react'
 
-export const httpGet = async (url, token) => {
+export const http = async (method, url, { token, body }, isJson = true) => {
 	const params = {
+		method,
 		headers: {
-			'Content-Type': 'application/json',
+			'Content-Type': isJson ? 'application/json' : undefined,
 			Authorization: token ? `${token}` : '',
 		},
+		body,
 	}
-	const res = await fetch(`${process.env.API_URL}${url}`, params)
-	return await res.json()
+	return await fetch(`${process.env.API_URL}${url}`, params)
 }
 
-export const useGet = (url, instant = true, options) => {
+export const httpGet = async (url, { token } = {}, isJson = true) => {
+	const response = await http('GET', url, { token }, isJson)
+	return response.json()
+}
+export const httpPost = async (url, { token, body } = {}, isJson = true) =>
+	http('POST', url, { token, body }, isJson)
+
+export const useGet = (url, options) => {
 	const { token } = useAuthContext()
-	const { data, error, isValidating, mutate } = useSWR(
-		instant ? [url, token] : null,
-		httpGet,
-		options
-	)
+	const fetcher = useCallback((url) => httpGet(url, { token }), [url, token])
+	const state = useSWR(url, fetcher, options)
+	const { data, error } = state
 	const isLoading = !data && !error
-	return { data, error, isLoading, isFetching: isValidating, execute: mutate }
+	return { ...state, isLoading }
+}
+
+export const useHttp = (method, url) => {
+	const { token } = useAuthContext()
+	return useCallback(
+		(body, isJson = true) => http(method, url, { token, body }, isJson),
+		[method, url, token]
+	)
+}
+export const usePost = (url) => {
+	return useHttp('POST', url)
 }

@@ -1,4 +1,4 @@
-import { withAuthSync, useAuthContext } from '../utils/auth'
+import { useAuthContext } from '../utils/auth'
 import { Jumbotron, Container, Row, Col } from 'react-bootstrap'
 import { Title } from '../components/CustomText'
 import PageLayout from '../components/PageLayout'
@@ -140,9 +140,9 @@ const Welcome = () => (
 
 const Hello = () => {
 	const { userData } = useAuthContext()
-	const { data } = useGet('/api/countProblem')
-	const { allProblem, userProblem, newProb, onlineUser } = data ?? {}
-	const { passProb, wrongProb } = userProblem ?? {}
+	const { data = {} } = useGet('/api/countProblem')
+	const { allProblem, userProblem = {}, newProb, onlineUser } = data
+	const { passProb, wrongProb } = userProblem
 	const noSub = allProblem - passProb - wrongProb
 
 	return (
@@ -251,4 +251,5 @@ const Index = () => {
 		</PageLayout>
 	)
 }
-export default withAuthSync(Index)
+
+export default Index

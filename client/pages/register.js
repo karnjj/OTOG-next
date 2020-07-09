@@ -1,6 +1,3 @@
-import { useState } from 'react'
-import fetch from 'isomorphic-unfetch'
-
 import { Container, Col, Row, Card, Form, Alert } from 'react-bootstrap'
 import OrangeButton from '../components/OrangeButton'
 
@@ -21,22 +18,21 @@ const RegisterCard = () => {
 	const [username, inputUsername] = useInput()
 	const [password, inputPassword] = useInput()
 	const [sname, inputSname] = useInput()
-	const [error, showAlert, closeAlert] = useSwitch(false)
+	const [show, showAlert, closeAlert] = useSwitch(false)
+
+	const post = usePost('/api/register')
 
 	const handleSubmit = async (event) => {
 		event.preventDefault()
-		const url = `${process.env.API_URL}/api/register`
 		try {
-			const response = await fetch(url, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ username, password, sname }),
-			})
+			const body = JSON.stringify({ username, password, sname })
+			const response = await post(body)
+
 			if (response.ok) {
 				router.push('/login')
 			} else {
 				console.log('Register failed.')
-				let error = new Error(response.statusText)
+				const error = new Error(response.statusText)
 				console.log(error)
 				showAlert()
 			}
@@ -57,7 +53,7 @@ const RegisterCard = () => {
 				</div>
 			</Card.Header>
 			<Card.Body>
-				{error && (
+				{show && (
 					<Alert variant='danger' dismissible onClose={closeAlert}>
 						<strong>Register Failed !</strong>
 						<br />

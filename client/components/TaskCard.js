@@ -19,7 +19,7 @@ import ViewCodeButton from './ViewCodeButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
-import { useGet } from '../utils/api'
+import { useGet, usePost } from '../utils/api'
 
 const Icon = styled(FontAwesomeIcon)`
 	user-select: none;
@@ -27,7 +27,7 @@ const Icon = styled(FontAwesomeIcon)`
 `
 const MiniSubmission = ({ idContest, idProb, parentCallback }) => {
 	const url = `/api/contest/${idContest}/submission?idProb=${idProb}`
-	const { data = {}, isFetching, execute: fetchData } = useGet(url, false)
+	const { data = {}, isValidating, mutate: fetchData } = useGet(url, false)
 
 	const { best_submit, lastest_submit } = data
 	const latest = lastest_submit && lastest_submit[0]
@@ -38,10 +38,10 @@ const MiniSubmission = ({ idContest, idProb, parentCallback }) => {
 	}
 
 	useEffect(() => {
-		const isGrading = !isFetching && latest?.status === 0
+		const isGrading = !isValidating && latest?.status === 0
 		const timeout = isGrading && setTimeout(fetchData, 1000)
 		return () => clearTimeout(timeout)
-	}, [isFetching])
+	}, [isValidating])
 
 	const CustomRow = ({ label, result = '-', score = '-', idResult }) => (
 		<tr>
@@ -72,7 +72,7 @@ const MiniSubmission = ({ idContest, idProb, parentCallback }) => {
 	)
 }
 
-export default (props) => {
+const TaskCard = (props) => {
 	const { idContest, id_Prob, index, name, whopass, sname } = props
 	const userData = useAuthContext()
 	const [selectedFile, setSelectedFile] = useState(undefined)
@@ -106,38 +106,20 @@ export default (props) => {
 			setFileName('')
 		}
 	}
+	const post = usePost(`/api/upload/${id_Prob}?contest=${idContest}`)
 	const uploadFile = async (e) => {
 		e.preventDefault()
-		if (selectedFile === undefined) return false
+		if (!selectedFile) {
+			return
+		}
+
 		const data = new FormData()
 		data.append('file', selectedFile)
 		data.append('fileLang', fileLang)
-		const url = `${process.env.API_URL}/api/upload/${id_Prob}?contest=${idContest}`
-		const respone = await fetch(url, {
-			method: 'POST',
-			headers: {
-				authorization: userData ? userData.id : '',
-			},
-			body: data,
-		})
-		if (respone.ok) window.location.reload(false)
-	}
-	const quickResend = async () => {
-		if (idBest != -1) {
-			const url = `${process.env.API_URL}/api/contest/quickresend`
-			const response = await fetch(url, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ id: idBest }),
-			})
-			if (response.ok) window.location.reload(false)
+		const respone = await post(data, false)
+		if (respone.ok) {
+			window.location.reload(false)
 		}
-	}
-	const callbackFunc = (ChildData, id) => {
-		if (ChildData == 100) setSolved(true)
-		setIdBest(id)
 	}
 
 	return (
@@ -202,3 +184,5 @@ export default (props) => {
 		</Accordion>
 	)
 }
+
+export default TaskCard

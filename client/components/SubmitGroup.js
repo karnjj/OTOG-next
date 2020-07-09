@@ -1,54 +1,34 @@
 import { useState } from 'react'
-import { useAuthContext } from '../utils/auth'
-import fetch from 'isomorphic-unfetch'
 import router from 'next/router'
 
 import { Modal, Form, ButtonGroup } from 'react-bootstrap'
 import OrangeButton from './OrangeButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
-import { route } from 'next/dist/next-server/server/router'
+import { usePost } from '../utils/api'
+import { useSwitch } from '../utils'
 
-const SubmitGroup = (props) => {
-	const { name, id_Prob, children } = props
-	const { userData } = useAuthContext()
-
-	const [show, setShow] = useState(false)
-	const [fileName, setFileName] = useState('')
+const SubmitGroup = ({ name, id_Prob, children }) => {
+	const [show, handleShow, handleClose] = useSwitch(false)
 	const [fileLang, setFileLang] = useState('C++')
-	const [selectedFile, setSelectedFile] = useState(undefined)
+	const [file, setFile] = useState()
 
-	const handleShow = () => setShow(true)
-	const handleClose = () => setShow(false)
 	const selectLang = (event) => setFileLang(event.target.value)
+	const selectFile = (event) => setFile(event.target.files[0])
 
-	const selectFile = (event) => {
-		if (event.target.files[0] !== undefined) {
-			setSelectedFile(event.target.files[0])
-			setFileName(event.target.files[0].name)
-		} else {
-			setSelectedFile(undefined)
-			setFileName('')
-		}
-	}
+	const post = usePost(`/api/upload/${id_Prob}`)
 	const uploadFile = async (e) => {
 		e.preventDefault()
-		if (selectedFile === undefined) return false
-		const data = new FormData()
-		data.append('file', selectedFile)
-		data.append('fileLang', fileLang)
-		const url = `${process.env.API_URL}/api/upload/${id_Prob}`
-		const respone = await fetch(url, {
-			method: 'POST',
-			headers: {
-				authorization: userData.id,
-			},
-			body: data,
-		})
-		if (respone.ok)
+		if (!file) return
+		const body = new FormData()
+		body.append('file', file)
+		body.append('fileLang', fileLang)
+		const response = await post(body, false)
+		if (response.ok) {
 			router.pathname === '/submission'
 				? window.location.reload(false)
 				: router.push('/submission')
+		}
 	}
 
 	return (
@@ -67,22 +47,22 @@ const SubmitGroup = (props) => {
 				<Form as={Modal.Body}>
 					<Form.Group>
 						<Form.File
-							label={fileName || 'Choose file'}
-							accept=".c,.cpp"
+							label={file?.name ?? 'Choose file'}
+							accept='.c,.cpp'
 							onChange={selectFile}
 							custom
 						/>
 					</Form.Group>
 					<Form.Group>
 						<Form.Label>Choose Language</Form.Label>
-						<Form.Control as="select" onChange={selectLang}>
+						<Form.Control as='select' onChange={selectLang}>
 							<option>C++</option>
 							<option>C</option>
 						</Form.Control>
 					</Form.Group>
 				</Form>
 				<Modal.Footer>
-					<OrangeButton type="submit" onClick={uploadFile}>
+					<OrangeButton type='submit' onClick={uploadFile}>
 						Submit
 					</OrangeButton>
 				</Modal.Footer>

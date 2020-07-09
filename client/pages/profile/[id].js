@@ -1,7 +1,6 @@
-import { withAuthSync } from '../../utils/auth'
 import { userClass } from '../../utils/user'
 
-import { Container, Col, Row, Card } from 'react-bootstrap'
+import { Col, Row, Card } from 'react-bootstrap'
 import { Title, ColoredText } from '../../components/CustomText'
 import PageLayout from '../../components/PageLayout'
 import Graph from '../../components/Graph'
@@ -17,9 +16,9 @@ const ImageCustomCard = styled(CustomCard)`
 	width: 345px;
 `
 const GraphCard = ({ userInfo }) => (
-	<CustomCard bg="light">
+	<CustomCard bg='light'>
 		<Card.Body>
-			<Card.Text as="div" className="pl-3 pb-3">
+			<Card.Text as='div' className='pl-3 pb-3'>
 				<h1>
 					<ColoredText {...userInfo}>{userInfo.sname}</ColoredText>
 				</h1>
@@ -39,11 +38,11 @@ const GraphCard = ({ userInfo }) => (
 )
 
 const ImageCard = ({ userInfo, id }) => (
-	<ImageCustomCard bg="light">
+	<ImageCustomCard bg='light'>
 		<Card.Img
-			variant="top"
+			variant='top'
 			src={`${process.env.API_URL}/api/avatar/${id}`}
-			alt="Profile Image"
+			alt='Profile Image'
 		/>
 		<Card.Body>
 			<Card.Title>Trophy</Card.Title>
@@ -77,18 +76,18 @@ const ImageCard = ({ userInfo, id }) => (
 	</ImageCustomCard>
 )
 
-const Rating = (props) => (
+const Profile = (props) => (
 	<PageLayout>
-		<Title icon={faUser} text="Profile" />
+		<Title icon={faUser} text='Profile' />
 		<hr />
 		<Row xs={1} lg={2}>
-			<Col lg={7} xl={8} className="mb-3 mb-lg-0">
+			<Col lg={7} xl={8} className='mb-3 mb-lg-0'>
 				<GraphCard {...props} />
 			</Col>
 			<Col
 				lg={5}
 				xl={4}
-				className="d-flex justify-content-center align-item-center py-3"
+				className='d-flex justify-content-center align-item-center py-3'
 			>
 				<ImageCard {...props} />
 			</Col>
@@ -96,10 +95,9 @@ const Rating = (props) => (
 	</PageLayout>
 )
 
-Rating.getInitialProps = async ({ query }) => {
-	const id = query.id
+Profile.getInitialProps = async ({ query: { id } }) => {
 	const userInfo = await httpGet(`/api/profile/${id}`)
 	return { id, userInfo }
 }
 
-export default withAuthSync(Rating)
+export default Profile

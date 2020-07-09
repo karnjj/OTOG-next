@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuthContext } from '../../utils/auth'
-import fetch from 'isomorphic-unfetch'
-import { useGet } from '../../utils/api'
+import { useGet, usePost, useHttp } from '../../utils/api'
 import DatePicker from 'react-datepicker'
 import { Button, Modal, Form, Col, Row, InputGroup } from 'react-bootstrap'
 import { Alink } from '../CustomText'
@@ -17,7 +16,6 @@ import {
 import { useInput, useSwitch } from '../../utils'
 
 export const NewContest = () => {
-	const { token } = useAuthContext()
 	const [show, handleShow, handleClose] = useSwitch(false)
 	const [name, inputName] = useInput()
 	const [mode, inputMode] = useInput('unrated')
@@ -25,20 +23,14 @@ export const NewContest = () => {
 	const [startDate, setStartDate] = useState(new Date())
 	const [endDate, setEndDate] = useState(new Date())
 
+	const put = useHttp('PUT', '/api/admin/contest')
 	const onSubmit = async (event) => {
 		event.preventDefault()
 		const start = Math.floor(Date.parse(startDate) / 1000)
 		const end = Math.floor(Date.parse(endDate) / 1000)
 		const data = { name, mode, judge, start, end }
-		const url = `${process.env.API_URL}/api/admin/contest`
-		const response = await fetch(url, {
-			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token ? token : '',
-			},
-			body: JSON.stringify(data),
-		})
+		const body = JSON.stringify(data)
+		const response = await put(body)
 		if (response.ok) {
 			handleClose()
 			window.location.reload(false)
@@ -121,10 +113,10 @@ export const NewContest = () => {
 export const ContestConfig = ({ idContest }) => {
 	const url = `/api/admin/contest/${idContest}?mode=config`
 	const isSelected = idContest !== 0
-	const { data } = useGet(url, isSelected)
+	const { data = {} } = useGet(isSelected && url)
 
 	const [contestData, setContestData] = useState(data)
-	const { name, mode, judge, startDate, endDate } = contestData ?? {}
+	const { name, mode, judge, startDate, endDate } = contestData
 
 	const [show, handleShow, handleClose] = useSwitch(false)
 
@@ -139,21 +131,14 @@ export const ContestConfig = ({ idContest }) => {
 	const handleChangeEnd = (date) =>
 		setContestData({ ...contestData, endDate: date })
 
+	const post = usePost(`/api/admin/contest/${idContest}?mode=config`)
 	const onSubmit = async (event) => {
 		event.preventDefault()
-		const url = `${process.env.API_URL}/api/admin/contest/${idContest}?mode=config`
 		const formData = new FormData()
 		Object.keys(contestData).forEach((item) =>
 			formData.append(item, contestData[item])
 		)
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token ?? '',
-			},
-			body: formData,
-		})
+		const response = await post(formData, false)
 		if (response.ok) {
 			handleClose()
 			window.location.reload(false)
@@ -242,18 +227,11 @@ const ConfigTask = (props) => {
 		setOnoff(see)
 	}, [see, idContest])
 
+	const post = usePost(`/api/admin/contest/${idContest}`)
 	const handleChangeState = async (event) => {
 		event.preventDefault()
-		const data = { idProb: id_Prob, state: !onoff }
-		const url = `${process.env.API_URL}/api/admin/contest/${idContest}`
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token ? token : '',
-			},
-			body: JSON.stringify(data),
-		})
+		const body = JSON.stringify({ idProb: id_Prob, state: !onoff })
+		const response = await post(body)
 		if (response.ok) {
 			setOnoff(!onoff)
 		}
@@ -274,10 +252,6 @@ const EditModal = (props) => {
 	const { name, sname, memory, time, score, pdf, testcase, zip } = data
 
 	const selectFile = (event) => {
-		if (event.target.files[0] === undefined) {
-			setData({ ...data, pdf: undefined, zip: undefined })
-			return
-		}
 		switch (event.target.id) {
 			case 'doc':
 				setData({ ...data, pdf: event.target.files[0] })
@@ -293,26 +267,20 @@ const EditModal = (props) => {
 	const handleChangeSname = (event) =>
 		setData({ ...data, sname: event.target.value })
 	const handleChangeMemory = (event) =>
-		setData({ ...data, memory: Number(event.target.value) ?? '' })
+		setData({ ...data, memory: Number(event.target.value) ?? 0 })
 	const handleChangeTime = (event) =>
-		setData({ ...data, time: Number(event.target.value) ?? '' })
+		setData({ ...data, time: Number(event.target.value) ?? 0 })
 	const handleChangeScore = (event) =>
-		setData({ ...data, score: Number(event.target.value) ?? '' })
+		setData({ ...data, score: Number(event.target.value) ?? 0 })
 	const handleChangeTestcase = (event) =>
 		setData({ ...data, testcase: event.target.value })
 
+	const post = usePost(`/api/admin/problem/${id_Prob}?option=save`)
 	const onSave = async (event) => {
 		event.preventDefault()
 		const formData = new FormData()
-		Object.keys(info).map((item) => {
-			formData.append(item, info[item])
-		})
-		const url = `${process.env.API_URL}/api/admin/problem/${id_Prob}?option=save`
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: { Authorization: token ? token : '' },
-			body: formData,
-		})
+		Object.keys(info).forEach((item) => formData.append(item, info[item]))
+		const response = await post(formData, false)
 		if (response.ok) {
 			handleClose()
 			window.location.reload(false)

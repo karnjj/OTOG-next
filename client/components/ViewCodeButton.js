@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCode } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import prism from 'prismjs'
-import { useAuthContext } from '../utils/auth'
 import { useSwitch } from '../utils'
+import { useGet } from '../utils/api'
 
 const FontPre = styled.pre`
 	span,
@@ -18,23 +18,14 @@ const FontPre = styled.pre`
 `
 
 const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
-	const { token } = useAuthContext()
 	const [show, handleShow, handleClose] = useSwitch(false)
-	const [sourceCode, setSourceCode] = useState('')
+
+	const url = idResult
+		? `/api/scode?idSubmit=${idResult}`
+		: `/api/scode?idProb=${id_Prob}`
+	const { data: { sourceCode } = {} } = useGet(show && url)
+
 	const [showLineNumber, setShowLineNumber] = useState(true)
-
-	const onShow = async () => {
-		let url = idResult
-			? `${process.env.API_URL}/api/scode?idSubmit=${idResult}`
-			: `${process.env.API_URL}/api/scode?idProb=${id_Prob}`
-		let headers = { 'Content-Type': 'application/json' }
-		headers['authorization'] = token ? token : ''
-		const response = await fetch(url, { headers })
-		const data = await response.json()
-		setSourceCode(data.sCode)
-		handleShow()
-	}
-
 	useEffect(() => {
 		const onResize = () => {
 			if (window.innerWidth < 768) {
@@ -58,11 +49,16 @@ const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
 	return (
 		<>
 			{mini ? (
-				<Button size='sm' variant='outline-link' onClick={onShow}>
+				<Button size='sm' variant='outline-link' onClick={handleShow}>
 					🔎
 				</Button>
 			) : (
-				<OrangeButton expand={2} outline='true' onClick={onShow} icon='true'>
+				<OrangeButton
+					expand={2}
+					outline='true'
+					onClick={handleShow}
+					icon='true'
+				>
 					<FontAwesomeIcon icon={faCode} />
 				</OrangeButton>
 			)}

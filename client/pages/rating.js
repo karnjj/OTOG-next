@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useGet } from '../utils/api'
-import { withAuthSync } from '../utils/auth'
 
 import { Col, Row, Form } from 'react-bootstrap'
 import { CustomTable } from '../components/CustomTable'
@@ -36,10 +35,10 @@ const UserTable = ({ users }) => (
 )
 
 const Rating = () => {
-	const { data: userState } = useGet('/api/user')
+	const { data: users } = useGet('/api/user')
 	const [usernameSearch, inputUsernameSearch] = useInput()
 
-	const filteredUser = userState?.filter(
+	const filteredUsers = users?.filter(
 		(user) => user.sname.indexOf(usernameSearch.substr(0, 20)) !== -1
 	)
 
@@ -59,8 +58,8 @@ const Rating = () => {
 				<Col md={4} />
 			</Row>
 			<hr />
-			<UserTable users={filteredUser} />
+			<UserTable users={filteredUsers} />
 		</PageLayout>
 	)
 }
-export default withAuthSync(Rating)
+export default Rating

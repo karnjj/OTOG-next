@@ -1,5 +1,4 @@
 import { useAuthContext } from '../../utils/auth'
-import fetch from 'isomorphic-unfetch'
 
 import { ButtonGroup, Button, Modal, Form } from 'react-bootstrap'
 
@@ -9,7 +8,7 @@ import {
 	faTrash,
 	faUserPlus,
 } from '@fortawesome/free-solid-svg-icons'
-import { useGet } from '../../utils/api'
+import { useGet, usePost, useHttp } from '../../utils/api'
 import { useSwitch, useInput } from '../../utils'
 import { CustomTable } from '../CustomTable'
 
@@ -19,19 +18,12 @@ export const NewUser = () => {
 	const [username, inputUsername] = useInput()
 	const [password, inputPassword] = useInput()
 	const [sname, inputSname] = useInput()
+	const post = usePost('/api/admin/user')
 
 	const onSubmit = async (event) => {
 		event.preventDefault()
-		const data = { username, password, sname }
-		const url = `${process.env.API_URL}/api/admin/user`
-		const respone = await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token ? token : '',
-			},
-			body: JSON.stringify(data),
-		})
+		const body = JSON.stringify({ username, password, sname })
+		const respone = await post(body)
 		if (respone.ok) {
 			handleClose()
 			window.location.reload(false)
@@ -72,18 +64,14 @@ export const NewUser = () => {
 
 const ConfigUser = ({ handleShow, idUser }) => {
 	const { token } = useAuthContext()
+	const del = useHttp('DELETE', `/api/admin/user/${idUser}`)
 
 	const handleDelete = async () => {
 		if (confirm(`Delete user id : ${idUser}`)) {
-			const url = `${process.env.API_URL}/api/admin/user/${idUser}`
-			const respone = await fetch(url, {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: token ? token : '',
-				},
-			})
-			if (respone.ok) window.location.reload(false)
+			const respone = await del()
+			if (respone.ok) {
+				window.location.reload(false)
+			}
 		}
 	}
 	return (
@@ -105,20 +93,16 @@ const EditModal = (props) => {
 	const [password, inputPassword] = useInput()
 	const [sname, inputSname] = useInput(props.sname)
 	const [state, inputState] = useInput(props.state, (val) => Number(val))
+	const post = usePost(`/api/admin/user/${idUser}`)
 
 	const onSave = async (event) => {
 		event.preventDefault()
-		const data = { username, sname, state, password }
-		const url = `${process.env.API_URL}/api/admin/user/${idUser}`
-		const respone = await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token ? token : '',
-			},
-			body: JSON.stringify(data),
-		})
-		if (respone.ok) handleClose(), window.location.reload(false)
+		const body = JSON.stringify({ username, sname, state, password })
+		const response = await post(body)
+		if (respone.ok) {
+			handleClose()
+			window.location.reload(false)
+		}
 	}
 
 	return (

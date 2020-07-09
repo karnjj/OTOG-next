@@ -15,7 +15,7 @@ import { httpGet } from '../../utils/api'
 
 const Note = () => (
 	<Card>
-		<Card.Header as="h6">Note</Card.Header>
+		<Card.Header as='h6'>Note</Card.Header>
 		<Card.Body>
 			<Card.Text>
 				1. <b>Double Click</b> to edit problems in this page.
@@ -59,7 +59,7 @@ const Contest = ({ contests }) => {
 
 Contest.getInitialProps = async (ctx) => {
 	const { token } = nextCookie(ctx)
-	return await httpGet('/api/admin/contest', token)
+	return await httpGet('/api/admin/contest', { token })
 }
 
 export default withAdminAuth(Contest)

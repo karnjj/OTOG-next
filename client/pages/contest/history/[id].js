@@ -1,6 +1,3 @@
-import { useEffect, useState } from 'react'
-import { withAuthSync, useAuthContext } from '../../../utils/auth'
-
 import { Title, Name } from '../../../components/CustomText'
 import PageLayout from '../../../components/PageLayout'
 import OrangeButton from '../../../components/OrangeButton'
@@ -86,4 +83,4 @@ const ContestScoreboard = (props) => {
 	)
 }
 
-export default withAuthSync(ContestScoreboard)
+export default ContestScoreboard
