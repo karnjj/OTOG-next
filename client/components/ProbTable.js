@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { useAuthContext } from '../utils/auth'
 
 import { Popover, OverlayTrigger, Row, Col } from 'react-bootstrap'
@@ -14,6 +15,7 @@ const StyledPop = styled(Popover)`
 const ProbTable = ({ isLoading, problems }) => {
 	const { isLogin } = useAuthContext()
 
+	console.log('rerenderd')
 	return (
 		<CustomTable ready={!isLoading}>
 			<thead>
@@ -34,7 +36,7 @@ const ProbTable = ({ isLoading, problems }) => {
 	)
 }
 
-const ProbTr = (props) => {
+const ProbTr = memo((props) => {
 	const {
 		id_Prob,
 		name,
@@ -97,6 +99,6 @@ const ProbTr = (props) => {
 			)}
 		</CustomTr>
 	)
-}
+})
 
 export default ProbTable

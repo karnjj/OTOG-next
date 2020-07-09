@@ -20,7 +20,6 @@ export const AuthContext = createContext()
 export const useAuthContext = () => useContext(AuthContext)
 export const AuthProvider = ({ nextToken, ...props }) => {
 	const [token, setToken] = useState(() => cookie.get('token'))
-	console.log(token)
 	const login = useCallback(
 		(accessToken) => {
 			cookie.set('token', accessToken, { expires: 3 / 24 })
