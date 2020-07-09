@@ -1,6 +1,6 @@
-import { withRouter } from 'next/router'
+import { useRouter } from 'next/router'
 
-import { Nav, Button } from 'react-bootstrap'
+import { Nav } from 'react-bootstrap'
 import { NavLink, ScrollNavbar, HeaderSpace } from '../CustomNavbar'
 import {
 	faWrench,
@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 const Header = (props) => {
-	const { router } = props
+	const router = useRouter()
 	const handleClose = () => {
 		window.open('/', '_self')
 		window.close()
@@ -45,4 +45,4 @@ const Header = (props) => {
 	)
 }
 
-export default withRouter(Header)
+export default Header

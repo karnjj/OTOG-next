@@ -7,6 +7,7 @@ import {
 } from 'react'
 import Error from 'next/error'
 import router from 'next/router'
+import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
 import jwt_decode from 'jwt-decode'
 import { http } from './api'
@@ -17,22 +18,9 @@ export const auth = (token) => {
 
 export const AuthContext = createContext()
 export const useAuthContext = () => useContext(AuthContext)
-export const AuthProvider = (props) => {
+export const AuthProvider = ({ nextToken, ...props }) => {
 	const [token, setToken] = useState(() => cookie.get('token'))
-	const syncLogout = useCallback((event) => {
-		if (event.key === 'logout') {
-			window.location.reload(false)
-		}
-	}, [])
-
-	useEffect(() => {
-		window.addEventListener('storage', syncLogout)
-		return () => {
-			window.removeEventListener('storage', syncLogout)
-			window.localStorage.removeItem('logout')
-		}
-	}, [])
-
+	console.log(token)
 	const login = useCallback(
 		(accessToken) => {
 			cookie.set('token', accessToken, { expires: 3 / 24 })
@@ -49,6 +37,20 @@ export const AuthProvider = (props) => {
 		window.localStorage.setItem('logout', Date.now())
 	}, [token])
 
+	const syncLogout = useCallback((event) => {
+		if (event.key === 'logout') {
+			logout()
+		}
+	}, [])
+
+	useEffect(() => {
+		window.addEventListener('storage', syncLogout)
+		return () => {
+			window.removeEventListener('storage', syncLogout)
+			window.localStorage.removeItem('logout')
+		}
+	}, [])
+
 	const userData = auth(token)
 	const isLogin = !!token
 	const isAdmin = userData?.state === 0
@@ -58,19 +60,20 @@ export const AuthProvider = (props) => {
 }
 
 export const withAdminAuth = (WrappedComponent) => {
-	const Wrapper = (props) => {
-		const { isAdmin } = useAuthContext()
-		return isAdmin ? (
+	const Wrapper = ({ token, ...props }) => {
+		const userData = auth(token)
+		return userData.state === 0 ? (
 			<WrappedComponent {...props} />
 		) : (
 			<Error statusCode={404} />
 		)
 	}
 	Wrapper.getInitialProps = async (ctx) => {
+		const { token } = nextCookie(ctx)
 		const componentProps =
 			WrappedComponent.getInitialProps &&
 			(await WrappedComponent.getInitialProps(ctx))
-		return { ...componentProps }
+		return { ...componentProps, token }
 	}
 	return Wrapper
 }
