@@ -4,7 +4,7 @@ import { unregister } from 'next-offline/runtime'
 
 import { AuthProvider } from '../utils/auth'
 import breakpoints from '../styles/breakpoints'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import '../styles/otog-custom-theme.scss'
 import 'react-datepicker/dist/react-datepicker.css'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
@@ -14,13 +14,13 @@ import vars from '../styles/vars'
 config.autoAddCss = false
 
 const GlobalStyle = createGlobalStyle`
-    body {
-        overflow-y: scroll;
-    }
-    ::selection {
-        color: ${vars.white};
-        background: ${vars.orange};
-    }
+	body {
+		overflow-y: scroll;
+	}
+	::selection {
+		color: ${vars.white};
+		background: ${vars.orange};
+	}
 `
 
 const MyApp = ({ Component, pageProps }) => {

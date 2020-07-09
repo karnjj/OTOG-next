@@ -6,7 +6,6 @@ import { Slate, Editable, withReact, useSlate } from 'slate-react'
 import { withHistory } from 'slate-history'
 
 import { Button, Modal, ButtonGroup, ButtonToolbar } from 'react-bootstrap'
-import { Alink } from './CustomText'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faPencilAlt,
@@ -39,9 +38,9 @@ const Code = styled.code`
 const Leaf = ({ attributes, children, leaf }) => {
 	if (leaf.link) {
 		children = (
-			<Alink target='_blank' href={leaf.text}>
+			<a target='_blank' href={leaf.text}>
 				{children}
-			</Alink>
+			</a>
 		)
 	}
 	if (leaf.bold) {
@@ -284,7 +283,7 @@ export default ({ value, idContest, children }) => {
 
 	return (
 		<>
-			<Alink onClick={handleShow}>{children}</Alink>
+			<a onClick={handleShow}>{children}</a>
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header closeButton>
 					<Modal.Title>Contest #{idContest}</Modal.Title>

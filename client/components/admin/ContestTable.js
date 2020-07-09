@@ -3,7 +3,6 @@ import { useAuthContext } from '../../utils/auth'
 import { useGet, usePost, useHttp } from '../../utils/api'
 import DatePicker from 'react-datepicker'
 import { Button, Modal, Form, Col, Row, InputGroup } from 'react-bootstrap'
-import { Alink } from '../CustomText'
 import { CustomTable } from '../CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -361,12 +360,9 @@ const TaskTr = (props) => {
 		<tr onDoubleClick={handleShow}>
 			<td>{id_Prob}</td>
 			<td>
-				<Alink
-					target='_blank'
-					href={`${process.env.API_URL}/api/docs/${sname}`}
-				>
+				<a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
 					{name}
-				</Alink>
+				</a>
 			</td>
 			<td>{time}</td>
 			<td>{memory}</td>

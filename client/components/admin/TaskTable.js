@@ -12,7 +12,6 @@ import {
 	InputGroup,
 	Badge,
 } from 'react-bootstrap'
-import { Alink } from '../CustomText'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -326,12 +325,9 @@ const TaskTr = (props) => {
 		<tr onDoubleClick={handleShow}>
 			<td>{id_Prob}</td>
 			<td>
-				<Alink
-					target='_blank'
-					href={`${process.env.API_URL}/api/docs/${sname}`}
-				>
+				<a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
 					{name}
-				</Alink>{' '}
+				</a>{' '}
 				{noTestcase && <Badge variant='warning'>No Testcases</Badge>}
 			</td>
 			<td>{time}</td>

@@ -1,4 +1,3 @@
-import { Alink } from './CustomText'
 import { useAuthContext } from '../utils/auth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -133,9 +132,9 @@ export const Footer = () => (
 		<Row sm={1} className='mb-3'>
 			<Col md='auto' className='mr-auto'>
 				If you have any problem or suggestion, please{' '}
-				<Alink href='https://fb.me/kkuotog' target='_blank'>
+				<a href='https://fb.me/kkuotog' target='_blank'>
 					Contact Us
-				</Alink>
+				</a>
 			</Col>
 			<Col md='auto'>&copy; 2019 Phakphum Dev Team</Col>
 		</Row>

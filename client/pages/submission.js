@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react'
 import { useAuthContext } from '../utils/auth'
 import { useGet } from '../utils/api'
 
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Form } from 'react-bootstrap'
 
-import { Title, Alink } from '../components/CustomText'
+import { Title } from '../components/CustomText'
 import PageLayout from '../components/PageLayout'
 import OrangeButton from '../components/OrangeButton'
 import SubmissionTable from '../components/SubmissionTable'
 import SubmitGroup from '../components/SubmitGroup'
-import OrangeCheck from '../components/OrangeCheck'
 
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 
@@ -46,20 +45,20 @@ const Submission = () => {
 					{lastest && (showOnlyMe || isAdmin) && (
 						<div>
 							<b>ส่งข้อล่าสุด :</b>
-							<Alink
+							<a
 								target='_blank'
 								className='mx-4'
 								href={`${process.env.API_URL}/api/docs/${lastest.sname}`}
 							>
 								{lastest.name}
-							</Alink>
+							</a>
 							<SubmitGroup {...lastest} />
 						</div>
 					)}
 				</Col>
 				<Col xs md='auto' className='ml-auto d-flex align-item-center'>
 					{isLogin && (
-						<OrangeCheck
+						<Form.Check
 							type='switch'
 							id='custom-switch'
 							label='แสดงเฉพาะฉัน'

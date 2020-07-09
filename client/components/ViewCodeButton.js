@@ -62,7 +62,12 @@ const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
 					🔎
 				</Button>
 			) : (
-				<OrangeButton expand={2} outline='true' onClick={onShow} icon='true'>
+				<OrangeButton
+					expand={2}
+					variant='outline-primary'
+					onClick={onShow}
+					icon='true'
+				>
 					<FontAwesomeIcon icon={faCode} />
 				</OrangeButton>
 			)}

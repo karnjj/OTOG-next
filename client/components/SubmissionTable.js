@@ -92,7 +92,6 @@ const SubTr = (props) => {
 				)}
 				<td>
 					<Alink
-						black
 						target='_blank'
 						href={`${process.env.API_URL}/api/docs/${problemname}`}
 					>
@@ -102,9 +101,7 @@ const SubTr = (props) => {
 				<td>
 					<ResultCode>
 						{result === 'Compilation Error' && canViewCode ? (
-							<Alink black onClick={handleShow}>
-								{result}
-							</Alink>
+							<Alink onClick={handleShow}>{result}</Alink>
 						) : (
 							result
 						)}

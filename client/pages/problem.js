@@ -7,7 +7,6 @@ import OrangeButton from '../components/OrangeButton'
 import { Title } from '../components/CustomText'
 import PageLayout from '../components/PageLayout'
 import ProbTable from '../components/ProbTable'
-import OrangeCheck from '../components/OrangeCheck'
 
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 
@@ -80,7 +79,7 @@ const Problem = () => {
 					{isAdmin && (
 						<InputGroup.Prepend>
 							<InputGroup.Text>
-								<OrangeCheck
+								<Form.Check
 									type='switch'
 									id='custom-switch'
 									label='ทั้งหมด '

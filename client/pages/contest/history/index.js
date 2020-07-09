@@ -34,7 +34,7 @@ const ContestTr = (props) => {
 				{time_end < now.valueOf() && (
 					<OrangeButton
 						expand={4}
-						outline='true'
+						variant='outline-primary'
 						href='/contest/history/[id]'
 						dynamic={`/contest/history/${idContest}`}
 					>

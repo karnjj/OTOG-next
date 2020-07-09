@@ -4,9 +4,6 @@ import { darken } from 'polished'
 import vars from '../styles/vars'
 import { range } from '../utils'
 
-const StyledSpinner = styled(Spinner)`
-	color: ${vars.orange};
-`
 const pulse = keyframes`
 	0% {
 		opacity: 0.3;
@@ -38,11 +35,12 @@ const AnimationTable = styled(Table)`
 `
 export const Loader = () => (
 	<Row className='justify-content-center py-5'>
-		<StyledSpinner animation='border' role='status'>
+		<Spinner variant='primary' animation='border' role='status'>
 			<span className='sr-only'>Loading...</span>
-		</StyledSpinner>
+		</Spinner>
 	</Row>
 )
+
 export const TableLoader = () => {
 	return (
 		<AnimationTable responsive>

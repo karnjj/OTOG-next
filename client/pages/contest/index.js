@@ -131,14 +131,14 @@ const HoldingContest = ({ idContest, timeleft, name }) => {
 				<Row>
 					<Col className='d-flex justify-content-end'>
 						<OrangeButton
-							outline='true'
+							variant='outline-primary'
 							href='/contest/submission'
 							className='mr-3'
 						>
 							See Submission
 						</OrangeButton>
 						<OrangeButton
-							outline='true'
+							variant='outline-primary'
 							href='/contest/history/[id]'
 							dynamic={`/contest/history/${idContest}`}
 						>

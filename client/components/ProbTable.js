@@ -2,7 +2,6 @@ import { useAuthContext } from '../utils/auth'
 
 import { Popover, OverlayTrigger, Row, Col } from 'react-bootstrap'
 import { CustomTr, CustomTable } from './CustomTable'
-import { Alink } from './CustomText'
 
 import SubmitGroup from './SubmitGroup'
 import ViewCodeButton from './ViewCodeButton'
@@ -59,13 +58,10 @@ const ProbTr = (props) => {
 		<CustomTr {...{ acceptState, wrongState }}>
 			<td>{id_Prob}</td>
 			<td>
-				<Alink
-					target='_blank'
-					href={`${process.env.API_URL}/api/docs/${sname}`}
-				>
+				<a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
 					{name}
 					<br />({time} วินาที {memory} MB)
-				</Alink>
+				</a>
 			</td>
 			<td>
 				{pass ? (
