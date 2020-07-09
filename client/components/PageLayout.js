@@ -1,5 +1,5 @@
 import { Alink } from './CustomText'
-import { logout, useAuthContext } from '../utils/auth'
+import { useAuthContext } from '../utils/auth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
@@ -35,7 +35,7 @@ const ProfileImage = styled(Image)`
 	margin: -2px 0;
 `
 export const Header = () => {
-	const { userData, isLogin, isAdmin } = useAuthContext()
+	const { userData, isLogin, isAdmin, logout } = useAuthContext()
 	const router = useRouter()
 	const navLinks = [
 		//name, icon, paths, exact
@@ -44,7 +44,7 @@ export const Header = () => {
 		['Contest', faTrophy, ['/contest'], false],
 		['Ratings', faChartBar, ['/rating'], false],
 	]
-	const handleClickLogout = () => logout(userData)
+	const handleClickLogout = () => logout()
 	return (
 		<>
 			<HeaderSpace />

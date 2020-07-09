@@ -1,11 +1,10 @@
-import { login } from '../utils/auth'
-
 import { Container, Card, Form, Alert } from 'react-bootstrap'
 import OrangeButton from '../components/OrangeButton'
 
 import styled from 'styled-components'
 import { useInput, useSwitch } from '../utils'
 import { usePost } from '../utils/api'
+import { useAuthContext } from '../utils/auth'
 
 const CenteredContainer = styled(Container)`
 	height: 100vh;
@@ -18,6 +17,7 @@ const StyledCard = styled(Card)`
 `
 
 const LoginCard = () => {
+	const { login } = useAuthContext()
 	const [username, inputUsername] = useInput()
 	const [password, inputPassword] = useInput()
 	const [error, showAlert, closeAlert] = useSwitch(false)

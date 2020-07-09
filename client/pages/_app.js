@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { ThemeProvider } from 'styled-components'
 import { unregister } from 'next-offline/runtime'
 
-import nextCookie from 'next-cookies'
+import { AuthProvider } from '../utils/auth'
 import breakpoints from '../styles/breakpoints'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -11,8 +11,6 @@ import '@fortawesome/fontawesome-svg-core/styles.css'
 import { createGlobalStyle } from 'styled-components'
 import { useEffect } from 'react'
 import vars from '../styles/vars'
-import { AuthProvider } from '../utils/auth'
-import App from 'next/app'
 config.autoAddCss = false
 
 const GlobalStyle = createGlobalStyle`
@@ -25,7 +23,7 @@ const GlobalStyle = createGlobalStyle`
     }
 `
 
-const MyApp = ({ Component, pageProps, token }) => {
+const MyApp = ({ Component, pageProps }) => {
 	useEffect(() => unregister(), [])
 
 	return (
@@ -43,19 +41,13 @@ const MyApp = ({ Component, pageProps, token }) => {
 				<meta name='theme-color' content='#ff851b' />
 			</Head>
 			<ThemeProvider theme={{ breakpoints }}>
-				<AuthProvider token={token}>
+				<AuthProvider>
 					<GlobalStyle />
 					<Component {...pageProps} />
 				</AuthProvider>
 			</ThemeProvider>
 		</>
 	)
-}
-
-MyApp.getInitialProps = async (ctx) => {
-	const { token } = nextCookie(ctx)
-	const appProps = await App.getInitialProps(ctx)
-	return { token, ...appProps }
 }
 
 export default MyApp
