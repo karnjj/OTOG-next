@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import { useAuthContext } from '../../utils/auth'
 import { useGet, usePost, useHttp } from '../../utils/api'
 import { CustomTable } from '../CustomTable'
@@ -26,8 +26,6 @@ import { useSwitch } from '../../utils'
 import { mutate } from 'swr'
 
 export const NewProblem = () => {
-	const { token } = useAuthContext()
-
 	const [show, handleShow, handleClose] = useSwitch(false)
 	const [data, setData] = useState({})
 	const { name, sname, numCase, memory, time, score, pdf, zip } = data
@@ -153,7 +151,6 @@ export const NewProblem = () => {
 }
 
 const ConfigTask = ({ index, id_Prob, handleShow, state, sname }) => {
-	const { token } = useAuthContext()
 	const post = usePost(`/api/admin/problem/${id_Prob}?option=onoff`)
 	const del = useHttp('DELETE', `/api/admin/problem/${id_Prob}?sname=${sname}`)
 
@@ -168,7 +165,7 @@ const ConfigTask = ({ index, id_Prob, handleShow, state, sname }) => {
 			],
 			false
 		)
-		const body = JSON.stringify({ state })
+		const body = JSON.stringify({ onoff: state })
 		const response = await post(body)
 		if (response.ok) {
 			mutate('/api/admin/problem')
@@ -203,7 +200,6 @@ const ConfigTask = ({ index, id_Prob, handleShow, state, sname }) => {
 }
 
 const EditModal = (props) => {
-	const { token } = useAuthContext()
 	const { show, handleClose, id_Prob, ...rest } = props
 	const [data, setData] = useState(rest)
 	const { name, sname, memory, time, score, rating, subtask, pdf, zip } = data
@@ -317,7 +313,7 @@ const EditModal = (props) => {
 	)
 }
 
-const TaskTr = (props) => {
+const TaskTr = memo((props) => {
 	const { id_Prob, name, sname, memory, time, rating, noTestcase } = props
 	const [show, handleShow, handleClose] = useSwitch(false)
 
@@ -339,7 +335,7 @@ const TaskTr = (props) => {
 			</td>
 		</tr>
 	)
-}
+})
 
 export const TaskTable = () => {
 	const { data: tasks } = useGet('/api/admin/problem')

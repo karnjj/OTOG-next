@@ -15,7 +15,6 @@ const StyledPop = styled(Popover)`
 const ProbTable = ({ isLoading, problems }) => {
 	const { isLogin } = useAuthContext()
 
-	console.log('rerenderd')
 	return (
 		<CustomTable ready={!isLoading}>
 			<thead>

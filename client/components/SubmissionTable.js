@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import { useAuthContext } from '../utils/auth'
 
 import { CustomTr, CustomTable } from './CustomTable'
@@ -47,7 +47,7 @@ const SubmissionTable = ({ isLoading, results, canViewCode }) => {
 	)
 }
 
-const SubTr = (props) => {
+const SubTr = memo((props) => {
 	const [showError, setShowError] = useState(false)
 	const {
 		problemname,
@@ -130,6 +130,6 @@ const SubTr = (props) => {
 			</Modal>
 		</>
 	)
-}
+})
 
 export default SubmissionTable

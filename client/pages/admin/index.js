@@ -3,7 +3,7 @@ import { withAdminAuth } from '../../utils/auth'
 import { Row, Col, Container, Button, Form } from 'react-bootstrap'
 import Header from '../../components/admin/Header'
 
-const Config = props => {
+const Config = (props) => {
 	return (
 		<>
 			<Header />

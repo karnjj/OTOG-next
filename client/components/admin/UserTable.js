@@ -11,9 +11,9 @@ import {
 import { useGet, usePost, useHttp } from '../../utils/api'
 import { useSwitch, useInput } from '../../utils'
 import { CustomTable } from '../CustomTable'
+import { memo } from 'react'
 
 export const NewUser = () => {
-	const { token } = useAuthContext()
 	const [show, handleShow, handleClose] = useSwitch(false)
 	const [username, inputUsername] = useInput()
 	const [password, inputPassword] = useInput()
@@ -63,7 +63,6 @@ export const NewUser = () => {
 }
 
 const ConfigUser = ({ handleShow, idUser }) => {
-	const { token } = useAuthContext()
 	const del = useHttp('DELETE', `/api/admin/user/${idUser}`)
 
 	const handleDelete = async () => {
@@ -74,6 +73,7 @@ const ConfigUser = ({ handleShow, idUser }) => {
 			}
 		}
 	}
+
 	return (
 		<ButtonGroup>
 			<Button variant='info' onClick={handleShow}>
@@ -87,7 +87,6 @@ const ConfigUser = ({ handleShow, idUser }) => {
 }
 
 const EditModal = (props) => {
-	const { token } = useAuthContext()
 	const { show, handleClose, idUser } = props
 	const [username, inputUsername] = useInput(props.username)
 	const [password, inputPassword] = useInput()
@@ -135,7 +134,7 @@ const EditModal = (props) => {
 	)
 }
 
-const UserTr = (props) => {
+const UserTr = memo((props) => {
 	const { idUser, username, sname, state } = props
 	const [show, handleShow, handleClose] = useSwitch(false)
 
@@ -151,7 +150,7 @@ const UserTr = (props) => {
 			</td>
 		</tr>
 	)
-}
+})
 
 export const UserTable = (props) => {
 	const { data: users } = useGet('/api/admin/user')
