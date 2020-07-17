@@ -39,7 +39,7 @@ router.get('/countProblem', problems.cntProblem)
 router.get('/docs/:name', problems.getDoc)
 //Submission
 router.get('/submission', submission.AllSubmission)
-router.get('/contest/submission',admin.AdminAuth,submission.ContestSubmission)
+router.get('/contest/submission',middleware.AdminAuth,submission.ContestSubmission)
 //Contest
 router.get('/contest', contest.contest)
 router.get('/contest/history', contest.getAllContest)
@@ -47,23 +47,23 @@ router.get('/contest/:id', contest.getContestWithId)
 router.get('/contest/history/:idContest', contest.getContestHistoryWithId)
 router.get('/contest/:id/submission', contest.getContestSubmissionWithId)
 //Admin
-router.get('/admin/problem', admin.AdminAuth, admin.Problems)
+router.get('/admin/problem', middleware.AdminAuth, admin.Problems)
 router.post('/admin/problem', admin.multerConfig.fields([
   { name: 'pdf', maxCount: 1 },
   { name: 'zip', maxCount: 1 }
 ]), admin.addProblem)
-router.get('/admin/user', admin.AdminAuth, admin.Users)
-router.post('/admin/user', admin.AdminAuth, admin.addUsers)
-router.get('/admin/contest', admin.AdminAuth, admin.Contests)
-router.put('/admin/contest', admin.AdminAuth, admin.addContest)
-router.get('/admin/contest/:id', admin.AdminAuth, admin.getContestWithId)
-router.post('/admin/user/:id', admin.AdminAuth, admin.editUser)
-router.delete('/admin/user/:id', admin.AdminAuth, admin.deleteUsers)
-router.delete('/admin/user/:id', admin.AdminAuth, admin.deleteUsers)
-router.delete('/admin/problem/:id', admin.AdminAuth, admin.deleteProblem)
+router.get('/admin/user', middleware.AdminAuth, admin.Users)
+router.post('/admin/user', middleware.AdminAuth, admin.addUsers)
+router.get('/admin/contest', middleware.AdminAuth, admin.Contests)
+router.put('/admin/contest', middleware.AdminAuth, admin.addContest)
+router.get('/admin/contest/:id', middleware.AdminAuth, admin.getContestWithId)
+router.post('/admin/user/:id', middleware.AdminAuth, admin.editUser)
+router.delete('/admin/user/:id', middleware.AdminAuth, admin.deleteUsers)
+router.delete('/admin/user/:id', middleware.AdminAuth, admin.deleteUsers)
+router.delete('/admin/problem/:id', middleware.AdminAuth, admin.deleteProblem)
 router.post('/admin/problem/:id', admin.multerConfig.fields([
   { name: 'pdf', maxCount: 1 },
   { name: 'zip', maxCount: 1 }
 ]), admin.editProblem)
-router.post('/admin/contest/:id', admin.AdminAuth, admin.editContest)
+router.post('/admin/contest/:id', middleware.AdminAuth, admin.editContest)
 module.exports = router

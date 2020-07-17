@@ -18,20 +18,6 @@ var storage = multer.diskStorage({
 })
 const multerConfig = multer({ storage: storage })
 
-
-function AdminAuth(req, res, next) {
-	const token = req.headers.authorization
-	try {
-		let js = jwt.verify(token, process.env.PUBLIC_KEY, {
-			algorithm: "RS256"
-		})
-		if (js.state === 0) next()
-		else res.status(404).json({})
-	} catch {
-		res.status(404).json({})
-	}
-}
-
 async function Problems(req, res) {
 	var sql = 'select * from Problem'
 	let problem = await new Promise((resolve) => {
@@ -253,7 +239,6 @@ module.exports = {
 	getContestWithId,
 	editContest,
 	addProblem,
-	AdminAuth,
 	multerConfig,
 	deleteProblem,
 	addContest
