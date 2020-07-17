@@ -9,17 +9,6 @@ const fileExt = {
 	'C++': '.cpp'
 }
 
-var verifyToken = token => {
-	try {
-		let js = jwt.verify(token, process.env.PUBLIC_KEY, {
-			algorithm: "RS256"
-		})
-		return js
-	} catch {
-		return false
-	}
-}
-
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		var idUser = req.headers.authorization
@@ -93,9 +82,9 @@ async function login(req,res){
 }
 
 function logout(req,res) {
-    const username = req.headers.authorization
+	const userData = res.locals.userData
 	var sql = "delete from session where idUser = ?"
-	db.query(sql, [username], (err) => err && console.log(err))
+	db.query(sql, [userData.id], (err) => err && console.log(err))
 	res.status(200).send('')
 }
 
@@ -157,10 +146,9 @@ function uploadFie(req,res) {
 }
 
 function viewSouceCode(req,res) {
-	let token = req.headers.authorization
+	const userData = res.locals.userData
 	let idSubmit = Number(req.query.idSubmit)
 	let idProb = Number(req.query.idProb)
-	var userData = verifyToken(token)
 	if(!userData) {
 		res.json({sCode : 'Access Denied'})
 		return

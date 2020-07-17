@@ -13,9 +13,8 @@ var verifyToken = token => {
 }
 
 async function getProblem(req,res) {
+	const userData = res.locals.userData
     let mode = req.query.mode
-	let token = req.headers.authorization
-	let userData = await verifyToken(token)
 	let whoPassPromise = new Promise((resolve, reject) => {
 		let sql = "select prob_id,GROUP_CONCAT(DISTINCT(sname) SEPARATOR ',') as pass from Result " +
 			"inner join User as U on Result.user_id = U.idUser " +
@@ -25,8 +24,6 @@ async function getProblem(req,res) {
 	let problemPromise = new Promise((resolve, reject) => {
 		let sql = '';
 		if (mode == 'firstpage') sql = 'select * from Problem where state = 1 order by see_date desc limit 10'
-		//fuck
-		else if(userData.id === 1074) sql = 'select * from Problem order by id_Prob desc'
 		else if(mode == 'admin' && userData.state == 0) sql = 'select * from Problem order by id_Prob desc'
 		else sql = 'select * from Problem where state = 1 order by id_Prob desc'
 		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
@@ -62,7 +59,7 @@ async function getProblem(req,res) {
 }
 
 function cntProblem(req,res) {
-    let idUser = req.headers.authorization
+    const userData = res.locals.userData
 	let allProblem = new Promise((resolve, reject) => {
 		let sql = 'select count(*) as allP from Problem where state = 1'
 		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
@@ -70,7 +67,7 @@ function cntProblem(req,res) {
 	let allUserDo = new Promise((resolve, reject) => {
 		let sql = 'SELECT r1.* FROM Result r1 inner join ( select prob_id,max(time) as maxTime '
 			+ 'from Result where user_id = ? group by prob_id) r2 on r1.prob_id = r2.prob_id and r1.time = r2.maxTime'
-		db.query(sql, [idUser], (err, result) => err ? reject(err) : resolve(result))
+		db.query(sql, [userData.id], (err, result) => err ? reject(err) : resolve(result))
 	})
 	let allUserOnline = new Promise((resolve, reject) => {
 		let sql = `select sname from session as s inner join User as U on s.idUser = U.idUser 
@@ -109,8 +106,6 @@ function getDoc(req,res) {
 		var holdingCon = result[1][0]
 		var probInCon = holdingCon ? JSON.parse(holdingCon.problems) : []
 		if(probData && probData.state === 1) return res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`)
-		//fuck
-		else if(userData.id === 1074) return res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`)
 		else {
 			if(userData.state === 0 || probInCon.includes(probData.id_Prob)) return res.sendFile(`${process.cwd()}/docs/${req.params.name}.pdf`)
 			else return res.status(401).send('Access denied')

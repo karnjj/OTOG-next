@@ -61,7 +61,7 @@ export const AuthProvider = ({ nextToken, ...props }) => {
 export const withAdminAuth = (WrappedComponent) => {
 	const Wrapper = ({ token, ...props }) => {
 		const userData = auth(token)
-		return userData.state === 0 ? (
+		return userData?.state === 0 ? (
 			<WrappedComponent {...props} />
 		) : (
 			<Error statusCode={404} />

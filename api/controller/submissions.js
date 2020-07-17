@@ -1,21 +1,10 @@
 const db = require('../models/database').Pool
 const jwt = require('jsonwebtoken')
 
-var verifyToken = (token) => {
-	try {
-		let js = jwt.verify(token, process.env.PUBLIC_KEY, {
-			algorithm: 'RS256',
-		})
-		return js
-	} catch {
-		return false
-	}
-}
 
 async function AllSubmission(req, res) {
 	let mode = req.query.mode
-	const token = req.headers.authorization
-	const userData = verifyToken(token)
+	const userData = res.locals.userData
 	let lastestPromise = new Promise((resolve, reject) => {
 		var sql = `select name,id_Prob,sname from ( select max(idResult) as lastest from Result where user_id = ?) 
 			as X inner join Result on Result.idResult = X.lastest inner join Problem on prob_id = Problem.id_Prob`

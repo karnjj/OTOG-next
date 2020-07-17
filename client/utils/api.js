@@ -7,7 +7,7 @@ export const http = async (method, url, { token, body }, isJson = true) => {
 		method,
 		headers: {
 			'Content-Type': isJson ? 'application/json' : undefined,
-			Authorization: token ? `${token}` : '',
+			Authorization: token ? `Bearer ${token}` : '',
 		},
 		body,
 	}

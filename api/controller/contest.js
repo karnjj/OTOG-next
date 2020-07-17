@@ -1,16 +1,6 @@
 const db = require('../models/database').Pool
 const jwt = require('jsonwebtoken')
 
-var verifyToken = token => {
-	try {
-		let js = jwt.verify(token, process.env.PUBLIC_KEY, {
-			algorithm: "RS256"
-		})
-		return js
-	} catch {
-		return false
-	}
-}
 
 function contest(req,res) {
 	let sql = `select idContest,name,time_start,time_end from Contest where time_end >= (UNIX_TIMESTAMP()-3600) order by time_start limit 1`
@@ -29,8 +19,7 @@ function getAllContest(req,res) {
 
 function getContestWithId(req,res) {
 	const idContest = req.params.id
-	const token = req.headers.authorization
-	var userData = verifyToken(token)
+	const userData = res.locals.userData
 	let sql = `select * from Contest where idContest = ?`
 	db.query(sql, [idContest], (err, result) => {
 		if (err) throw err
@@ -104,18 +93,18 @@ function getContestHistoryWithId(req,res) {
 function getContestSubmissionWithId(req,res) {
     const idContest = req.params.id
 	const idProb = req.query.idProb
-	const idUser = req.headers.authorization
+	const userData = res.locals.userData
 	var last_query = `select idResult,result,errmsg,status,score from Result 
 		where user_id = ? and prob_id = ? and contestmode = ? 
 		order by idResult desc limit 1`
 	var best_query = `select idResult,result,score,errmsg from Result 
 		where user_id = ? and prob_id = ? and contestmode = ?
 		order by score desc, timeuse asc limit 1`
-	var lastest = new Promise((resolve, reject) => db.query(last_query, [idUser, idProb, idContest], (err, result) => {
+	var lastest = new Promise((resolve, reject) => db.query(last_query, [userData.id, idProb, idContest], (err, result) => {
 		if (err) throw err
 		resolve(result)
 	}))
-	var best = new Promise((resolve, reject) => db.query(best_query, [idUser, idProb, idContest], (err, result) => {
+	var best = new Promise((resolve, reject) => db.query(best_query, [userData.id, idProb, idContest], (err, result) => {
 		if (err) throw err
 		resolve(result)
 	}))

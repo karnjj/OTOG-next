@@ -3,6 +3,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const router = express.Router()
 const logger = require('morgan');
+const middleware = require('../models/middleware')
 const users = require('./users')
 const problems = require('./problems')
 const contest = require('./contest')
@@ -18,7 +19,7 @@ router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(cookieParser())
 router.use(logger('dev'));
-
+router.use(middleware.JWTAUTH)
 router.get('/', (req, res) => {
   res.send('OTOG API Service')
 })
