@@ -55,14 +55,15 @@ export const Header = () => {
 				fixed='top'
 			>
 				<Link href={isAdmin ? '/admin' : '/'} passHref>
-					<Navbar.Brand
-						className='mr-auto'
-						target={isAdmin ? '_blank' : undefined}
-					>
-						<NavTitle>
-							OTOG<NavText> - One Tambon One Grader</NavText>
-						</NavTitle>
-					</Navbar.Brand>
+					<a target={isAdmin ? '_blank' : undefined}>
+						<Navbar.Brand
+							className='mr-auto'
+						>
+							<NavTitle>
+								OTOG<NavText> - One Tambon One Grader</NavText>
+							</NavTitle>
+						</Navbar.Brand>
+					</a>
 				</Link>
 				<Navbar.Toggle aria-controls='responsive-navbar-nav' />
 				<Navbar.Collapse id='responsive-navbar-nav'>
