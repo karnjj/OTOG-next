@@ -24,9 +24,9 @@ export const AuthProvider = ({ nextToken, ...props }) => {
 		(accessToken) => {
 			cookie.set('token', accessToken, { expires: 3 / 24 })
 			setToken(accessToken)
+			window.localStorage.setItem('login', Date.now())
 			router.push('/')
-		},
-		[token]
+		},[token]
 	)
 
 	const logout = useCallback(() => {
@@ -38,15 +38,24 @@ export const AuthProvider = ({ nextToken, ...props }) => {
 
 	const syncLogout = useCallback((event) => {
 		if (event.key === 'logout') {
-			logout()
+			window.location.reload(false)
+		}
+	}, [])
+
+	const syncLogin = useCallback((event) => {
+		if (event.key === 'login') {
+			window.location.reload(false)
 		}
 	}, [])
 
 	useEffect(() => {
 		window.addEventListener('storage', syncLogout)
+		window.addEventListener('storage', syncLogin)
 		return () => {
 			window.removeEventListener('storage', syncLogout)
+			window.removeEventListener('storage', syncLogin)
 			window.localStorage.removeItem('logout')
+			window.localStorage.removeItem('login')
 		}
 	}, [])
 
