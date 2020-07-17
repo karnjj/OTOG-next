@@ -50,7 +50,7 @@ export const NewProblem = () => {
 		event.preventDefault()
 		const body = new FormData()
 		Object.keys(data).forEach((item) => body.append(item, data[item]))
-		const response = post(body, false)
+		const response = await post(body, false)
 		if (response.ok) {
 			handleClose()
 			mutate('/api/admin/problem')

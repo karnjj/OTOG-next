@@ -46,6 +46,7 @@ const Problem = () => {
 
 	const [problemSearch, inputProblemSearch] = useInput()
 	const [showAll, setShowAll] = useState(isAdmin)
+	useEffect(() => setShowAll(isAdmin), [isAdmin])
 
 	const url = `/api/problem?mode=${showAll ? 'admin' : 'full'}`
 	const { data: tasks = [], isLoading, isValidating } = useGet(url)

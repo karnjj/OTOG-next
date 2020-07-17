@@ -6,12 +6,12 @@ export const http = async (method, url, { token, body }, isJson = true) => {
 	const params = {
 		method,
 		headers: {
-			'Content-Type': isJson ? 'application/json' : undefined,
+			...(isJson && { 'Content-Type': 'application/json' }),
 			Authorization: token ? `Bearer ${token}` : '',
 		},
 		body,
 	}
-	return await fetch(`${process.env.API_URL}${url}`, params)
+	return fetch(`${process.env.API_URL}${url}`, params)
 }
 
 export const httpGet = async (url, { token } = {}, isJson = true) => {

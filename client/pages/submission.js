@@ -15,6 +15,7 @@ import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 const Submission = () => {
 	const { isLogin, isAdmin } = useAuthContext()
 	const [showOnlyMe, setShowOnlyMe] = useState(!isAdmin && isLogin)
+	useEffect(() => setShowOnlyMe(!isAdmin && isLogin), [isAdmin, isLogin])
 
 	const url = `/api/submission?mode=${showOnlyMe ? 'onlyme' : 'full'}`
 	const { data: submissions = {}, isLoading, isValidating } = useGet(url)
