@@ -4,6 +4,7 @@ import OrangeButton from '../components/OrangeButton'
 import styled from 'styled-components'
 import router from 'next/router'
 import { useInput, useSwitch } from '../utils'
+import { usePost } from '../utils/api'
 
 const CenteredContainer = styled(Container)`
 	height: 100vh;
