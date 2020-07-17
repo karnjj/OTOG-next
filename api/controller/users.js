@@ -84,7 +84,7 @@ async function login(req,res){
 function logout(req,res) {
 	const userData = res.locals.userData
 	var sql = "delete from session where idUser = ?"
-	db.query(sql, [userData.id], (err) => err && console.log(err))
+	db.query(sql, [userData?.id], (err) => err && console.log(err))
 	res.status(200).send('')
 }
 
@@ -154,12 +154,12 @@ function viewSouceCode(req,res) {
 		return
 	}
 	let sql = idSubmit ? `select * from Result where idResult = ${idSubmit}` :
-		`select * from (select max(idResult) as latest from Result where user_id = ${userData.id} and prob_id = ${idProb}) 
+		`select * from (select max(idResult) as latest from Result where user_id = ${userData?.id} and prob_id = ${idProb}) 
 		as X inner join Result as R on R.idResult = X.latest`
 	db.query(sql, (err, result) => {
 		if (err) throw err
 		var submitData = result[0]
-		if(userData.id != submitData.user_id && userData.state != 0) {
+		if(userData?.id != submitData.user_id && userData?.state != 0) {
 			res.json({sCode : 'Access Denied'})
 			return
 		}

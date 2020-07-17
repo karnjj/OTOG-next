@@ -42,7 +42,7 @@ function getContestWithId(req,res) {
 			for(var i in prob) {
 				prob[i].whopass = prob[i].whopass ? prob[i].whopass.split(" ").length : 0
 			}
-			if(start <= now || userData.state === 0) {
+			if(start <= now || userData?.state === 0) {
 				res.json({
 					name: result[0].name,
 					id: result[0].idContest,
@@ -100,11 +100,11 @@ function getContestSubmissionWithId(req,res) {
 	var best_query = `select idResult,result,score,errmsg from Result 
 		where user_id = ? and prob_id = ? and contestmode = ?
 		order by score desc, timeuse asc limit 1`
-	var lastest = new Promise((resolve, reject) => db.query(last_query, [userData.id, idProb, idContest], (err, result) => {
+	var lastest = new Promise((resolve, reject) => db.query(last_query, [userData?.id, idProb, idContest], (err, result) => {
 		if (err) throw err
 		resolve(result)
 	}))
-	var best = new Promise((resolve, reject) => db.query(best_query, [userData.id, idProb, idContest], (err, result) => {
+	var best = new Promise((resolve, reject) => db.query(best_query, [userData?.id, idProb, idContest], (err, result) => {
 		if (err) throw err
 		resolve(result)
 	}))
