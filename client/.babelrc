@@ -5,7 +5,7 @@
         ["prismjs", {
             "languages": ["c", "cpp"],
             "plugins": ["line-numbers", "show-language"],
-            "theme": "okaidia",
+            "theme": "synthwave84",
             "css": true
         }]
     ]
