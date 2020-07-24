@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 
 async function AllSubmission(req, res) {
 	let mode = req.query.mode
-	const userData = res.locals.userData
+	const userData = req.user
 	let lastestPromise = new Promise((resolve, reject) => {
 		var sql = `select name,id_Prob,sname from ( select max(idResult) as lastest from Result where user_id = ?) 
 			as X inner join Result on Result.idResult = X.lastest inner join Problem on prob_id = Problem.id_Prob`

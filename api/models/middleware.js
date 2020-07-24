@@ -6,7 +6,7 @@ const JWTAUTH = (req,res,next) => {
             const userData = jwt.verify(token, process.env.PUBLIC_KEY, {
                 algorithm: "RS256"
             })
-            res.locals.userData = userData
+            req.user = userData
         } catch {
             return res.status(401).send('')
         }

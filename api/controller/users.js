@@ -11,14 +11,14 @@ const fileExt = {
 
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		const userData = res.locals.userData
+		const userData = req.user
 		mkdirp(`uploaded/${userData.id}`).then(() => {
 			cb(null, `uploaded/${userData.id}`)
 		})
 	},
 	filename: function (req, file, cb) {
 		const timeStamp = Math.floor(Date.now() / 1000)
-		const userData = res.locals.userData
+		const userData = req.user
 		var idProb = req.params.id
 		var fileLang = req.body.fileLang
 		var contest = req.query.contest
@@ -56,9 +56,9 @@ async function login(req,res){
 	var password = req.body.password;
 	hash.update(password);
 	console.log(username + ' Sign in at' + Date(Date.now()));
-	let sql = 'select * from User where username = "' + username + '"'
+	let sql = `select * from User where username = ?`
 	var result = await new Promise((resolve, reject) => {
-		db.query(sql, (err, result) => {
+		db.query(sql, [username], (err, result) => {
 			if (err) reject(err)
 			resolve(result[0])
 		})
@@ -82,7 +82,7 @@ async function login(req,res){
 }
 
 function logout(req,res) {
-	const userData = res.locals.userData
+	const userData = req.user
 	var sql = "delete from session where idUser = ?"
 	db.query(sql, [userData?.id], (err) => err && console.log(err))
 	res.status(200).send('')
@@ -146,7 +146,7 @@ function uploadFie(req,res) {
 }
 
 function viewSouceCode(req,res) {
-	const userData = res.locals.userData
+	const userData = req.user
 	let idSubmit = Number(req.query.idSubmit)
 	let idProb = Number(req.query.idProb)
 	if(!userData) {

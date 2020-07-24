@@ -19,7 +19,7 @@ function getAllContest(req,res) {
 
 function getContestWithId(req,res) {
 	const idContest = req.params.id
-	const userData = res.locals.userData
+	const userData = req.user
 	let sql = `select * from Contest where idContest = ?`
 	db.query(sql, [idContest], (err, result) => {
 		if (err) throw err
@@ -93,7 +93,7 @@ function getContestHistoryWithId(req,res) {
 function getContestSubmissionWithId(req,res) {
     const idContest = req.params.id
 	const idProb = req.query.idProb
-	const userData = res.locals.userData
+	const userData = req.user
 	var last_query = `select idResult,result,errmsg,status,score from Result 
 		where user_id = ? and prob_id = ? and contestmode = ? 
 		order by idResult desc limit 1`

@@ -13,7 +13,7 @@ var verifyToken = token => {
 }
 
 async function getProblem(req,res) {
-	const userData = res.locals.userData
+	const userData = req.user
     let mode = req.query.mode
 	let whoPassPromise = new Promise((resolve, reject) => {
 		let sql = "select prob_id,GROUP_CONCAT(DISTINCT(sname) SEPARATOR ',') as pass from Result " +
@@ -59,7 +59,7 @@ async function getProblem(req,res) {
 }
 
 function cntProblem(req,res) {
-    const userData = res.locals.userData
+    const userData = req.user
 	let allProblem = new Promise((resolve, reject) => {
 		let sql = 'select count(*) as allP from Problem where state = 1'
 		db.query(sql, (err, result) => err ? reject(err) : resolve(result))
