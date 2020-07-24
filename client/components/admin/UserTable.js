@@ -23,8 +23,8 @@ export const NewUser = () => {
 	const onSubmit = async (event) => {
 		event.preventDefault()
 		const body = JSON.stringify({ username, password, sname })
-		const respone = await post(body)
-		if (respone.ok) {
+		const response = await post(body)
+		if (response.ok) {
 			handleClose()
 			window.location.reload(false)
 		}
@@ -67,8 +67,8 @@ const ConfigUser = ({ handleShow, idUser }) => {
 
 	const handleDelete = async () => {
 		if (confirm(`Delete user id : ${idUser}`)) {
-			const respone = await del()
-			if (respone.ok) {
+			const response = await del()
+			if (response.ok) {
 				window.location.reload(false)
 			}
 		}
@@ -98,7 +98,7 @@ const EditModal = (props) => {
 		event.preventDefault()
 		const body = JSON.stringify({ username, sname, state, password })
 		const response = await post(body)
-		if (respone.ok) {
+		if (response.ok) {
 			handleClose()
 			window.location.reload(false)
 		}
