@@ -11,19 +11,19 @@ const fileExt = {
 
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		var idUser = req.headers.authorization
-		mkdirp(`uploaded/${idUser}`).then(made => {
-			cb(null, `uploaded/${idUser}`)
+		const userData = res.locals.userData
+		mkdirp(`uploaded/${userData.id}`).then(() => {
+			cb(null, `uploaded/${userData.id}`)
 		})
 	},
 	filename: function (req, file, cb) {
 		const timeStamp = Math.floor(Date.now() / 1000)
+		const userData = res.locals.userData
 		var idProb = req.params.id
 		var fileLang = req.body.fileLang
 		var contest = req.query.contest
-		var idUser = req.headers.authorization
 		var sql = "INSERT INTO Result (time, user_id, prob_id, status,contestmode,language) VALUES ?";
-		var values = [[timeStamp, idUser, idProb, 0, (contest ? contest : null), fileLang],];
+		var values = [[timeStamp, userData.id, idProb, 0, (contest ? contest : null), fileLang],];
 		db.query(sql, [values], (err, result) => err && console.log(err))
 		cb(null, `${idProb}_${timeStamp}${fileExt[fileLang]}`)
 	}
