@@ -12,7 +12,7 @@ import { useGet, usePost, useHttp } from '../../utils/api'
 import { useSwitch, useInput } from '../../utils'
 import { CustomTable } from '../CustomTable'
 import { memo } from 'react'
-
+import { mutate } from 'swr'
 export const NewUser = () => {
 	const [show, handleShow, handleClose] = useSwitch(false)
 	const [username, inputUsername] = useInput()
@@ -26,7 +26,7 @@ export const NewUser = () => {
 		const response = await post(body)
 		if (response.ok) {
 			handleClose()
-			window.location.reload(false)
+			mutate('/api/admin/user')
 		}
 	}
 
@@ -69,7 +69,7 @@ const ConfigUser = ({ handleShow, idUser }) => {
 		if (confirm(`Delete user id : ${idUser}`)) {
 			const response = await del()
 			if (response.ok) {
-				window.location.reload(false)
+				mutate('/api/admin/user')
 			}
 		}
 	}
@@ -100,7 +100,7 @@ const EditModal = (props) => {
 		const response = await post(body)
 		if (response.ok) {
 			handleClose()
-			window.location.reload(false)
+			mutate('/api/admin/user')
 		}
 	}
 
