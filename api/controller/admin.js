@@ -69,10 +69,10 @@ async function deleteUsers(req, res) {
 }
 async function Contests(req, res) {
 	var sql = 'select idContest,name from Contest'
-	let contest = await new Promise((resolve) => {
+	let contests = await new Promise((resolve) => {
 		db.query(sql, (err, result) => resolve(result))
 	})
-	res.json(contest)
+	res.json({contests})
 }
 
 function getContestWithId(req, res) {
