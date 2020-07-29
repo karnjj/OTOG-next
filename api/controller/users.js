@@ -3,7 +3,8 @@ const sha256 = require('js-sha256');
 const jwt = require('jsonwebtoken');
 const multer = require('multer')
 const mkdirp = require('mkdirp');
-const fs = require('fs')
+const fs = require('fs');
+const { maxHeaderSize } = require('http');
 const fileExt = {
 	'C': '.c',
 	'C++': '.cpp'
@@ -38,6 +39,7 @@ function getUserData(req,res) {
 		if (result[0]) {
 			result[0].history = JSON.parse(result[0].history)
 			userInfo = result[0]
+			userInfo.mxRating = userInfo.history?.reduce((acc,cur) => (acc > cur.y) ? acc : cur.y,0)
 		}
 		res.status(200).json(userInfo)
 	})
