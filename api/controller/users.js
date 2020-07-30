@@ -37,9 +37,10 @@ function getUserData(req,res) {
 	db.query(sql, [idUser], (err, result) => {
 		var userInfo = {}
 		if (result[0]) {
-			result[0].history = JSON.parse(result[0].history)
+			result[0].history = JSON.parse(result[0].history) ?? []
 			userInfo = result[0]
-			userInfo.mxRating = userInfo.history?.reduce((acc,cur) => (acc > cur.y) ? acc : cur.y,0)
+			userInfo.mxRating = userInfo.history.reduce((acc,cur) => (acc > cur.y) ? acc : cur.y,0)
+			if(userInfo.mxRating === 0) userInfo.mxRating = undefined
 		}
 		res.status(200).json(userInfo)
 	})

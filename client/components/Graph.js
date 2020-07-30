@@ -193,7 +193,7 @@ const option = (datas) => ({
 const Graph = ({ history }) => {
 	return (
 		<div>
-			<Line data={Data(history?? [])} options={option(history?? [])} />
+			<Line data={Data(history)} options={option(history)} />
 		</div>
 	)
 }

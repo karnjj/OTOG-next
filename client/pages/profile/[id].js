@@ -29,7 +29,7 @@ const GraphCard = ({ userInfo }) => (
 					Rating : <ColoredText {...userInfo}>{userInfo.rating}</ColoredText>{' '}
 					{userInfo.mxRating && <text>(max : <ColoredText rating={userInfo.mxRating}>{userInfo.mxRating}</ColoredText>)</text>}
 				</h5>
-				<h5>Contest Participated : -</h5>
+				<h5>Contest Participated : {userInfo.history.length}</h5>
 				<h5>Problem Solved : -</h5>
 			</Card.Text>
 			<Graph {...userInfo} />
