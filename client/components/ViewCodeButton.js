@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import { Modal, Button } from 'react-bootstrap'
 import OrangeButton from './OrangeButton'
@@ -29,6 +29,8 @@ const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
 
 	const [showLineNumber, setShowLineNumber] = useState(true)
 
+	const codeRef = useRef(null)
+
 	useEffect(() => {
 		const onResize = () => {
 			if (show) {
@@ -41,10 +43,10 @@ const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
 	}, [show])
 
 	useEffect(() => {
-		if (!isLoading && show) {
-			prism.highlightAll()
+		if (!isLoading && show && !shown) {
+			prism.highlightElement(codeRef.current)
 		}
-	}, [show, showLineNumber, isLoading])
+	}, [show, showLineNumber, isLoading, codeRef])
 
 	return (
 		<>
@@ -69,7 +71,9 @@ const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
 				</Modal.Header>
 				<Modal.Body>
 					<FontPre className={showLineNumber && 'line-numbers'}>
-						<code className={`language-cpp`}>{sourceCode}</code>
+						<code className={`language-cpp`} ref={codeRef}>
+							{sourceCode}
+						</code>
 					</FontPre>
 				</Modal.Body>
 			</Modal>
