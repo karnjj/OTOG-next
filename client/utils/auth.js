@@ -18,15 +18,17 @@ export const auth = (token) => {
 
 export const AuthContext = createContext()
 export const useAuthContext = () => useContext(AuthContext)
-export const AuthProvider = ({ nextToken, ...props }) => {
+export const AuthProvider = (props) => {
 	const [token, setToken] = useState(() => cookie.get('token'))
+
 	const login = useCallback(
-		(accessToken) => {
-			cookie.set('token', accessToken, { expires: 3 / 24 })
-			setToken(accessToken)
+		(token) => {
+			cookie.set('token', token, { expires: 3 / 24 })
+			setToken(token)
 			window.localStorage.setItem('login', Date.now())
 			router.push('/')
-		},[token]
+		},
+		[token]
 	)
 
 	const logout = useCallback(() => {
@@ -36,24 +38,16 @@ export const AuthProvider = ({ nextToken, ...props }) => {
 		window.localStorage.setItem('logout', Date.now())
 	}, [token])
 
-	const syncLogout = useCallback((event) => {
-		if (event.key === 'logout') {
-			window.location.reload(false)
-		}
-	}, [])
-
-	const syncLogin = useCallback((event) => {
-		if (event.key === 'login') {
-			window.location.reload(false)
+	const syncSession = useCallback(({ key }) => {
+		if (key === 'login' || key === 'logout') {
+			setToken(cookie.get('token'))
 		}
 	}, [])
 
 	useEffect(() => {
-		window.addEventListener('storage', syncLogout)
-		window.addEventListener('storage', syncLogin)
+		window.addEventListener('storage', syncSession)
 		return () => {
-			window.removeEventListener('storage', syncLogout)
-			window.removeEventListener('storage', syncLogin)
+			window.removeEventListener('storage', syncSession)
 			window.localStorage.removeItem('logout')
 			window.localStorage.removeItem('login')
 		}
