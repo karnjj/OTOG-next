@@ -43,7 +43,7 @@ const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
 	}, [show])
 
 	useEffect(() => {
-		if (!isLoading && show && !shown) {
+		if (!isLoading && show) {
 			prism.highlightElement(codeRef.current)
 		}
 	}, [show, showLineNumber, isLoading, codeRef])
