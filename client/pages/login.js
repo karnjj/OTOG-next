@@ -2,7 +2,7 @@ import { Container, Card, Form, Alert } from 'react-bootstrap'
 import OrangeButton from '../components/OrangeButton'
 
 import styled from 'styled-components'
-import { useInput, useSwitch } from '../utils'
+import { useInput, useShow } from '../utils'
 import { usePost } from '../utils/api'
 import { useAuthContext } from '../utils/auth'
 
@@ -20,7 +20,7 @@ const LoginCard = () => {
 	const { login } = useAuthContext()
 	const [username, inputUsername] = useInput()
 	const [password, inputPassword] = useInput()
-	const [error, showAlert, closeAlert] = useSwitch(false)
+	const [error, showAlert, closeAlert] = useShow(false)
 	const post = usePost('/api/login')
 
 	const handleSubmit = async (event) => {

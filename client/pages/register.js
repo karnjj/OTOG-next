@@ -3,7 +3,7 @@ import OrangeButton from '../components/OrangeButton'
 
 import styled from 'styled-components'
 import router from 'next/router'
-import { useInput, useSwitch } from '../utils'
+import { useInput, useShow } from '../utils'
 import { usePost } from '../utils/api'
 
 const CenteredContainer = styled(Container)`
@@ -19,7 +19,7 @@ const RegisterCard = () => {
 	const [username, inputUsername] = useInput()
 	const [password, inputPassword] = useInput()
 	const [sname, inputSname] = useInput()
-	const [show, showAlert, closeAlert] = useSwitch(false)
+	const [show, showAlert, closeAlert] = useShow(false)
 
 	const post = usePost('/api/register')
 

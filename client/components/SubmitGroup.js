@@ -6,10 +6,10 @@ import OrangeButton from './OrangeButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
 import { usePost } from '../utils/api'
-import { useSwitch } from '../utils'
+import { useShow } from '../utils'
 
 const SubmitGroup = ({ name, id_Prob, children }) => {
-	const [show, handleShow, handleClose] = useSwitch(false)
+	const [show, handleShow, handleClose] = useShow(false)
 	const [fileLang, setFileLang] = useState('C++')
 	const [file, setFile] = useState()
 

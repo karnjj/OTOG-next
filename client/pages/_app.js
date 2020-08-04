@@ -14,6 +14,7 @@ import vars from '../styles/vars'
 config.autoAddCss = false
 
 const GlobalStyle = createGlobalStyle`
+	@import url('https://fonts.googleapis.com/css?family=Fira+Code&display=swap');
 	body {
 		overflow-y: scroll;
 	}
@@ -34,10 +35,6 @@ const MyApp = ({ Component, pageProps }) => {
 				<link rel='shortcut icon' href='/logo196.png' />
 				<link rel='apple-touch-icon' href='/logoIOS.png' />
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
-				<link
-					href='https://fonts.googleapis.com/css?family=Fira+Code&display=swap'
-					rel='stylesheet'
-				/>
 				<meta name='theme-color' content='#ff851b' />
 			</Head>
 			<ThemeProvider theme={{ breakpoints }}>

@@ -22,11 +22,11 @@ import {
 	faTrash,
 	faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
-import { useSwitch } from '../../utils'
+import { useShow } from '../../utils'
 import { mutate } from 'swr'
 
 export const NewProblem = () => {
-	const [show, handleShow, handleClose] = useSwitch(false)
+	const [show, handleShow, handleClose] = useShow(false)
 	const [data, setData] = useState({})
 	const { name, sname, numCase, memory, time, score, pdf, zip } = data
 
@@ -203,7 +203,7 @@ const EditModal = (props) => {
 	const { show, handleClose, id_Prob, ...rest } = props
 	const [data, setData] = useState(rest)
 	const { name, sname, memory, time, score, rating, subtask, pdf, zip } = data
-	const [isSaving, handleSaving] = useSwitch(false)
+	const [isSaving, handleSaving] = useShow(false)
 
 	const selectFile = (event) =>
 		setData({ ...data, [event.target.id]: event.target.files[0] })
@@ -315,7 +315,7 @@ const EditModal = (props) => {
 
 const TaskTr = memo((props) => {
 	const { id_Prob, name, sname, memory, time, rating, noTestcase } = props
-	const [show, handleShow, handleClose] = useSwitch(false)
+	const [show, handleShow, handleClose] = useShow(false)
 
 	return (
 		<tr onDoubleClick={handleShow}>

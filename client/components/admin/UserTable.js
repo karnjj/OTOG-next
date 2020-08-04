@@ -9,12 +9,12 @@ import {
 	faUserPlus,
 } from '@fortawesome/free-solid-svg-icons'
 import { useGet, usePost, useHttp } from '../../utils/api'
-import { useSwitch, useInput } from '../../utils'
+import { useShow, useInput } from '../../utils'
 import { CustomTable } from '../CustomTable'
 import { memo } from 'react'
 import { mutate } from 'swr'
 export const NewUser = () => {
-	const [show, handleShow, handleClose] = useSwitch(false)
+	const [show, handleShow, handleClose] = useShow(false)
 	const [username, inputUsername] = useInput()
 	const [password, inputPassword] = useInput()
 	const [sname, inputSname] = useInput()
@@ -136,7 +136,7 @@ const EditModal = (props) => {
 
 const UserTr = memo((props) => {
 	const { idUser, username, sname, state } = props
-	const [show, handleShow, handleClose] = useSwitch(false)
+	const [show, handleShow, handleClose] = useShow(false)
 
 	return (
 		<tr onDoubleClick={handleShow}>

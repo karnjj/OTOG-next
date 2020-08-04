@@ -12,10 +12,10 @@ import {
 	faEyeSlash,
 	faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
-import { useInput, useSwitch } from '../../utils'
+import { useInput, useShow } from '../../utils'
 
 export const NewContest = () => {
-	const [show, handleShow, handleClose] = useSwitch(false)
+	const [show, handleShow, handleClose] = useShow(false)
 	const [name, inputName] = useInput()
 	const [mode, inputMode] = useInput('unrated')
 	const [judge, inputJudge] = useInput('classic')
@@ -117,7 +117,7 @@ export const ContestConfig = ({ idContest }) => {
 	const [contestData, setContestData] = useState(data)
 	const { name, mode, judge, startDate, endDate } = contestData
 
-	const [show, handleShow, handleClose] = useSwitch(false)
+	const [show, handleShow, handleClose] = useShow(false)
 
 	const handleChangeName = (event) =>
 		setContestData({ ...contestData, name: event.target.value })
@@ -354,7 +354,7 @@ const EditModal = (props) => {
 
 const TaskTr = (props) => {
 	const { id_Prob, name, sname, memory, time, score } = props
-	const [show, handleShow, handleClose] = useSwitch(false)
+	const [show, handleShow, handleClose] = useShow(false)
 
 	return (
 		<tr onDoubleClick={handleShow}>
