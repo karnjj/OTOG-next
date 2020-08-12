@@ -21,5 +21,8 @@
     "mysql": "^2.18.1",
     "path": "^0.12.7",
     "unzipper": "^0.10.11"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }

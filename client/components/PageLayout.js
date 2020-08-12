@@ -33,17 +33,18 @@ const ProfileImage = styled(Image)`
 	height: 28px;
 	margin: -2px 0;
 `
+const navLinks = [
+	//name, icon, paths, exact
+	['Main', faHome, ['/'], true],
+	['Problems', faPuzzlePiece, ['/problem', '/submission'], false],
+	['Contest', faTrophy, ['/contest'], false],
+	['Ratings', faChartBar, ['/rating'], false],
+]
+
 export const Header = () => {
 	const { userData, isLogin, isAdmin, logout } = useAuthContext()
 	const router = useRouter()
-	const navLinks = [
-		//name, icon, paths, exact
-		['Main', faHome, ['/'], true],
-		['Problems', faPuzzlePiece, ['/problem', '/submission'], false],
-		['Contest', faTrophy, ['/contest'], false],
-		['Ratings', faChartBar, ['/rating'], false],
-	]
-	const handleClickLogout = () => logout()
+
 	return (
 		<>
 			<HeaderSpace />
@@ -56,9 +57,7 @@ export const Header = () => {
 			>
 				<Link href={isAdmin ? '/admin' : '/'} passHref>
 					<a target={isAdmin ? '_blank' : undefined}>
-						<Navbar.Brand
-							className='mr-auto'
-						>
+						<Navbar.Brand className='mr-auto'>
 							<NavTitle>
 								OTOG<NavText> - One Tambon One Grader</NavText>
 							</NavTitle>
@@ -103,7 +102,7 @@ export const Header = () => {
 									</NavDropdown.Item>
 								</Link>
 								<NavDropdown.Divider />
-								<NavDropdown.Item onClick={handleClickLogout}>
+								<NavDropdown.Item onClick={logout}>
 									<NavTitle
 										name='Logout'
 										icon={faSignInAlt}
@@ -149,7 +148,7 @@ const FullWindowLayout = styled.div`
 	justify-content: space-between;
 `
 
-export default ({ container = true, children, ...rest }) => {
+const PageLayout = ({ container = true, children, ...rest }) => {
 	return container ? (
 		<FullWindowLayout>
 			<div>
@@ -170,3 +169,5 @@ export default ({ container = true, children, ...rest }) => {
 		</FullWindowLayout>
 	)
 }
+
+export default PageLayout
