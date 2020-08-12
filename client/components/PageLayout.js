@@ -117,7 +117,7 @@ export const Header = () => {
 }
 
 export const Footer = () => (
-	<>
+	<Container>
 		<hr />
 		<Row sm={1} className='mb-3'>
 			<Col md='auto' className='mr-auto'>
@@ -128,7 +128,7 @@ export const Footer = () => (
 			</Col>
 			<Col md='auto'>&copy; 2019 Phakphum Dev Team</Col>
 		</Row>
-	</>
+	</Container>
 )
 
 const FullWindowLayout = styled.div`
@@ -145,17 +145,13 @@ const PageLayout = ({ container = true, children, ...rest }) => {
 				<Header />
 				<Container {...rest}>{children}</Container>
 			</div>
-			<Container>
-				<Footer />
-			</Container>
+			<Footer />
 		</FullWindowLayout>
 	) : (
 		<FullWindowLayout>
 			<Header />
 			<div {...rest}>{children}</div>
-			<Container>
-				<Footer />
-			</Container>
+			<Footer />
 		</FullWindowLayout>
 	)
 }
