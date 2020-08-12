@@ -48,79 +48,69 @@ export const Header = () => {
 	return (
 		<>
 			<HeaderSpace />
-			<ScrollNavbar
-				collapseOnSelect
-				expand='md'
-				bg='light'
-				expand='sm'
-				fixed='top'
-			>
-				<Link href={isAdmin ? '/admin' : '/'} passHref>
-					<a target={isAdmin ? '_blank' : undefined}>
-						<Navbar.Brand className='mr-auto'>
-							<NavTitle>
-								OTOG<NavText> - One Tambon One Grader</NavText>
-							</NavTitle>
-						</Navbar.Brand>
-					</a>
-				</Link>
-				<Navbar.Toggle aria-controls='responsive-navbar-nav' />
-				<Navbar.Collapse id='responsive-navbar-nav'>
-					<Nav className='ml-auto'>
-						{navLinks.map(([name, icon, paths, exact]) => (
-							<NavLink
-								{...{ name, icon }}
-								className='mx-2 mx-xl-0'
-								path={paths[0]}
-								key={name}
-								active={paths.some((path) =>
-									exact
-										? path === router.pathname
-										: path === router.pathname.slice(0, path.length)
-								)}
-							/>
-						))}
-						{isLogin ? (
-							<NavDropdown
-								alignRight
-								title={
-									<ProfileImage
-										className='mx-1 ml-xl-0'
-										src={`${process.env.API_URL}/api/avatar/${userData.id}`}
-										roundedCircle
-									/>
-								}
-							>
-								<Link
-									href='/profile/[id]'
-									as={`/profile/${userData.id}`}
-									passHref
-									prefetch={false}
+			<ScrollNavbar collapseOnSelect expand='md' bg='light' fixed='top'>
+				<Container>
+					<Link href={isAdmin ? '/admin' : '/'} passHref>
+						<a target={isAdmin ? '_blank' : undefined}>
+							<Navbar.Brand className='mr-auto'>
+								<NavTitle>
+									OTOG<NavText> - One Tambon One Grader</NavText>
+								</NavTitle>
+							</Navbar.Brand>
+						</a>
+					</Link>
+					<Navbar.Toggle aria-controls='responsive-navbar-nav' />
+					<Navbar.Collapse id='responsive-navbar-nav'>
+						<Nav className='ml-auto'>
+							{navLinks.map(([name, icon, paths, exact]) => (
+								<NavLink
+									{...{ name, icon }}
+									path={paths[0]}
+									key={name}
+									active={paths.some((path) =>
+										exact
+											? path === router.pathname
+											: path === router.pathname.slice(0, path.length)
+									)}
+								/>
+							))}
+							{isLogin ? (
+								<NavDropdown
+									alignRight
+									title={
+										<ProfileImage
+											className='mx-1 ml-xl-0'
+											src={`${process.env.API_URL}/api/avatar/${userData.id}`}
+											roundedCircle
+										/>
+									}
 								>
-									<NavDropdown.Item>
-										<NavTitle name='Profile' icon={faUser} shrink={false} />
+									<Link
+										href='/profile/[id]'
+										as={`/profile/${userData.id}`}
+										passHref
+										prefetch={false}
+									>
+										<NavDropdown.Item>
+											<NavTitle name='Profile' icon={faUser} shrink={false} />
+										</NavDropdown.Item>
+									</Link>
+									<NavDropdown.Divider />
+									<NavDropdown.Item onClick={logout}>
+										<NavTitle
+											name='Logout'
+											icon={faSignInAlt}
+											red='true'
+											shrink={false}
+										/>
 									</NavDropdown.Item>
-								</Link>
-								<NavDropdown.Divider />
-								<NavDropdown.Item onClick={logout}>
-									<NavTitle
-										name='Logout'
-										icon={faSignInAlt}
-										red='true'
-										shrink={false}
-									/>
-								</NavDropdown.Item>
-							</NavDropdown>
-						) : (
-							<NavLink
-								name='Login'
-								className='mx-2 mx-xl-0'
-								icon={faSignInAlt}
-								path='/login'
-							/>
-						)}
-					</Nav>
-				</Navbar.Collapse>
+								</NavDropdown>
+							) : (
+								<NavLink name='Login' icon={faSignInAlt} path='/login' />
+							)}
+						</Nav>
+					</Navbar.Collapse>
+				</Container>
 			</ScrollNavbar>
 		</>
 	)
