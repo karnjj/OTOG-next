@@ -187,7 +187,7 @@ const Index = () => {
 
 	return (
 		<PageLayout container={false}>
-			<Jumbotron>
+			<Jumbotron fluid>
 				<Container>{isLogin ? <Hello /> : <Welcome />}</Container>
 			</Jumbotron>
 			<Container>

@@ -1,5 +1,6 @@
-import { useState, useEffect, memo } from 'react'
+import { useEffect, memo } from 'react'
 import { useAuthContext } from '../utils/auth'
+import { useShow } from '../utils'
 
 import { CustomTr, CustomTable } from './CustomTable'
 import { Modal, ButtonGroup } from 'react-bootstrap'
@@ -48,7 +49,7 @@ const SubmissionTable = ({ isLoading, results, canViewCode }) => {
 }
 
 const SubTr = memo((props) => {
-	const [showError, setShowError] = useState(false)
+	const [showError, handleShow, handleClose] = useShow(false)
 	const {
 		problemname,
 		state,
@@ -64,8 +65,6 @@ const SubTr = memo((props) => {
 		idUser,
 	} = props
 
-	const handleShow = () => setShowError(true)
-	const handleClose = () => setShowError(false)
 	const isAccept = (result) =>
 		result
 			.split('')
