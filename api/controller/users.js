@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer')
 const mkdirp = require('mkdirp');
 const fs = require('fs');
-const { maxHeaderSize } = require('http');
 const fileExt = {
 	'C': '.c',
 	'C++': '.cpp'
