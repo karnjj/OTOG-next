@@ -12,6 +12,7 @@ import { useShow } from '../utils'
 import { useGet } from '../utils/api'
 
 const FontPre = styled.pre`
+	&&,
 	span,
 	code {
 		font-family: 'Fira Code', monospace, 'Courier New', Courier;
