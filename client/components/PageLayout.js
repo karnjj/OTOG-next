@@ -131,6 +131,14 @@ export const Footer = () => (
 	</Container>
 )
 
+export const CenteredContainer = styled(Container).attrs({ fluid: true })`
+	height: 100vh;
+	display: flex;
+	background: #f5f5f5;
+	align-items: center;
+	justify-content: center;
+`
+
 const FullWindowLayout = styled.div`
 	min-height: 100vh;
 	display: flex;

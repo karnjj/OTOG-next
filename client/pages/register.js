@@ -1,21 +1,13 @@
-import { Container, Col, Row, Card, Form, Alert } from 'react-bootstrap'
+import { Card, Form, Alert } from 'react-bootstrap'
+import { CenteredContainer } from '../components/PageLayout'
 import OrangeButton from '../components/OrangeButton'
+import ShadowCard from '../components/ShadowCard'
 
-import styled from 'styled-components'
 import router from 'next/router'
 import { useInput, useShow } from '../utils'
 import { usePost } from '../utils/api'
 
-const CenteredContainer = styled(Container)`
-	height: 100vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-`
-const StyledCard = styled(Card)`
-	min-width: 325px;
-`
-const RegisterCard = () => {
+const Register = () => {
 	const [username, inputUsername] = useInput()
 	const [password, inputPassword] = useInput()
 	const [sname, inputSname] = useInput()
@@ -47,62 +39,61 @@ const RegisterCard = () => {
 	}
 
 	return (
-		<StyledCard>
-			<Card.Header>
-				<div className='text-center font-weight-bold'>
-					OTOG - One Tambon One Grader
-				</div>
-			</Card.Header>
-			<Card.Body>
-				{show && (
-					<Alert variant='danger' dismissible onClose={closeAlert}>
-						<strong>Register Failed !</strong>
-						<br />
-						Username นี้ถูกใช้ไปแล้ว
-					</Alert>
-				)}
-				<Form onSubmit={handleSubmit}>
-					<Form.Control
-						type='username'
-						name='username'
-						placeholder='Username'
-						required
-						{...inputUsername}
-					/>
-					<br />
-					<Form.Control
-						type='password'
-						name='password'
-						placeholder='Password'
-						required
-						{...inputPassword}
-					/>
-					<br />
-					<Form.Control
-						type='sname'
-						name='sname'
-						placeholder='Display name'
-						required
-						{...inputSname}
-					/>
-					<br />
-					<br />
-					<OrangeButton size='lg' type='submit' block>
-						Create User
-					</OrangeButton>
-					<OrangeButton size='lg' href='/login' block>
+		<CenteredContainer>
+			<ShadowCard>
+				<Card.Header>
+					<div className='text-center font-weight-bold'>
+						OTOG - One Tambon One Grader
+					</div>
+				</Card.Header>
+				<Card.Body>
+					{show && (
+						<Alert variant='danger' dismissible onClose={closeAlert}>
+							<strong>Register Failed !</strong>
+							<br />
+							Username นี้ถูกใช้ไปแล้ว
+						</Alert>
+					)}
+					<Form onSubmit={handleSubmit}>
+						<Form.Group>
+							<Form.Control
+								type='username'
+								name='username'
+								placeholder='Username'
+								required
+								{...inputUsername}
+							/>
+						</Form.Group>
+						<Form.Group>
+							<Form.Control
+								type='password'
+								name='password'
+								placeholder='Password'
+								required
+								{...inputPassword}
+							/>
+						</Form.Group>
+						<Form.Group>
+							<Form.Control
+								type='sname'
+								name='sname'
+								placeholder='Display name'
+								required
+								{...inputSname}
+							/>
+						</Form.Group>
+						<OrangeButton type='submit' block>
+							Create User
+						</OrangeButton>
+					</Form>
+					<hr />
+					<OrangeButton variant='outline-secondary' href='/login' block>
 						{`< Back`}
 					</OrangeButton>
-				</Form>
-			</Card.Body>
-		</StyledCard>
+				</Card.Body>
+			</ShadowCard>
+		</CenteredContainer>
 	)
 }
-
-const Register = () => (
-	<CenteredContainer>
-		<RegisterCard />
-	</CenteredContainer>
-)
 
 export default Register

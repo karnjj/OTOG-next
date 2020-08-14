@@ -1,22 +1,13 @@
-import { Container, Card, Form, Alert } from 'react-bootstrap'
+import { Card, Form, Alert } from 'react-bootstrap'
+import { CenteredContainer } from '../components/PageLayout'
 import OrangeButton from '../components/OrangeButton'
+import ShadowCard from '../components/ShadowCard'
 
-import styled from 'styled-components'
 import { useInput, useShow } from '../utils'
 import { usePost } from '../utils/api'
 import { useAuthContext } from '../utils/auth'
 
-const CenteredContainer = styled(Container)`
-	height: 100vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-`
-const StyledCard = styled(Card)`
-	min-width: 325px;
-`
-
-const LoginCard = () => {
+const Login = () => {
 	const { login } = useAuthContext()
 	const [username, inputUsername] = useInput()
 	const [password, inputPassword] = useInput()
@@ -47,56 +38,52 @@ const LoginCard = () => {
 	}
 
 	return (
-		<StyledCard>
-			<Card.Header>
-				<div className='text-center font-weight-bold'>
+		<CenteredContainer>
+			<ShadowCard>
+				<Card.Header className='text-center font-weight-bold'>
 					OTOG - One Tambon One Grader
-				</div>
-			</Card.Header>
-			<Card.Body>
-				{error && (
-					<Alert variant='danger' dismissible onClose={closeAlert}>
-						<strong>Login Failed !</strong>
-						<br />
-						Username หรือ Password
-						<br />
-						ไม่ถูกต้อง
-					</Alert>
-				)}
-				<Form onSubmit={handleSubmit}>
-					<Form.Control
-						type='username'
-						name='username'
-						placeholder='Username'
-						required
-						{...inputUsername}
-					/>
-					<br />
-					<Form.Control
-						type='password'
-						name='password'
-						placeholder='Password'
-						required
-						{...inputPassword}
-					/>
-					<br />
-					<br />
-					<OrangeButton size='lg' type='submit' block>
-						Sign in
-					</OrangeButton>
-					<OrangeButton size='lg' href='/register' block>
+				</Card.Header>
+				<Card.Body>
+					{error && (
+						<Alert variant='danger' dismissible onClose={closeAlert}>
+							<strong>Login Failed !</strong>
+							<br />
+							Username หรือ Password
+							<br />
+							ไม่ถูกต้อง
+						</Alert>
+					)}
+					<Form onSubmit={handleSubmit}>
+						<Form.Group>
+							<Form.Control
+								type='username'
+								name='username'
+								placeholder='Username'
+								required
+								{...inputUsername}
+							/>
+						</Form.Group>
+						<Form.Group>
+							<Form.Control
+								type='password'
+								name='password'
+								placeholder='Password'
+								required
+								{...inputPassword}
+							/>
+						</Form.Group>
+						<OrangeButton type='submit' block>
+							Login
+						</OrangeButton>
+					</Form>
+					<hr />
+					<OrangeButton variant='secondary' href='/register' block>
 						Register
 					</OrangeButton>
-				</Form>
-			</Card.Body>
-		</StyledCard>
+				</Card.Body>
+			</ShadowCard>
+		</CenteredContainer>
 	)
 }
-
-const Login = () => (
-	<CenteredContainer>
-		<LoginCard />
-	</CenteredContainer>
-)
 
 export default Login
