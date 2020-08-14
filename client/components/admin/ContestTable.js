@@ -248,7 +248,7 @@ const EditModal = (props) => {
 	const { show, handleClose, id_Prob, ...rest } = props
 
 	const [data, setData] = useState(rest)
-	const { name, sname, memory, time, score, pdf, testcase, zip } = data
+	const { name, sname, memory, time, score, pdf, subtask, zip } = data
 
 	const selectFile = (event) => {
 		switch (event.target.id) {
@@ -272,13 +272,13 @@ const EditModal = (props) => {
 	const handleChangeScore = (event) =>
 		setData({ ...data, score: Number(event.target.value) ?? 0 })
 	const handleChangeTestcase = (event) =>
-		setData({ ...data, testcase: event.target.value })
+		setData({ ...data, subtask: event.target.value })
 
 	const post = usePost(`/api/admin/problem/${id_Prob}?option=save`)
 	const onSave = async (event) => {
 		event.preventDefault()
 		const formData = new FormData()
-		Object.keys(info).forEach((item) => formData.append(item, info[item]))
+		Object.keys(data).forEach((item) => formData.append(item, data[item]))
 		const response = await post(formData, false)
 		if (response.ok) {
 			handleClose()
@@ -314,7 +314,7 @@ const EditModal = (props) => {
 					<Col xs={6}>
 						<Form.Label>Testcases</Form.Label>
 						<Form.Control
-							defaultValue={testcase}
+							defaultValue={subtask}
 							onChange={handleChangeTestcase}
 						/>
 					</Col>

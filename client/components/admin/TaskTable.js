@@ -203,7 +203,7 @@ const EditModal = (props) => {
 	const { show, handleClose, id_Prob, ...rest } = props
 	const [data, setData] = useState(rest)
 	const { name, sname, memory, time, score, rating, subtask, pdf, zip } = data
-	const [isSaving, handleSaving] = useShow(false)
+	const [saveState, saving, saved] = useShow(false)
 
 	const selectFile = (event) =>
 		setData({ ...data, [event.target.id]: event.target.files[0] })
@@ -225,13 +225,14 @@ const EditModal = (props) => {
 	const post = usePost(`/api/admin/problem/${id_Prob}?option=save`)
 	const onSave = async (event) => {
 		event.preventDefault()
-		handleSaving()
+		saving()
 		const body = new FormData()
 		Object.keys(data).forEach((item) => body.append(item, data[item]))
 		const response = await post(body, false)
 		if (response.ok) {
 			mutate('/api/admin/problem')
 			handleClose()
+			saved()
 		}
 	}
 
@@ -305,7 +306,7 @@ const EditModal = (props) => {
 				</Form.Group>
 			</Form>
 			<Modal.Footer>
-				<Button variant='success' onClick={onSave} disabled={isSaving}>
+				<Button variant='success' onClick={onSave} disabled={saveState}>
 					Save
 				</Button>
 			</Modal.Footer>
