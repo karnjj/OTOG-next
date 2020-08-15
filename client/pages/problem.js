@@ -92,7 +92,7 @@ const Problem = () => {
 					)}
 					<Form.Control placeholder='ค้นหาโจทย์' {...inputProblemSearch} />
 				</Col>
-				<Col xs sm={4} md={3} lg={2} className='ml-auto'>
+				<Col xs sm={5} md={4} lg={3} xl={2} className='ml-auto'>
 					<OrangeButton href='submission' className='w-100'>
 						View Submissions
 					</OrangeButton>

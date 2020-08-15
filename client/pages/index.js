@@ -97,7 +97,7 @@ const CountButton = styled.li`
 	animation: ${popin} 0.25s ease backwards
 		${(props) => props.index * 0.01 + 's'};
 	animation-play-state: ${(props) => !props.number && 'pause'};
-	animation-delay: ${() => Math.round(Math.random() * 100) + 'ms'};
+	animation-delay: ${(props) => props.index * 20}ms;
 `
 const ButtonWrapper = styled.ul`
 	display: flex;

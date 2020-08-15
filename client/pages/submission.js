@@ -68,7 +68,7 @@ const Submission = () => {
 						/>
 					)}
 				</Col>
-				<Col xs={5} md={3} lg={2}>
+				<Col xs={5} md={3} xl={2}>
 					<OrangeButton href='problem' className='w-100'>
 						View Problems
 					</OrangeButton>
