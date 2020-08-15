@@ -37,27 +37,38 @@ const Submission = () => {
 	return (
 		<PageLayout>
 			<Title icon={faPuzzlePiece} text='Submissions' />
-			<Row className='align-items-center'>
+			<Row className='align-items-baseline'>
 				<Col
 					xs={{ span: 12, order: 'last' }}
-					md={{ span: 'auto', order: 'first' }}
-					className='d-flex align-items-baseline justify-content-center justify-content-md-start mt-2 mt-md-0'
+					lg={{ span: 6, order: 'first' }}
+					className='mt-2 mt-lg-0'
 				>
 					{lastest && (showOnlyMe || isAdmin) && (
-						<div>
-							<b>ส่งข้อล่าสุด :</b>
-							<a
-								target='_blank'
-								className='mx-4'
-								href={`${process.env.API_URL}/api/docs/${lastest.sname}`}
+						<Row className='align-items-baseline'>
+							<Col xs='auto' className='ml-auto ml-lg-0'>
+								<b>ส่งข้อล่าสุด :</b>
+							</Col>
+							<Col
+								xs='auto'
+								style={{
+									maxWidth: '195px',
+								}}
 							>
-								{lastest.name}
-							</a>
-							<SubmitGroup {...lastest} />
-						</div>
+								<a
+									target='_blank'
+									className='text-wrap'
+									href={`${process.env.API_URL}/api/docs/${lastest.sname}`}
+								>
+									{lastest.name}
+								</a>
+							</Col>
+							<Col xs='auto'>
+								<SubmitGroup {...lastest} />
+							</Col>
+						</Row>
 					)}
 				</Col>
-				<Col xs md='auto' className='ml-auto d-flex align-item-center'>
+				<Col xs lg='auto' className='ml-auto'>
 					{isLogin && (
 						<Form.Check
 							type='switch'
@@ -68,7 +79,7 @@ const Submission = () => {
 						/>
 					)}
 				</Col>
-				<Col xs={5} md={3} xl={2}>
+				<Col xs sm={5} md={4} lg={3} xl={2}>
 					<OrangeButton href='problem' className='w-100'>
 						View Problems
 					</OrangeButton>
