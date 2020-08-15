@@ -91,7 +91,7 @@ const NoContest = (props) => {
 			</OrangeButton>
 			{isAdmin && (
 				<OrangeButton href='/contest/submission' variant='outline-primary'>
-					See Submission
+					See Submissions
 				</OrangeButton>
 			)}
 		</CenteredDiv>
@@ -135,7 +135,7 @@ const HoldingContest = ({ idContest, timeleft, name }) => {
 							href='/contest/submission'
 							className='mr-3'
 						>
-							See Submission
+							See Submissions
 						</OrangeButton>
 						<OrangeButton
 							variant='outline-primary'

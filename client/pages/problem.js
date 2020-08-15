@@ -74,7 +74,7 @@ const Problem = () => {
 
 	return (
 		<PageLayout>
-			<Title icon={faPuzzlePiece} text='Problem' />
+			<Title icon={faPuzzlePiece} text='Problems' />
 			<Row>
 				<Col as={InputGroup} xs sm={6} md={8}>
 					{isAdmin && (
@@ -94,7 +94,7 @@ const Problem = () => {
 				</Col>
 				<Col xs sm={4} md={3} lg={2} className='ml-auto'>
 					<OrangeButton href='submission' className='w-100'>
-						View Submission
+						View Submissions
 					</OrangeButton>
 				</Col>
 			</Row>

@@ -36,7 +36,7 @@ const Submission = () => {
 
 	return (
 		<PageLayout>
-			<Title icon={faPuzzlePiece} text='Submission' />
+			<Title icon={faPuzzlePiece} text='Submissions' />
 			<Row className='align-items-center'>
 				<Col
 					xs={{ span: 12, order: 'last' }}
@@ -70,7 +70,7 @@ const Submission = () => {
 				</Col>
 				<Col xs={5} md={3} lg={2}>
 					<OrangeButton href='problem' className='w-100'>
-						View Problem
+						View Problems
 					</OrangeButton>
 				</Col>
 			</Row>

@@ -14,7 +14,7 @@ const Submission = () => {
 
 	return (
 		<PageLayout>
-			<Title icon={faTrophy} text='Contest Submission' noBot='true'>
+			<Title icon={faTrophy} text='Contest Submissions' noBot='true'>
 				<OrangeButton href='/contest'>View Contest</OrangeButton>
 			</Title>
 			<hr />

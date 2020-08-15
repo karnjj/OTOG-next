@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react'
 import { useGet } from '../utils/api'
 
 import { Col, Row, Form } from 'react-bootstrap'
@@ -44,7 +43,7 @@ const Rating = () => {
 
 	return (
 		<PageLayout>
-			<Title icon={faChartBar} text='Rating' />
+			<Title icon={faChartBar} text='Ratings' />
 			<Row className='mx-auto align-items-baseline'>
 				<Col as='label' md={2}>
 					<b>ค้นหาผู้ใช้ : </b>

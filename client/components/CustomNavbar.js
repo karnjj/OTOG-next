@@ -61,7 +61,6 @@ export const NavLink = ({ path, target, active, ...rest }) => {
 export const ScrollNavbar = (props) => {
 	const [hidden, setHidden] = useState(false)
 	const prevScroll = useRef(0)
-	console.log('rerendered', hidden)
 
 	useEffect(() => {
 		const onScroll = () => {
