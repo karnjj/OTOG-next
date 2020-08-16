@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 
 export const useInput = (initialValue = '', converter) => {
 	const [value, setValue] = useState(initialValue)
@@ -19,6 +19,16 @@ export const useShow = (initialState = false) => {
 		shown.current = true
 	}
 	return [show, handleShow, handleClose, shown.current]
+}
+
+export const useFocus = () => {
+	const focusRef = useRef(null)
+	useEffect(() => {
+		if (focusRef) {
+			focusRef.current.focus()
+		}
+	}, [focusRef])
+	return { ref: focusRef, autoFocus: true }
 }
 
 export const range = (n) => [...Array(n).keys()]

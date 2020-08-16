@@ -41,7 +41,7 @@ const Contest = ({ contests }) => {
 					<Col lg={3}>
 						<NewContest />
 						<hr />
-						<SelectContest {...{ contests }} setId={selectIdContest} />
+						<SelectContest contests={contests} setId={selectIdContest} />
 						<AnnounceEditor idContest={idContest} />
 						<ContestConfig idContest={idContest} />
 						<hr />
@@ -49,7 +49,7 @@ const Contest = ({ contests }) => {
 						<br />
 					</Col>
 					<Col lg={9}>
-						<TaskTable {...{ idContest }} />
+						<TaskTable idContest={idContest} />
 					</Col>
 				</Row>
 			</Container>
@@ -57,9 +57,10 @@ const Contest = ({ contests }) => {
 	)
 }
 
-Contest.getInitialProps = async (ctx) => {
+Contest.getInitialProps = (ctx) => {
 	const { token } = nextCookie(ctx)
-	return await httpGet('/api/admin/contest', { token })
+	const props = await httpGet('/api/admin/contest', { token })
+	return { props }
 }
 
 export default withAdminAuth(Contest)

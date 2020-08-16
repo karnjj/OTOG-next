@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { useAuthContext } from '../../utils/auth'
 
 import { Container, Row, Jumbotron, Col } from 'react-bootstrap'
@@ -203,9 +202,9 @@ const Contest = ({ contest, serverTime }) => {
 	)
 }
 
-Contest.getInitialProps = async (ctx) => {
-	const json = await httpGet('/api/contest')
-	return { contest: json.result[0], serverTime: json.serverTime }
+export async function getServerSideProps() {
+	const { result, serverTime } = await httpGet('/api/contest')
+	return { props: { contest: result[0] ?? null, serverTime } }
 }
 
 export default Contest

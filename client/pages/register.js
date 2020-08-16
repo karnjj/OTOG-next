@@ -4,7 +4,7 @@ import OrangeButton from '../components/OrangeButton'
 import ShadowCard from '../components/ShadowCard'
 
 import router from 'next/router'
-import { useInput, useShow } from '../utils'
+import { useInput, useShow, useFocus } from '../utils'
 import { usePost } from '../utils/api'
 
 const Register = () => {
@@ -38,6 +38,8 @@ const Register = () => {
 		}
 	}
 
+	const autoFocus = useFocus()
+
 	return (
 		<CenteredContainer>
 			<ShadowCard>
@@ -61,6 +63,7 @@ const Register = () => {
 								name='username'
 								placeholder='Username'
 								required
+								{...autoFocus}
 								{...inputUsername}
 							/>
 						</Form.Group>

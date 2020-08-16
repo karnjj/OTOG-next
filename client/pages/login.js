@@ -3,7 +3,7 @@ import { CenteredContainer } from '../components/PageLayout'
 import OrangeButton from '../components/OrangeButton'
 import ShadowCard from '../components/ShadowCard'
 
-import { useInput, useShow } from '../utils'
+import { useInput, useShow, useFocus } from '../utils'
 import { usePost } from '../utils/api'
 import { useAuthContext } from '../utils/auth'
 
@@ -37,6 +37,9 @@ const Login = () => {
 		}
 	}
 
+	// Edge somtimes doesn't focus on first render
+	const autoFocus = useFocus()
+
 	return (
 		<CenteredContainer>
 			<ShadowCard>
@@ -60,6 +63,7 @@ const Login = () => {
 								name='username'
 								placeholder='Username'
 								required
+								{...autoFocus}
 								{...inputUsername}
 							/>
 						</Form.Group>
