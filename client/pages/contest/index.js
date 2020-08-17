@@ -85,14 +85,16 @@ const NoContest = (props) => {
 	return (
 		<CenteredDiv>
 			<h1>ยังไม่มีการแข่งขัน</h1>
-			<OrangeButton href='/contest/history' className='mr-2'>
-				See Contest History
-			</OrangeButton>
 			{isAdmin && (
-				<OrangeButton href='/contest/submission' variant='outline-primary'>
+				<OrangeButton
+					href='/contest/submission'
+					variant='outline-primary'
+					className='mr-2'
+				>
 					See Submissions
 				</OrangeButton>
 			)}
+			<OrangeButton href='/contest/history'>See Contest History</OrangeButton>
 		</CenteredDiv>
 	)
 }
