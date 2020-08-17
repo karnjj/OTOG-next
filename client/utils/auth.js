@@ -70,12 +70,10 @@ export const withAdminAuth = (WrappedComponent) => {
 			<Error statusCode={404} />
 		)
 	}
-	Wrapper.getInitialProps = async (ctx) => {
-		const { token } = nextCookie(ctx)
-		const componentProps =
-			WrappedComponent.getInitialProps &&
-			(await WrappedComponent.getInitialProps(ctx))
-		return { ...componentProps, token }
-	}
 	return Wrapper
+}
+
+export function getCookieContext(ctx) {
+	const { token } = nextCookie(ctx)
+	return token ?? null
 }

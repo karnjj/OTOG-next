@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Container, Row, Col, Card } from 'react-bootstrap'
-import { withAdminAuth } from '../../utils/auth'
+import { withAdminAuth, getCookieContext } from '../../utils/auth'
 import {
 	NewContest,
 	TaskTable,
@@ -10,7 +10,6 @@ import {
 import Header from '../../components/admin/Header'
 import { AnnounceEditor } from '../../components/Announce'
 
-import nextCookie from 'next-cookies'
 import { httpGet } from '../../utils/api'
 
 const Note = () => (
@@ -57,10 +56,10 @@ const Contest = ({ contests }) => {
 	)
 }
 
-Contest.getInitialProps = (ctx) => {
-	const { token } = nextCookie(ctx)
+export function getServerSideProps (ctx) {
+	const token = getCookieContext(ctx)
 	const props = await httpGet('/api/admin/contest', { token })
-	return { props }
+	return { props: { token, ...props} }
 }
 
 export default withAdminAuth(Contest)

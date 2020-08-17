@@ -1,4 +1,4 @@
-import { withAdminAuth } from '../../utils/auth'
+import { withAdminAuth, getCookieContext } from '../../utils/auth'
 
 import { Row, Col, Container, Card } from 'react-bootstrap'
 import { TaskTable, NewProblem } from '../../components/admin/TaskTable'
@@ -40,6 +40,11 @@ const Task = () => {
 			</Container>
 		</>
 	)
+}
+
+export function getServerSideProps(ctx) {
+	const token = getCookieContext(ctx)
+	return { props: { token } }
 }
 
 export default withAdminAuth(Task)

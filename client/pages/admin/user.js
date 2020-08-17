@@ -1,4 +1,4 @@
-import { withAdminAuth } from '../../utils/auth'
+import { withAdminAuth, getCookieContext } from '../../utils/auth'
 
 import { Container, Row, Col, Card } from 'react-bootstrap'
 import { UserTable, NewUser } from '../../components/admin/UserTable'
@@ -19,7 +19,7 @@ const Note = () => (
 	</Card>
 )
 
-const UserConfig = props => {
+const UserConfig = () => {
 	return (
 		<>
 			<Header />
@@ -41,4 +41,10 @@ const UserConfig = props => {
 		</>
 	)
 }
+
+export function getServerSideProps(ctx) {
+	const token = getCookieContext(ctx)
+	return { props: { token } }
+}
+
 export default withAdminAuth(UserConfig)
