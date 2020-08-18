@@ -42,7 +42,7 @@ const UserConfig = () => {
 	)
 }
 
-export function getServerSideProps(ctx) {
+export async function getServerSideProps(ctx) {
 	const token = getCookieContext(ctx)
 	return { props: { token } }
 }

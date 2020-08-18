@@ -56,10 +56,10 @@ const Contest = ({ contests }) => {
 	)
 }
 
-export function getServerSideProps (ctx) {
+export async function getServerSideProps(ctx) {
 	const token = getCookieContext(ctx)
 	const props = await httpGet('/api/admin/contest', { token })
-	return { props: { token, ...props} }
+	return { props: { token, ...props } }
 }
 
 export default withAdminAuth(Contest)
