@@ -19,7 +19,7 @@ export const auth = (token) => {
 export const AuthContext = createContext()
 export const useAuthContext = () => useContext(AuthContext)
 export const AuthProvider = (props) => {
-	const [token, setToken] = useState(() => cookie.get('token'))
+	const [token, setToken] = useState(cookie.get('token'))
 
 	const login = useCallback(
 		(token) => {
@@ -62,7 +62,11 @@ export const AuthProvider = (props) => {
 }
 
 export const withAdminAuth = (WrappedComponent) => {
-	const Wrapper = ({ token, ...props }) => {
+	const Wrapper = ({ token: nextToken, ...props }) => {
+		const { token: authToken } = useAuthContext()
+		const [token, setToken] = useState(nextToken)
+		useEffect(() => setToken(authToken), [authToken])
+
 		const userData = auth(token)
 		return userData?.state === 0 ? (
 			<WrappedComponent {...props} />
