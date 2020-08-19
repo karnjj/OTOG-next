@@ -31,4 +31,15 @@ export const useFocus = () => {
 	return { ref: focusRef, autoFocus: true }
 }
 
+export const useAlert = (initialMessages = { head: '', desc: '' }) => {
+	const [alert, setMessages] = useState({ show: false, ...initialMessages })
+	const setAlert = useCallback((messages) => {
+		setMessages({ ...messages, show: true })
+	}, [])
+	const handleClose = useCallback(() => {
+		setMessages((prevMessages) => ({ ...prevMessages, show: false }))
+	}, [])
+	return [{ handleClose, ...alert }, setAlert]
+}
+
 export const range = (n) => [...Array(n).keys()]
