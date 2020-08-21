@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 
-import { Nav } from 'react-bootstrap'
+import { Nav, Container } from 'react-bootstrap'
 import { NavLink, ScrollNavbar, HeaderSpace } from '../CustomNavbar'
 import {
 	faWrench,
@@ -10,7 +10,14 @@ import {
 	faTimes,
 } from '@fortawesome/free-solid-svg-icons'
 
-const Header = (props) => {
+const adminNavEntries = [
+	['Main', faWrench, '/admin'],
+	['Task', faTasks, '/admin/task'],
+	['User', faUserCog, '/admin/user'],
+	['Contest', faTrophy, '/admin/contest'],
+]
+
+const Header = () => {
 	const router = useRouter()
 	const handleClose = () => {
 		window.open('/', '_self')
@@ -20,26 +27,23 @@ const Header = (props) => {
 		<>
 			<HeaderSpace />
 			<ScrollNavbar bg='dark' variant='dark' fixed='top'>
-				<Nav>
-					{[
-						['Main', faWrench, '/admin'],
-						['Task', faTasks, '/admin/task'],
-						['User', faUserCog, '/admin/user'],
-						['Contest', faTrophy, '/admin/contest'],
-					].map(([name, icon, path], index) => (
+				<Container>
+					<Nav>
+						{adminNavEntries.map(([name, icon, path]) => (
+							<NavLink
+								{...{ name, icon, path }}
+								key={name}
+								active={path === router.pathname}
+							/>
+						))}
 						<NavLink
-							{...{ name, icon, path }}
-							key={index}
-							active={path === router.pathname}
+							name='Exit'
+							icon={faTimes}
+							red='true'
+							onClick={handleClose}
 						/>
-					))}
-					<NavLink
-						name='Exit'
-						icon={faTimes}
-						red='true'
-						onClick={handleClose}
-					/>
-				</Nav>
+					</Nav>
+				</Container>
 			</ScrollNavbar>
 		</>
 	)

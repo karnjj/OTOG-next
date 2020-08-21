@@ -1,16 +1,15 @@
-import { useState } from 'react'
-import { Container, Row, Col, Card } from 'react-bootstrap'
+import { useState, useEffect } from 'react'
+import { Container, Row, Col, Card, Form } from 'react-bootstrap'
 import { withAdminAuth, getCookieContext } from '../../utils/auth'
 import {
 	NewContest,
 	TaskTable,
-	SelectContest,
 	ContestConfig,
 } from '../../components/admin/ContestTable'
 import Header from '../../components/admin/Header'
 import { AnnounceEditor } from '../../components/Announce'
 
-import { httpGet } from '../../utils/api'
+import { httpGet, useGet } from '../../utils/api'
 
 const Note = () => (
 	<Card>
@@ -27,9 +26,37 @@ const Note = () => (
 	</Card>
 )
 
-const Contest = ({ contests }) => {
-	const [idContest, setIdContest] = useState(0)
+const Contest = ({ tasks }) => {
+	const { data = {} } = useGet('/api/admin/contest')
+	const { contests = [], selectedTasks = [] } = data
+
+	const [idContest, setIdContest] = useState()
+	const latestContest = contests[0]?.idContest ?? 0
+	useEffect(() => {
+		setIdContest(latestContest)
+	}, [latestContest])
+
 	const selectIdContest = (event) => setIdContest(event.target.value)
+	const SelectContest = () => (
+		<Form.Group>
+			<Form.Label>Choose Contest : </Form.Label>
+			<Form.Control as='select' onChange={selectIdContest} value={idContest}>
+				{contests.map(({ idContest: id, name }) => (
+					<option key={id} value={id}>
+						{name}
+					</option>
+				))}
+			</Form.Control>
+		</Form.Group>
+	)
+
+	// const contestData =
+	// 	contests.find((contest) => contest.idContest === idContest) ?? {}
+
+	const { data: contestData = {} } = useGet(
+		idContest && `/api/admin/contest/${idContest}?mode=config`
+	)
+
 	return (
 		<>
 			<Header />
@@ -40,15 +67,19 @@ const Contest = ({ contests }) => {
 					<Col lg={3}>
 						<NewContest />
 						<hr />
-						<SelectContest contests={contests} setId={selectIdContest} />
+						<SelectContest />
 						<AnnounceEditor idContest={idContest} />
-						<ContestConfig idContest={idContest} />
+						<ContestConfig idContest={idContest} contestData={contestData} />
 						<hr />
 						<Note />
 						<br />
 					</Col>
 					<Col lg={9}>
-						<TaskTable idContest={idContest} />
+						<TaskTable
+							tasks={tasks}
+							idContest={idContest}
+							selectedTasks={selectedTasks}
+						/>
 					</Col>
 				</Row>
 			</Container>
@@ -58,8 +89,8 @@ const Contest = ({ contests }) => {
 
 export async function getServerSideProps(ctx) {
 	const token = getCookieContext(ctx)
-	const props = await httpGet('/api/admin/contest', { token })
-	return { props: { token, ...props } }
+	const tasks = await httpGet('/api/admin/problem', { token })
+	return { props: { token, tasks } }
 }
 
 export default withAdminAuth(Contest)

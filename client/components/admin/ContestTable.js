@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useAuthContext } from '../../utils/auth'
-import { useGet, usePost, useHttp } from '../../utils/api'
+import { useInput, useShow } from '../../utils'
+import { useHttp, usePost } from '../../utils/api'
+import { mutate } from 'swr'
+
 import DatePicker from 'react-datepicker'
 import { Button, Modal, Form, Col, Row, InputGroup } from 'react-bootstrap'
 import { CustomTable } from '../CustomTable'
@@ -12,7 +14,6 @@ import {
 	faEyeSlash,
 	faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
-import { useInput, useShow } from '../../utils'
 
 export const NewContest = () => {
 	const [show, handleShow, handleClose] = useShow(false)
@@ -22,17 +23,17 @@ export const NewContest = () => {
 	const [startDate, setStartDate] = useState(new Date())
 	const [endDate, setEndDate] = useState(new Date())
 
-	const put = useHttp('PUT', '/api/admin/contest')
+	const post = usePost('/api/admin/contest')
 	const onSubmit = async (event) => {
 		event.preventDefault()
 		const start = Math.floor(Date.parse(startDate) / 1000)
 		const end = Math.floor(Date.parse(endDate) / 1000)
 		const data = { name, mode, judge, start, end }
 		const body = JSON.stringify(data)
-		const response = await put(body)
-		if (response.ok) {
+		const res = await post(body)
+		if (res.ok) {
 			handleClose()
-			window.location.reload(false)
+			mutate('/api/admin/contest')
 		}
 	}
 	return (
@@ -109,17 +110,16 @@ export const NewContest = () => {
 	)
 }
 
-export const ContestConfig = ({ idContest }) => {
-	const url = `/api/admin/contest/${idContest}?mode=config`
+export const ContestConfig = ({ contestData: data, idContest }) => {
 	const isSelected = idContest !== 0
-	const { data = {} } = useGet(isSelected && url)
+	const [show, handleShow, handleClose] = useShow(false)
 	const [contestData, setContestData] = useState(data)
 	useEffect(() => {
-		setContestData(data)
-	},[data])
-	console.log(data);
+		if (show) {
+			setContestData(data)
+		}
+	}, [show, data])
 	const { name, mode, judge, startDate, endDate } = contestData
-	const [show, handleShow, handleClose] = useShow(false)
 
 	const handleChangeName = (event) =>
 		setContestData({ ...contestData, name: event.target.value })
@@ -132,15 +132,15 @@ export const ContestConfig = ({ idContest }) => {
 	const handleChangeEnd = (date) =>
 		setContestData({ ...contestData, endDate: date })
 
-	const post = usePost(`/api/admin/contest/${idContest}?mode=config`)
+	const patch = useHttp('PATCH', `/api/admin/contest/${idContest}`)
 	const onSubmit = async (event) => {
 		event.preventDefault()
 		const formData = new FormData()
 		Object.keys(contestData).forEach((item) =>
 			formData.append(item, contestData[item])
 		)
-		const response = await post(formData, false)
-		if (response.ok) {
+		const res = await patch(formData, false)
+		if (res.ok) {
 			handleClose()
 			window.location.reload(false)
 		}
@@ -219,34 +219,28 @@ export const ContestConfig = ({ idContest }) => {
 	)
 }
 
-const ConfigTask = (props) => {
-	const { id_Prob, see, idContest } = props
-	const [onoff, setOnoff] = useState(undefined)
-	const { token } = useAuthContext()
-
+const ConfigTask = ({ id_Prob, see, idContest }) => {
+	const [state, setState] = useState()
 	useEffect(() => {
-		setOnoff(see)
-	}, [see, idContest])
+		setState(see)
+	}, [see])
 
-	const post = usePost(`/api/admin/contest/${idContest}`)
+	const patch = useHttp('PATCH', `/api/admin/contest/${idContest}/${id_Prob}`)
 	const handleChangeState = async (event) => {
 		event.preventDefault()
-		const body = JSON.stringify({ idProb: id_Prob, state: !onoff })
-		const response = await post(body)
-		if (response.ok) {
-			setOnoff(!onoff)
-		}
+		setState(!state)
+		const body = JSON.stringify({ state })
+		await patch(body)
 	}
 
 	return (
-		<Button variant={onoff ? 'light' : 'dark'} onClick={handleChangeState}>
-			<FontAwesomeIcon icon={onoff ? faEye : faEyeSlash} />
+		<Button variant={state ? 'light' : 'dark'} onClick={handleChangeState}>
+			<FontAwesomeIcon icon={state ? faEye : faEyeSlash} />
 		</Button>
 	)
 }
 
 const EditModal = (props) => {
-	const { token } = useAuthContext()
 	const { show, handleClose, id_Prob, ...rest } = props
 
 	const [data, setData] = useState(rest)
@@ -356,7 +350,7 @@ const EditModal = (props) => {
 
 const TaskTr = (props) => {
 	const { id_Prob, name, sname, memory, time, score } = props
-	const [show, handleShow, handleClose] = useShow(false)
+	const [show, handleShow, handleClose] = useShow()
 
 	return (
 		<tr onDoubleClick={handleShow}>
@@ -371,50 +365,33 @@ const TaskTr = (props) => {
 			<td>{score}</td>
 			<td>
 				<ConfigTask {...props} />
-				<EditModal {...props} {...{ handleClose, show }} />
+				<EditModal {...props} show={show} handleClose={handleClose} />
 			</td>
 		</tr>
 	)
 }
 
-export const SelectContest = ({ contests, setId }) => (
-	<Form.Group>
-		<Form.Label>Choose Contest : </Form.Label>
-		<Form.Control as='select' onChange={setId}>
-			<option disabled selected>
-				select a contest
-			</option>
-			{contests?.map((contest, index) => {
-				return (
-					<option key={index} value={contest.idContest}>
-						{contest.name}
-					</option>
-				)
-			})}
-		</Form.Control>
-	</Form.Group>
+export const TaskTable = ({ tasks, idContest, selectedTasks }) => (
+	<CustomTable align='left'>
+		<thead className='thead-light'>
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<th>Time</th>
+				<th>Memory</th>
+				<th>Score</th>
+				<th>Config</th>
+			</tr>
+		</thead>
+		<tbody>
+			{tasks?.map((task) => (
+				<TaskTr
+					{...task}
+					key={task.id_Prob}
+					idContest={idContest}
+					see={selectedTasks.includes(task.id_Prob)}
+				/>
+			))}
+		</tbody>
+	</CustomTable>
 )
-
-export const TaskTable = ({ idContest }) => {
-	const { data: tasks } = useGet(`/api/admin/contest/${idContest}?mode=problem`)
-
-	return (
-		<CustomTable ready={!!tasks} align='left'>
-			<thead className='thead-light'>
-				<tr>
-					<th>#</th>
-					<th>Name</th>
-					<th>Time</th>
-					<th>Memory</th>
-					<th>Score</th>
-					<th>Config</th>
-				</tr>
-			</thead>
-			<tbody>
-				{tasks?.map((task, index) => (
-					<TaskTr key={index} {...task} idContest={idContest} />
-				))}
-			</tbody>
-		</CustomTable>
-	)
-}

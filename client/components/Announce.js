@@ -23,6 +23,7 @@ import {
 	faAlignRight,
 } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
+import { useShow } from '../utils'
 
 const Blockquote = styled.blockquote`
 	padding-left: 10px;
@@ -164,16 +165,13 @@ const HOTKEYS = {
 }
 
 export const AnnounceEditor = ({ idContest }) => {
-	const [show, setShow] = useState(false)
+	const [show, handleShow, handleClose] = useShow()
 	const [value, setValue] = useState([
 		{
 			type: 'paragraph',
 			children: [{ text: '' }],
 		},
 	])
-
-	const handleClose = () => setShow(false)
-	const handleShow = () => setShow(true)
 
 	const editor = useMemo(() => withHistory(withReact(createEditor())), [])
 	const renderElement = useCallback((props) => <Element {...props} />, [])
