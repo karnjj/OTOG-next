@@ -113,10 +113,12 @@ export const ContestConfig = ({ idContest }) => {
 	const url = `/api/admin/contest/${idContest}?mode=config`
 	const isSelected = idContest !== 0
 	const { data = {} } = useGet(isSelected && url)
-
 	const [contestData, setContestData] = useState(data)
+	useEffect(() => {
+		setContestData(data)
+	},[data])
+	console.log(data);
 	const { name, mode, judge, startDate, endDate } = contestData
-
 	const [show, handleShow, handleClose] = useShow(false)
 
 	const handleChangeName = (event) =>
@@ -394,7 +396,7 @@ export const SelectContest = ({ contests, setId }) => (
 )
 
 export const TaskTable = ({ idContest }) => {
-	const { data: tasks } = useGet(`/api/admin/contest/${idContest}`)
+	const { data: tasks } = useGet(`/api/admin/contest/${idContest}?mode=problem`)
 
 	return (
 		<CustomTable ready={!!tasks} align='left'>

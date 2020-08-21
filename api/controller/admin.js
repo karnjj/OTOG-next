@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken')
 const multer = require('multer')
 const fs = require('fs')
 var unzipper = require('unzipper');
+const { resolve } = require('path');
+const contest = require('./contest');
 
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
@@ -77,27 +79,76 @@ async function Contests(req, res) {
 
 function getContestWithId(req, res) {
 	const idContest = req.params.id
-	let problemPromise = new Promise((resolve) => {
-		var sql = 'select * from Problem'
-		db.query(sql, (err, result) => resolve(result))
-	})
-	let contestPromise = new Promise((resolve) => {
-		var sql = `select problems from Contest where idContest = ?`
+	const mode = req.query.mode
+	var contestPromise = new Promise((resolve) => {
+		var sql = `select * from Contest where idContest = ?`
 		db.query(sql, [idContest], (err, result) => resolve(result))
 	})
-	Promise.all([problemPromise, contestPromise]).then(values => {
-		var problem = values[0]
-		var conProb = values[1]
-		if (conProb[0]) {
-			conProb = JSON.parse(conProb[0].problems)
-			conProb.map(idProb => {
-				var idx = problem.findIndex(obj => obj.id_Prob === idProb)
-				if (idx != -1) problem[idx].see = true
+	switch (mode) {
+		case 'config':
+			contestPromise.then((contest) => {
+				if(contest[0]) {
+					const config = {
+						name : contest[0].name,
+						mode : contest[0].mode_grader,
+						judge : contest[0].judge,
+						startDate : contest[0].time_start*1000,
+						endDate : contest[0].time_end*1000
+					}
+					return res.json(config)
+				}else return res.status(404).send('')
 			})
-		}
-		res.json(problem)
-
-	})
+			break
+		case 'problem':
+			let problemPromise = new Promise((resolve) => {
+				var sql = 'select * from Problem'
+				db.query(sql, (err, result) => resolve(result))
+			})
+			Promise.all([problemPromise, contestPromise]).then(values => {
+				var problem = values[0]
+				var conProb = values[1]
+				if (conProb[0]) {
+					conProb = JSON.parse(conProb[0].problems)
+					conProb.map(idProb => {
+						var idx = problem.findIndex(obj => obj.id_Prob === idProb)
+						if (idx != -1) problem[idx].see = true
+					})
+				}
+				res.json(problem)
+			})
+			break
+		case 'detail':
+			break
+	}
+}
+function editContest(req, res) {
+	const idContest = req.params.id
+	const mode = req.query.mode
+	const data = req.body
+	if (idContest == 0) {
+		res.status(404).send('')
+		return
+	}
+	switch (mode) {
+		case 'config':
+			console.log(data);
+			break
+		case 'problem':
+			let sql = `select problems from Contest where idContest = ?`
+			db.query(sql, [idContest], (err, result) => {
+				var conProb = JSON.parse(result[0].problems)
+				if (data.state) conProb.push(data.idProb)
+				else conProb = conProb.filter(item => item !== data.idProb)
+				let sql = `update Contest set problems = ? where idContest = ?`
+				db.query(sql, [JSON.stringify(conProb), idContest], (err) => {
+					if (err) throw err
+					res.status(200).send('')
+				})
+			})
+			break
+		case 'detail':
+			break
+	}
 }
 
 async function editUser(req, res) {
@@ -198,25 +249,7 @@ function deleteProblem(req, res) {
 	if (fs.existsSync(dirPDF)) fs.unlinkSync(dirPDF);
 	res.status(200).send('')
 }
-function editContest(req, res) {
-	const idContest = req.params.id
-	if (idContest == 0) {
-		res.status(404).send('')
-		return
-	}
-	const data = req.body
-	var sql = `select problems from Contest where idContest = ?`
-	db.query(sql, [idContest], (err, result) => {
-		conProb = JSON.parse(result[0].problems)
-		if (data.state) conProb.push(data.idProb)
-		else conProb = conProb.filter(item => item !== data.idProb)
-		var sql = `update Contest set problems = ? where idContest = ?`
-		db.query(sql, [JSON.stringify(conProb), idContest], (err) => {
-			if (err) throw err
-			res.status(200).send('')
-		})
-	})
-}
+
 function addContest(req, res) {
 	const data = req.body
 	var sql = "INSERT INTO Contest (name,mode_grader,judge,time_start,time_end) VALUES ?"
