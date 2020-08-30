@@ -70,85 +70,107 @@ async function deleteUsers(req, res) {
 
 }
 async function Contests(req, res) {
-	var sql = 'select idContest,name from Contest'
+	var sql = 'select idContest,name,mode_grader as mode,judge,time_start as startDate,time_end as endDate,problems from Contest'
 	let contests = await new Promise((resolve) => {
 		db.query(sql, (err, result) => resolve(result))
 	})
-	res.json({contests})
+	res.json(contests)
 }
 
-function getContestWithId(req, res) {
+// function getContestWithId(req, res) {
+// 	const idContest = req.params.id
+// 	const mode = req.query.mode
+// 	var contestPromise = new Promise((resolve) => {
+// 		var sql = `select * from Contest where idContest = ?`
+// 		db.query(sql, [idContest], (err, result) => resolve(result))
+// 	})
+// 	switch (mode) {
+// 		case 'config':
+// 			contestPromise.then((contest) => {
+// 				if(contest[0]) {
+// 					const config = {
+// 						name : contest[0].name,
+// 						mode : contest[0].mode_grader,
+// 						judge : contest[0].judge,
+// 						startDate : contest[0].time_start*1000,
+// 						endDate : contest[0].time_end*1000
+// 					}
+// 					return res.json(config)
+// 				}else return res.status(404).send('')
+// 			})
+// 			break
+// 		case 'problem':
+// 			let problemPromise = new Promise((resolve) => {
+// 				var sql = 'select * from Problem'
+// 				db.query(sql, (err, result) => resolve(result))
+// 			})
+// 			Promise.all([problemPromise, contestPromise]).then(values => {
+// 				var problem = values[0]
+// 				var conProb = values[1]
+// 				if (conProb[0]) {
+// 					conProb = JSON.parse(conProb[0].problems)
+// 					conProb.map(idProb => {
+// 						var idx = problem.findIndex(obj => obj.id_Prob === idProb)
+// 						if (idx != -1) problem[idx].see = true
+// 					})
+// 				}
+// 				res.json(problem)
+// 			})
+// 			break
+// 		case 'detail':
+// 			break
+// 	}
+// }
+function patchContestConfig(req, res) {
 	const idContest = req.params.id
-	const mode = req.query.mode
-	var contestPromise = new Promise((resolve) => {
-		var sql = `select * from Contest where idContest = ?`
-		db.query(sql, [idContest], (err, result) => resolve(result))
-	})
-	switch (mode) {
-		case 'config':
-			contestPromise.then((contest) => {
-				if(contest[0]) {
-					const config = {
-						name : contest[0].name,
-						mode : contest[0].mode_grader,
-						judge : contest[0].judge,
-						startDate : contest[0].time_start*1000,
-						endDate : contest[0].time_end*1000
-					}
-					return res.json(config)
-				}else return res.status(404).send('')
-			})
-			break
-		case 'problem':
-			let problemPromise = new Promise((resolve) => {
-				var sql = 'select * from Problem'
-				db.query(sql, (err, result) => resolve(result))
-			})
-			Promise.all([problemPromise, contestPromise]).then(values => {
-				var problem = values[0]
-				var conProb = values[1]
-				if (conProb[0]) {
-					conProb = JSON.parse(conProb[0].problems)
-					conProb.map(idProb => {
-						var idx = problem.findIndex(obj => obj.id_Prob === idProb)
-						if (idx != -1) problem[idx].see = true
-					})
-				}
-				res.json(problem)
-			})
-			break
-		case 'detail':
-			break
-	}
-}
-function editContest(req, res) {
-	const idContest = req.params.id
-	const mode = req.query.mode
 	const data = req.body
 	if (idContest == 0) {
 		res.status(404).send('')
 		return
 	}
-	switch (mode) {
-		case 'config':
-			console.log(data);
-			break
-		case 'problem':
-			let sql = `select problems from Contest where idContest = ?`
-			db.query(sql, [idContest], (err, result) => {
-				var conProb = JSON.parse(result[0].problems)
-				if (data.state) conProb.push(data.idProb)
-				else conProb = conProb.filter(item => item !== data.idProb)
-				let sql = `update Contest set problems = ? where idContest = ?`
-				db.query(sql, [JSON.stringify(conProb), idContest], (err) => {
-					if (err) throw err
-					res.status(200).send('')
-				})
-			})
-			break
-		case 'detail':
-			break
+	let sql = `update contest set name = ?, mode_grader = ?, judge = ?, 
+		time_start = ?, time_end = ? where idContest = ?`
+	let value = [
+        data.name,
+        data.mode,
+        data.judge,
+        data.stateDate,
+        data.endDate,
+        idContest
+    ]
+	db.query(sql,value,(err) => {
+        if(err) return res.status(404).send('')
+        return res.json({msg:`Update complete.`})
+    })
+}
+
+function contestAnnounce(req, res) {
+    const idContest = req.params.id
+	const data = req.body
+	if (idContest == 0) {
+		res.status(404).send('')
+		return
 	}
+	let sql = `update contest set announce = ? where idContest = ?`
+	db.query(sql,[data.announce, idContest],(err) => {
+        if(err) return res.status(404).send('')
+        return res.json({msg:`Update complete.`})
+    })
+}
+function contestProblem(req, res) {
+    const idContest = req.params.id
+    const idProblem = Number(req.params.probId)
+	let sql = `select problems from Contest where idContest = ?`
+	db.query(sql, [idContest], (err, result) => {
+		var conProb = JSON.parse(result[0].problems)
+		if (idProblem in conProb) conProb = conProb.filter(item => item !== idProblem)
+		else conProb.push(idProblem)
+		let sql = `update Contest set problems = ? where idContest = ?`
+		db.query(sql, [JSON.stringify(conProb), idContest], (err) => {
+			if (err) throw err
+			res.status(200).send({msg:'Update complete.'})
+		})
+	})
 }
 
 async function editUser(req, res) {
@@ -258,7 +280,7 @@ function addContest(req, res) {
 	]
 	db.query(sql, [values], function (err, rows) {
 		if (err) res.status(404).send('')
-		else res.status(200).send('')
+		else res.status(200).json({msg:"success"})
 	});
 }
 module.exports = {
@@ -269,8 +291,10 @@ module.exports = {
 	Contests,
 	editProblem,
 	editUser,
-	getContestWithId,
-	editContest,
+	// getContestWithId,
+    patchContestConfig,
+    contestAnnounce,
+    contestProblem,
 	addProblem,
 	multerConfig,
 	deleteProblem,
