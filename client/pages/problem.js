@@ -25,83 +25,83 @@ const popin = keyframes`
 	}
 `
 const ProbButton = styled.button`
-	width: 38px;
-	height: 38px;
-	border-radius: 4px;
-	margin: 0 5px;
-	border: 2px ${(props) => props.color} solid;
-	background: ${vars.grey};
-	transition: all 0.15s ease;
-	animation: ${popin} 0.4s cubic-bezier(0.25, 0.25, 0.25, 1.25) backwards;
-	&:active {
-		transform: scale(0.75);
-	}
-	&:focus {
-		outline: none;
-	}
+  width: 38px;
+  height: 38px;
+  border-radius: 4px;
+  margin: 0 5px;
+  border: 2px ${(props) => props.color} solid;
+  background: ${vars.grey};
+  transition: all 0.15s ease;
+  animation: ${popin} 0.4s cubic-bezier(0.25, 0.25, 0.25, 1.25) backwards;
+  &:active {
+    transform: scale(0.75);
+  }
+  &:focus {
+    outline: none;
+  }
 `
 
 const Problem = () => {
-	const { isAdmin } = useAuthContext()
+  const { isAdmin } = useAuthContext()
 
-	const [problemSearch, inputProblemSearch] = useInput()
-	const [showAll, setShowAll] = useState(isAdmin)
-	useEffect(() => setShowAll(isAdmin), [isAdmin])
+  const [problemSearch, inputProblemSearch] = useInput()
+  const [showAll, setShowAll] = useState(isAdmin)
+  useEffect(() => setShowAll(isAdmin), [isAdmin])
 
-	const url = `/api/problem?mode=${showAll ? 'admin' : 'full'}`
-	const { data: tasks = [], isLoading, isValidating } = useGet(url)
+  const url = `/api/problem?mode=${showAll ? 'admin' : 'full'}`
+  const { data: tasks = [], isLoading, isValidating } = useGet(url)
 
-	//switch reload effect
-	const [loading, setLoading] = useState(isLoading)
-	useEffect(() => {
-		if (!isLoading) {
-			setLoading(false)
-		}
-	}, [isValidating])
+  //switch reload effect
+  const [loading, setLoading] = useState(isLoading)
+  useEffect(() => {
+    if (!isLoading) {
+      setLoading(false)
+    }
+  }, [isValidating])
 
-	const handleChange = (event) => {
-		setShowAll(event.target.checked)
-		setLoading(true)
-	}
+  const handleChange = (event) => {
+    setShowAll(event.target.checked)
+    setLoading(true)
+  }
 
-	const filteredTasks = tasks?.filter((problem) => {
-		const id = String(problem.id_Prob)
-		return (
-			problem.name.indexOf(problemSearch.substr(0, 20)) !== -1 ||
-			id.indexOf(problemSearch.substr(0, 20)) !== -1
-		)
-	})
+  const filteredTasks = tasks?.filter((problem) => {
+    const id = String(problem.id_Prob)
+    return (
+      problem.name.indexOf(problemSearch.substr(0, 20)) !== -1 ||
+      id.indexOf(problemSearch.substr(0, 20)) !== -1
+    )
+  })
 
-	return (
-		<PageLayout>
-			<Title icon={faPuzzlePiece} text='Problems' />
-			<Row>
-				<Col as={InputGroup} xs sm={6} md={8}>
-					{isAdmin && (
-						<InputGroup.Prepend>
-							<InputGroup.Text>
-								<Form.Check
-									type='switch'
-									id='custom-switch'
-									label='ทั้งหมด '
-									checked={showAll}
-									onChange={handleChange}
-								/>
-							</InputGroup.Text>
-						</InputGroup.Prepend>
-					)}
-					<Form.Control placeholder='ค้นหาโจทย์' {...inputProblemSearch} />
-				</Col>
-				<Col xs sm={5} md={4} lg={3} xl={2} className='ml-auto'>
-					<OrangeButton href='submission' className='w-100'>
-						View Submissions
-					</OrangeButton>
-				</Col>
-			</Row>
-			<hr />
-			<ProbTable problems={filteredTasks} isLoading={loading} />
-		</PageLayout>
-	)
+  return (
+    <PageLayout>
+      <Title icon={faPuzzlePiece} text='Problems' />
+      <Row>
+        <Col as={InputGroup} xs sm={6} md={8}>
+          {isAdmin && (
+            <InputGroup.Prepend>
+              <InputGroup.Text>
+                <Form.Check
+                  type='switch'
+                  id='custom-switch'
+                  label='ทั้งหมด '
+                  checked={showAll}
+                  onChange={handleChange}
+                />
+              </InputGroup.Text>
+            </InputGroup.Prepend>
+          )}
+          <Form.Control placeholder='ค้นหาโจทย์' {...inputProblemSearch} />
+        </Col>
+        <Col xs sm={5} md={4} lg={3} xl={2} className='ml-auto'>
+          <OrangeButton href='submission' className='w-100'>
+            View Submissions
+          </OrangeButton>
+        </Col>
+      </Row>
+      <hr />
+      <ProbTable problems={filteredTasks} isLoading={loading} />
+    </PageLayout>
+  )
 }
 
 export default Problem

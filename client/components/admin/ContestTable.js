@@ -9,389 +9,389 @@ import { CustomTable } from '../CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-	faCog,
-	faEye,
-	faEyeSlash,
-	faPlusCircle,
+  faCog,
+  faEye,
+  faEyeSlash,
+  faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
 export const NewContest = () => {
-	const [show, handleShow, handleClose] = useShow(false)
-	const [name, inputName] = useInput()
-	const [mode, inputMode] = useInput('unrated')
-	const [judge, inputJudge] = useInput('classic')
-	const [startDate, setStartDate] = useState(new Date())
-	const [endDate, setEndDate] = useState(new Date())
+  const [show, handleShow, handleClose] = useShow(false)
+  const [name, inputName] = useInput()
+  const [mode, inputMode] = useInput('unrated')
+  const [judge, inputJudge] = useInput('classic')
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
 
-	const post = usePost('/api/admin/contest')
-	const onSubmit = async (event) => {
-		event.preventDefault()
-		const start = Math.floor(Date.parse(startDate) / 1000)
-		const end = Math.floor(Date.parse(endDate) / 1000)
-		const data = { name, mode, judge, start, end }
-		const body = JSON.stringify(data)
-		const res = await post(body)
-		if (res.ok) {
-			handleClose()
-			mutate('/api/admin/contest')
-		}
-	}
-	return (
-		<>
-			<Button variant='success' size='lg' onClick={handleShow}>
-				<FontAwesomeIcon icon={faPlusCircle} /> New Contest
-			</Button>
-			<Modal show={show} onHide={handleClose}>
-				<Modal.Header closeButton>
-					<Modal.Title>Create New Contest</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form>
-						<Form.Group>
-							<Form.Label>Contest Name : </Form.Label>
-							<Form.Control {...inputName} />
-						</Form.Group>
-						<Form.Group>
-							<Form.Label>Choose Mode : </Form.Label>
-							<InputGroup>
-								<Form.Control as='select' {...inputMode}>
-									<option selected value='unrated'>
-										Unrated Contest
-									</option>
-									<option value='rated'>Rated Contest</option>
-								</Form.Control>
-								<Form.Control as='select' {...inputJudge}>
-									<option selected value='classic'>
-										Classic (Time based)
-									</option>
-									<option value='acm'>ACM Mode</option>
-									<option disabled>OTOG Mode</option>
-									<option disabled>Blind Mode</option>
-								</Form.Control>
-							</InputGroup>
-						</Form.Group>
-						<Form.Group>
-							<Form.Label>Time : </Form.Label>
-							<InputGroup as={Row} className='m-auto'>
-								<Form.Control
-									as={DatePicker}
-									selected={startDate}
-									onChange={(date) => {
-										setStartDate(date), setEndDate(date)
-									}}
-									showTimeSelect
-									timeFormat='HH:mm'
-									timeIntervals={30}
-									timeCaption='time'
-									dateFormat='d/MMMM/yyyy HH:mm'
-								/>
-								<Col xs={1} />
-								<Form.Control
-									as={DatePicker}
-									selected={endDate}
-									onChange={(date) => setEndDate(date)}
-									showTimeSelect
-									timeFormat='HH:mm'
-									timeIntervals={30}
-									timeCaption='time'
-									dateFormat='d/MMMM/yyyy HH:mm'
-								/>
-							</InputGroup>
-						</Form.Group>
-					</Form>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant='success' onClick={onSubmit}>
-						Save
-					</Button>
-				</Modal.Footer>
-			</Modal>
-		</>
-	)
+  const post = usePost('/api/admin/contest')
+  const onSubmit = async (event) => {
+    event.preventDefault()
+    const start = Math.floor(Date.parse(startDate) / 1000)
+    const end = Math.floor(Date.parse(endDate) / 1000)
+    const data = { name, mode, judge, start, end }
+    const body = JSON.stringify(data)
+    const res = await post(body)
+    if (res.ok) {
+      handleClose()
+      mutate('/api/admin/contest')
+    }
+  }
+  return (
+    <>
+      <Button variant='success' size='lg' onClick={handleShow}>
+        <FontAwesomeIcon icon={faPlusCircle} /> New Contest
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create New Contest</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group>
+              <Form.Label>Contest Name : </Form.Label>
+              <Form.Control {...inputName} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Choose Mode : </Form.Label>
+              <InputGroup>
+                <Form.Control as='select' {...inputMode}>
+                  <option selected value='unrated'>
+                    Unrated Contest
+                  </option>
+                  <option value='rated'>Rated Contest</option>
+                </Form.Control>
+                <Form.Control as='select' {...inputJudge}>
+                  <option selected value='classic'>
+                    Classic (Time based)
+                  </option>
+                  <option value='acm'>ACM Mode</option>
+                  <option disabled>OTOG Mode</option>
+                  <option disabled>Blind Mode</option>
+                </Form.Control>
+              </InputGroup>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Time : </Form.Label>
+              <InputGroup as={Row} className='m-auto'>
+                <Form.Control
+                  as={DatePicker}
+                  selected={startDate}
+                  onChange={(date) => {
+                    setStartDate(date), setEndDate(date)
+                  }}
+                  showTimeSelect
+                  timeFormat='HH:mm'
+                  timeIntervals={30}
+                  timeCaption='time'
+                  dateFormat='d/MMMM/yyyy HH:mm'
+                />
+                <Col xs={1} />
+                <Form.Control
+                  as={DatePicker}
+                  selected={endDate}
+                  onChange={(date) => setEndDate(date)}
+                  showTimeSelect
+                  timeFormat='HH:mm'
+                  timeIntervals={30}
+                  timeCaption='time'
+                  dateFormat='d/MMMM/yyyy HH:mm'
+                />
+              </InputGroup>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='success' onClick={onSubmit}>
+            Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  )
 }
 
 export const ContestConfig = ({ contestData: data, idContest }) => {
-	const isSelected = idContest !== 0
-	const [show, handleShow, handleClose] = useShow(false)
-	const [contestData, setContestData] = useState(data)
-	useEffect(() => {
-		if (show) {
-			setContestData(data)
-		}
-	}, [show, data])
-	const { name, mode, judge, startDate, endDate } = contestData
+  const isSelected = idContest !== 0
+  const [show, handleShow, handleClose] = useShow(false)
+  const [contestData, setContestData] = useState(data)
+  useEffect(() => {
+    if (show) {
+      setContestData(data)
+    }
+  }, [show, data])
+  const { name, mode, judge, startDate, endDate } = contestData
 
-	const handleChangeName = (event) =>
-		setContestData({ ...contestData, name: event.target.value })
-	const handleChangeMode = (event) =>
-		setContestData({ ...contestData, mode: event.target.value })
-	const handleChangeJudge = (event) =>
-		setContestData({ ...contestData, judge: event.target.value })
-	const handleChangeStart = (date) =>
-		setContestData({ ...contestData, startDate: date, endDate: date })
-	const handleChangeEnd = (date) =>
-		setContestData({ ...contestData, endDate: date })
+  const handleChangeName = (event) =>
+    setContestData({ ...contestData, name: event.target.value })
+  const handleChangeMode = (event) =>
+    setContestData({ ...contestData, mode: event.target.value })
+  const handleChangeJudge = (event) =>
+    setContestData({ ...contestData, judge: event.target.value })
+  const handleChangeStart = (date) =>
+    setContestData({ ...contestData, startDate: date, endDate: date })
+  const handleChangeEnd = (date) =>
+    setContestData({ ...contestData, endDate: date })
 
-	const patch = useHttp('PATCH', `/api/admin/contest/${idContest}`)
-	const onSubmit = async (event) => {
-		event.preventDefault()
-		const formData = new FormData()
-		Object.keys(contestData).forEach((item) =>
-			formData.append(item, contestData[item])
-		)
-		const res = await patch(formData, false)
-		if (res.ok) {
-			handleClose()
-			window.location.reload(false)
-		}
-	}
+  const patch = useHttp('PATCH', `/api/admin/contest/${idContest}`)
+  const onSubmit = async (event) => {
+    event.preventDefault()
+    const formData = new FormData()
+    Object.keys(contestData).forEach((item) =>
+      formData.append(item, contestData[item])
+    )
+    const res = await patch(formData, false)
+    if (res.ok) {
+      handleClose()
+      window.location.reload(false)
+    }
+  }
 
-	return (
-		<>
-			<Button
-				variant='warning'
-				className='ml-2'
-				onClick={handleShow}
-				disabled={!isSelected}
-			>
-				<FontAwesomeIcon icon={faCog} />
-			</Button>
-			<Modal show={show} onHide={handleClose}>
-				<Modal.Header closeButton>
-					<Modal.Title>Edit Contest #{idContest}</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form>
-						<Form.Group>
-							<Form.Label>Contest Name : </Form.Label>
-							<Form.Control value={name} onChange={handleChangeName} />
-						</Form.Group>
-						<Form.Group>
-							<Form.Label>Choose Mode : </Form.Label>
-							<InputGroup>
-								<Form.Control as='select' onChange={handleChangeMode}>
-									<option value='unrated'>Unrated Contest</option>
-									<option value='rated'>Rated Contest</option>
-								</Form.Control>
-								<Form.Control as='select' onChange={handleChangeJudge}>
-									<option value='classic'>Classic (Time based)</option>
-									<option value='acm'>ACM Mode</option>
-									<option disabled>OTOG Mode</option>
-									<option disabled>Blind Mode</option>
-								</Form.Control>
-							</InputGroup>
-						</Form.Group>
-						<Form.Group>
-							<Form.Label>Time : </Form.Label>
-							<InputGroup as={Row} className='m-auto'>
-								<Form.Control
-									as={DatePicker}
-									selected={startDate}
-									onChange={handleChangeStart}
-									showTimeSelect
-									timeFormat='HH:mm'
-									timeIntervals={30}
-									timeCaption='time'
-									dateFormat='d/MMMM/yyyy HH:mm'
-								/>
-								<Col xs={1} />
-								<Form.Control
-									as={DatePicker}
-									selected={endDate}
-									onChange={handleChangeEnd}
-									showTimeSelect
-									timeFormat='HH:mm'
-									timeIntervals={30}
-									timeCaption='time'
-									dateFormat='d/MMMM/yyyy HH:mm'
-								/>
-							</InputGroup>
-						</Form.Group>
-					</Form>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant='success' onClick={onSubmit}>
-						Save
-					</Button>
-				</Modal.Footer>
-			</Modal>
-		</>
-	)
+  return (
+    <>
+      <Button
+        variant='warning'
+        className='ml-2'
+        onClick={handleShow}
+        disabled={!isSelected}
+      >
+        <FontAwesomeIcon icon={faCog} />
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Contest #{idContest}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group>
+              <Form.Label>Contest Name : </Form.Label>
+              <Form.Control value={name} onChange={handleChangeName} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Choose Mode : </Form.Label>
+              <InputGroup>
+                <Form.Control as='select' onChange={handleChangeMode}>
+                  <option value='unrated'>Unrated Contest</option>
+                  <option value='rated'>Rated Contest</option>
+                </Form.Control>
+                <Form.Control as='select' onChange={handleChangeJudge}>
+                  <option value='classic'>Classic (Time based)</option>
+                  <option value='acm'>ACM Mode</option>
+                  <option disabled>OTOG Mode</option>
+                  <option disabled>Blind Mode</option>
+                </Form.Control>
+              </InputGroup>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Time : </Form.Label>
+              <InputGroup as={Row} className='m-auto'>
+                <Form.Control
+                  as={DatePicker}
+                  selected={startDate}
+                  onChange={handleChangeStart}
+                  showTimeSelect
+                  timeFormat='HH:mm'
+                  timeIntervals={30}
+                  timeCaption='time'
+                  dateFormat='d/MMMM/yyyy HH:mm'
+                />
+                <Col xs={1} />
+                <Form.Control
+                  as={DatePicker}
+                  selected={endDate}
+                  onChange={handleChangeEnd}
+                  showTimeSelect
+                  timeFormat='HH:mm'
+                  timeIntervals={30}
+                  timeCaption='time'
+                  dateFormat='d/MMMM/yyyy HH:mm'
+                />
+              </InputGroup>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='success' onClick={onSubmit}>
+            Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  )
 }
 
 const ConfigTask = ({ id_Prob, see, idContest }) => {
-	const [state, setState] = useState()
-	useEffect(() => {
-		setState(see)
-	}, [see])
+  const [state, setState] = useState()
+  useEffect(() => {
+    setState(see)
+  }, [see])
 
-	const patch = useHttp('PATCH', `/api/admin/contest/${idContest}/${id_Prob}`)
-	const handleChangeState = async (event) => {
-		event.preventDefault()
-		setState(!state)
-		const body = JSON.stringify({ state })
-		await patch(body)
-	}
+  const patch = useHttp('PATCH', `/api/admin/contest/${idContest}/${id_Prob}`)
+  const handleChangeState = async (event) => {
+    event.preventDefault()
+    setState(!state)
+    const body = JSON.stringify({ state })
+    await patch(body)
+  }
 
-	return (
-		<Button variant={state ? 'light' : 'dark'} onClick={handleChangeState}>
-			<FontAwesomeIcon icon={state ? faEye : faEyeSlash} />
-		</Button>
-	)
+  return (
+    <Button variant={state ? 'light' : 'dark'} onClick={handleChangeState}>
+      <FontAwesomeIcon icon={state ? faEye : faEyeSlash} />
+    </Button>
+  )
 }
 
 const EditModal = (props) => {
-	const { show, handleClose, id_Prob, ...rest } = props
+  const { show, handleClose, id_Prob, ...rest } = props
 
-	const [data, setData] = useState(rest)
-	const { name, sname, memory, time, score, pdf, subtask, zip } = data
+  const [data, setData] = useState(rest)
+  const { name, sname, memory, time, score, pdf, subtask, zip } = data
 
-	const selectFile = (event) => {
-		switch (event.target.id) {
-			case 'doc':
-				setData({ ...data, pdf: event.target.files[0] })
-				break
-			case 'testcase':
-				setData({ ...data, zip: event.target.files[0] })
-				break
-		}
-	}
+  const selectFile = (event) => {
+    switch (event.target.id) {
+      case 'doc':
+        setData({ ...data, pdf: event.target.files[0] })
+        break
+      case 'testcase':
+        setData({ ...data, zip: event.target.files[0] })
+        break
+    }
+  }
 
-	const handleChangeName = (event) =>
-		setData({ ...data, name: event.target.value })
-	const handleChangeSname = (event) =>
-		setData({ ...data, sname: event.target.value })
-	const handleChangeMemory = (event) =>
-		setData({ ...data, memory: Number(event.target.value) ?? 0 })
-	const handleChangeTime = (event) =>
-		setData({ ...data, time: Number(event.target.value) ?? 0 })
-	const handleChangeScore = (event) =>
-		setData({ ...data, score: Number(event.target.value) ?? 0 })
-	const handleChangeTestcase = (event) =>
-		setData({ ...data, subtask: event.target.value })
+  const handleChangeName = (event) =>
+    setData({ ...data, name: event.target.value })
+  const handleChangeSname = (event) =>
+    setData({ ...data, sname: event.target.value })
+  const handleChangeMemory = (event) =>
+    setData({ ...data, memory: Number(event.target.value) ?? 0 })
+  const handleChangeTime = (event) =>
+    setData({ ...data, time: Number(event.target.value) ?? 0 })
+  const handleChangeScore = (event) =>
+    setData({ ...data, score: Number(event.target.value) ?? 0 })
+  const handleChangeTestcase = (event) =>
+    setData({ ...data, subtask: event.target.value })
 
-	const post = usePost(`/api/admin/problem/${id_Prob}?option=save`)
-	const onSave = async (event) => {
-		event.preventDefault()
-		const formData = new FormData()
-		Object.keys(data).forEach((item) => formData.append(item, data[item]))
-		const response = await post(formData, false)
-		if (response.ok) {
-			handleClose()
-			window.location.reload(false)
-		}
-	}
+  const post = usePost(`/api/admin/problem/${id_Prob}?option=save`)
+  const onSave = async (event) => {
+    event.preventDefault()
+    const formData = new FormData()
+    Object.keys(data).forEach((item) => formData.append(item, data[item]))
+    const response = await post(formData, false)
+    if (response.ok) {
+      handleClose()
+      window.location.reload(false)
+    }
+  }
 
-	return (
-		<Modal show={show} onHide={handleClose}>
-			<Modal.Header closeButton>
-				<Modal.Title>Problem #{id_Prob}</Modal.Title>
-			</Modal.Header>
-			<Form as={Modal.Body}>
-				<Form.Group>
-					<Form.Label>Name</Form.Label>
-					<Form.Control defaultValue={name} onChange={handleChangeName} />
-				</Form.Group>
-				<Form.Group>
-					<Form.Label>Short Name</Form.Label>
-					<Form.Control defaultValue={sname} onChange={handleChangeSname} />
-				</Form.Group>
-				<Form.Group as={Row}>
-					<Col xs={6}>
-						<Form.Label>Time</Form.Label>
-						<Form.Control defaultValue={time} onChange={handleChangeTime} />
-					</Col>
-					<Col xs={6}>
-						<Form.Label>Memory</Form.Label>
-						<Form.Control defaultValue={memory} onChange={handleChangeMemory} />
-					</Col>
-				</Form.Group>
-				<Form.Group as={Row}>
-					<Col xs={6}>
-						<Form.Label>Testcases</Form.Label>
-						<Form.Control
-							defaultValue={subtask}
-							onChange={handleChangeTestcase}
-						/>
-					</Col>
-					<Col xs={6}>
-						<Form.Label>Score</Form.Label>
-						<Form.Control defaultValue={score} onChange={handleChangeScore} />
-					</Col>
-				</Form.Group>
-				<Form.Group>
-					<Form.File
-						id='doc'
-						label={pdf?.name ?? 'New Document (PDF)'}
-						accept='.pdf'
-						onChange={selectFile}
-						custom
-						required
-					/>
-				</Form.Group>
-				<Form.Group>
-					<Form.File
-						id='testcase'
-						label={zip?.name ?? 'New Testcases (ZIP)'}
-						accept='.zip'
-						onChange={selectFile}
-						custom
-					/>
-				</Form.Group>
-			</Form>
-			<Modal.Footer>
-				<Button variant='success' onClick={onSave}>
-					Save
-				</Button>
-			</Modal.Footer>
-		</Modal>
-	)
+  return (
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Problem #{id_Prob}</Modal.Title>
+      </Modal.Header>
+      <Form as={Modal.Body}>
+        <Form.Group>
+          <Form.Label>Name</Form.Label>
+          <Form.Control defaultValue={name} onChange={handleChangeName} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Short Name</Form.Label>
+          <Form.Control defaultValue={sname} onChange={handleChangeSname} />
+        </Form.Group>
+        <Form.Group as={Row}>
+          <Col xs={6}>
+            <Form.Label>Time</Form.Label>
+            <Form.Control defaultValue={time} onChange={handleChangeTime} />
+          </Col>
+          <Col xs={6}>
+            <Form.Label>Memory</Form.Label>
+            <Form.Control defaultValue={memory} onChange={handleChangeMemory} />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row}>
+          <Col xs={6}>
+            <Form.Label>Testcases</Form.Label>
+            <Form.Control
+              defaultValue={subtask}
+              onChange={handleChangeTestcase}
+            />
+          </Col>
+          <Col xs={6}>
+            <Form.Label>Score</Form.Label>
+            <Form.Control defaultValue={score} onChange={handleChangeScore} />
+          </Col>
+        </Form.Group>
+        <Form.Group>
+          <Form.File
+            id='doc'
+            label={pdf?.name ?? 'New Document (PDF)'}
+            accept='.pdf'
+            onChange={selectFile}
+            custom
+            required
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.File
+            id='testcase'
+            label={zip?.name ?? 'New Testcases (ZIP)'}
+            accept='.zip'
+            onChange={selectFile}
+            custom
+          />
+        </Form.Group>
+      </Form>
+      <Modal.Footer>
+        <Button variant='success' onClick={onSave}>
+          Save
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  )
 }
 
 const TaskTr = (props) => {
-	const { id_Prob, name, sname, memory, time, score } = props
-	const [show, handleShow, handleClose] = useShow()
+  const { id_Prob, name, sname, memory, time, score } = props
+  const [show, handleShow, handleClose] = useShow()
 
-	return (
-		<tr onDoubleClick={handleShow}>
-			<td>{id_Prob}</td>
-			<td>
-				<a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
-					{name}
-				</a>
-			</td>
-			<td>{time}</td>
-			<td>{memory}</td>
-			<td>{score}</td>
-			<td>
-				<ConfigTask {...props} />
-				<EditModal {...props} show={show} handleClose={handleClose} />
-			</td>
-		</tr>
-	)
+  return (
+    <tr onDoubleClick={handleShow}>
+      <td>{id_Prob}</td>
+      <td>
+        <a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
+          {name}
+        </a>
+      </td>
+      <td>{time}</td>
+      <td>{memory}</td>
+      <td>{score}</td>
+      <td>
+        <ConfigTask {...props} />
+        <EditModal {...props} show={show} handleClose={handleClose} />
+      </td>
+    </tr>
+  )
 }
 
 export const TaskTable = ({ tasks, idContest, selectedTasks }) => (
-	<CustomTable align='left'>
-		<thead className='thead-light'>
-			<tr>
-				<th>#</th>
-				<th>Name</th>
-				<th>Time</th>
-				<th>Memory</th>
-				<th>Score</th>
-				<th>Config</th>
-			</tr>
-		</thead>
-		<tbody>
-			{tasks?.map((task) => (
-				<TaskTr
-					{...task}
-					key={task.id_Prob}
-					idContest={idContest}
-					see={selectedTasks.includes(task.id_Prob)}
-				/>
-			))}
-		</tbody>
-	</CustomTable>
+  <CustomTable align='left'>
+    <thead className='thead-light'>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Time</th>
+        <th>Memory</th>
+        <th>Score</th>
+        <th>Config</th>
+      </tr>
+    </thead>
+    <tbody>
+      {tasks?.map((task) => (
+        <TaskTr
+          {...task}
+          key={task.id_Prob}
+          idContest={idContest}
+          see={selectedTasks.includes(task.id_Prob)}
+        />
+      ))}
+    </tbody>
+  </CustomTable>
 )

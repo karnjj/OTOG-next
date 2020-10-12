@@ -5,16 +5,16 @@ import { Table } from 'react-bootstrap'
 import { TableLoader } from './Loader'
 
 const customColor = (props) =>
-	props.acceptState ? vars.accept : props.wrongState && vars.wrong
+  props.acceptState ? vars.accept : props.wrongState && vars.wrong
 
 export const CustomTr = styled.tr`
-	background: ${customColor};
-	&:hover td {
-		background: ${vars.hover};
-	}
+  background: ${customColor};
+  &:hover td {
+    background: ${vars.hover};
+  }
 `
 export const CustomTd = styled.td`
-	background: ${customColor};
+  background: ${customColor};
 `
 const fadein = keyframes`
 	0% {
@@ -25,22 +25,22 @@ const fadein = keyframes`
 	}
 `
 const StyledTable = styled(Table)`
-	text-align: ${(props) => props.align};
-	th {
-		color: ${vars.orange};
-		&:hover {
-			color: ${vars.orange};
-			cursor: pointer;
-		}
-	}
-	tr {
-		animation: ${fadein} 0.5s ease;
-	}
+  text-align: ${(props) => props.align};
+  th {
+    color: ${vars.orange};
+    &:hover {
+      color: ${vars.orange};
+      cursor: pointer;
+    }
+  }
+  tr {
+    animation: ${fadein} 0.5s ease;
+  }
 `
 export const CustomTable = ({ ready = true, align = 'center', ...props }) => {
-	return ready ? (
-		<StyledTable responsive hover align={align} {...props} />
-	) : (
-		<TableLoader />
-	)
+  return ready ? (
+    <StyledTable responsive hover align={align} {...props} />
+  ) : (
+    <TableLoader />
+  )
 }

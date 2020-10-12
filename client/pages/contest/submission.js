@@ -9,18 +9,18 @@ import { faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { useGet } from '../../utils/api'
 
 const Submission = () => {
-	const { data = {} } = useGet('/api/contest/submission')
-	const { result: results } = data
+  const { data = {} } = useGet('/api/contest/submission')
+  const { result: results } = data
 
-	return (
-		<PageLayout>
-			<Title icon={faTrophy} text='Contest Submissions' noBot='true'>
-				<OrangeButton href='/contest'>View Contest</OrangeButton>
-			</Title>
-			<hr />
-			<SubmissionTable results={results} />
-		</PageLayout>
-	)
+  return (
+    <PageLayout>
+      <Title icon={faTrophy} text='Contest Submissions' noBot='true'>
+        <OrangeButton href='/contest'>View Contest</OrangeButton>
+      </Title>
+      <hr />
+      <SubmissionTable results={results} />
+    </PageLayout>
+  )
 }
 
 export default withAdminAuth(Submission)

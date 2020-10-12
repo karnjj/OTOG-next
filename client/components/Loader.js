@@ -16,55 +16,55 @@ const pulse = keyframes`
 	}
 `
 const Text = styled.div`
-	height: 16px;
-	max-width: 160px;
-	background: ${darken(0.03, vars.grey)};
-	opacity: 0.3;
-	animation: ${pulse} 1s ease ${(props) => props.delay + 500 + 'ms'} infinite;
+  height: 16px;
+  max-width: 160px;
+  background: ${darken(0.03, vars.grey)};
+  opacity: 0.3;
+  animation: ${pulse} 1s ease ${(props) => props.delay + 500 + 'ms'} infinite;
 `
 const AnimationTable = styled(Table)`
-	text-align: center;
-	th {
-		height: 50px;
-		text-align: center;
-	}
-	td {
-		height: 73px;
-		text-align: center;
-	}
+  text-align: center;
+  th {
+    height: 50px;
+    text-align: center;
+  }
+  td {
+    height: 73px;
+    text-align: center;
+  }
 `
 export const Loader = () => (
-	<Row className='justify-content-center py-5'>
-		<Spinner variant='primary' animation='border' role='status'>
-			<span className='sr-only'>Loading...</span>
-		</Spinner>
-	</Row>
+  <Row className='justify-content-center py-5'>
+    <Spinner variant='primary' animation='border' role='status'>
+      <span className='sr-only'>Loading...</span>
+    </Spinner>
+  </Row>
 )
 
 export const TableLoader = () => {
-	return (
-		<AnimationTable responsive>
-			<thead>
-				<tr>
-					{range(5).map((i) => (
-						<th key={i}>
-							<Text delay={i * 20} />
-						</th>
-					))}
-				</tr>
-			</thead>
-			<tbody>
-				{range(5).map((i) => (
-					<tr key={i}>
-						{range(5).map((j) => (
-							<td key={j}>
-								<Text delay={j * 20 + (i + 1) * 100} />
-							</td>
-						))}
-					</tr>
-				))}
-			</tbody>
-		</AnimationTable>
-	)
+  return (
+    <AnimationTable responsive>
+      <thead>
+        <tr>
+          {range(5).map((i) => (
+            <th key={i}>
+              <Text delay={i * 20} />
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {range(5).map((i) => (
+          <tr key={i}>
+            {range(5).map((j) => (
+              <td key={j}>
+                <Text delay={j * 20 + (i + 1) * 100} />
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </AnimationTable>
+  )
 }
 export default Loader

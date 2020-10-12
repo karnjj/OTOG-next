@@ -13,35 +13,35 @@ const dropin = keyframes`
 `
 
 const AlertContainer = styled.div`
-	position: fixed;
-	top: 0;
-	margin: 10px auto;
-	.fade-in {
-		animation: ${dropin} 0.5s ease;
-	}
-	.hide {
-		display: none;
-	}
-	.alert {
-		width: 350px;
-	}
+  position: fixed;
+  top: 0;
+  margin: 10px auto;
+  .fade-in {
+    animation: ${dropin} 0.5s ease;
+  }
+  .hide {
+    display: none;
+  }
+  .alert {
+    width: 350px;
+  }
 `
 
 const CustomAlert = ({ head, desc, show, handleClose }) => {
-	return (
-		<AlertContainer>
-			<Alert
-				variant='danger'
-				className={show ? 'fade-in' : 'hide'}
-				onClose={handleClose}
-				dismissible
-			>
-				<strong>{head}</strong>
-				<br />
-				{desc}
-			</Alert>
-		</AlertContainer>
-	)
+  return (
+    <AlertContainer>
+      <Alert
+        variant='danger'
+        className={show ? 'fade-in' : 'hide'}
+        onClose={handleClose}
+        dismissible
+      >
+        <strong>{head}</strong>
+        <br />
+        {desc}
+      </Alert>
+    </AlertContainer>
+  )
 }
 
 export default CustomAlert
