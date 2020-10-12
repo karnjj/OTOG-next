@@ -7,6 +7,7 @@ import { CustomTr, CustomTable } from './CustomTable'
 import SubmitGroup from './SubmitGroup'
 import ViewCodeButton from './ViewCodeButton'
 import styled from 'styled-components'
+import { RenderOnIntersect } from './RenderOnIntersect'
 
 const StyledPop = styled(Popover)`
   max-width: none;
@@ -18,13 +19,15 @@ const ProbTable = ({ isLoading, problems }) => {
   return (
     <CustomTable ready={!isLoading}>
       <thead>
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Passed</th>
-          <th>Ratings</th>
-          {isLogin && <th>Submit</th>}
-        </tr>
+        <RenderOnIntersect id='tasks/head' initialHeight='50px'>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Passed</th>
+            <th>Ratings</th>
+            {isLogin && <th>Submit</th>}
+          </tr>
+        </RenderOnIntersect>
       </thead>
       <tbody>
         {problems.map((prob, index) => (
@@ -56,47 +59,51 @@ const ProbTr = memo((props) => {
     }
   }
   return (
-    <CustomTr {...{ acceptState, wrongState }}>
-      <td>{id_Prob}</td>
-      <td>
-        <a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
-          {name}
-          <br />({time} วินาที {memory} MB)
-        </a>
-      </td>
-      <td>
-        {pass ? (
-          <OverlayTrigger
-            placement='top'
-            overlay={
-              <StyledPop>
-                <Popover.Content as={Row}>
-                  {passed.map((names, i) => (
-                    <Col key={i}>
-                      {names.map((name, j) => (
-                        <div key={j}>• {name}</div>
-                      ))}
-                    </Col>
-                  ))}
-                </Popover.Content>
-              </StyledPop>
-            }
-          >
-            <div>{pass.length}</div>
-          </OverlayTrigger>
-        ) : (
-          <>0</>
-        )}
-      </td>
-      <td>{rating ? rating : '-'}</td>
-      {isLogin && (
+    <RenderOnIntersect id={`tasks/${id_Prob}`} initialHeight='73px'>
+      <CustomTr {...{ acceptState, wrongState }}>
+        <td>{id_Prob}</td>
         <td>
-          <SubmitGroup {...props}>
-            {(acceptState || wrongState) && <ViewCodeButton {...{ id_Prob }} />}
-          </SubmitGroup>
+          <a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
+            {name}
+            <br />({time} วินาที {memory} MB)
+          </a>
         </td>
-      )}
-    </CustomTr>
+        <td>
+          {pass ? (
+            <OverlayTrigger
+              placement='top'
+              overlay={
+                <StyledPop>
+                  <Popover.Content as={Row}>
+                    {passed.map((names, i) => (
+                      <Col key={i}>
+                        {names.map((name, j) => (
+                          <div key={j}>• {name}</div>
+                        ))}
+                      </Col>
+                    ))}
+                  </Popover.Content>
+                </StyledPop>
+              }
+            >
+              <div>{pass.length}</div>
+            </OverlayTrigger>
+          ) : (
+            <>0</>
+          )}
+        </td>
+        <td>{rating ? rating : '-'}</td>
+        {isLogin && (
+          <td>
+            <SubmitGroup {...props}>
+              {(acceptState || wrongState) && (
+                <ViewCodeButton {...{ id_Prob }} />
+              )}
+            </SubmitGroup>
+          </td>
+        )}
+      </CustomTr>
+    </RenderOnIntersect>
   )
 })
 

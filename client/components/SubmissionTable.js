@@ -10,6 +10,7 @@ import ViewCodeButton from './ViewCodeButton'
 import styled from 'styled-components'
 import prism from 'prismjs'
 import vars from '../styles/vars'
+import { RenderOnIntersect } from './RenderOnIntersect'
 
 const FontPre = styled.pre`
   span,
@@ -29,15 +30,17 @@ const SubmissionTable = ({ isLoading, results, canViewCode }) => {
   return (
     <CustomTable ready={!!results && !isLoading}>
       <thead>
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Problem</th>
-          <th>Result</th>
-          <th>Time</th>
-          <th>Score</th>
-          {showCode && <th>Code</th>}
-        </tr>
+        <RenderOnIntersect id='subs/head' initialHeight='50px'>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Problem</th>
+            <th>Result</th>
+            <th>Time</th>
+            <th>Score</th>
+            {showCode && <th>Code</th>}
+          </tr>
+        </RenderOnIntersect>
       </thead>
       <tbody>
         {results?.map((result, index) => (
@@ -80,42 +83,44 @@ const SubTr = memo((props) => {
 
   return (
     <>
-      <CustomTr acceptState={isAccept(result)}>
-        <td>{idResult}</td>
-        {state != 0 ? (
+      <RenderOnIntersect id={`subs/${idResult}`} initialHeight='63px'>
+        <CustomTr acceptState={isAccept(result)}>
+          <td>{idResult}</td>
+          {state != 0 ? (
+            <td>
+              <Name {...{ sname, rating, idUser }} />
+            </td>
+          ) : (
+            <td>{sname}</td>
+          )}
           <td>
-            <Name {...{ sname, rating, idUser }} />
+            <Alink
+              target='_blank'
+              href={`${process.env.API_URL}/api/docs/${problemname}`}
+            >
+              {name}
+            </Alink>
           </td>
-        ) : (
-          <td>{sname}</td>
-        )}
-        <td>
-          <Alink
-            target='_blank'
-            href={`${process.env.API_URL}/api/docs/${problemname}`}
-          >
-            {name}
-          </Alink>
-        </td>
-        <td>
-          <ResultCode>
-            {result === 'Compilation Error' && canViewCode ? (
-              <Alink onClick={handleShow}>{result}</Alink>
-            ) : (
-              result
-            )}
-          </ResultCode>
-        </td>
-        <td>{timeuse} s</td>
-        <td>{round(score)}</td>
-        {canViewCode && (
           <td>
-            <ButtonGroup>
-              <ViewCodeButton {...{ idResult }} />
-            </ButtonGroup>
+            <ResultCode>
+              {result === 'Compilation Error' && canViewCode ? (
+                <Alink onClick={handleShow}>{result}</Alink>
+              ) : (
+                result
+              )}
+            </ResultCode>
           </td>
-        )}
-      </CustomTr>
+          <td>{timeuse} s</td>
+          <td>{round(score)}</td>
+          {canViewCode && (
+            <td>
+              <ButtonGroup>
+                <ViewCodeButton {...{ idResult }} />
+              </ButtonGroup>
+            </td>
+          )}
+        </CustomTr>
+      </RenderOnIntersect>
 
       <Modal show={showError} onHide={handleClose} centered size='lg'>
         <Modal.Header closeButton>

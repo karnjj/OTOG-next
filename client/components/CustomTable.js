@@ -34,7 +34,7 @@ const StyledTable = styled(Table)`
     }
   }
   tr {
-    animation: ${fadein} 0.5s ease;
+    animation: ${fadein} 0.2s ease;
   }
 `
 export const CustomTable = ({ ready = true, align = 'center', ...props }) => {
