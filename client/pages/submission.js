@@ -35,8 +35,7 @@ const Submission = () => {
   }
 
   return (
-    <PageLayout>
-      <Title icon={faPuzzlePiece} text='Submissions' />
+    <>
       <Row className='align-items-baseline'>
         <Col
           xs={{ span: 12, order: 'last' }}
@@ -91,8 +90,17 @@ const Submission = () => {
         canViewCode={showOnlyMe}
         results={results}
       />
+    </>
+  )
+}
+
+const SubmissionPage = () => {
+  return (
+    <PageLayout>
+      <Title icon={faPuzzlePiece} text='Submissions' />
+      <Submission />
     </PageLayout>
   )
 }
 
-export default Submission
+export default SubmissionPage

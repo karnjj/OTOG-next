@@ -19,28 +19,26 @@ const Note = () => (
   </Card>
 )
 
-const UserConfig = () => {
-  return (
-    <>
-      <Header />
-      <Container>
-        <br />
-        <br />
-        <Row>
-          <Col lg={3}>
-            <NewUser />
-            <hr />
-            <Note />
-            <br />
-          </Col>
-          <Col lg={9}>
-            <UserTable />
-          </Col>
-        </Row>
-      </Container>
-    </>
-  )
-}
+const UserConfig = () => (
+  <>
+    <Header />
+    <Container>
+      <br />
+      <br />
+      <Row>
+        <Col lg={3}>
+          <NewUser />
+          <hr />
+          <Note />
+          <br />
+        </Col>
+        <Col lg={9}>
+          <UserTable />
+        </Col>
+      </Row>
+    </Container>
+  </>
+)
 
 export async function getServerSideProps(ctx) {
   const token = getCookieContext(ctx)

@@ -11,16 +11,17 @@ import { useGet } from '../../utils/api'
 const Submission = () => {
   const { data = {} } = useGet('/api/contest/submission')
   const { result: results } = data
-
-  return (
-    <PageLayout>
-      <Title icon={faTrophy} text='Contest Submissions' noBot='true'>
-        <OrangeButton href='/contest'>View Contest</OrangeButton>
-      </Title>
-      <hr />
-      <SubmissionTable results={results} />
-    </PageLayout>
-  )
+  return <SubmissionTable results={results} />
 }
 
-export default withAdminAuth(Submission)
+const ContestSubmissionPage = () => (
+  <PageLayout>
+    <Title icon={faTrophy} text='Contest Submissions' noBot='true'>
+      <OrangeButton href='/contest'>View Contest</OrangeButton>
+    </Title>
+    <hr />
+    <Submission />
+  </PageLayout>
+)
+
+export default withAdminAuth(ContestSubmissionPage)

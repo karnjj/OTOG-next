@@ -73,8 +73,7 @@ const Task = () => {
   })
 
   return (
-    <PageLayout>
-      <Title icon={faPuzzlePiece} text='Tasks' />
+    <>
       <Row>
         <Col as={InputGroup} xs sm={6} md={8}>
           {isAdmin && (
@@ -100,8 +99,17 @@ const Task = () => {
       </Row>
       <hr />
       <TaskTable problems={filteredTasks} isLoading={loading} />
+    </>
+  )
+}
+
+const TaskPage = () => {
+  return (
+    <PageLayout>
+      <Title icon={faPuzzlePiece} text='Tasks' />
+      <Task />
     </PageLayout>
   )
 }
 
-export default Task
+export default TaskPage

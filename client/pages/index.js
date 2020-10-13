@@ -182,65 +182,70 @@ const NewTaskTable = () => {
   return <TaskTable problems={tasks} isLoading={isLoading} />
 }
 
-const Index = () => {
+const Hero = () => {
   const { isLogin } = useAuthContext()
+  return <Container>{isLogin ? <Hello /> : <Welcome />}</Container>
+}
+
+const Index = () => {
+  const Guide = () => (
+    <Row xs={1} md={3}>
+      <Col className='px-5 p-md-3'>
+        <h2>
+          <FontAwesomeIcon icon={faQuestion} /> FAQ
+        </h2>
+        <p>
+          ไม่รู้ว่าจะเริ่มต้นอย่างไร ทุกอย่างดูงงไปหมด
+          ถ้าหากคุณมีปัญหาเหล่านี้สามารถ หาคำตอบได้จาก
+          คำถามยอดนิยมที่ผู้ใช้ส่วนใหญ่มักจะถามเป็นประจำ
+        </p>
+        <a
+          href='https://medium.com/otog/complete-guide-to-otog-22f88a349e78'
+          target='_blank'
+        >
+          <OrangeButton size='lg'>Learn More</OrangeButton>
+        </a>
+        <br />
+        <br />
+      </Col>
+      <Col className='px-5 p-md-3'>
+        <h2>
+          <FontAwesomeIcon icon={faFlagCheckered} /> Get started
+        </h2>
+        <p>
+          เพิ่งเริ่มการเดินทาง อาจจะอยากได้การต้อนรับที่ดี
+          ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน competitive programming
+        </p>
+        <OrangeButton size='lg' href='task'>
+          View Tasks
+        </OrangeButton>
+        <br />
+        <br />
+      </Col>
+      <Col className='px-5 p-md-3'>
+        <h2>
+          <FontAwesomeIcon icon={faTrophy} /> Contest
+        </h2>
+        <p>
+          ทำโจทย์คนเดียวมันอาจจะเหงา ลองมาเข้า contest การแข่งขันอันทรงเกียรติ
+          (?) เพื่อจะได้มีเพื่อนทำโจทย์และแข่งขันไปพร้อม ๆ กันกับเรา
+        </p>
+        <OrangeButton size='lg' href='contest'>
+          Join Contest
+        </OrangeButton>
+        <br />
+        <br />
+      </Col>
+    </Row>
+  )
 
   return (
     <PageLayout container={false}>
       <Jumbotron fluid>
-        <Container>{isLogin ? <Hello /> : <Welcome />}</Container>
+        <Hero />
       </Jumbotron>
       <Container>
-        <Row xs={1} md={3}>
-          <Col className='px-5 p-md-3'>
-            <h2>
-              <FontAwesomeIcon icon={faQuestion} /> FAQ
-            </h2>
-            <p>
-              ไม่รู้ว่าจะเริ่มต้นอย่างไร ทุกอย่างดูงงไปหมด
-              ถ้าหากคุณมีปัญหาเหล่านี้สามารถ หาคำตอบได้จาก
-              คำถามยอดนิยมที่ผู้ใช้ส่วนใหญ่มักจะถามเป็นประจำ
-            </p>
-            <a
-              href='https://medium.com/otog/complete-guide-to-otog-22f88a349e78'
-              target='_blank'
-            >
-              <OrangeButton size='lg'>Learn More</OrangeButton>
-            </a>
-            <br />
-            <br />
-          </Col>
-          <Col className='px-5 p-md-3'>
-            <h2>
-              <FontAwesomeIcon icon={faFlagCheckered} /> Get started
-            </h2>
-            <p>
-              เพิ่งเริ่มการเดินทาง อาจจะอยากได้การต้อนรับที่ดี
-              ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน competitive
-              programming
-            </p>
-            <OrangeButton size='lg' href='task'>
-              View Tasks
-            </OrangeButton>
-            <br />
-            <br />
-          </Col>
-          <Col className='px-5 p-md-3'>
-            <h2>
-              <FontAwesomeIcon icon={faTrophy} /> Contest
-            </h2>
-            <p>
-              ทำโจทย์คนเดียวมันอาจจะเหงา ลองมาเข้า contest
-              การแข่งขันอันทรงเกียรติ (?)
-              เพื่อจะได้มีเพื่อนทำโจทย์และแข่งขันไปพร้อม ๆ กันกับเรา
-            </p>
-            <OrangeButton size='lg' href='contest'>
-              Join Contest
-            </OrangeButton>
-            <br />
-            <br />
-          </Col>
-        </Row>
+        <Guide />
         <div>
           <i className='glyphicon glyphicon-asterisk'></i>
           <Title icon={faPuzzlePiece} text='โจทย์ใหม่' noBot='true' />

@@ -49,10 +49,8 @@ const Rating = () => {
   const filteredUsers = users?.filter(
     (user) => user.sname.indexOf(usernameSearch.substr(0, 20)) !== -1
   )
-
   return (
-    <PageLayout>
-      <Title icon={faChartBar} text='Ratings' />
+    <>
       <Row className='mx-auto align-items-baseline'>
         <Col as='label' md={2}>
           <b>ค้นหาผู้ใช้ : </b>
@@ -67,7 +65,16 @@ const Rating = () => {
       </Row>
       <hr />
       <UserTable users={filteredUsers} />
+    </>
+  )
+}
+
+const RatingPage = () => {
+  return (
+    <PageLayout>
+      <Title icon={faChartBar} text='Ratings' />
+      <Rating />
     </PageLayout>
   )
 }
-export default Rating
+export default RatingPage

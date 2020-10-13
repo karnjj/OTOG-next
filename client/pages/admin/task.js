@@ -19,28 +19,26 @@ const Note = () => (
   </Card>
 )
 
-const Task = () => {
-  return (
-    <>
-      <Header />
-      <Container>
-        <br />
-        <br />
-        <Row>
-          <Col lg={3}>
-            <NewTask />
-            <hr />
-            <Note />
-            <br />
-          </Col>
-          <Col lg={9}>
-            <TaskTable />
-          </Col>
-        </Row>
-      </Container>
-    </>
-  )
-}
+const Task = () => (
+  <>
+    <Header />
+    <Container>
+      <br />
+      <br />
+      <Row>
+        <Col lg={3}>
+          <NewTask />
+          <hr />
+          <Note />
+          <br />
+        </Col>
+        <Col lg={9}>
+          <TaskTable />
+        </Col>
+      </Row>
+    </Container>
+  </>
+)
 
 export async function getServerSideProps(ctx) {
   const token = getCookieContext(ctx)
