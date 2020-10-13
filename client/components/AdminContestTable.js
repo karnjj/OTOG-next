@@ -14,6 +14,7 @@ import {
   faEyeSlash,
   faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
+import { RenderOnIntersect } from './RenderOnIntersect'
 
 export const NewContest = () => {
   const [show, handleShow, handleClose] = useShow(false)
@@ -357,35 +358,43 @@ const TaskRow = (props) => {
   const [show, handleShow, handleClose] = useShow()
 
   return (
-    <tr onDoubleClick={handleShow}>
-      <td>{id_Prob}</td>
-      <td>
-        <a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
-          {name}
-        </a>
-      </td>
-      <td>{time}</td>
-      <td>{memory}</td>
-      <td>{score}</td>
-      <td>
-        <ConfigTask {...props} />
-        <EditModal {...props} show={show} handleClose={handleClose} />
-      </td>
-    </tr>
+    <RenderOnIntersect
+      id={`admin/contest/${id_Prob}`}
+      initialHeight='63px'
+      as='tr'
+    >
+      <tr onDoubleClick={handleShow}>
+        <td>{id_Prob}</td>
+        <td>
+          <a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
+            {name}
+          </a>
+        </td>
+        <td>{time}</td>
+        <td>{memory}</td>
+        <td>{score}</td>
+        <td>
+          <ConfigTask {...props} />
+          <EditModal {...props} show={show} handleClose={handleClose} />
+        </td>
+      </tr>
+    </RenderOnIntersect>
   )
 }
 
 export const TaskTable = ({ tasks, idContest, selectedTasks }) => (
   <CustomTable align='left'>
     <thead className='thead-light'>
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Time</th>
-        <th>Memory</th>
-        <th>Score</th>
-        <th>Config</th>
-      </tr>
+      <RenderOnIntersect id='admin/contest/head' initialHeight='50px' as='tr'>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Time</th>
+          <th>Memory</th>
+          <th>Score</th>
+          <th>Config</th>
+        </tr>
+      </RenderOnIntersect>
     </thead>
     <tbody>
       {tasks?.map((task) => (

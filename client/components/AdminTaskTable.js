@@ -24,6 +24,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { useShow } from '../utils'
 import { mutate } from 'swr'
+import { RenderOnIntersect } from './RenderOnIntersect'
 
 export const NewTask = () => {
   const [show, handleShow, handleClose] = useShow(false)
@@ -323,22 +324,28 @@ const TaskRow = memo((props) => {
   const [show, handleShow, handleClose] = useShow(false)
 
   return (
-    <tr onDoubleClick={handleShow}>
-      <td>{id_Prob}</td>
-      <td>
-        <a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
-          {name}
-        </a>{' '}
-        {noTestcase && <Badge variant='warning'>No Testcases</Badge>}
-      </td>
-      <td>{time}</td>
-      <td>{memory}</td>
-      <td>{rating ?? '-'}</td>
-      <td>
-        <ConfigTask {...props} {...{ handleShow }} />
-        <EditModal {...props} {...{ handleClose, show }} />
-      </td>
-    </tr>
+    <RenderOnIntersect
+      id={`admin/tasks/${id_Prob}`}
+      initialHeight='63px'
+      as='tr'
+    >
+      <tr onDoubleClick={handleShow}>
+        <td>{id_Prob}</td>
+        <td>
+          <a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
+            {name}
+          </a>{' '}
+          {noTestcase && <Badge variant='warning'>No Testcases</Badge>}
+        </td>
+        <td>{time}</td>
+        <td>{memory}</td>
+        <td>{rating ?? '-'}</td>
+        <td>
+          <ConfigTask {...props} {...{ handleShow }} />
+          <EditModal {...props} {...{ handleClose, show }} />
+        </td>
+      </tr>
+    </RenderOnIntersect>
   )
 })
 
@@ -348,14 +355,16 @@ export const TaskTable = () => {
   return (
     <CustomTable ready={!!tasks} align='left'>
       <thead className='thead-light'>
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Time</th>
-          <th>Memory</th>
-          <th>Rating</th>
-          <th>Config</th>
-        </tr>
+        <RenderOnIntersect id='admin/tasks/head' initialHeight='50px' as='tr'>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Time</th>
+            <th>Memory</th>
+            <th>Rating</th>
+            <th>Config</th>
+          </tr>
+        </RenderOnIntersect>
       </thead>
       <tbody>
         {tasks?.map((task, index) => (

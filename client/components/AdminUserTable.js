@@ -1,5 +1,3 @@
-import { useAuthContext } from '../utils/auth'
-
 import { ButtonGroup, Button, Modal, Form } from 'react-bootstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,6 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { useGet, usePost, useHttp } from '../utils/api'
 import { useShow, useInput } from '../utils'
+import { RenderOnIntersect } from './RenderOnIntersect'
 import { CustomTable } from './CustomTable'
 import { memo } from 'react'
 import { mutate } from 'swr'
@@ -134,21 +133,23 @@ const EditModal = (props) => {
   )
 }
 
-const UserTr = memo((props) => {
+const UserRow = memo((props) => {
   const { idUser, username, sname, state } = props
   const [show, handleShow, handleClose] = useShow(false)
 
   return (
-    <tr onDoubleClick={handleShow}>
-      <td>{idUser}</td>
-      <td>{username}</td>
-      <td>{sname}</td>
-      <td>{state}</td>
-      <td>
-        <ConfigUser {...props} {...{ handleShow }} />
-        <EditModal {...props} {...{ handleClose, show }} />
-      </td>
-    </tr>
+    <RenderOnIntersect id={`admin/users/${sname}`} initialHeight='63px' as='tr'>
+      <tr onDoubleClick={handleShow}>
+        <td>{idUser}</td>
+        <td>{username}</td>
+        <td>{sname}</td>
+        <td>{state}</td>
+        <td>
+          <ConfigUser {...props} {...{ handleShow }} />
+          <EditModal {...props} {...{ handleClose, show }} />
+        </td>
+      </tr>
+    </RenderOnIntersect>
   )
 })
 
@@ -158,17 +159,19 @@ export const UserTable = (props) => {
   return (
     <CustomTable ready={!!users} align='left'>
       <thead className='thead-light'>
-        <tr>
-          <th>#</th>
-          <th>Username</th>
-          <th>Display Name</th>
-          <th>Level</th>
-          <th>Config</th>
-        </tr>
+        <RenderOnIntersect id='admin/users/head' initialHeight='50px' as='tr'>
+          <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>Display Name</th>
+            <th>Level</th>
+            <th>Config</th>
+          </tr>
+        </RenderOnIntersect>
       </thead>
       <tbody>
         {users?.map((task, index) => (
-          <UserTr key={index} {...task} />
+          <UserRow key={index} {...task} />
         ))}
       </tbody>
     </CustomTable>

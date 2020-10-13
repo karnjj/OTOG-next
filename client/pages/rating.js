@@ -7,27 +7,36 @@ import PageLayout from '../components/PageLayout'
 
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
 import { useInput } from '../utils'
+import { RenderOnIntersect } from '../components/RenderOnIntersect'
 
 const UserTable = ({ users }) => (
   <CustomTable ready={!!users}>
     <thead>
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Rating</th>
-        <th>Solved</th>
-      </tr>
+      <RenderOnIntersect id='users/header' initialHeight='50px' as='tr'>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Rating</th>
+          <th>Solved</th>
+        </tr>
+      </RenderOnIntersect>
     </thead>
     <tbody>
       {users?.map((user, index) => (
-        <tr key={index}>
-          <td>{user.rank}</td>
-          <td>
-            <Name {...user} />
-          </td>
-          <td>{user.rating}</td>
-          <td>0</td>
-        </tr>
+        <RenderOnIntersect
+          id={`users/${user.sname}`}
+          initialHeight='49px'
+          as='tr'
+        >
+          <tr key={index}>
+            <td>{user.rank}</td>
+            <td>
+              <Name {...user} />
+            </td>
+            <td>{user.rating}</td>
+            <td>0</td>
+          </tr>
+        </RenderOnIntersect>
       ))}
     </tbody>
   </CustomTable>
