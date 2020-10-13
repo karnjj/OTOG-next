@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { useInput, useShow } from '../../utils'
-import { useHttp, usePost } from '../../utils/api'
+import { useInput, useShow } from '../utils'
+import { useHttp, usePost } from '../utils/api'
 import { mutate } from 'swr'
 
 import DatePicker from 'react-datepicker'
 import { Button, Modal, Form, Col, Row, InputGroup } from 'react-bootstrap'
-import { CustomTable } from '../CustomTable'
+import { CustomTable } from './CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -234,7 +234,11 @@ const ConfigTask = ({ id_Prob, see, idContest }) => {
   }
 
   return (
-    <Button variant={state ? 'light' : 'dark'} onClick={handleChangeState}>
+    <Button
+      title={state ? 'Close' : 'Open'}
+      variant={state ? 'light' : 'dark'}
+      onClick={handleChangeState}
+    >
       <FontAwesomeIcon icon={state ? faEye : faEyeSlash} />
     </Button>
   )
@@ -285,7 +289,7 @@ const EditModal = (props) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Problem #{id_Prob}</Modal.Title>
+        <Modal.Title>Task #{id_Prob}</Modal.Title>
       </Modal.Header>
       <Form as={Modal.Body}>
         <Form.Group>
@@ -348,7 +352,7 @@ const EditModal = (props) => {
   )
 }
 
-const TaskTr = (props) => {
+const TaskRow = (props) => {
   const { id_Prob, name, sname, memory, time, score } = props
   const [show, handleShow, handleClose] = useShow()
 
@@ -385,7 +389,7 @@ export const TaskTable = ({ tasks, idContest, selectedTasks }) => (
     </thead>
     <tbody>
       {tasks?.map((task) => (
-        <TaskTr
+        <TaskRow
           {...task}
           key={task.id_Prob}
           idContest={idContest}

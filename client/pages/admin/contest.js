@@ -5,8 +5,8 @@ import {
   NewContest,
   TaskTable,
   ContestConfig,
-} from '../../components/admin/ContestTable'
-import Header from '../../components/admin/Header'
+} from '../../components/AdminContestTable'
+import Header from '../../components/AdminHeader'
 import { AnnounceEditor } from '../../components/Announce'
 
 import { httpGet, useGet } from '../../utils/api'
@@ -16,7 +16,7 @@ const Note = () => (
     <Card.Header as='h6'>Note</Card.Header>
     <Card.Body>
       <Card.Text>
-        1. <b>Double Click</b> to edit problems in this page.
+        1. <b>Double Click</b> to edit tasks in this page.
       </Card.Text>
       <Card.Text>2. Hover over each icons for explanation.</Card.Text>
       <Card.Text>

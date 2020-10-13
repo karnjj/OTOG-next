@@ -36,7 +36,7 @@ const ProfileImage = styled(Image)`
 const navLinks = [
   //name, icon, paths, exact
   ['Main', faHome, ['/'], true],
-  ['Problems', faPuzzlePiece, ['/problem', '/submission'], false],
+  ['Tasks', faPuzzlePiece, ['/task', '/submission'], false],
   ['Contest', faTrophy, ['/contest'], false],
   ['Ratings', faChartBar, ['/rating'], false],
 ]

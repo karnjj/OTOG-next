@@ -2,7 +2,7 @@ import { useEffect, memo } from 'react'
 import { useAuthContext } from '../utils/auth'
 import { useShow } from '../utils'
 
-import { CustomTr, CustomTable } from './CustomTable'
+import { TableRow, CustomTable } from './CustomTable'
 import { Modal, ButtonGroup } from 'react-bootstrap'
 import { Name, Alink } from './CustomText'
 import ViewCodeButton from './ViewCodeButton'
@@ -34,7 +34,7 @@ const SubmissionTable = ({ isLoading, results, canViewCode }) => {
           <tr>
             <th>#</th>
             <th>Name</th>
-            <th>Problem</th>
+            <th>Task</th>
             <th>Result</th>
             <th>Time</th>
             <th>Score</th>
@@ -84,7 +84,7 @@ const SubTr = memo((props) => {
   return (
     <>
       <RenderOnIntersect id={`subs/${idResult}`} initialHeight='63px'>
-        <CustomTr acceptState={isAccept(result)}>
+        <TableRow acceptState={isAccept(result)}>
           <td>{idResult}</td>
           {state != 0 ? (
             <td>
@@ -119,7 +119,7 @@ const SubTr = memo((props) => {
               </ButtonGroup>
             </td>
           )}
-        </CustomTr>
+        </TableRow>
       </RenderOnIntersect>
 
       <Modal show={showError} onHide={handleClose} centered size='lg'>

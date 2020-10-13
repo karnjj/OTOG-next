@@ -1,7 +1,7 @@
 import { useState, useEffect, memo } from 'react'
-import { useAuthContext } from '../../utils/auth'
-import { useGet, usePost, useHttp } from '../../utils/api'
-import { CustomTable } from '../CustomTable'
+import { useAuthContext } from '../utils/auth'
+import { useGet, usePost, useHttp } from '../utils/api'
+import { CustomTable } from './CustomTable'
 import {
   ButtonGroup,
   Button,
@@ -22,10 +22,10 @@ import {
   faTrash,
   faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
-import { useShow } from '../../utils'
+import { useShow } from '../utils'
 import { mutate } from 'swr'
 
-export const NewProblem = () => {
+export const NewTask = () => {
   const [show, handleShow, handleClose] = useShow(false)
   const [data, setData] = useState({})
   const { name, sname, numCase, memory, time, score, pdf, zip } = data
@@ -60,11 +60,11 @@ export const NewProblem = () => {
   return (
     <>
       <Button variant='success' size='lg' onClick={handleShow}>
-        <FontAwesomeIcon icon={faPlusCircle} /> New Problem
+        <FontAwesomeIcon icon={faPlusCircle} /> New Task
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add New Problem</Modal.Title>
+          <Modal.Title>Add New Task</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={onSubmit}>
@@ -173,7 +173,7 @@ const ConfigTask = ({ index, id_Prob, handleShow, state, sname }) => {
   }
 
   const handleDelete = async () => {
-    if (confirm(`Delete problem id : ${id_Prob}`)) {
+    if (confirm(`Delete task id : ${id_Prob}`)) {
       const res = await del()
       if (res.ok) {
         mutate('/api/admin/problem')
@@ -183,16 +183,20 @@ const ConfigTask = ({ index, id_Prob, handleShow, state, sname }) => {
 
   return (
     <ButtonGroup>
-      <Button variant='info' onClick={handleShow}>
+      <Button title='Edit' variant='info' onClick={handleShow}>
         <FontAwesomeIcon icon={faPencilAlt} />
       </Button>
-      <Button variant='warning'>
+      <Button title='Rejudge' variant='warning'>
         <FontAwesomeIcon icon={faSyncAlt} />
       </Button>
-      <Button variant={state ? 'light' : 'dark'} onClick={handleChangeState}>
+      <Button
+        title={state ? 'Close' : 'Open'}
+        variant={state ? 'light' : 'dark'}
+        onClick={handleChangeState}
+      >
         <FontAwesomeIcon icon={state ? faEye : faEyeSlash} />
       </Button>
-      <Button variant='danger' onClick={handleDelete}>
+      <Button title='Delete' variant='danger' onClick={handleDelete}>
         <FontAwesomeIcon icon={faTrash} />
       </Button>
     </ButtonGroup>
@@ -239,7 +243,7 @@ const EditModal = (props) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Problem #{id_Prob}</Modal.Title>
+        <Modal.Title>Task #{id_Prob}</Modal.Title>
       </Modal.Header>
       <Form as={Modal.Body}>
         <Form.Group>
@@ -314,7 +318,7 @@ const EditModal = (props) => {
   )
 }
 
-const TaskTr = memo((props) => {
+const TaskRow = memo((props) => {
   const { id_Prob, name, sname, memory, time, rating, noTestcase } = props
   const [show, handleShow, handleClose] = useShow(false)
 
@@ -355,7 +359,7 @@ export const TaskTable = () => {
       </thead>
       <tbody>
         {tasks?.map((task, index) => (
-          <TaskTr key={index} index={index} {...task} />
+          <TaskRow key={index} index={index} {...task} />
         ))}
       </tbody>
     </CustomTable>

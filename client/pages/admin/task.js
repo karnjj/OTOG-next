@@ -1,15 +1,15 @@
 import { withAdminAuth, getCookieContext } from '../../utils/auth'
 
 import { Row, Col, Container, Card } from 'react-bootstrap'
-import { TaskTable, NewProblem } from '../../components/admin/TaskTable'
-import Header from '../../components/admin/Header'
+import { TaskTable, NewTask } from '../../components/AdminTaskTable'
+import Header from '../../components/AdminHeader'
 
 const Note = () => (
   <Card>
     <Card.Header as='h6'>Note</Card.Header>
     <Card.Body>
       <Card.Text>
-        1. <b>Double Click</b> to edit problems in this page.
+        1. <b>Double Click</b> to edit tasks in this page.
       </Card.Text>
       <Card.Text>2. Hover over each icons for explanation.</Card.Text>
       <Card.Text>
@@ -28,7 +28,7 @@ const Task = () => {
         <br />
         <Row>
           <Col lg={3}>
-            <NewProblem />
+            <NewTask />
             <hr />
             <Note />
             <br />

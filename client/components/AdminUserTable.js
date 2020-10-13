@@ -1,4 +1,4 @@
-import { useAuthContext } from '../../utils/auth'
+import { useAuthContext } from '../utils/auth'
 
 import { ButtonGroup, Button, Modal, Form } from 'react-bootstrap'
 
@@ -8,9 +8,9 @@ import {
   faTrash,
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons'
-import { useGet, usePost, useHttp } from '../../utils/api'
-import { useShow, useInput } from '../../utils'
-import { CustomTable } from '../CustomTable'
+import { useGet, usePost, useHttp } from '../utils/api'
+import { useShow, useInput } from '../utils'
+import { CustomTable } from './CustomTable'
 import { memo } from 'react'
 import { mutate } from 'swr'
 export const NewUser = () => {
@@ -76,10 +76,10 @@ const ConfigUser = ({ handleShow, idUser }) => {
 
   return (
     <ButtonGroup>
-      <Button variant='info' onClick={handleShow}>
+      <Button title='Edit' variant='info' onClick={handleShow}>
         <FontAwesomeIcon icon={faPencilAlt} />
       </Button>
-      <Button variant='danger' onClick={handleDelete}>
+      <Button title='Delete' variant='danger' onClick={handleDelete}>
         <FontAwesomeIcon icon={faTrash} />
       </Button>
     </ButtonGroup>

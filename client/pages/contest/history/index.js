@@ -1,6 +1,6 @@
 import { Title } from '../../../components/CustomText'
 import PageLayout from '../../../components/PageLayout'
-import { CustomTable, CustomTr } from '../../../components/CustomTable'
+import { CustomTable, TableRow } from '../../../components/CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrophy, faChartArea } from '@fortawesome/free-solid-svg-icons'
@@ -24,7 +24,7 @@ const ContestTr = (props) => {
     else return hours + ':' + minutes
   }
   return (
-    <CustomTr>
+    <TableRow>
       <td>{idContest}</td>
       <td>{name}</td>
       <td>{start.toLocaleString('th-TH')}</td>
@@ -42,7 +42,7 @@ const ContestTr = (props) => {
           </OrangeButton>
         )}
       </td>
-    </CustomTr>
+    </TableRow>
   )
 }
 

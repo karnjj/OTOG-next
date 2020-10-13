@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useAuthContext } from '../utils/auth'
 
 import { Popover, OverlayTrigger, Row, Col } from 'react-bootstrap'
-import { CustomTr, CustomTable } from './CustomTable'
+import { TableRow, CustomTable } from './CustomTable'
 
 import SubmitGroup from './SubmitGroup'
 import ViewCodeButton from './ViewCodeButton'
@@ -13,7 +13,7 @@ const StyledPop = styled(Popover)`
   max-width: none;
 `
 
-const ProbTable = ({ isLoading, problems }) => {
+const TaskTable = ({ isLoading, problems }) => {
   const { isLogin } = useAuthContext()
 
   return (
@@ -31,14 +31,14 @@ const ProbTable = ({ isLoading, problems }) => {
       </thead>
       <tbody>
         {problems.map((prob, index) => (
-          <ProbTr key={index} {...prob} />
+          <TaskRow key={index} {...prob} />
         ))}
       </tbody>
     </CustomTable>
   )
 }
 
-const ProbTr = memo((props) => {
+const TaskRow = memo((props) => {
   const {
     id_Prob,
     name,
@@ -60,7 +60,7 @@ const ProbTr = memo((props) => {
   }
   return (
     <RenderOnIntersect id={`tasks/${id_Prob}`} initialHeight='73px'>
-      <CustomTr {...{ acceptState, wrongState }}>
+      <TableRow {...{ acceptState, wrongState }}>
         <td>{id_Prob}</td>
         <td>
           <a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
@@ -102,9 +102,9 @@ const ProbTr = memo((props) => {
             </SubmitGroup>
           </td>
         )}
-      </CustomTr>
+      </TableRow>
     </RenderOnIntersect>
   )
 })
 
-export default ProbTable
+export default TaskTable

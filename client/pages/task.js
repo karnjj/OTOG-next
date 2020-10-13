@@ -6,7 +6,7 @@ import { Row, Col, Form, InputGroup } from 'react-bootstrap'
 import OrangeButton from '../components/OrangeButton'
 import { Title } from '../components/CustomText'
 import PageLayout from '../components/PageLayout'
-import ProbTable from '../components/ProbTable'
+import TaskTable from '../components/TaskTable'
 
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
 
@@ -41,10 +41,10 @@ const ProbButton = styled.button`
   }
 `
 
-const Problem = () => {
+const Task = () => {
   const { isAdmin } = useAuthContext()
 
-  const [problemSearch, inputProblemSearch] = useInput()
+  const [taskSearch, inputTaskSearch] = useInput()
   const [showAll, setShowAll] = useState(isAdmin)
   useEffect(() => setShowAll(isAdmin), [isAdmin])
 
@@ -64,17 +64,17 @@ const Problem = () => {
     setLoading(true)
   }
 
-  const filteredTasks = tasks?.filter((problem) => {
-    const id = String(problem.id_Prob)
+  const filteredTasks = tasks?.filter((task) => {
+    const id = String(task.id_Prob)
     return (
-      problem.name.indexOf(problemSearch.substr(0, 20)) !== -1 ||
-      id.indexOf(problemSearch.substr(0, 20)) !== -1
+      task.name.indexOf(taskSearch.substr(0, 20)) !== -1 ||
+      id.indexOf(taskSearch.substr(0, 20)) !== -1
     )
   })
 
   return (
     <PageLayout>
-      <Title icon={faPuzzlePiece} text='Problems' />
+      <Title icon={faPuzzlePiece} text='Tasks' />
       <Row>
         <Col as={InputGroup} xs sm={6} md={8}>
           {isAdmin && (
@@ -90,7 +90,7 @@ const Problem = () => {
               </InputGroup.Text>
             </InputGroup.Prepend>
           )}
-          <Form.Control placeholder='ค้นหาโจทย์' {...inputProblemSearch} />
+          <Form.Control placeholder='ค้นหาโจทย์' {...inputTaskSearch} />
         </Col>
         <Col xs sm={5} md={4} lg={3} xl={2} className='ml-auto'>
           <OrangeButton href='submission' className='w-100'>
@@ -99,9 +99,9 @@ const Problem = () => {
         </Col>
       </Row>
       <hr />
-      <ProbTable problems={filteredTasks} isLoading={loading} />
+      <TaskTable problems={filteredTasks} isLoading={loading} />
     </PageLayout>
   )
 }
 
-export default Problem
+export default Task

@@ -133,7 +133,7 @@ const TaskCard = (props) => {
         <h5>
           <Row xs={1}>
             <Col md>
-              Problem {index} : {name}
+              Task {index} : {name}
             </Col>
             <Col xs='auto' className='ml-auto'>
               {solved && <Badge variant='success'>Solved</Badge>}

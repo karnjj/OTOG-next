@@ -2,7 +2,7 @@ import { useAuthContext } from '../utils/auth'
 import { Jumbotron, Container, Row, Col } from 'react-bootstrap'
 import { Title } from '../components/CustomText'
 import PageLayout from '../components/PageLayout'
-import ProbTable from '../components/ProbTable'
+import TaskTable from '../components/TaskTable'
 import OrangeButton from '../components/OrangeButton'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -177,9 +177,9 @@ const Hello = () => {
   )
 }
 
-const ProblemTable = () => {
+const NewTaskTable = () => {
   const { data: tasks = [], isLoading } = useGet('/api/problem?mode=firstpage')
-  return <ProbTable problems={tasks} isLoading={isLoading} />
+  return <TaskTable problems={tasks} isLoading={isLoading} />
 }
 
 const Index = () => {
@@ -219,8 +219,8 @@ const Index = () => {
               ด้วยโจทย์ที่คัดสรรว่าเหมาะสำหรับผู้เริ่มต้นใน competitive
               programming
             </p>
-            <OrangeButton size='lg' href='problem'>
-              View Problem
+            <OrangeButton size='lg' href='task'>
+              View Tasks
             </OrangeButton>
             <br />
             <br />
@@ -246,7 +246,7 @@ const Index = () => {
           <Title icon={faPuzzlePiece} text='โจทย์ใหม่' noBot='true' />
         </div>
         <hr />
-        <ProblemTable />
+        <NewTaskTable />
       </Container>
     </PageLayout>
   )

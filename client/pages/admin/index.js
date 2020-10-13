@@ -1,7 +1,7 @@
 import { withAdminAuth, getCookieContext } from '../../utils/auth'
 
 import { Row, Col, Container, Button, Form } from 'react-bootstrap'
-import Header from '../../components/admin/Header'
+import Header from '../../components/AdminHeader'
 
 const Config = () => {
   return (

@@ -7,13 +7,13 @@ import { TableLoader } from './Loader'
 const customColor = (props) =>
   props.acceptState ? vars.accept : props.wrongState && vars.wrong
 
-export const CustomTr = styled.tr`
+export const TableRow = styled.tr`
   background: ${customColor};
   &:hover td {
     background: ${vars.hover};
   }
 `
-export const CustomTd = styled.td`
+export const TableData = styled.td`
   background: ${customColor};
 `
 const fadein = keyframes`

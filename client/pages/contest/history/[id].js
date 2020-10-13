@@ -3,9 +3,9 @@ import PageLayout from '../../../components/PageLayout'
 import OrangeButton from '../../../components/OrangeButton'
 import {
   CustomTable,
-  CustomTr,
+  TableRow,
   UserTd,
-  CustomTd,
+  TableData,
 } from '../../../components/CustomTable'
 
 import { faChartArea } from '@fortawesome/free-solid-svg-icons'
@@ -20,23 +20,23 @@ const ScoreTr = (props) => {
   const round = (num) => Math.round(num * 100) / 100
 
   return (
-    <CustomTr acceptState={sum === maxSum}>
+    <TableRow acceptState={sum === maxSum}>
       <td>{rank}</td>
       <td>
         <Name {...{ rating, sname, idUser }} />
       </td>
       {problems.map((prob, index) => (
-        <CustomTd
+        <TableData
           key={index}
           acceptState={prob.score === score(prob)}
           wrongState={scores[prob.id_Prob] && prob.score !== score(prob)}
         >
           {round(score(prob))}
-        </CustomTd>
+        </TableData>
       ))}
       <td>{round(sum)}</td>
       <td>{round(sumTime)}</td>
-    </CustomTr>
+    </TableRow>
   )
 }
 

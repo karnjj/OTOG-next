@@ -80,8 +80,8 @@ const Submission = () => {
           )}
         </Col>
         <Col xs sm={5} md={4} lg={3} xl={2}>
-          <OrangeButton href='problem' className='w-100'>
-            View Problems
+          <OrangeButton href='task' className='w-100'>
+            View Tasks
           </OrangeButton>
         </Col>
       </Row>

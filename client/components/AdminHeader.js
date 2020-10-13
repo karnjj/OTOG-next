@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 
 import { Nav, Container } from 'react-bootstrap'
-import { NavLink, ScrollNavbar, HeaderSpace } from '../CustomNavbar'
+import { NavLink, ScrollNavbar, HeaderSpace } from './CustomNavbar'
 import {
   faWrench,
   faTasks,

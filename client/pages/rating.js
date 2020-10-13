@@ -15,7 +15,7 @@ const UserTable = ({ users }) => (
         <th>#</th>
         <th>Name</th>
         <th>Rating</th>
-        <th>Passed</th>
+        <th>Solved</th>
       </tr>
     </thead>
     <tbody>
