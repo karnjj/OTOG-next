@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import { Spinner, Row, Table } from 'react-bootstrap'
 import styled, { keyframes } from 'styled-components'
 import { darken } from 'polished'
@@ -67,4 +68,5 @@ export const TableLoader = () => {
     </AnimationTable>
   )
 }
+
 export default Loader

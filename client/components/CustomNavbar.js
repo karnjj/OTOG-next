@@ -78,5 +78,5 @@ export const ScrollNavbar = (props) => {
     }
   }, [])
 
-  return <StyledNavbar {...props} hide={hidden} />
+  return <StyledNavbar {...props} hide={hidden ? true : undefined} />
 }

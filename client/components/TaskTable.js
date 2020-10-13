@@ -3,6 +3,7 @@ import { useAuthContext } from '../utils/auth'
 
 import { Popover, OverlayTrigger, Row, Col } from 'react-bootstrap'
 import { TableRow, CustomTable } from './CustomTable'
+import { RowSkeleton } from './Loader'
 
 import SubmitGroup from './SubmitGroup'
 import ViewCodeButton from './ViewCodeButton'
@@ -19,7 +20,7 @@ const TaskTable = ({ isLoading, problems }) => {
   return (
     <CustomTable ready={!isLoading}>
       <thead>
-        <RenderOnIntersect id='tasks/head' initialHeight='50px'>
+        <RenderOnIntersect id='tasks/head' initialHeight='50px' as='tr'>
           <tr>
             <th>#</th>
             <th>Name</th>
@@ -59,7 +60,7 @@ const TaskRow = memo((props) => {
     }
   }
   return (
-    <RenderOnIntersect id={`tasks/${id_Prob}`} initialHeight='73px'>
+    <RenderOnIntersect id={`tasks/${id_Prob}`} initialHeight='73px' as='tr'>
       <TableRow {...{ acceptState, wrongState }}>
         <td>{id_Prob}</td>
         <td>

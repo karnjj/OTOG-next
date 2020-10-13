@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
+import { Container } from 'react-bootstrap'
 import Measure from 'react-measure'
 
 const heightCache = {}
 
-const RenderOnIntersect = ({ id, initialHeight, children }) => {
+const RenderOnIntersect = ({ id, initialHeight, as, children }) => {
   const [intersecting, setIntersecting] = useState(false)
   const dummyBoxRef = useRef()
 
@@ -46,7 +47,9 @@ const RenderOnIntersect = ({ id, initialHeight, children }) => {
       }
     </Measure>
   ) : (
-    <div
+    <Container
+      fluid
+      as={as}
       ref={dummyBoxRef}
       style={{ height: heightCache[id] || initialHeight }}
     />
