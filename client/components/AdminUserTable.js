@@ -1,3 +1,4 @@
+import { memo, useState, useCallback, useEffect } from 'react'
 import { ButtonGroup, Button, Modal, Form } from 'react-bootstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,8 +11,8 @@ import { useGet, usePost, useHttp } from '../utils/api'
 import { useShow, useInput } from '../utils'
 import { RenderOnIntersect } from './RenderOnIntersect'
 import { CustomTable } from './CustomTable'
-import { memo } from 'react'
 import { mutate } from 'swr'
+
 export const NewUser = () => {
   const [show, handleShow, handleClose] = useShow(false)
   const [username, inputUsername] = useInput()
@@ -86,11 +87,23 @@ const ConfigUser = ({ handleShow, idUser }) => {
 }
 
 const EditModal = (props) => {
-  const { show, handleClose, idUser } = props
-  const [username, inputUsername] = useInput(props.username)
-  const [password, inputPassword] = useInput()
-  const [sname, inputSname] = useInput(props.sname)
-  const [state, inputState] = useInput(props.state, (val) => Number(val))
+  const { show, handleClose, user } = props
+  const { idUser } = user
+
+  const [username, inputUsername, setUsername] = useInput(user.username)
+  const [password, inputPassword, setPassword] = useInput('')
+  const [sname, inputSname, setSname] = useInput(user.sname)
+  const [state, inputState, setState] = useInput(user.state, (val) =>
+    Number(val)
+  )
+
+  useEffect(() => {
+    setUsername(user.username)
+    setPassword('')
+    setSname(user.sname)
+    setState(user.state)
+  }, [user])
+
   const post = usePost(`/api/admin/user/${idUser}`)
 
   const onSave = async (event) => {
@@ -134,8 +147,11 @@ const EditModal = (props) => {
 }
 
 const UserRow = memo((props) => {
-  const { idUser, username, sname, state } = props
-  const [show, handleShow, handleClose] = useShow(false)
+  const { user, selectUser } = props
+  const { idUser, username, sname, state } = user
+  const handleShow = useCallback(() => {
+    selectUser(user)
+  }, [user])
 
   return (
     <RenderOnIntersect id={`admin/users/${sname}`} initialHeight='63px' as='tr'>
@@ -145,35 +161,46 @@ const UserRow = memo((props) => {
         <td>{sname}</td>
         <td>{state}</td>
         <td>
-          <ConfigUser {...props} {...{ handleShow }} />
-          <EditModal {...props} {...{ handleClose, show }} />
+          <ConfigUser handleShow={handleShow} idUser={idUser} />
         </td>
       </tr>
     </RenderOnIntersect>
   )
 })
 
-export const UserTable = (props) => {
+export const UserTable = () => {
   const { data: users } = useGet('/api/admin/user')
 
+  const [userModal, setUserModal] = useState({ show: false, user: {} })
+  const selectUser = useCallback((user) => {
+    setUserModal({ user, show: true })
+  }, [])
+  const handleClose = useCallback(() => {
+    setUserModal((prevState) => ({ ...prevState, show: false }))
+  }, [])
+
   return (
-    <CustomTable ready={!!users} align='left'>
-      <thead className='thead-light'>
-        <RenderOnIntersect id='admin/users/head' initialHeight='50px' as='tr'>
-          <tr>
-            <th>#</th>
-            <th>Username</th>
-            <th>Display Name</th>
-            <th>Level</th>
-            <th>Config</th>
-          </tr>
-        </RenderOnIntersect>
-      </thead>
-      <tbody>
-        {users?.map((task, index) => (
-          <UserRow key={index} {...task} />
-        ))}
-      </tbody>
-    </CustomTable>
+    <>
+      <CustomTable ready={!!users} align='left'>
+        <thead className='thead-light'>
+          <RenderOnIntersect id='admin/users/head' initialHeight='50px' as='tr'>
+            <tr>
+              <th>#</th>
+              <th>Username</th>
+              <th>Display Name</th>
+              <th>Level</th>
+              <th>Config</th>
+            </tr>
+          </RenderOnIntersect>
+        </thead>
+        <tbody>
+          {users?.map((user) => (
+            <UserRow key={user.idUser} user={user} selectUser={selectUser} />
+          ))}
+        </tbody>
+      </CustomTable>
+
+      <EditModal {...userModal} handleClose={handleClose} />
+    </>
   )
 }

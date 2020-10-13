@@ -70,13 +70,12 @@ const ContestTable = () => {
   )
 }
 
-const History = () => {
-  return (
-    <PageLayout>
-      <Title icon={faTrophy} text='Contest History' />
-      <hr />
-      <ContestTable />
-    </PageLayout>
-  )
-}
+const History = () => (
+  <PageLayout>
+    <Title icon={faTrophy} text='Contest History' />
+    <hr />
+    <ContestTable />
+  </PageLayout>
+)
+
 export default History
