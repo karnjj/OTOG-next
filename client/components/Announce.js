@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import isHotkey from 'is-hotkey'
 import { createEditor, Editor, Transforms } from 'slate'
@@ -24,6 +24,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import { useShow } from '../utils'
+import { useHttp } from '../utils/api'
 
 const Blockquote = styled.blockquote`
   padding-left: 10px;
@@ -164,14 +165,27 @@ const HOTKEYS = {
   'mod+`': 'code',
 }
 
-export const AnnounceEditor = ({ idContest }) => {
+const emptyAnnounce = [
+  {
+    type: 'paragraph',
+    children: [{ text: '' }],
+  },
+]
+
+export const AnnounceEditor = ({ idContest, announce }) => {
   const [show, handleShow, handleClose] = useShow()
-  const [value, setValue] = useState([
-    {
-      type: 'paragraph',
-      children: [{ text: '' }],
-    },
-  ])
+  const [value, setValue] = useState(emptyAnnounce)
+  useEffect(() => {
+    if (!!announce) {
+      setValue(announce)
+    }
+  }, [announce])
+
+  const put = useHttp('PUT', `/api/admin/contest/${idContest}`)
+  const onSave = async () => {
+    await put(value)
+    handleClose()
+  }
 
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
   const renderElement = useCallback((props) => <Element {...props} />, [])
@@ -232,7 +246,7 @@ export const AnnounceEditor = ({ idContest }) => {
           </Slate>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant='success' onClick={handleClose}>
+          <Button variant='success' onClick={onSave}>
             Save Changes
           </Button>
         </Modal.Footer>
@@ -241,7 +255,7 @@ export const AnnounceEditor = ({ idContest }) => {
   )
 }
 
-export default ({ value, idContest, children }) => {
+const Announce = ({ value, idContest, children }) => {
   const editor = useMemo(() => withReact(createEditor()), [])
   value = [
     { type: 'heading-one', children: [{ text: 'SNIS-1234' }] },
@@ -273,9 +287,7 @@ export default ({ value, idContest, children }) => {
       children: [{ text: '', underline: true, link: true }],
     },
   ]
-  const [show, setShow] = useState(false)
-  const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
+  const [show, handleShow, handleClose] = useShow()
   const renderElement = useCallback((props) => <Element {...props} />, [])
   const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
 
@@ -299,6 +311,8 @@ export default ({ value, idContest, children }) => {
     </>
   )
 }
+
+export default Announce
 
 // ************Old Announce******************
 // const Announce = styled.div`

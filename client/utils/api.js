@@ -1,8 +1,13 @@
 import { useAuthContext } from './auth'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { useCallback } from 'react'
 
-export const http = async (method, url, { token, body }, isJson = true) => {
+export const http = async (
+  method,
+  url,
+  { token, body } = {},
+  isJson = true
+) => {
   const params = {
     method,
     headers: {
@@ -14,12 +19,17 @@ export const http = async (method, url, { token, body }, isJson = true) => {
   return fetch(`${process.env.API_URL}${url}`, params)
 }
 
-export const httpGet = async (url, { token } = {}, isJson = true) => {
-  const response = await http('GET', url, { token }, isJson)
+export const httpGet = async (...args) => {
+  const response = await http('GET', ...args)
   return response.json()
 }
-export const httpPost = async (url, { token, body } = {}, isJson = true) =>
-  http('POST', url, { token, body }, isJson)
+
+export const getAndCache = async (...args) => {
+  const data = httpGet(...args)
+  return mutate(args[0], data, false)
+}
+
+export const httpPost = async (...args) => http('POST', ...args)
 
 export const useGet = (url, options) => {
   const { token } = useAuthContext()

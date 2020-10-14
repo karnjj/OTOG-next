@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useInput, useShow } from '../utils'
 import { useHttp, usePost } from '../utils/api'
 import { mutate } from 'swr'
@@ -16,7 +16,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { RenderOnIntersect } from './RenderOnIntersect'
 
-export const NewContest = () => {
+export const NewContest = ({ setIdContest }) => {
   const [show, handleShow, handleClose] = useShow(false)
   const [name, inputName] = useInput()
   const [mode, inputMode] = useInput('unrated')
@@ -34,7 +34,8 @@ export const NewContest = () => {
     const res = await post(body)
     if (res.ok) {
       handleClose()
-      mutate('/api/admin/contest')
+      const contests = await mutate('/api/admin/contest')
+      setIdContest(contests[0].idContest)
     }
   }
   return (
@@ -143,7 +144,7 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
     const res = await patch(formData, false)
     if (res.ok) {
       handleClose()
-      window.location.reload(false)
+      mutate('/api/admin/contest')
     }
   }
 
@@ -187,7 +188,7 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
               <InputGroup as={Row} className='m-auto'>
                 <Form.Control
                   as={DatePicker}
-                  selected={startDate}
+                  value={startDate}
                   onChange={handleChangeStart}
                   showTimeSelect
                   timeFormat='HH:mm'
@@ -198,7 +199,7 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
                 <Col xs={1} />
                 <Form.Control
                   as={DatePicker}
-                  selected={endDate}
+                  value={endDate}
                   onChange={handleChangeEnd}
                   showTimeSelect
                   timeFormat='HH:mm'
@@ -246,9 +247,14 @@ const ConfigTask = ({ id_Prob, see, idContest }) => {
 }
 
 const EditModal = (props) => {
-  const { show, handleClose, id_Prob, ...rest } = props
+  const { show, handleClose, task } = props
+  const { id_Prob } = task
 
-  const [data, setData] = useState(rest)
+  const [data, setData] = useState(task)
+  useEffect(() => {
+    setData(task)
+  }, [task])
+
   const { name, sname, memory, time, score, pdf, subtask, zip } = data
 
   const selectFile = (event) => {
@@ -283,7 +289,7 @@ const EditModal = (props) => {
     const response = await post(formData, false)
     if (response.ok) {
       handleClose()
-      window.location.reload(false)
+      mutate('/api/admin/problem')
     }
   }
 
@@ -354,9 +360,11 @@ const EditModal = (props) => {
 }
 
 const TaskRow = (props) => {
-  const { id_Prob, name, sname, memory, time, score } = props
-  const [show, handleShow, handleClose] = useShow()
-
+  const { task, selectTask } = props
+  const { id_Prob, name, sname, memory, time, score } = task
+  const handleShow = useCallback(() => {
+    selectTask(task)
+  }, [task])
   return (
     <RenderOnIntersect
       id={`admin/contest/${id_Prob}`}
@@ -375,36 +383,53 @@ const TaskRow = (props) => {
         <td>{score}</td>
         <td>
           <ConfigTask {...props} />
-          <EditModal {...props} show={show} handleClose={handleClose} />
         </td>
       </tr>
     </RenderOnIntersect>
   )
 }
 
-export const TaskTable = ({ tasks, idContest, selectedTasks }) => (
-  <CustomTable align='left'>
-    <thead className='thead-light'>
-      <RenderOnIntersect id='admin/contest/head' initialHeight='50px' as='tr'>
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Time</th>
-          <th>Memory</th>
-          <th>Score</th>
-          <th>Config</th>
-        </tr>
-      </RenderOnIntersect>
-    </thead>
-    <tbody>
-      {tasks?.map((task) => (
-        <TaskRow
-          {...task}
-          key={task.id_Prob}
-          idContest={idContest}
-          see={selectedTasks.includes(task.id_Prob)}
-        />
-      ))}
-    </tbody>
-  </CustomTable>
-)
+export const TaskTable = ({ tasks, idContest, selectedTasks }) => {
+  const [taskModal, setTaskModal] = useState({ show: false, task: {} })
+  const selectTask = useCallback((task) => {
+    setTaskModal({ task, show: true })
+  }, [])
+  const handleClose = useCallback(() => {
+    setTaskModal((prevState) => ({ ...prevState, show: false }))
+  }, [])
+
+  return (
+    <>
+      <CustomTable ready={!!tasks} align='left'>
+        <thead className='thead-light'>
+          <RenderOnIntersect
+            id='admin/contest/head'
+            initialHeight='50px'
+            as='tr'
+          >
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Time</th>
+              <th>Memory</th>
+              <th>Score</th>
+              <th>Config</th>
+            </tr>
+          </RenderOnIntersect>
+        </thead>
+        <tbody>
+          {tasks?.map((task) => (
+            <TaskRow
+              key={task.id_Prob}
+              task={task}
+              selectTask={selectTask}
+              idContest={idContest}
+              see={selectedTasks.includes(task.id_Prob)}
+            />
+          ))}
+        </tbody>
+      </CustomTable>
+      <EditModal {...taskModal} handleClose={handleClose} />
+    </>
+  )
+}

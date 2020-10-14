@@ -9,7 +9,7 @@ import {
 import Header from '../../components/AdminHeader'
 import { AnnounceEditor } from '../../components/Announce'
 
-import { httpGet, useGet } from '../../utils/api'
+import { useGet, getAndCache } from '../../utils/api'
 
 const Note = () => (
   <Card>
@@ -26,15 +26,19 @@ const Note = () => (
   </Card>
 )
 
-const Contest = ({ tasks }) => {
-  const { data = {} } = useGet('/api/admin/contest')
-  const { contests = [], selectedTasks = [] } = data
+const Contests = () => {
+  const { data: contests = [] } = useGet('/api/admin/contest')
+  const { data: tasks = [] } = useGet('/api/admin/problem')
 
-  const [idContest, setIdContest] = useState()
+  const [idContest, setIdContest] = useState(contests[0]?.idContest ?? 0)
   const latestContest = contests[0]?.idContest ?? 0
   useEffect(() => {
     setIdContest(latestContest)
   }, [latestContest])
+
+  const contestData =
+    contests.find((contest) => contest.idContest === idContest) ?? {}
+  const selectedTasks = contestData?.problems ?? []
 
   const selectIdContest = (event) => setIdContest(event.target.value)
   const SelectContest = () => (
@@ -50,47 +54,44 @@ const Contest = ({ tasks }) => {
     </Form.Group>
   )
 
-  // const contestData =
-  // 	contests.find((contest) => contest.idContest === idContest) ?? {}
-
-  const { data: contestData = {} } = useGet(
-    idContest && `/api/admin/contest/${idContest}?mode=config`
-  )
-
   return (
-    <>
-      <Header />
-      <Container>
+    <Row>
+      <Col lg={3}>
+        <NewContest setIdContest={setIdContest} />
+        <hr />
+        <SelectContest />
+        <AnnounceEditor idContest={idContest} />
+        <ContestConfig idContest={idContest} contestData={contestData} />
+        <hr />
+        <Note />
         <br />
-        <br />
-        <Row>
-          <Col lg={3}>
-            <NewContest />
-            <hr />
-            <SelectContest />
-            <AnnounceEditor idContest={idContest} />
-            <ContestConfig idContest={idContest} contestData={contestData} />
-            <hr />
-            <Note />
-            <br />
-          </Col>
-          <Col lg={9}>
-            <TaskTable
-              tasks={tasks}
-              idContest={idContest}
-              selectedTasks={selectedTasks}
-            />
-          </Col>
-        </Row>
-      </Container>
-    </>
+      </Col>
+      <Col lg={9}>
+        <TaskTable
+          tasks={tasks}
+          idContest={idContest}
+          selectedTasks={selectedTasks}
+        />
+      </Col>
+    </Row>
   )
 }
+
+const ContestConfigPage = () => (
+  <>
+    <Header />
+    <Container>
+      <br />
+      <br />
+      <Contests />
+    </Container>
+  </>
+)
 
 export async function getServerSideProps(ctx) {
   const token = getCookieContext(ctx)
-  const tasks = await httpGet('/api/admin/problem', { token })
-  return { props: { token, tasks } }
+  await getAndCache('/api/admin/problem', { token })
+  return { props: { token } }
 }
 
-export default withAdminAuth(Contest)
+export default withAdminAuth(ContestConfigPage)
