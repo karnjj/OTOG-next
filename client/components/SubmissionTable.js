@@ -30,7 +30,7 @@ const SubmissionTable = ({ isLoading, results, canViewCode }) => {
   return (
     <CustomTable ready={!!results && !isLoading}>
       <thead>
-        <RenderOnIntersect id='subs/head' initialHeight='50px'>
+        <RenderOnIntersect id='subs/head' initialHeight='50px' as='tr'>
           <tr>
             <th>#</th>
             <th>Name</th>

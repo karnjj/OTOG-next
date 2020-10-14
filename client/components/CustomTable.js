@@ -2,7 +2,6 @@ import vars from '../styles/vars'
 import styled, { keyframes } from 'styled-components'
 
 import { Table } from 'react-bootstrap'
-import { TableLoader } from './Loader'
 
 const customColor = (props) =>
   props.acceptState ? vars.accept : props.wrongState && vars.wrong
@@ -41,6 +40,6 @@ export const CustomTable = ({ ready = true, align = 'center', ...props }) => {
   return ready ? (
     <StyledTable responsive hover align={align} {...props} />
   ) : (
-    <TableLoader />
+    <div style={{ height: '80vh' }} />
   )
 }
