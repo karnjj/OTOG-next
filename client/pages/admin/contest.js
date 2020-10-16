@@ -27,8 +27,10 @@ const Note = () => (
 )
 
 const Contests = () => {
-  const { data: contests = [] } = useGet('/api/admin/contest')
+  const { data: contestsData = {} } = useGet('/api/admin/contest')
   const { data: tasks = [] } = useGet('/api/admin/problem')
+
+  const { contests = [] } = contestsData
 
   const [idContest, setIdContest] = useState(contests[0]?.idContest ?? 0)
   const latestContest = contests[0]?.idContest ?? 0
