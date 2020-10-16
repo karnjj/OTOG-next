@@ -70,11 +70,23 @@ async function deleteUsers(req, res) {
 
 }
 async function Contests(req, res) {
-	var sql = 'select idContest,name,mode_grader as mode,judge,time_start as startDate,time_end as endDate,problems from Contest'
+	var sql = 'select idContest, name, problems from Contest'
 	let contests = await new Promise((resolve) => {
 		db.query(sql, (err, result) => resolve(result))
 	})
-	res.json(contests)
+	res.json({contests})
+}
+
+async function getContestWithId(req, res) {
+	const idContest = req.params.id
+	var sql = 'select idContest,name,mode_grader as mode,judge,time_start as startDate,time_end as endDate,problems from Contest where idContest = ?'
+	let contests = await new Promise((resolve) => {
+		db.query(sql, [idContest], (err, result) => resolve(result))
+	})
+	if(contests[0]) {
+		contest[0].problems = json.parse(contest[0].problems)
+	}
+	res.json(contests[0] ?? {})
 }
 
 // function getContestWithId(req, res) {
@@ -291,7 +303,7 @@ module.exports = {
 	Contests,
 	editProblem,
 	editUser,
-	// getContestWithId,
+	getContestWithId,
     patchContestConfig,
     contestAnnounce,
     contestProblem,
