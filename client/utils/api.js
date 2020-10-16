@@ -37,6 +37,7 @@ export const useGet = (url, options) => {
   const state = useSWR(url, fetcher, options)
   const { data, error } = state
   const isLoading = !data && !error
+  // TODO: make undefined an empty object (?)
   return { ...state, isLoading }
 }
 

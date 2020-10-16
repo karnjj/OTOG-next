@@ -84,7 +84,7 @@ async function getContestWithId(req, res) {
 		db.query(sql, [idContest], (err, result) => resolve(result))
 	})
 	if(contests[0]) {
-		contest[0].problems = json.parse(contest[0].problems)
+		contests[0].problems = JSON.parse(contests[0].problems)
 	}
 	res.json(contests[0] ?? {})
 }

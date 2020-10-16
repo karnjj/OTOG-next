@@ -117,11 +117,18 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
   const [show, handleShow, handleClose] = useShow(false)
   const [contestData, setContestData] = useState(data)
   useEffect(() => {
-    if (show) {
+    if (!show) {
       setContestData(data)
     }
   }, [show, data])
-  const { name, mode, judge, startDate, endDate } = contestData
+  const { name, mode, judge, startDate: start, endDate: end } = contestData
+
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
+  useEffect(() => {
+    setStartDate(new Date(start * 1000))
+    setEndDate(new Date(end * 1000))
+  }, [start, end])
 
   const handleChangeName = (event) =>
     setContestData({ ...contestData, name: event.target.value })
@@ -138,6 +145,8 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
   const onSubmit = async (event) => {
     event.preventDefault()
     const formData = new FormData()
+    contestData.startDate = Math.floor(Date.parse(startDate) / 1000)
+    contestData.endDate = Math.floor(Date.parse(endDate) / 1000)
     Object.keys(contestData).forEach((item) =>
       formData.append(item, contestData[item])
     )
@@ -188,8 +197,10 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
               <InputGroup as={Row} className='m-auto'>
                 <Form.Control
                   as={DatePicker}
-                  value={startDate}
-                  onChange={handleChangeStart}
+                  selected={startDate}
+                  onChange={(date) => {
+                    setStartDate(date), setEndDate(date)
+                  }}
                   showTimeSelect
                   timeFormat='HH:mm'
                   timeIntervals={30}
@@ -199,8 +210,10 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
                 <Col xs={1} />
                 <Form.Control
                   as={DatePicker}
-                  value={endDate}
-                  onChange={handleChangeEnd}
+                  selected={endDate}
+                  onChange={(date) => {
+                    setEndDate(date)
+                  }}
                   showTimeSelect
                   timeFormat='HH:mm'
                   timeIntervals={30}

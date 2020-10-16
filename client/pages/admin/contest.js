@@ -32,15 +32,15 @@ const Contests = () => {
 
   const { contests = [] } = contestsData
 
-  const [idContest, setIdContest] = useState(contests[0]?.idContest ?? 0)
-  const latestContest = contests[0]?.idContest ?? 0
+  const [idContest, setIdContest] = useState(contests[0]?.idContest || 0)
+  const latestContest = contests[0]?.idContest || 0
   useEffect(() => {
     setIdContest(latestContest)
   }, [latestContest])
 
-  const contestData =
-    contests.find((contest) => contest.idContest === idContest) ?? {}
-  const selectedTasks = contestData?.problems ?? []
+  const { data: contestData = {} } = useGet(`/api/admin/contest/${idContest}`)
+
+  const selectedTasks = contestData?.problems || []
 
   const selectIdContest = (event) => setIdContest(event.target.value)
   const SelectContest = () => (
