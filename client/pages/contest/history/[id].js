@@ -12,7 +12,7 @@ import { faChartArea } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 import { useGet } from '../../../utils/api'
 
-const ScoreTr = (props) => {
+const ScoreRow = (props) => {
   const { rank, sname, sumTime, sum, scores, tasks, rating, idUser } = props
   const maxSum = tasks.reduce((total, prob) => total + prob.score, 0)
   const score = (prob) =>
@@ -42,7 +42,7 @@ const ScoreTr = (props) => {
 
 const Scoreboard = ({ tasks, contestants, isLoading }) => {
   return (
-    <CustomTable ready={!!tasks && !!contestants} isLoading={isLoading}>
+    <CustomTable isLoading={isLoading}>
       <thead>
         <tr>
           <th>#</th>
@@ -58,14 +58,14 @@ const Scoreboard = ({ tasks, contestants, isLoading }) => {
       </thead>
       <tbody>
         {contestants?.map((con, index) => (
-          <ScoreTr key={index} tasks={tasks} {...con} />
+          <ScoreRow key={index} tasks={tasks} {...con} />
         ))}
       </tbody>
     </CustomTable>
   )
 }
 
-const ContestScoreboard = (props) => {
+const ContestScoreboard = () => {
   const router = useRouter()
   const { id } = router.query
   const {
@@ -73,7 +73,7 @@ const ContestScoreboard = (props) => {
     isLoadin: usersLoading,
   } = useGet(`/api/contest/history/${id}`)
   const {
-    data: { tasks },
+    data: { problems: tasks },
     isLoading: tasksLoading,
   } = useGet(`/api/contest/${id}`)
 

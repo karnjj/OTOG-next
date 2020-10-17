@@ -27,7 +27,6 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
-import { useEffect } from 'react'
 
 const ProfileImage = styled(Image)`
   width: 28px;
