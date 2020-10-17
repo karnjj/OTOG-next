@@ -26,7 +26,6 @@ export const AuthProvider = (props) => {
       cookie.set('token', token, { expires: 3 / 24 })
       setToken(token)
       window.localStorage.setItem('login', Date.now())
-      router.push('/')
     },
     [token]
   )

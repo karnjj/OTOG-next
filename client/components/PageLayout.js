@@ -27,6 +27,7 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
+import { useEffect } from 'react'
 
 const ProfileImage = styled(Image)`
   width: 28px;
@@ -106,7 +107,11 @@ export const Header = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <NavLink name='Login' icon={faSignInAlt} path='/login' />
+                <NavLink
+                  name='Login'
+                  icon={faSignInAlt}
+                  path={`/login?page=${router.pathname}`}
+                />
               )}
             </Nav>
           </Navbar.Collapse>

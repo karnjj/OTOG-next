@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 import { Card, Form } from 'react-bootstrap'
 import CustomAlert from '../components/CustomAlert'
@@ -17,6 +18,7 @@ const Login = () => {
   const [isLoading, setLoading] = useState(false)
   const [alert, setAlert] = useAlert()
 
+  const { push, query } = useRouter()
   const post = usePost('/api/login')
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -28,6 +30,7 @@ const Login = () => {
       if (res.ok) {
         const token = await res.json()
         login(token)
+        push(query?.page || '/')
       } else if (res.status === 401) {
         setAlert({
           head: 'Login failed !',
