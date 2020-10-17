@@ -1,4 +1,4 @@
-import { useAuthContext } from './auth'
+import { getCookieContext, useAuthContext } from './auth'
 import useSWR, { mutate } from 'swr'
 import { useCallback } from 'react'
 
@@ -26,7 +26,8 @@ export const getAndCache = async (...args) => {
 
 export const prefetch = async (context, url) => {
   const token = getCookieContext(context)
-  getAndCache(url, { token })
+  const data = await getAndCache(url, { token })
+  return { data, token }
 }
 
 export const httpPost = async (...args) => http('POST', ...args)

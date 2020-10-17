@@ -40,9 +40,5 @@ const UserConfig = () => (
   </>
 )
 
-export async function getServerSideProps(ctx) {
-  const token = getCookieContext(ctx)
-  return { props: { token } }
-}
-
+export { getServerSideProps } from '../../utils/auth'
 export default withAdminAuth(UserConfig)

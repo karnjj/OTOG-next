@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Container, Row, Col, Card, Form } from 'react-bootstrap'
-import { withAdminAuth, getCookieContext } from '../../utils/auth'
+import { withAdminAuth } from '../../utils/auth'
 import {
   NewContest,
   TaskTable,
@@ -92,9 +92,8 @@ const ContestConfigPage = () => (
   </>
 )
 
-export async function getServerSideProps(ctx) {
-  const token = getCookieContext(ctx)
-  await getAndCache('/api/admin/problem', { token })
+export async function getServerSideProps(context) {
+  const { token } = await getAndCache(context, '/api/admin/problem')
   return { props: { token } }
 }
 

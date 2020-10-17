@@ -77,7 +77,12 @@ export const withAdminAuth = (WrappedComponent) => {
   return Wrapper
 }
 
-export function getCookieContext(ctx) {
-  const { token } = nextCookie(ctx)
+export function getCookieContext(context) {
+  const { token } = nextCookie(context)
   return token ?? null
+}
+
+export async function getServerSideProps(context) {
+  const token = getCookieContext(context)
+  return { props: { token } }
 }
