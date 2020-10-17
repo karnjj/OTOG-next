@@ -44,14 +44,14 @@ const SubmissionTable = ({ isLoading, results, canViewCode }) => {
       </thead>
       <tbody>
         {results?.map((result, index) => (
-          <SubTr key={index} {...result} canViewCode={showCode} />
+          <SubRow key={index} {...result} canViewCode={showCode} />
         ))}
       </tbody>
     </CustomTable>
   )
 }
 
-const SubTr = memo((props) => {
+const SubRow = memo((props) => {
   const [showError, handleShow, handleClose] = useShow(false)
   const {
     problemname,
@@ -83,7 +83,7 @@ const SubTr = memo((props) => {
 
   return (
     <>
-      <RenderOnIntersect id={`subs/${idResult}`} initialHeight='63px'>
+      <RenderOnIntersect id={`subs/${idResult}`} initialHeight='63px' as='tr'>
         <TableRow acceptState={isAccept(result)}>
           <td>{idResult}</td>
           {state != 0 ? (

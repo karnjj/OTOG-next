@@ -22,24 +22,24 @@ const multerConfig = multer({ storage: storage })
 
 async function Problems(req, res) {
 	var sql = 'select * from Problem'
-	let problem = await new Promise((resolve) => {
+	let tasks = await new Promise((resolve) => {
 		db.query(sql, (err, result) => resolve(result))
 	})
-	for(var i in problem) {
-		var pathName = `./grader/source/${problem[i].sname}`
-		var casePathName = `./grader/source/${problem[i].sname}/1.in`
+	for(var i in tasks) {
+		var pathName = `./grader/source/${tasks[i].sname}`
+		var casePathName = `./grader/source/${tasks[i].sname}/1.in`
 		if (fs.existsSync(pathName) && fs.existsSync(casePathName) ) {
-			problem[i].noTestcase = false;
-		}else problem[i].noTestcase = true;
+			tasks[i].noTestcase = false;
+		}else tasks[i].noTestcase = true;
 	}
-	res.json(problem)
+	res.json({tasks})
 }
 async function Users(req, res) {
 	var sql = 'select * from User'
-	let problem = await new Promise((resolve) => {
+	let users = await new Promise((resolve) => {
 		db.query(sql, (err, result) => resolve(result))
 	})
-	res.json(problem)
+	res.json({users})
 }
 async function addUsers(req, res) {
 	var username = req.body.username;

@@ -22,13 +22,14 @@ const UserTable = ({ users }) => (
       </RenderOnIntersect>
     </thead>
     <tbody>
-      {users?.map((user, index) => (
+      {users?.map((user) => (
         <RenderOnIntersect
-          id={`users/${user.sname}`}
+          key={user.idUser}
+          id={`users/${user.idUser}`}
           initialHeight='49px'
           as='tr'
         >
-          <tr key={index}>
+          <tr>
             <td>{user.rank}</td>
             <td>
               <Name {...user} />
@@ -43,7 +44,9 @@ const UserTable = ({ users }) => (
 )
 
 const Rating = () => {
-  const { data: users } = useGet('/api/user')
+  const {
+    data: { users },
+  } = useGet('/api/user')
   const [usernameSearch, inputUsernameSearch] = useInput()
 
   const filteredUsers = users?.filter(

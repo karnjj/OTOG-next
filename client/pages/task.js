@@ -49,7 +49,11 @@ const Task = () => {
   useEffect(() => setShowAll(isAdmin), [isAdmin])
 
   const url = `/api/problem?mode=${showAll ? 'admin' : 'full'}`
-  const { data: tasks = [], isLoading, isValidating } = useGet(url)
+  const {
+    data: { tasks },
+    isLoading,
+    isValidating,
+  } = useGet(url)
 
   //switch reload effect
   const [loading, setLoading] = useState(isLoading)
@@ -98,7 +102,7 @@ const Task = () => {
         </Col>
       </Row>
       <hr />
-      <TaskTable problems={filteredTasks} isLoading={loading} />
+      <TaskTable tasks={filteredTasks} isLoading={loading} />
     </>
   )
 }

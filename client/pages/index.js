@@ -140,8 +140,9 @@ const Welcome = () => (
 
 const Hello = () => {
   const { userData } = useAuthContext()
-  const { data = {} } = useGet('/api/countProblem')
-  const { allProblem, userProblem = {}, newProb, onlineUser } = data
+  const {
+    data: { allProblem, userProblem = {}, newProb, onlineUser },
+  } = useGet('/api/countProblem')
   const { passProb, wrongProb } = userProblem
   const noSub = allProblem - passProb - wrongProb
 
@@ -178,8 +179,11 @@ const Hello = () => {
 }
 
 const NewTaskTable = () => {
-  const { data: tasks = [], isLoading } = useGet('/api/problem?mode=firstpage')
-  return <TaskTable problems={tasks} isLoading={isLoading} />
+  const {
+    data: { tasks },
+    isLoading,
+  } = useGet('/api/problem?mode=firstpage')
+  return <TaskTable tasks={tasks} isLoading={isLoading} />
 }
 
 const Hero = () => {

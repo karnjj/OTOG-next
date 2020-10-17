@@ -138,7 +138,7 @@ function getUser(req,res) {
 				else result[i].rank = prev
 			}
 		}
-		res.json(result);
+		res.json({users: result});
 	});
 }
 

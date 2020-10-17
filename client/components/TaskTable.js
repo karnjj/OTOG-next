@@ -14,7 +14,7 @@ const StyledPop = styled(Popover)`
   max-width: none;
 `
 
-const TaskTable = ({ isLoading, problems }) => {
+const TaskTable = ({ isLoading, tasks }) => {
   const { isLogin } = useAuthContext()
 
   return (
@@ -31,7 +31,7 @@ const TaskTable = ({ isLoading, problems }) => {
         </RenderOnIntersect>
       </thead>
       <tbody>
-        {problems.map((prob, index) => (
+        {tasks?.map((prob, index) => (
           <TaskRow key={index} {...prob} />
         ))}
       </tbody>

@@ -39,22 +39,22 @@ async function getProblem(req,res) {
 	if (userData) promiseValue.push(PassOrWrongPromise)
 	Promise.all(promiseValue).then(result => {
 		let whoPass = result[0]
-		let problems = result[1]
+		let tasks = result[1]
 		let answer = result[2]
 		if (answer !== undefined) {
 			answer.map((data) => {
-				let idx = problems.findIndex(obj => obj.id_Prob == Number(data.prob_id))
-				if (idx !== -1) if (data.score === 100) problems[idx]['acceptState'] = true
-				else problems[idx]['wrongState'] = true
+				let idx = tasks.findIndex(obj => obj.id_Prob == Number(data.prob_id))
+				if (idx !== -1) if (data.score === 100) tasks[idx]['acceptState'] = true
+				else tasks[idx]['wrongState'] = true
 			})
 		}
 		for (let key in whoPass) {
-			let idx = problems.findIndex(obj => obj.id_Prob == whoPass[key].prob_id)
+			let idx = tasks.findIndex(obj => obj.id_Prob == whoPass[key].prob_id)
 			if (idx == -1) continue
-			if (problems[idx]['pass'] == undefined) problems[idx]['pass'] = new Array()
-			problems[idx]['pass'] = whoPass[key].pass.split(',')
+			if (tasks[idx]['pass'] == undefined) tasks[idx]['pass'] = new Array()
+			tasks[idx]['pass'] = whoPass[key].pass.split(',')
 		}
-		res.json(problems)
+		res.json({tasks})
 	})
 }
 

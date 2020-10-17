@@ -24,7 +24,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import { useShow } from '../utils'
-import { useHttp } from '../utils/api'
+import { useHttp, usePut } from '../utils/api'
 
 const Blockquote = styled.blockquote`
   padding-left: 10px;
@@ -181,7 +181,7 @@ export const AnnounceEditor = ({ idContest, announce }) => {
     }
   }, [announce])
 
-  const put = useHttp('PUT', `/api/admin/contest/${idContest}`)
+  const put = usePut(`/api/admin/contest/${idContest}`)
   const onSave = async () => {
     await put(value)
     handleClose()

@@ -29,7 +29,7 @@ async function AllSubmission(req, res) {
 		)
 	})
 	Promise.all([lastestPromise, submitPromise]).then((values) => {
-		res.json({ result: values[1], lastest: values[0] })
+		res.json({ results: values[1], latest: values[0] })
 	})
 }
 
@@ -41,7 +41,7 @@ async function ContestSubmission(req, res) {
 			where contestmode is not null order by idResult desc limit 100`
 		db.query(sql, (err, result) => (err ? reject(err) : resolve(result)))
 	})
-	res.json({ result: submit })
+	res.json({ results: submit })
 }
 
 module.exports = {

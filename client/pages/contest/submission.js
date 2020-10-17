@@ -9,8 +9,9 @@ import { faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { useGet } from '../../utils/api'
 
 const Submission = () => {
-  const { data = {} } = useGet('/api/contest/submission')
-  const { result: results } = data
+  const {
+    data: { results },
+  } = useGet('/api/contest/submission')
   return <SubmissionTable results={results} />
 }
 

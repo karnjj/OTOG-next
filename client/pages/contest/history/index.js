@@ -47,7 +47,9 @@ const ContestTr = (props) => {
 }
 
 const ContestTable = () => {
-  const { data: contests } = useGet('/api/contest/history')
+  const {
+    data: { contests },
+  } = useGet('/api/contest/history')
 
   return (
     <CustomTable ready={!!contests}>

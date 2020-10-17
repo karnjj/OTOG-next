@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useInput, useShow } from '../utils'
-import { useHttp, usePost } from '../utils/api'
+import { useHttp, usePatch, usePost } from '../utils/api'
 import { mutate } from 'swr'
 
 import DatePicker from 'react-datepicker'
@@ -141,7 +141,7 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
   const handleChangeEnd = (date) =>
     setContestData({ ...contestData, endDate: date })
 
-  const patch = useHttp('PATCH', `/api/admin/contest/${idContest}`)
+  const patch = usePatch(`/api/admin/contest/${idContest}`)
   const onSubmit = async (event) => {
     event.preventDefault()
     const formData = new FormData()
@@ -240,7 +240,7 @@ const ConfigTask = ({ id_Prob, see, idContest }) => {
     setState(see)
   }, [see])
 
-  const patch = useHttp('PATCH', `/api/admin/contest/${idContest}/${id_Prob}`)
+  const patch = usePatch(`/api/admin/contest/${idContest}/${id_Prob}`)
   const handleChangeState = async (event) => {
     event.preventDefault()
     setState(!state)

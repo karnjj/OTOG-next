@@ -13,7 +13,7 @@ function getAllContest(req,res) {
 	let sql = `select * from Contest where time_end < UNIX_TIMESTAMP() order by idContest desc`
 	db.query(sql, (err, result) => {
 		if (err) throw err
-		res.json(result)
+		res.json({contests: result})
 	});
 }
 
@@ -47,7 +47,7 @@ function getContestWithId(req,res) {
 					name: result[0].name,
 					id: result[0].idContest,
 					timeEnd: result[0].time_end,
-					problem: prob
+					problems: prob
 				})
 			}else res.status(404).json({})
 		})
@@ -86,7 +86,7 @@ function getContestHistoryWithId(req,res) {
 			 if (idx != 0) if(new_result[idx].sum != new_result[idx-1].sum) Rank = Number(idx)+1
 			new_result[idx].rank = Rank 
 		}
-		res.json(new_result)
+		res.json({contestants: new_result})
 	});
 }
 

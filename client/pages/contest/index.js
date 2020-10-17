@@ -109,8 +109,9 @@ const NoLogin = (props) => {
 
 const HoldingContest = ({ idContest, timeleft, name }) => {
   const { isAdmin } = useAuthContext()
-  const { data = {} } = useGet(`/api/contest/${idContest}`)
-  const { tasks } = data
+  const {
+    data: { tasks },
+  } = useGet(`/api/contest/${idContest}`)
 
   return (
     <Container>

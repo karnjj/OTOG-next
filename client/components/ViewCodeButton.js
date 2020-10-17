@@ -25,8 +25,10 @@ const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
   const url = idResult
     ? `/api/scode?idSubmit=${idResult}`
     : `/api/scode?idProb=${id_Prob}`
-  const { data = {}, isLoading } = useGet(shown && url)
-  const { sCode: sourceCode } = data
+  const {
+    data: { sCode: sourceCode },
+    isLoading,
+  } = useGet(shown && url)
 
   const [showLineNumber, setShowLineNumber] = useState(true)
 

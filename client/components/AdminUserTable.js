@@ -7,7 +7,7 @@ import {
   faTrash,
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons'
-import { useGet, usePost, useHttp } from '../utils/api'
+import { useGet, usePost, useHttp, useDelete } from '../utils/api'
 import { useShow, useInput } from '../utils'
 import { RenderOnIntersect } from './RenderOnIntersect'
 import { CustomTable } from './CustomTable'
@@ -63,7 +63,7 @@ export const NewUser = () => {
 }
 
 const ConfigUser = ({ handleShow, idUser }) => {
-  const del = useHttp('DELETE', `/api/admin/user/${idUser}`)
+  const del = useDelete(`/api/admin/user/${idUser}`)
 
   const handleDelete = async () => {
     if (confirm(`Delete user id : ${idUser}`)) {
@@ -169,7 +169,9 @@ const UserRow = memo((props) => {
 })
 
 export const UserTable = () => {
-  const { data: users } = useGet('/api/admin/user')
+  const {
+    data: { users },
+  } = useGet('/api/admin/user')
 
   const [userModal, setUserModal] = useState({ show: false, user: {} })
   const selectUser = useCallback((user) => {

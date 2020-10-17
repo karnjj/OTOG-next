@@ -27,7 +27,7 @@ const Icon = styled(FontAwesomeIcon)`
 `
 const MiniSubmission = ({ idContest, idProb, parentCallback }) => {
   const url = `/api/contest/${idContest}/submission?idProb=${idProb}`
-  const { data = {}, isValidating, mutate: fetchData } = useGet(url, false)
+  const { data, isValidating, mutate: fetchData } = useGet(url, false)
 
   const { best_submit, lastest_submit } = data
   const latest = lastest_submit && lastest_submit[0]

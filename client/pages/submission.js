@@ -18,8 +18,11 @@ const Submission = () => {
   useEffect(() => setShowOnlyMe(!isAdmin && isLogin), [isAdmin, isLogin])
 
   const url = `/api/submission?mode=${showOnlyMe ? 'onlyme' : 'full'}`
-  const { data: submissions = {}, isLoading, isValidating } = useGet(url)
-  const { result: results, lastest } = submissions
+  const {
+    data: { results, latest },
+    isLoading,
+    isValidating,
+  } = useGet(url)
 
   //switch reload effect
   const [loading, setLoading] = useState(isLoading)
@@ -42,7 +45,7 @@ const Submission = () => {
           lg={{ span: 6, order: 'first' }}
           className='mt-2 mt-lg-0'
         >
-          {lastest && (showOnlyMe || isAdmin) && (
+          {latest && (showOnlyMe || isAdmin) && (
             <Row className='align-items-baseline'>
               <Col xs='auto' className='ml-auto ml-lg-0'>
                 <b>ส่งข้อล่าสุด :</b>
@@ -56,13 +59,13 @@ const Submission = () => {
                 <a
                   target='_blank'
                   className='text-wrap'
-                  href={`${process.env.API_URL}/api/docs/${lastest.sname}`}
+                  href={`${process.env.API_URL}/api/docs/${latest.sname}`}
                 >
-                  {lastest.name}
+                  {latest.name}
                 </a>
               </Col>
               <Col xs='auto'>
-                <SubmitGroup {...lastest} />
+                <SubmitGroup {...latest} />
               </Col>
             </Row>
           )}

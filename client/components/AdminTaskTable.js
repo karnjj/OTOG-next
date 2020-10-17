@@ -1,6 +1,6 @@
 import { useState, useEffect, memo } from 'react'
 import { useAuthContext } from '../utils/auth'
-import { useGet, usePost, useHttp } from '../utils/api'
+import { useGet, usePost, useHttp, useDelete } from '../utils/api'
 import { CustomTable } from './CustomTable'
 import {
   ButtonGroup,
@@ -153,7 +153,7 @@ export const NewTask = () => {
 
 const ConfigTask = ({ index, id_Prob, handleShow, state, sname }) => {
   const post = usePost(`/api/admin/problem/${id_Prob}?option=onoff`)
-  const del = useHttp('DELETE', `/api/admin/problem/${id_Prob}?sname=${sname}`)
+  const del = useDelete(`/api/admin/problem/${id_Prob}?sname=${sname}`)
 
   const handleChangeState = async (event) => {
     event.preventDefault()
@@ -350,7 +350,9 @@ const TaskRow = memo((props) => {
 })
 
 export const TaskTable = () => {
-  const { data: tasks } = useGet('/api/admin/problem')
+  const {
+    data: { tasks },
+  } = useGet('/api/admin/problem')
 
   return (
     <CustomTable ready={!!tasks} align='left'>

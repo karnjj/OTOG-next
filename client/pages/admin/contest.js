@@ -27,18 +27,20 @@ const Note = () => (
 )
 
 const Contests = () => {
-  const { data: contestsData = {} } = useGet('/api/admin/contest')
-  const { data: tasks = [] } = useGet('/api/admin/problem')
+  const {
+    data: { contests },
+  } = useGet('/api/admin/contest')
+  const {
+    data: { tasks },
+  } = useGet('/api/admin/problem')
 
-  const { contests = [] } = contestsData
-
-  const [idContest, setIdContest] = useState(contests[0]?.idContest || 0)
-  const latestContest = contests[0]?.idContest || 0
+  const [idContest, setIdContest] = useState(0)
+  const latestContest = (contests && contests[0]?.idContest) || 0
   useEffect(() => {
     setIdContest(latestContest)
   }, [latestContest])
 
-  const { data: contestData = {} } = useGet(`/api/admin/contest/${idContest}`)
+  const { data: contestData } = useGet(`/api/admin/contest/${idContest}`)
 
   const selectedTasks = contestData?.problems || []
 
@@ -47,7 +49,7 @@ const Contests = () => {
     <Form.Group>
       <Form.Label>Choose Contest : </Form.Label>
       <Form.Control as='select' onChange={selectIdContest} value={idContest}>
-        {contests.map(({ idContest: id, name }) => (
+        {contests?.map(({ idContest: id, name }) => (
           <option key={id} value={id}>
             {name}
           </option>

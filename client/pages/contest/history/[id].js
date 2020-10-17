@@ -13,8 +13,8 @@ import { useRouter } from 'next/router'
 import { useGet } from '../../../utils/api'
 
 const ScoreTr = (props) => {
-  const { rank, sname, sumTime, sum, scores, problems, rating, idUser } = props
-  const maxSum = problems.reduce((total, prob) => total + prob.score, 0)
+  const { rank, sname, sumTime, sum, scores, tasks, rating, idUser } = props
+  const maxSum = tasks.reduce((total, prob) => total + prob.score, 0)
   const score = (prob) =>
     scores[prob.id_Prob] ? scores[prob.id_Prob].score : 0
   const round = (num) => Math.round(num * 100) / 100
@@ -25,7 +25,7 @@ const ScoreTr = (props) => {
       <td>
         <Name {...{ rating, sname, idUser }} />
       </td>
-      {problems.map((prob, index) => (
+      {tasks.map((prob, index) => (
         <TableData
           key={index}
           acceptState={prob.score === score(prob)}
@@ -40,14 +40,14 @@ const ScoreTr = (props) => {
   )
 }
 
-const Scoreboard = ({ problems, contestants }) => {
+const Scoreboard = ({ tasks, contestants }) => {
   return (
-    <CustomTable ready={!!problems && !!contestants}>
+    <CustomTable ready={!!tasks && !!contestants}>
       <thead>
         <tr>
           <th>#</th>
           <th>ชื่อผู้เข้าแข่งขัน</th>
-          {problems?.map((n, i) => (
+          {tasks?.map((n, i) => (
             <th key={i} title={n.name}>
               ข้อที่ {i + 1}
             </th>
@@ -58,7 +58,7 @@ const Scoreboard = ({ problems, contestants }) => {
       </thead>
       <tbody>
         {contestants?.map((con, index) => (
-          <ScoreTr key={index} problems={problems} {...con} />
+          <ScoreTr key={index} tasks={tasks} {...con} />
         ))}
       </tbody>
     </CustomTable>
@@ -68,9 +68,12 @@ const Scoreboard = ({ problems, contestants }) => {
 const ContestScoreboard = (props) => {
   const router = useRouter()
   const { id } = router.query
-  const { data: contestants } = useGet(`/api/contest/history/${id}`)
-  const { data: contestData = {} } = useGet(`/api/contest/${id}`)
-  const { problem: problems } = contestData
+  const {
+    data: { contestants },
+  } = useGet(`/api/contest/history/${id}`)
+  const {
+    data: { tasks },
+  } = useGet(`/api/contest/${id}`)
 
   return (
     <PageLayout>
@@ -78,7 +81,7 @@ const ContestScoreboard = (props) => {
         <OrangeButton href='/contest/history'>View Contest</OrangeButton>
       </Title>
       <hr />
-      <Scoreboard contestants={contestants} problems={problems} />
+      <Scoreboard contestants={contestants} tasks={tasks} />
     </PageLayout>
   )
 }
