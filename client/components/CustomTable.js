@@ -36,10 +36,14 @@ const StyledTable = styled(Table)`
     animation: ${fadein} 0.2s ease;
   }
 `
-export const CustomTable = ({ ready = true, align = 'center', ...props }) => {
-  return ready ? (
-    <StyledTable responsive hover align={align} {...props} />
-  ) : (
+export const CustomTable = ({
+  isLoading = false,
+  align = 'center',
+  ...props
+}) => {
+  return isLoading ? (
     <div style={{ height: '80vh' }} />
+  ) : (
+    <StyledTable responsive hover align={align} {...props} />
   )
 }

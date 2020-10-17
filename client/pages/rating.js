@@ -46,6 +46,7 @@ const UserTable = ({ users }) => (
 const Rating = () => {
   const {
     data: { users },
+    isLoading,
   } = useGet('/api/user')
   const [usernameSearch, inputUsernameSearch] = useInput()
 
@@ -67,7 +68,7 @@ const Rating = () => {
         <Col md={4} />
       </Row>
       <hr />
-      <UserTable users={filteredUsers} />
+      <UserTable users={filteredUsers} isLoading={isLoading} />
     </>
   )
 }

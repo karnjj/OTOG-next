@@ -402,7 +402,7 @@ const TaskRow = (props) => {
   )
 }
 
-export const TaskTable = ({ tasks, idContest, selectedTasks }) => {
+export const TaskTable = ({ tasks, idContest, selectedTasks, isLoading }) => {
   const [taskModal, setTaskModal] = useState({ show: false, task: {} })
   const selectTask = useCallback((task) => {
     setTaskModal({ task, show: true })
@@ -413,7 +413,7 @@ export const TaskTable = ({ tasks, idContest, selectedTasks }) => {
 
   return (
     <>
-      <CustomTable ready={!!tasks} align='left'>
+      <CustomTable isLoading={isLoading} align='left'>
         <thead className='thead-light'>
           <RenderOnIntersect
             id='admin/contest/head'

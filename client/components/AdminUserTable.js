@@ -171,6 +171,7 @@ const UserRow = memo((props) => {
 export const UserTable = () => {
   const {
     data: { users },
+    isLoading,
   } = useGet('/api/admin/user')
 
   const [userModal, setUserModal] = useState({ show: false, user: {} })
@@ -183,7 +184,7 @@ export const UserTable = () => {
 
   return (
     <>
-      <CustomTable ready={!!users} align='left'>
+      <CustomTable isLoading={isLoading} align='left'>
         <thead className='thead-light'>
           <RenderOnIntersect id='admin/users/head' initialHeight='50px' as='tr'>
             <tr>

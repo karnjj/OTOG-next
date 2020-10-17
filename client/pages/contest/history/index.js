@@ -49,10 +49,11 @@ const ContestTr = (props) => {
 const ContestTable = () => {
   const {
     data: { contests },
+    isLoading,
   } = useGet('/api/contest/history')
 
   return (
-    <CustomTable ready={!!contests}>
+    <CustomTable isLoading={isLoading}>
       <thead>
         <tr>
           <th>#</th>

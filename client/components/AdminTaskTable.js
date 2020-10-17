@@ -352,10 +352,11 @@ const TaskRow = memo((props) => {
 export const TaskTable = () => {
   const {
     data: { tasks },
+    isLoading,
   } = useGet('/api/admin/problem')
 
   return (
-    <CustomTable ready={!!tasks} align='left'>
+    <CustomTable isLoading={isLoading} align='left'>
       <thead className='thead-light'>
         <RenderOnIntersect id='admin/tasks/head' initialHeight='50px' as='tr'>
           <tr>

@@ -18,7 +18,7 @@ const TaskTable = ({ isLoading, tasks }) => {
   const { isLogin } = useAuthContext()
 
   return (
-    <CustomTable ready={!isLoading}>
+    <CustomTable isLoading={isLoading}>
       <thead>
         <RenderOnIntersect id='tasks/head' initialHeight='50px' as='tr'>
           <tr>

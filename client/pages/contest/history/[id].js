@@ -40,9 +40,9 @@ const ScoreTr = (props) => {
   )
 }
 
-const Scoreboard = ({ tasks, contestants }) => {
+const Scoreboard = ({ tasks, contestants, isLoading }) => {
   return (
-    <CustomTable ready={!!tasks && !!contestants}>
+    <CustomTable ready={!!tasks && !!contestants} isLoading={isLoading}>
       <thead>
         <tr>
           <th>#</th>
@@ -70,9 +70,11 @@ const ContestScoreboard = (props) => {
   const { id } = router.query
   const {
     data: { contestants },
+    isLoadin: usersLoading,
   } = useGet(`/api/contest/history/${id}`)
   const {
     data: { tasks },
+    isLoading: tasksLoading,
   } = useGet(`/api/contest/${id}`)
 
   return (
@@ -81,7 +83,11 @@ const ContestScoreboard = (props) => {
         <OrangeButton href='/contest/history'>View Contest</OrangeButton>
       </Title>
       <hr />
-      <Scoreboard contestants={contestants} tasks={tasks} />
+      <Scoreboard
+        contestants={contestants}
+        tasks={tasks}
+        isLoading={usersLoading || tasksLoading}
+      />
     </PageLayout>
   )
 }

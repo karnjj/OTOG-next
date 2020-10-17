@@ -11,8 +11,9 @@ import { useGet } from '../../utils/api'
 const Submission = () => {
   const {
     data: { results },
+    isLoading,
   } = useGet('/api/contest/submission')
-  return <SubmissionTable results={results} />
+  return <SubmissionTable results={results} isLoading={isLoading} />
 }
 
 const ContestSubmissionPage = () => (
