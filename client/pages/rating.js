@@ -9,8 +9,8 @@ import { faChartBar } from '@fortawesome/free-solid-svg-icons'
 import { useInput } from '../utils'
 import { RenderOnIntersect } from '../components/RenderOnIntersect'
 
-const UserTable = ({ users }) => (
-  <CustomTable ready={!!users}>
+const UserTable = ({ users, isLoading }) => (
+  <CustomTable isLoading={isLoading}>
     <thead>
       <RenderOnIntersect id='users/header' initialHeight='50px' as='tr'>
         <tr>

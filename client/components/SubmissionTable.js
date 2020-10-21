@@ -28,7 +28,7 @@ const SubmissionTable = ({ isLoading, results, canViewCode }) => {
   const showCode = canViewCode || isAdmin
 
   return (
-    <CustomTable ready={!!results && !isLoading}>
+    <CustomTable isLoading={!results || isLoading}>
       <thead>
         <RenderOnIntersect id='subs/head' initialHeight='50px' as='tr'>
           <tr>
