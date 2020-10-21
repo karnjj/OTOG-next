@@ -9,7 +9,7 @@ import {
 import Header from '../../components/AdminHeader'
 import { AnnounceEditor } from '../../components/Announce'
 
-import { useGet, getAndCache } from '../../utils/api'
+import { useGet, prefetch } from '../../utils/api'
 
 const Note = () => (
   <Card>
@@ -93,7 +93,7 @@ const ContestConfigPage = () => (
 )
 
 export async function getServerSideProps(context) {
-  const { token } = await getAndCache(context, '/api/admin/problem')
+  const { token } = await prefetch(context, '/api/admin/problem')
   return { props: { token } }
 }
 
