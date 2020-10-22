@@ -34,7 +34,7 @@ export const NewContest = ({ setIdContest }) => {
     const res = await post(body)
     if (res.ok) {
       handleClose()
-      const contests = await mutate('/api/admin/contest')
+      const { contests } = await mutate('/api/admin/contest')
       setIdContest(contests[0].idContest)
     }
   }
