@@ -21,7 +21,7 @@ var storage = multer.diskStorage({
 const multerConfig = multer({ storage: storage })
 
 async function Problems(req, res) {
-	var sql = 'select * from Problem'
+	var sql = 'select * from Problem order by id_Prob desc'
 	let tasks = await new Promise((resolve) => {
 		db.query(sql, (err, result) => resolve(result))
 	})
@@ -35,7 +35,7 @@ async function Problems(req, res) {
 	res.json({tasks})
 }
 async function Users(req, res) {
-	var sql = 'select * from User'
+	var sql = 'select * from User order by idUser desc'
 	let users = await new Promise((resolve) => {
 		db.query(sql, (err, result) => resolve(result))
 	})
@@ -136,10 +136,6 @@ async function getContestWithId(req, res) {
 function patchContestConfig(req, res) {
 	const idContest = req.params.id
 	const data = req.body
-	if (idContest == 0) {
-		res.status(404).send('')
-		return
-	}
 	let sql = `update contest set name = ?, mode_grader = ?, judge = ?, 
 		time_start = ?, time_end = ? where idContest = ?`
 	let value = [
@@ -149,9 +145,10 @@ function patchContestConfig(req, res) {
         data.stateDate,
         data.endDate,
         idContest
-    ]
+	]
+	console.log(data);
 	db.query(sql,value,(err) => {
-        if(err) return res.status(404).send('')
+        if(err) return res.status(400).send('')
         return res.json({msg:`Update complete.`})
     })
 }
@@ -159,13 +156,10 @@ function patchContestConfig(req, res) {
 function contestAnnounce(req, res) {
     const idContest = req.params.id
 	const data = req.body
-	if (idContest == 0) {
-		res.status(404).send('')
-		return
-	}
+	console.log(data);
 	let sql = `update contest set announce = ? where idContest = ?`
 	db.query(sql,[data.announce, idContest],(err) => {
-        if(err) return res.status(404).send('')
+        if(err) return res.status(400).send('')
         return res.json({msg:`Update complete.`})
     })
 }
