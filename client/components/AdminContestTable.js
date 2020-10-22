@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useInput, useShow } from '../utils'
-import { useHttp, usePatch, usePost } from '../utils/api'
+import { usePatch, usePost } from '../utils/api'
 import { mutate } from 'swr'
 
 import DatePicker from 'react-datepicker'
@@ -117,10 +117,8 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
   const [show, handleShow, handleClose] = useShow(false)
   const [contestData, setContestData] = useState(data)
   useEffect(() => {
-    if (!show) {
-      setContestData(data)
-    }
-  }, [show, data])
+    setContestData(data)
+  }, [data])
   const { name, mode, judge, startDate: start, endDate: end } = contestData
 
   const [startDate, setStartDate] = useState(new Date())
@@ -150,6 +148,7 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
     Object.keys(contestData).forEach((item) =>
       formData.append(item, contestData[item])
     )
+    console.log(contestData)
     const res = await patch(formData, false)
     if (res.ok) {
       handleClose()
@@ -234,7 +233,7 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
   )
 }
 
-const ConfigTask = ({ id_Prob, see, idContest }) => {
+const ConfigTask = ({ task: { id_Prob }, see, idContest }) => {
   const [state, setState] = useState()
   useEffect(() => {
     setState(see)
@@ -244,7 +243,7 @@ const ConfigTask = ({ id_Prob, see, idContest }) => {
   const handleChangeState = async (event) => {
     event.preventDefault()
     setState(!state)
-    const body = JSON.stringify({ state })
+    const body = JSON.stringify({ onoff: state })
     await patch(body)
   }
 

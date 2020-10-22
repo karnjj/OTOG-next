@@ -183,7 +183,7 @@ export const AnnounceEditor = ({ idContest, announce }) => {
 
   const put = usePut(`/api/admin/contest/${idContest}`)
   const onSave = async () => {
-    await put(value)
+    await put(JSON.stringify(value))
     handleClose()
   }
 
