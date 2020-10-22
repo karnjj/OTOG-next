@@ -41,7 +41,7 @@ const Contests = () => {
   }, [latestContest])
 
   const { data: contestData } = useGet(`/api/admin/contest/${idContest}`)
-
+  const { announce } = contestData
   const selectedTasks = contestData?.problems || []
 
   const selectIdContest = (event) => setIdContest(event.target.value)
@@ -64,7 +64,7 @@ const Contests = () => {
         <NewContest setIdContest={setIdContest} />
         <hr />
         <SelectContest />
-        <AnnounceEditor idContest={idContest} />
+        <AnnounceEditor idContest={idContest} announce={announce} />
         <ContestConfig idContest={idContest} contestData={contestData} />
         <hr />
         <Note />
