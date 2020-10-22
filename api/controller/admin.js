@@ -79,12 +79,14 @@ async function Contests(req, res) {
 
 async function getContestWithId(req, res) {
 	const idContest = req.params.id
-	var sql = 'select idContest,name,mode_grader as mode,judge,time_start as startDate,time_end as endDate,problems from Contest where idContest = ?'
+	var sql = `select idContest,name,mode_grader as mode,judge,time_start as startDate,
+				time_end as endDate,problems,announce from Contest where idContest = ?`
 	let contests = await new Promise((resolve) => {
 		db.query(sql, [idContest], (err, result) => resolve(result))
 	})
 	if(contests[0]) {
 		contests[0].problems = JSON.parse(contests[0].problems)
+		contests[0].announce = JSON.parse(contests[0].announce)
 	}
 	res.json(contests[0] ?? {})
 }
@@ -142,11 +144,10 @@ function patchContestConfig(req, res) {
         data.name,
         data.mode,
         data.judge,
-        data.stateDate,
+        data.startDate,
         data.endDate,
         idContest
 	]
-	console.log(data);
 	db.query(sql,value,(err) => {
         if(err) return res.status(400).send('')
         return res.json({msg:`Update complete.`})
@@ -156,9 +157,8 @@ function patchContestConfig(req, res) {
 function contestAnnounce(req, res) {
     const idContest = req.params.id
 	const data = req.body
-	console.log(data);
 	let sql = `update contest set announce = ? where idContest = ?`
-	db.query(sql,[data.announce, idContest],(err) => {
+	db.query(sql,[JSON.stringify(data), idContest],(err) => {
         if(err) return res.status(400).send('')
         return res.json({msg:`Update complete.`})
     })
