@@ -165,11 +165,11 @@ function contestAnnounce(req, res) {
 }
 function contestProblem(req, res) {
     const idContest = req.params.id
-    const idProblem = Number(req.params.probId)
+	const idProblem = Number(req.params.probId)
 	let sql = `select problems from Contest where idContest = ?`
 	db.query(sql, [idContest], (err, result) => {
 		var conProb = JSON.parse(result[0].problems)
-		if (idProblem in conProb) conProb = conProb.filter(item => item !== idProblem)
+		if (conProb.includes(idProblem)) conProb = conProb.filter(item => item !== idProblem)
 		else conProb.push(idProblem)
 		let sql = `update Contest set problems = ? where idContest = ?`
 		db.query(sql, [JSON.stringify(conProb), idContest], (err) => {
