@@ -142,14 +142,9 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
   const patch = usePatch(`/api/admin/contest/${idContest}`)
   const onSubmit = async (event) => {
     event.preventDefault()
-    const formData = new FormData()
     contestData.startDate = Math.floor(Date.parse(startDate) / 1000)
     contestData.endDate = Math.floor(Date.parse(endDate) / 1000)
-    Object.keys(contestData).forEach((item) =>
-      formData.append(item, contestData[item])
-    )
-    console.log(contestData)
-    const res = await patch(formData, false)
+    const res = await patch(JSON.stringify(contestData))
     if (res.ok) {
       handleClose()
       mutate('/api/admin/contest')
