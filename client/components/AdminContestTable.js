@@ -174,11 +174,19 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
             <Form.Group>
               <Form.Label>Choose Mode : </Form.Label>
               <InputGroup>
-                <Form.Control as='select' onChange={handleChangeMode}>
+                <Form.Control
+                  as='select'
+                  onChange={handleChangeMode}
+                  defaultValue={mode}
+                >
                   <option value='unrated'>Unrated Contest</option>
                   <option value='rated'>Rated Contest</option>
                 </Form.Control>
-                <Form.Control as='select' onChange={handleChangeJudge}>
+                <Form.Control
+                  as='select'
+                  onChange={handleChangeJudge}
+                  defaultValue={judge}
+                >
                   <option value='classic'>Classic (Time based)</option>
                   <option value='acm'>ACM Mode</option>
                   <option disabled>OTOG Mode</option>
