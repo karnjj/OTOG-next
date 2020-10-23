@@ -54,10 +54,11 @@ const StyledJumbotron = styled(Jumbotron)`
   align-items: center;
 `
 
-const Countdown = ({ timeleft, name, idContest }) => (
+const Countdown = ({ timeleft, name, idContest, announce: value }) => (
   <CenteredDiv>
     <h1>
-      การแข่งขัน <Announce {...{ idContest }}>{name}</Announce> กำลังจะเริ่ม
+      การแข่งขัน <Announce {...{ idContest, value }}>{name}</Announce>{' '}
+      กำลังจะเริ่ม
     </h1>
     <h3>
       ในอีก <Timer timeLeft={timeleft} mode='th' />
@@ -112,7 +113,6 @@ const HoldingContest = ({ idContest, timeleft, name }) => {
   const {
     data: { tasks },
   } = useGet(`/api/contest/${idContest}`)
-
   return (
     <Container>
       <Title icon={faTrophy} text={name} paddingTop={false}>
@@ -185,6 +185,7 @@ const Contest = ({ contest, serverTime }) => {
                   timeleft={start - now}
                   idContest={idContest}
                   name={contest.name}
+                  announce={contest.announce}
                 />
               ) : isHolding ? (
                 <HoldingContest

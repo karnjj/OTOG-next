@@ -257,36 +257,6 @@ export const AnnounceEditor = ({ idContest, announce }) => {
 
 const Announce = ({ value, idContest, children }) => {
   const editor = useMemo(() => withReact(createEditor()), [])
-  value = [
-    { type: 'heading-one', children: [{ text: 'SNIS-1234' }] },
-    {
-      type: 'paragraph',
-      children: [
-        { text: 'Welcome to ' },
-        { text: 'the world', code: true },
-        { text: ' !' },
-      ],
-    },
-    {
-      type: 'bulleted-list',
-      children: [
-        { type: 'list-item', children: [{ text: '1 2 3' }] },
-        { type: 'list-item', children: [{ text: '4 5 6' }] },
-        { type: 'list-item', children: [{ text: '7 8 9' }] },
-      ],
-    },
-    { type: 'block-quote', children: [{ text: 'Baka ! Hentai ' }] },
-    {
-      type: 'paragraph',
-      children: [
-        { text: 'https://otog.cf/contest', underline: true, link: true },
-      ],
-    },
-    {
-      type: 'paragraph',
-      children: [{ text: '', underline: true, link: true }],
-    },
-  ]
   const [show, handleShow, handleClose] = useShow()
   const renderElement = useCallback((props) => <Element {...props} />, [])
   const renderLeaf = useCallback((props) => <Leaf {...props} />, [])

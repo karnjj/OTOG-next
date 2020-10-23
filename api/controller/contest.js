@@ -3,8 +3,13 @@ const jwt = require('jsonwebtoken')
 
 
 function contest(req,res) {
-	let sql = `select idContest,name,time_start,time_end from Contest where time_end >= (UNIX_TIMESTAMP()-3600) order by time_start limit 1`
+	let sql = `select idContest,name,time_start,time_end,announce 
+			from Contest where time_end >= (UNIX_TIMESTAMP()-3600) order by time_start limit 1`
 	db.query(sql,(err,result) => {
+		if (err) res.status(500).send('')
+		if(result[0]) {
+			result[0].announce = JSON.parse(result[0].announce)
+		}
 		res.json({result:result,serverTime:Date.now()})
 	})
 }
@@ -47,7 +52,7 @@ function getContestWithId(req,res) {
 					name: result[0].name,
 					id: result[0].idContest,
 					timeEnd: result[0].time_end,
-					problems: prob
+					tasks: prob
 				})
 			}else res.status(404).json({})
 		})
