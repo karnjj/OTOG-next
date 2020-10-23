@@ -25,6 +25,7 @@ import {
 import styled from 'styled-components'
 import { useShow } from '../utils'
 import { useHttp, usePut } from '../utils/api'
+import { Alink } from './CustomText'
 
 const Blockquote = styled.blockquote`
   padding-left: 10px;
@@ -181,10 +182,15 @@ export const AnnounceEditor = ({ idContest, announce }) => {
     }
   }, [announce])
 
+  const [isPending, setPending] = useState(false)
   const put = usePut(`/api/admin/contest/${idContest}`)
   const onSave = async () => {
-    await put(JSON.stringify(value))
-    handleClose()
+    setPending(true)
+    const response = await put(JSON.stringify(value))
+    if (response.ok) {
+      handleClose()
+      setPending(false)
+    }
   }
 
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
@@ -246,7 +252,7 @@ export const AnnounceEditor = ({ idContest, announce }) => {
           </Slate>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant='success' onClick={onSave}>
+          <Button variant='success' onClick={onSave} disabled={isPending}>
             Save Changes
           </Button>
         </Modal.Footer>
@@ -255,45 +261,46 @@ export const AnnounceEditor = ({ idContest, announce }) => {
   )
 }
 
-const Announce = ({ value, idContest, children }) => {
+const BAKA = [
+  { type: 'heading-one', children: [{ text: 'SNIS-1234' }] },
+  {
+    type: 'paragraph',
+    children: [
+      { text: 'Welcome to ' },
+      { text: 'the world', code: true },
+      { text: ' !' },
+    ],
+  },
+  {
+    type: 'bulleted-list',
+    children: [
+      { type: 'list-item', children: [{ text: '1 2 3' }] },
+      { type: 'list-item', children: [{ text: '4 5 6' }] },
+      { type: 'list-item', children: [{ text: '7 8 9' }] },
+    ],
+  },
+  { type: 'block-quote', children: [{ text: 'Baka ! Hentai ' }] },
+  {
+    type: 'paragraph',
+    children: [
+      { text: 'https://otog.cf/contest', underline: true, link: true },
+    ],
+  },
+  {
+    type: 'paragraph',
+    children: [{ text: '', underline: true, link: true }],
+  },
+]
+
+const Announce = ({ value = BAKA, idContest, children }) => {
   const editor = useMemo(() => withReact(createEditor()), [])
-  value = [
-    { type: 'heading-one', children: [{ text: 'SNIS-1234' }] },
-    {
-      type: 'paragraph',
-      children: [
-        { text: 'Welcome to ' },
-        { text: 'the world', code: true },
-        { text: ' !' },
-      ],
-    },
-    {
-      type: 'bulleted-list',
-      children: [
-        { type: 'list-item', children: [{ text: '1 2 3' }] },
-        { type: 'list-item', children: [{ text: '4 5 6' }] },
-        { type: 'list-item', children: [{ text: '7 8 9' }] },
-      ],
-    },
-    { type: 'block-quote', children: [{ text: 'Baka ! Hentai ' }] },
-    {
-      type: 'paragraph',
-      children: [
-        { text: 'https://otog.cf/contest', underline: true, link: true },
-      ],
-    },
-    {
-      type: 'paragraph',
-      children: [{ text: '', underline: true, link: true }],
-    },
-  ]
   const [show, handleShow, handleClose] = useShow()
   const renderElement = useCallback((props) => <Element {...props} />, [])
   const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
 
   return (
     <>
-      <a onClick={handleShow}>{children}</a>
+      <Alink onClick={handleShow}>{children}</Alink>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Contest #{idContest}</Modal.Title>

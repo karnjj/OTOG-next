@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useAuthContext } from '../utils/auth'
 
 import {
   Row,
@@ -25,17 +24,15 @@ const Icon = styled(FontAwesomeIcon)`
   user-select: none;
   cursor: pointer;
 `
-const MiniSubmission = ({ idContest, idProb, parentCallback }) => {
+const MiniSubmission = ({ idContest, idProb, setSolved }) => {
   const url = `/api/contest/${idContest}/submission?idProb=${idProb}`
-  const { data, isValidating, mutate: fetchData } = useGet(url, false)
-
-  const { best_submit, lastest_submit } = data
+  const {
+    data: { best_submit, lastest_submit },
+    isValidating,
+    mutate: fetchData,
+  } = useGet(url, false)
   const latest = lastest_submit && lastest_submit[0]
   const best = best_submit && best_submit[0]
-
-  if (!!latest) {
-    parentCallback(latest.score, best.idResult)
-  }
 
   useEffect(() => {
     const isGrading = !isValidating && latest?.status === 0
@@ -43,13 +40,13 @@ const MiniSubmission = ({ idContest, idProb, parentCallback }) => {
     return () => clearTimeout(timeout)
   }, [isValidating])
 
-  const CustomRow = ({ label, result = '-', score = '-', idResult }) => (
+  const SubRow = ({ label, result = '-', score = '-', idResult }) => (
     <tr>
       <td>{label}</td>
       <td>{result}</td>
       <td>{score}</td>
       <td>
-        {idResult ? <ViewCodeButton mini='true' idResult={idResult} /> : '❌'}
+        {idResult ? <ViewCodeButton mini='true' idResult={idResult} /> : '-'}
       </td>
     </tr>
   )
@@ -65,8 +62,8 @@ const MiniSubmission = ({ idContest, idProb, parentCallback }) => {
         </tr>
       </thead>
       <tbody>
-        <CustomRow label='Latest' {...latest} />
-        <CustomRow label='Best' {...best} />
+        <SubRow label='Latest' {...latest} />
+        <SubRow label='Best' {...best} />
       </tbody>
     </Table>
   )
@@ -74,13 +71,10 @@ const MiniSubmission = ({ idContest, idProb, parentCallback }) => {
 
 const TaskCard = (props) => {
   const { idContest, id_Prob, index, name, whopass, sname } = props
-  const userData = useAuthContext()
-  const [selectedFile, setSelectedFile] = useState(undefined)
+  const [selectedFile, setSelectedFile] = useState()
   const [fileName, setFileName] = useState('')
   const [fileLang, setFileLang] = useState('C++')
   const [solved, setSolved] = useState(false)
-  const [idBest, setIdBest] = useState(-1)
-  const [passed, setPassed] = useState(whopass)
 
   const CustomToggle = (props) => {
     const [isHidden, setIsHidden] = useState(false)
@@ -97,6 +91,7 @@ const TaskCard = (props) => {
       />
     )
   }
+
   const selectFile = (event) => {
     if (event.target.files[0] !== undefined) {
       setSelectedFile(event.target.files[0])
@@ -116,8 +111,8 @@ const TaskCard = (props) => {
     const data = new FormData()
     data.append('file', selectedFile)
     data.append('fileLang', fileLang)
-    const respone = await post(data, false)
-    if (respone.ok) {
+    const response = await post(data, false)
+    if (response.ok) {
       window.location.reload(false)
     }
   }
@@ -139,7 +134,7 @@ const TaskCard = (props) => {
               {solved && <Badge variant='success'>Solved</Badge>}
             </Col>
           </Row>
-          ผ่านแล้ว : {passed}
+          ผ่านแล้ว : {whopass}
         </h5>
       </Accordion.Toggle>
 
@@ -149,7 +144,7 @@ const TaskCard = (props) => {
             <MiniSubmission
               idContest={idContest}
               idProb={id_Prob}
-              parentCallback={callbackFunc}
+              setSolved={setSolved}
             />
           </Col>
           <Col xs={0} lg={1} />
