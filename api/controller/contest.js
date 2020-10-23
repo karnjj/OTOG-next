@@ -8,7 +8,7 @@ function contest(req,res) {
 	db.query(sql,(err,result) => {
 		if (err) res.status(500).send('')
 		if(result[0]) {
-			result[0].announce = JSON.parse(result[0].announce)
+			result[0].announce = result[0].announce ? JSON.parse(result[0].announce) : undefined
 		}
 		res.json({result:result,serverTime:Date.now()})
 	})
