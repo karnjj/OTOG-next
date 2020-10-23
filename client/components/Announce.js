@@ -24,7 +24,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import { useShow } from '../utils'
-import { useHttp, usePut } from '../utils/api'
+import { usePut } from '../utils/api'
 import { Alink } from './CustomText'
 
 const Blockquote = styled.blockquote`
@@ -179,6 +179,8 @@ export const AnnounceEditor = ({ idContest, announce }) => {
   useEffect(() => {
     if (!!announce) {
       setValue(announce)
+    } else {
+      setValue(emptyAnnounce)
     }
   }, [announce])
 
