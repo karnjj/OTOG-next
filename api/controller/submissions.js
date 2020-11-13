@@ -51,7 +51,7 @@ async function AllSubmission(req, res) {
 		)
 	})
 	Promise.all([lastestPromise, submitPromise, oldestPromise]).then((values) => {
-		res.json({ results: values[1], latest: values[0], hasMore: values[2][0].idResult == values[1][values[1].length-1].idResult })
+		res.json({ results: values[1], latest: values[0], hasMore: values[2][0].idResult !=last })
 	})
 }
 
