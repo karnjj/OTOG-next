@@ -66,6 +66,7 @@ const SubRow = memo((props) => {
     sname,
     rating,
     idUser,
+    time,
   } = props
 
   const isAccept = (result) =>
@@ -85,7 +86,9 @@ const SubRow = memo((props) => {
     <>
       <RenderOnIntersect id={`subs/${idResult}`} initialHeight='63px' as='tr'>
         <TableRow acceptState={isAccept(result)}>
-          <td>{idResult}</td>
+          <td title={new Date(time * 1000).toLocaleString('th-TH')}>
+            {idResult}
+          </td>
           {state != 0 ? (
             <td>
               <Name {...{ sname, rating, idUser }} />
