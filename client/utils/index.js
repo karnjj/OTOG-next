@@ -53,6 +53,7 @@ export const useRenderCount = (name) => {
 }
 
 export const useOnScreen = (ref, rootMargin = '0px', retoggle = true) => {
+  const target = ref.current
   const [isIntersecting, setIntersecting] = useState(false)
 
   useEffect(() => {
@@ -65,14 +66,15 @@ export const useOnScreen = (ref, rootMargin = '0px', retoggle = true) => {
       { rootMargin, threshold: 0 }
     )
 
-    const target = ref.current
     if (target) {
       observer.observe(target)
     }
     return () => {
-      observer.unobserve(target)
+      if (target) {
+        observer.unobserve(target)
+      }
     }
-  }, [isIntersecting, ref, rootMargin, retoggle])
+  }, [isIntersecting, target, rootMargin, retoggle])
 
   return isIntersecting
 }

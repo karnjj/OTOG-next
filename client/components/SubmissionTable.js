@@ -10,7 +10,6 @@ import ViewCodeButton from './ViewCodeButton'
 import styled from 'styled-components'
 import prism from 'prismjs'
 import vars from '../styles/vars'
-import { RenderOnIntersect } from './RenderOnIntersect'
 
 const FontPre = styled.pre`
   span,
@@ -30,17 +29,15 @@ const SubmissionTable = ({ isLoading, results, canViewCode }) => {
   return (
     <CustomTable isLoading={!results || isLoading}>
       <thead>
-        <RenderOnIntersect id='subs/head' initialHeight='50px' as='tr'>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Task</th>
-            <th>Result</th>
-            <th>Time</th>
-            <th>Score</th>
-            {showCode && <th>Code</th>}
-          </tr>
-        </RenderOnIntersect>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Task</th>
+          <th>Result</th>
+          <th>Time</th>
+          <th>Score</th>
+          {showCode && <th>Code</th>}
+        </tr>
       </thead>
       <tbody>
         {results?.map((result, index) => (
