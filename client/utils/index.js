@@ -54,7 +54,9 @@ export const useRenderCount = (name) => {
 
 export const useOnScreen = (ref, rootMargin = '0px', alwaysObserve = true) => {
   const [isIntersecting, setIntersecting] = useState(false)
-
+  const resetIntersecting = useCallback(() => setIntersecting(false), [
+    setIntersecting,
+  ])
   useEffect(() => {
     if (!alwaysObserve && isIntersecting) {
       return
@@ -76,5 +78,5 @@ export const useOnScreen = (ref, rootMargin = '0px', alwaysObserve = true) => {
     }
   }, [isIntersecting, ref.current, rootMargin, alwaysObserve])
 
-  return isIntersecting
+  return [isIntersecting, resetIntersecting]
 }

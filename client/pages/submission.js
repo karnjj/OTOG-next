@@ -16,8 +16,9 @@ import { useOnScreen } from '../utils'
 
 const Submission = () => {
   const { isLogin, isAdmin } = useAuthContext()
-  const [showOnlyMe, setShowOnlyMe] = useState(!isAdmin && isLogin)
-  useEffect(() => setShowOnlyMe(!isAdmin && isLogin), [isAdmin, isLogin])
+  const isOnlyMe = !isAdmin && isLogin
+  const [showOnlyMe, setShowOnlyMe] = useState(isOnlyMe)
+  useEffect(() => setShowOnlyMe(isOnlyMe), [isOnlyMe])
 
   const url = `/api/submission?mode=${showOnlyMe ? 'onlyme' : 'full'}`
   const {
@@ -41,7 +42,7 @@ const Submission = () => {
   }
 
   const loaderRef = useRef()
-  const loadMore = useOnScreen(loaderRef)
+  const [loadMore, resetLoadMore] = useOnScreen(loaderRef)
   useEffect(() => {
     if (hasMore && loadMore) {
       mutate(async ({ results, ...rest }) => {
@@ -51,6 +52,7 @@ const Submission = () => {
         )
         return { results: [...results, ...olderResults], hasMore, ...rest }
       }, false)
+      resetLoadMore()
     }
   }, [loadMore, url, hasMore])
 

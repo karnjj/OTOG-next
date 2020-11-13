@@ -7,7 +7,7 @@ const heightCache = {}
 
 const RenderOnIntersect = ({ id, initialHeight, as, children }) => {
   const dummyBoxRef = useRef()
-  const intersecting = useOnScreen(dummyBoxRef, '200px', false)
+  const [intersecting] = useOnScreen(dummyBoxRef, '200px', false)
 
   const onResize = useCallback(
     (contentRect) => {
