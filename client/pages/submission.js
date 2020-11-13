@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuthContext } from '../utils/auth'
-import { useGet } from '../utils/api'
+import { useGet, httpGet } from '../utils/api'
 
 import { Row, Col, Form } from 'react-bootstrap'
 
@@ -42,14 +42,13 @@ const Submission = () => {
 
   const loaderRef = useRef()
   const loadMore = useOnScreen(loaderRef)
-  console.log(loadMore)
   useEffect(() => {
     if (loadMore) {
-      mutate(url, async ({ results, latest }) => {
+      mutate(async ({ results, latest }) => {
         const lastId = results[results.length - 1].idResult
-        const olderResults = await httpGet(`${url}&last=${lastId}`)
+        const { results: olderResults } = await httpGet(`${url}&last=${lastId}`)
         return { results: [...results, ...olderResults], latest }
-      })
+      }, false)
     }
   }, [loadMore, url])
 

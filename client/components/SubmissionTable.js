@@ -84,44 +84,42 @@ const SubRow = memo((props) => {
 
   return (
     <>
-      <RenderOnIntersect id={`subs/${idResult}`} initialHeight='63px' as='tr'>
-        <TableRow acceptState={isAccept(result)}>
-          <td title={timeToString(time)}>{idResult}</td>
-          {state != 0 ? (
-            <td>
-              <Name {...{ sname, rating, idUser }} />
-            </td>
-          ) : (
-            <td>{sname}</td>
-          )}
+      <TableRow acceptState={isAccept(result)}>
+        <td title={timeToString(time)}>{idResult}</td>
+        {state != 0 ? (
           <td>
-            <Alink
-              target='_blank'
-              href={`${process.env.API_URL}/api/docs/${problemname}`}
-            >
-              {name}
-            </Alink>
+            <Name {...{ sname, rating, idUser }} />
           </td>
+        ) : (
+          <td>{sname}</td>
+        )}
+        <td>
+          <Alink
+            target='_blank'
+            href={`${process.env.API_URL}/api/docs/${problemname}`}
+          >
+            {name}
+          </Alink>
+        </td>
+        <td>
+          <ResultCode>
+            {result === 'Compilation Error' && canViewCode ? (
+              <Alink onClick={handleShow}>{result}</Alink>
+            ) : (
+              result
+            )}
+          </ResultCode>
+        </td>
+        <td>{timeuse} s</td>
+        <td>{round(score)}</td>
+        {canViewCode && (
           <td>
-            <ResultCode>
-              {result === 'Compilation Error' && canViewCode ? (
-                <Alink onClick={handleShow}>{result}</Alink>
-              ) : (
-                result
-              )}
-            </ResultCode>
+            <ButtonGroup>
+              <ViewCodeButton {...{ idResult }} />
+            </ButtonGroup>
           </td>
-          <td>{timeuse} s</td>
-          <td>{round(score)}</td>
-          {canViewCode && (
-            <td>
-              <ButtonGroup>
-                <ViewCodeButton {...{ idResult }} />
-              </ButtonGroup>
-            </td>
-          )}
-        </TableRow>
-      </RenderOnIntersect>
+        )}
+      </TableRow>
 
       <Modal show={showError} onHide={handleClose} centered size='lg'>
         <Modal.Header closeButton>
