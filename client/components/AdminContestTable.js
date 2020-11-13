@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useInput, useShow } from '../utils'
 import { usePatch, usePost } from '../utils/api'
+import { useForm, useShow } from '../utils'
 import { mutate } from 'swr'
 
 import DatePicker from 'react-datepicker'
@@ -15,22 +15,33 @@ import {
   faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
 import { RenderOnIntersect } from './RenderOnIntersect'
+import styled from 'styled-components'
+
+const StyledInputGroup = styled(InputGroup)`
+  .react-datepicker-wrapper {
+    width: 50%;
+  }
+`
 
 export const NewContest = ({ setIdContest }) => {
   const [show, handleShow, handleClose] = useShow(false)
-  const [name, inputName] = useInput()
-  const [mode, inputMode] = useInput('unrated')
-  const [judge, inputJudge] = useInput('classic')
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
+  const [data, setForm, setData] = useForm({
+    name: '',
+    mode: 'unrated',
+    judge: 'classic',
+    startDate: new Date(),
+    endDate: new Date(),
+  })
+  const { startDate, endDate } = data
+  console.log(data)
 
   const post = usePost('/api/admin/contest')
   const onSubmit = async (event) => {
     event.preventDefault()
+    const { startDate, endDate, ...rest } = data
     const start = Math.floor(Date.parse(startDate) / 1000)
     const end = Math.floor(Date.parse(endDate) / 1000)
-    const data = { name, mode, judge, start, end }
-    const body = JSON.stringify(data)
+    const body = JSON.stringify({ ...rest, start, end })
     const res = await post(body)
     if (res.ok) {
       handleClose()
@@ -43,29 +54,35 @@ export const NewContest = ({ setIdContest }) => {
       <Button variant='success' size='lg' onClick={handleShow}>
         <FontAwesomeIcon icon={faPlusCircle} /> New Contest
       </Button>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create New Contest</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
+      <Form>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Create New Contest</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <Form.Group>
               <Form.Label>Contest Name : </Form.Label>
-              <Form.Control {...inputName} />
+              <Form.Control name='name' onChange={setForm} />
             </Form.Group>
             <Form.Group>
               <Form.Label>Choose Mode : </Form.Label>
               <InputGroup>
-                <Form.Control as='select' {...inputMode}>
-                  <option selected value='unrated'>
-                    Unrated Contest
-                  </option>
+                <Form.Control
+                  name='mode'
+                  onChange={setForm}
+                  as='select'
+                  defaultValue='unrated'
+                >
+                  <option value='unrated'>Unrated Contest</option>
                   <option value='rated'>Rated Contest</option>
                 </Form.Control>
-                <Form.Control as='select' {...inputJudge}>
-                  <option selected value='classic'>
-                    Classic (Time based)
-                  </option>
+                <Form.Control
+                  name='judge'
+                  onChange={setForm}
+                  as='select'
+                  defaultValue='classic'
+                >
+                  <option value='classic'>Classic (Time based)</option>
                   <option value='acm'>ACM Mode</option>
                   <option disabled>OTOG Mode</option>
                   <option disabled>Blind Mode</option>
@@ -74,12 +91,13 @@ export const NewContest = ({ setIdContest }) => {
             </Form.Group>
             <Form.Group>
               <Form.Label>Time : </Form.Label>
-              <InputGroup as={Row} className='m-auto'>
+              <StyledInputGroup>
                 <Form.Control
                   as={DatePicker}
                   selected={startDate}
                   onChange={(date) => {
-                    setStartDate(date), setEndDate(date)
+                    setData((data) => ({ ...data, startDate: date }))
+                    setData((data) => ({ ...data, endDate: date }))
                   }}
                   showTimeSelect
                   timeFormat='HH:mm'
@@ -87,27 +105,28 @@ export const NewContest = ({ setIdContest }) => {
                   timeCaption='time'
                   dateFormat='d/MMMM/yyyy HH:mm'
                 />
-                <Col xs={1} />
                 <Form.Control
                   as={DatePicker}
                   selected={endDate}
-                  onChange={(date) => setEndDate(date)}
+                  onChange={(date) =>
+                    setData((data) => ({ ...data, endDate: date }))
+                  }
                   showTimeSelect
                   timeFormat='HH:mm'
                   timeIntervals={30}
                   timeCaption='time'
                   dateFormat='d/MMMM/yyyy HH:mm'
                 />
-              </InputGroup>
+              </StyledInputGroup>
             </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant='success' onClick={onSubmit}>
-            Save
-          </Button>
-        </Modal.Footer>
-      </Modal>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant='success' type='submit' onClick={onSubmit}>
+              Save
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Form>
     </>
   )
 }

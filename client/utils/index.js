@@ -10,6 +10,14 @@ export const useInput = (initialValue = '', converter) => {
   return [value, { value, onChange }, setValue]
 }
 
+export const useForm = (defaultValue) => {
+  const [value, setValue] = useState(defaultValue)
+  const setFormValue = useCallback(({ target }) => {
+    setValue((prevValue) => ({ ...prevValue, [target.name]: target.value }))
+  }, [])
+  return [value, setFormValue, setValue]
+}
+
 export const useShow = (initialState = false) => {
   const [show, setShow] = useState(initialState)
   const handleShow = useCallback(() => setShow(true), [])
