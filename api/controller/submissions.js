@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 
 async function AllSubmission(req, res) {
 	let mode = req.query.mode
+	let last = req.query.last ? Number(req.query.last) : undefined
 	const userData = req.user
 	let lastestPromise = new Promise((resolve, reject) => {
 		var sql = `select name,id_Prob,sname from ( select max(idResult) as lastest from Result where user_id = ?) 
@@ -18,12 +19,17 @@ async function AllSubmission(req, res) {
 			sql = `SELECT idResult,U.sname,U.rating,U.state,U.idUser as idUser,P.name,P.sname as problemname,result,timeuse,Result.score,Result.time as time,errmsg FROM Result 
 			inner join Problem as P on Result.prob_id = P.id_Prob
 			inner join User as U on Result.user_id = U.idUser
-			where contestmode is null${(userData?.state === 0) ? ' ' : ' and P.state = 1 '}order by idResult desc limit 100`
+			where contestmode is null 
+			${(userData?.state === 0) ? '' : 'and P.state = 1 '}
+			${(last === undefined) ? '' : `and idResult between ${last-54} and ${last-1} `}
+			order by idResult desc limit 53`
 		else
 			sql = `SELECT idResult,U.sname,U.rating,U.state,U.idUser as idUser,P.name,P.sname as problemname,result,timeuse,Result.score,Result.time as time,errmsg FROM Result 
 			inner join Problem as P on Result.prob_id = P.id_Prob
 			inner join User as U on Result.user_id = U.idUser
-			where contestmode is null and user_id = ? order by idResult desc limit 100`
+			where contestmode is null and user_id = ? 
+			${(last === undefined) ? '' : `and idResult between ${last-54} and ${last-1} `}
+			order by idResult desc limit 53`
 		db.query(sql, [userData?.id], (err, result) =>
 			err ? reject(err) : resolve(result)
 		)
