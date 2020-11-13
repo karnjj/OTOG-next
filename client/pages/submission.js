@@ -21,7 +21,7 @@ const Submission = () => {
 
   const url = `/api/submission?mode=${showOnlyMe ? 'onlyme' : 'full'}`
   const {
-    data: { results, latest },
+    data: { results, latest, hasMore },
     isLoading,
     isValidating,
     mutate,
@@ -43,14 +43,16 @@ const Submission = () => {
   const loaderRef = useRef()
   const loadMore = useOnScreen(loaderRef)
   useEffect(() => {
-    if (loadMore) {
-      mutate(async ({ results, latest }) => {
+    if (hasMore && loadMore) {
+      mutate(async ({ results, ...rest }) => {
         const lastId = results[results.length - 1].idResult
-        const { results: olderResults } = await httpGet(`${url}&last=${lastId}`)
-        return { results: [...results, ...olderResults], latest }
+        const { results: olderResults, hasMore } = await httpGet(
+          `${url}&last=${lastId}`
+        )
+        return { results: [...results, ...olderResults], hasMore, ...rest }
       }, false)
     }
-  }, [loadMore, url])
+  }, [loadMore, url, hasMore])
 
   return (
     <>
@@ -108,7 +110,7 @@ const Submission = () => {
         canViewCode={showOnlyMe}
         results={results}
       />
-      <Loader ref={loaderRef} />
+      {hasMore && <Loader ref={loaderRef} />}
     </>
   )
 }
