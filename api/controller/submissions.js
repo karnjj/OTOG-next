@@ -34,8 +34,24 @@ async function AllSubmission(req, res) {
 			err ? reject(err) : resolve(result)
 		)
 	})
-	Promise.all([lastestPromise, submitPromise]).then((values) => {
-		res.json({ results: values[1], latest: values[0] })
+	let oldestPromise = new Promise((resolve, reject) => {
+		var sql = ''
+		if (mode == 'full')
+			sql = `SELECT idResult from Result 
+			inner join Problem as P on Result.prob_id = P.id_Prob 
+			where contestmode is null 
+			${(userData?.state === 0) ? '' : 'and P.state = 1 '}
+			order by idResult asc limit 1`
+		else
+			sql = `SELECT idResult FROM Result 
+			where contestmode is null and user_id = ? 
+			order by idResult asc limit 1`
+		db.query(sql, [userData?.id], (err, result) =>
+			err ? reject(err) : resolve(result)
+		)
+	})
+	Promise.all([lastestPromise, submitPromise, oldestPromise]).then((values) => {
+		res.json({ results: values[1], latest: values[0], hasMore: values[2][0].idResult == values[1][values[1].length-1].idResult })
 	})
 }
 
