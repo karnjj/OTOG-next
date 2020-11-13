@@ -46,3 +46,33 @@ export const range = (n) => [...Array(n).keys()]
 
 export const timeToString = (time) =>
   new Date(time * 1000).toLocaleString('th-TH')
+
+export const useRenderCount = (name) => {
+  const count = useRef(0)
+  console.log(`${name} rendered : ${++count.current} `)
+}
+
+export const useOnScreen = (ref, rootMargin = '0px', retoggle = true) => {
+  const [isIntersecting, setIntersecting] = useState(false)
+
+  useEffect(() => {
+    if (!retoggle && isIntersecting) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIntersecting(entry.isIntersecting),
+      { rootMargin, threshold: 0 }
+    )
+
+    const target = ref.current
+    if (target) {
+      observer.observe(target)
+    }
+    return () => {
+      observer.unobserve(target)
+    }
+  }, [isIntersecting, ref, rootMargin, retoggle])
+
+  return isIntersecting
+}

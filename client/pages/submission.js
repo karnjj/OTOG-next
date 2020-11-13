@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAuthContext } from '../utils/auth'
 import { useGet } from '../utils/api'
 
@@ -11,6 +11,8 @@ import SubmissionTable from '../components/SubmissionTable'
 import SubmitGroup from '../components/SubmitGroup'
 
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
+import Loader from '../components/Loader'
+import { useOnScreen } from '../utils'
 
 const Submission = () => {
   const { isLogin, isAdmin } = useAuthContext()
@@ -22,6 +24,7 @@ const Submission = () => {
     data: { results, latest },
     isLoading,
     isValidating,
+    mutate,
   } = useGet(url)
 
   //switch reload effect
@@ -36,6 +39,19 @@ const Submission = () => {
     setShowOnlyMe(event.target.checked)
     setLoading(true)
   }
+
+  const loaderRef = useRef()
+  const loadMore = useOnScreen(loaderRef)
+  console.log(loadMore)
+  useEffect(() => {
+    if (loadMore) {
+      mutate(url, async ({ results, latest }) => {
+        const lastId = results[results.length - 1].idResult
+        const olderResults = await httpGet(`${url}&last=${lastId}`)
+        return { results: [...results, ...olderResults], latest }
+      })
+    }
+  }, [loadMore, url])
 
   return (
     <>
@@ -93,6 +109,7 @@ const Submission = () => {
         canViewCode={showOnlyMe}
         results={results}
       />
+      <Loader ref={loaderRef} />
     </>
   )
 }

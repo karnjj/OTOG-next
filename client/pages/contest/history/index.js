@@ -12,7 +12,6 @@ import { timeToString } from '../../../utils'
 const ContestTr = (props) => {
   const { idContest, name, time_start, time_end, mode_grader, judge } = props
   const now = new Date()
-  const start = new Date(Number(time_start * 1000))
   const PascalCase = (str) => str[0].toUpperCase() + str.slice(1)
   const difftime = (timestamp) => {
     timestamp = Math.floor(timestamp / 60)
@@ -28,7 +27,7 @@ const ContestTr = (props) => {
     <TableRow>
       <td>{idContest}</td>
       <td>{name}</td>
-      <td>{timeToString(start)}</td>
+      <td>{timeToString(time_start)}</td>
       <td>{difftime(time_end - time_start)}</td>
       <td>{`${PascalCase(mode_grader)} (${PascalCase(judge)})`}</td>
       <td>
