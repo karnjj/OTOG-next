@@ -7,6 +7,7 @@ import { faTrophy, faChartArea } from '@fortawesome/free-solid-svg-icons'
 
 import OrangeButton from '../../../components/OrangeButton'
 import { useGet } from '../../../utils/api'
+import { timeToString } from '../../../utils'
 
 const ContestTr = (props) => {
   const { idContest, name, time_start, time_end, mode_grader, judge } = props
@@ -27,7 +28,7 @@ const ContestTr = (props) => {
     <TableRow>
       <td>{idContest}</td>
       <td>{name}</td>
-      <td>{start.toLocaleString('th-TH')}</td>
+      <td>{timeToString(start)}</td>
       <td>{difftime(time_end - time_start)}</td>
       <td>{`${PascalCase(mode_grader)} (${PascalCase(judge)})`}</td>
       <td>

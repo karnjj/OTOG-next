@@ -43,3 +43,6 @@ export const useAlert = (initialMessages = { head: '', desc: '' }) => {
 }
 
 export const range = (n) => [...Array(n).keys()]
+
+export const timeToString = (time) =>
+  new Date(time * 1000).toLocaleString('th-TH')

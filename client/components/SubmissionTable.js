@@ -1,6 +1,6 @@
 import { useEffect, memo } from 'react'
 import { useAuthContext } from '../utils/auth'
-import { useShow } from '../utils'
+import { timeToString, useShow } from '../utils'
 
 import { TableRow, CustomTable } from './CustomTable'
 import { Modal, ButtonGroup } from 'react-bootstrap'
@@ -86,9 +86,7 @@ const SubRow = memo((props) => {
     <>
       <RenderOnIntersect id={`subs/${idResult}`} initialHeight='63px' as='tr'>
         <TableRow acceptState={isAccept(result)}>
-          <td title={new Date(time * 1000).toLocaleString('th-TH')}>
-            {idResult}
-          </td>
+          <td title={timeToString(time)}>{idResult}</td>
           {state != 0 ? (
             <td>
               <Name {...{ sname, rating, idUser }} />
