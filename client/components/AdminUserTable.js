@@ -133,7 +133,11 @@ const EditModal = (props) => {
           <Form.Control {...inputState} />
           <br />
           <Form.Label>New Password : </Form.Label>
-          <Form.Control placeholder='New Password' {...inputPassword} />
+          <Form.Control
+            type='password'
+            placeholder='New Password'
+            {...inputPassword}
+          />
           <br />
         </Form>
       </Modal.Body>
