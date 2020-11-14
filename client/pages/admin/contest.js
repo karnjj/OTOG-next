@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Container, Row, Col, Card, Form } from 'react-bootstrap'
+import { Container, Row, Col, Card, Form, InputGroup } from 'react-bootstrap'
 import { withAdminAuth } from '../../utils/auth'
 import {
   NewContest,
@@ -35,37 +35,41 @@ const Contests = () => {
   } = useGet('/api/admin/problem')
 
   const [idContest, setIdContest] = useState(0)
-  const latestContest = (contests && contests[0]?.idContest) || 0
+  const latestContest = contests && contests[0]?.idContest
   useEffect(() => {
-    setIdContest(latestContest)
+    setIdContest(latestContest ?? 0)
   }, [latestContest])
+  const selectIdContest = (event) => setIdContest(event.target.value)
 
-  const { data: contestData } = useGet(`/api/admin/contest/${idContest}`)
+  const { data: contestData } = useGet(
+    idContest && `/api/admin/contest/${idContest}`
+  )
   const { announce } = contestData
   const selectedTasks = contestData?.problems || []
-
-  const selectIdContest = (event) => setIdContest(event.target.value)
-  const SelectContest = () => (
-    <Form.Group>
-      <Form.Label>Choose Contest : </Form.Label>
-      <Form.Control as='select' onChange={selectIdContest} value={idContest}>
-        {contests?.map(({ idContest: id, name }) => (
-          <option key={id} value={id}>
-            {name}
-          </option>
-        ))}
-      </Form.Control>
-    </Form.Group>
-  )
 
   return (
     <Row>
       <Col lg={3}>
         <NewContest setIdContest={setIdContest} />
         <hr />
-        <SelectContest />
-        <AnnounceEditor idContest={idContest} announce={announce} />
-        <ContestConfig idContest={idContest} contestData={contestData} />
+        <Form.Label>Contest :</Form.Label>
+        <InputGroup>
+          <Form.Control
+            as='select'
+            onChange={selectIdContest}
+            value={idContest}
+          >
+            {contests?.map(({ idContest: id, name }) => (
+              <option key={id} value={id}>
+                {name}
+              </option>
+            ))}
+          </Form.Control>
+          <InputGroup.Append>
+            <AnnounceEditor idContest={idContest} announce={announce} />
+            <ContestConfig idContest={idContest} contestData={contestData} />
+          </InputGroup.Append>
+        </InputGroup>
         <hr />
         <Note />
         <br />

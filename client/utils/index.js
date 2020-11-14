@@ -11,11 +11,17 @@ export const useInput = (initialValue = '', converter) => {
 }
 
 export const useForm = (defaultValue) => {
-  const [value, setValue] = useState(defaultValue)
-  const setFormValue = useCallback(({ target }) => {
-    setValue((prevValue) => ({ ...prevValue, [target.name]: target.value }))
+  const [data, setData] = useState(defaultValue)
+  const onValueChange = useCallback(({ target }) => {
+    setData((prevData) => ({ ...prevData, [target.name]: target.value }))
   }, [])
-  return [value, setFormValue, setValue]
+  const onCheckChange = useCallback(({ target }) => {
+    setData((prevData) => ({ ...prevData, [target.name]: target.check }))
+  }, [])
+  const onFileChange = useCallback(({ target }) => {
+    setData((prevData) => ({ ...prevData, [target.name]: target.files[0] }))
+  }, [])
+  return { data, onValueChange, onCheckChange, onFileChange, setData }
 }
 
 export const useShow = (initialState = false) => {

@@ -1,6 +1,5 @@
-import { useState, useEffect, memo } from 'react'
-import { useAuthContext } from '../utils/auth'
-import { useGet, usePost, useHttp, useDelete } from '../utils/api'
+import { memo } from 'react'
+import { useGet, usePost, useDelete } from '../utils/api'
 import { CustomTable } from './CustomTable'
 import {
   ButtonGroup,
@@ -8,7 +7,6 @@ import {
   Modal,
   Form,
   Col,
-  Row,
   InputGroup,
   Badge,
 } from 'react-bootstrap'
@@ -22,30 +20,14 @@ import {
   faTrash,
   faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
-import { useShow } from '../utils'
-import { mutate } from 'swr'
 import { RenderOnIntersect } from './RenderOnIntersect'
+import { useForm, useShow } from '../utils'
+import { mutate } from 'swr'
 
 export const NewTask = () => {
   const [show, handleShow, handleClose] = useShow(false)
-  const [data, setData] = useState({})
+  const { data, onFileChange, onValueChange } = useForm({})
   const { name, sname, numCase, memory, time, score, pdf, zip } = data
-
-  const selectFile = (event) =>
-    setData({ ...data, [event.target.id]: event.target.files[0] })
-  const handleChangeName = (event) =>
-    setData({ ...data, name: event.target.value })
-  const handleChangeSname = (event) =>
-    setData({ ...data, sname: event.target.value })
-  const handleChangeMemory = (event) =>
-    setData({ ...data, memory: Number(event.target.value) ?? '' })
-  const handleChangeTime = (event) =>
-    setData({ ...data, time: Number(event.target.value) ?? '' })
-  const handleChangeNumCase = (event) =>
-    setData({ ...data, numCase: Number(event.target.value) ?? '' })
-  const handleChangeScore = (event) =>
-    setData({ ...data, score: Number(event.target.value) ?? '' })
-
   const post = usePost('/api/admin/problem')
   const onSubmit = async (event) => {
     event.preventDefault()
@@ -70,76 +52,105 @@ export const NewTask = () => {
         <Modal.Body>
           <Form onSubmit={onSubmit}>
             <Form.Group>
-              <Form.Label>Description : </Form.Label>
-              <InputGroup>
-                <Form.Control
-                  value={name}
-                  onChange={handleChangeName}
-                  placeholder='Display Name'
-                  required
-                />
-                <Form.Control
-                  value={sname}
-                  onChange={handleChangeSname}
-                  placeholder='Short Name'
-                  required
-                />
-              </InputGroup>
+              <Form.Label>Display Name / Short Name : </Form.Label>
+              <Form.Row>
+                <InputGroup as={Col}>
+                  <Form.Control
+                    name='name'
+                    value={name}
+                    onChange={onValueChange}
+                    placeholder='Display Name'
+                    required
+                  />
+                </InputGroup>
+                <InputGroup as={Col}>
+                  <Form.Control
+                    name='sname'
+                    value={sname}
+                    onChange={onValueChange}
+                    placeholder='Short Name'
+                    required
+                  />
+                </InputGroup>
+              </Form.Row>
             </Form.Group>
 
             <Form.Group>
+              <Form.Label>Constraints : </Form.Label>
+              <Form.Row>
+                <InputGroup as={Col}>
+                  <Form.Control
+                    name='time'
+                    value={time}
+                    onChange={onValueChange}
+                    placeholder='Time Limit'
+                    required
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Text>s</InputGroup.Text>
+                  </InputGroup.Append>
+                </InputGroup>
+                <InputGroup as={Col}>
+                  <Form.Control
+                    name='memory'
+                    value={memory}
+                    onChange={onValueChange}
+                    placeholder='Memory'
+                    required
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Text>MB</InputGroup.Text>
+                  </InputGroup.Append>
+                </InputGroup>
+              </Form.Row>
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Row>
+                <InputGroup as={Col}>
+                  <Form.Control
+                    name='score'
+                    value={score}
+                    onChange={onValueChange}
+                    placeholder='Score'
+                    required
+                  />
+                </InputGroup>
+                <InputGroup as={Col}>
+                  <Form.Control
+                    name='numCase'
+                    value={numCase}
+                    onChange={onValueChange}
+                    placeholder='Test Cases'
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Text>case(s)</InputGroup.Text>
+                  </InputGroup.Append>
+                </InputGroup>
+              </Form.Row>
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Files :</Form.Label>
               <Form.File
-                id='pdf'
-                label={pdf?.name ?? 'Document (PDF)'}
-                accept='.pdf'
-                onChange={selectFile}
                 custom
                 required
+                name='pdf'
+                accept='.pdf'
+                onChange={onFileChange}
+                label={pdf?.name ?? 'Document (PDF)'}
               />
             </Form.Group>
             <Form.Group>
               <Form.File
-                id='zip'
-                label={zip?.name ?? 'Testcases (ZIP)'}
-                accept='.zip'
-                onChange={selectFile}
                 custom
+                name='zip'
+                accept='.zip'
+                onChange={onFileChange}
+                label={zip?.name ?? 'Testcases (ZIP)'}
               />
             </Form.Group>
 
-            <Form.Group>
-              <Form.Label>Constraint : </Form.Label>
-              <InputGroup>
-                <Form.Control
-                  value={time}
-                  onChange={handleChangeTime}
-                  placeholder='Time Limit (s)'
-                  required
-                />
-                <Form.Control
-                  value={memory}
-                  onChange={handleChangeMemory}
-                  placeholder='Memory (MB)'
-                  required
-                />
-              </InputGroup>
-            </Form.Group>
-
-            <Form.Group>
-              <InputGroup>
-                <Form.Control
-                  value={numCase}
-                  onChange={handleChangeNumCase}
-                  placeholder='Testcases e.g.10'
-                />
-                <Form.Control
-                  value={score}
-                  onChange={handleChangeScore}
-                  placeholder='Score'
-                  required
-                />
-              </InputGroup>
-            </Form.Group>
             <hr />
             <Button variant='success' type='submit' block>
               Save
@@ -206,27 +217,10 @@ const ConfigTask = ({ index, id_Prob, handleShow, state, sname }) => {
 
 const EditModal = (props) => {
   const { show, handleClose, id_Prob, ...rest } = props
-  const [data, setData] = useState(rest)
+  const { data, onValueChange, onFileChange } = useForm(rest)
   const { name, sname, memory, time, score, rating, subtask, pdf, zip } = data
+
   const [saveState, saving, saved] = useShow(false)
-
-  const selectFile = (event) =>
-    setData({ ...data, [event.target.id]: event.target.files[0] })
-  const handleChangeName = (event) =>
-    setData({ ...data, name: event.target.value })
-  const handleChangeSname = (event) =>
-    setData({ ...data, sname: event.target.value })
-  const handleChangeMemory = (event) =>
-    setData({ ...data, memory: Number(event.target.value) ?? '' })
-  const handleChangeTime = (event) =>
-    setData({ ...data, time: Number(event.target.value) ?? '' })
-  const handleChangeScore = (event) =>
-    setData({ ...data, score: Number(event.target.value) ?? '' })
-  const handleChangeRating = (event) =>
-    setData({ ...data, rating: event.target.value })
-  const handleChangeSubtask = (event) =>
-    setData({ ...data, subtask: event.target.value })
-
   const post = usePost(`/api/admin/problem/${id_Prob}?option=save`)
   const onSave = async (event) => {
     event.preventDefault()
@@ -246,75 +240,132 @@ const EditModal = (props) => {
       <Modal.Header closeButton>
         <Modal.Title>Task #{id_Prob}</Modal.Title>
       </Modal.Header>
-      <Form as={Modal.Body}>
-        <Form.Group>
-          <Form.Label>Name</Form.Label>
-          <Form.Control defaultValue={name} onChange={handleChangeName} />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Short Name</Form.Label>
-          <Form.Control defaultValue={sname} onChange={handleChangeSname} />
-        </Form.Group>
-        <Form.Group as={Row}>
-          <Col xs={6}>
-            <Form.Label>Time Limit (s)</Form.Label>
-            <Form.Control defaultValue={time} onChange={handleChangeTime} />
-          </Col>
-          <Col xs={6}>
-            <Form.Label>Memory (MB)</Form.Label>
-            <Form.Control defaultValue={memory} onChange={handleChangeMemory} />
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row}>
-          <Col xs={6}>
-            <Form.Label>Testcases</Form.Label>
-            <Form.Control
-              defaultValue={subtask}
-              onChange={handleChangeSubtask}
+      <Modal.Body>
+        <Form onSubmit={onSave}>
+          <Form.Group>
+            <Form.Label>Display Name / Short Name : </Form.Label>
+            <Form.Row>
+              <InputGroup as={Col}>
+                <Form.Control
+                  name='name'
+                  value={name ?? ''}
+                  onChange={onValueChange}
+                  placeholder='Display Name'
+                  required
+                />
+              </InputGroup>
+              <InputGroup as={Col}>
+                <Form.Control
+                  name='sname'
+                  value={sname ?? ''}
+                  onChange={onValueChange}
+                  placeholder='Short Name'
+                  required
+                />
+              </InputGroup>
+            </Form.Row>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Constraints : </Form.Label>
+            <Form.Row>
+              <InputGroup as={Col}>
+                <Form.Control
+                  name='time'
+                  value={time ?? ''}
+                  onChange={onValueChange}
+                  placeholder='Time Limit'
+                  required
+                />
+                <InputGroup.Append>
+                  <InputGroup.Text>s</InputGroup.Text>
+                </InputGroup.Append>
+              </InputGroup>
+              <InputGroup as={Col}>
+                <Form.Control
+                  name='memory'
+                  value={memory ?? ''}
+                  onChange={onValueChange}
+                  placeholder='Memory'
+                  required
+                />
+                <InputGroup.Append>
+                  <InputGroup.Text>MB</InputGroup.Text>
+                </InputGroup.Append>
+              </InputGroup>
+            </Form.Row>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Row>
+              <InputGroup as={Col}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Score</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  name='score'
+                  value={score ?? ''}
+                  onChange={onValueChange}
+                  placeholder='Score'
+                  required
+                />
+              </InputGroup>
+              <InputGroup as={Col}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Rating</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  name='rating'
+                  value={rating ?? ''}
+                  placeholder='eg.1500'
+                  onChange={onValueChange}
+                />
+              </InputGroup>
+            </Form.Row>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Row>
+              <InputGroup as={Col}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Subtasks</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  name='subtask'
+                  value={subtask ?? ''}
+                  onChange={onValueChange}
+                  placeholder='Subtasks'
+                />
+              </InputGroup>
+            </Form.Row>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Files :</Form.Label>
+            <Form.File
+              custom
+              name='pdf'
+              accept='.pdf'
+              onChange={onFileChange}
+              label={pdf?.name ?? 'Document (PDF)'}
             />
-          </Col>
-          <Col xs={6}>
-            <Form.Label>Score</Form.Label>
-            <Form.Control defaultValue={score} onChange={handleChangeScore} />
-          </Col>
-        </Form.Group>
-        <Form.Group>
-          <InputGroup>
-            <InputGroup.Prepend>
-              <InputGroup.Text>Rating</InputGroup.Text>
-            </InputGroup.Prepend>
-            <Form.Control
-              placeholder='eg.1500'
-              defaultValue={rating}
-              onChange={handleChangeRating}
+          </Form.Group>
+          <Form.Group>
+            <Form.File
+              custom
+              name='zip'
+              accept='.zip'
+              onChange={onFileChange}
+              label={zip?.name ?? 'Testcases (ZIP)'}
             />
-          </InputGroup>
-        </Form.Group>
-        <Form.Group>
-          <Form.File
-            id='pdf'
-            label={pdf?.name ?? 'New Document (PDF)'}
-            accept='.pdf'
-            onChange={selectFile}
-            custom
-            required
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.File
-            id='zip'
-            label={zip?.name ?? 'New Testcases (ZIP)'}
-            accept='.zip'
-            onChange={selectFile}
-            custom
-          />
-        </Form.Group>
-      </Form>
-      <Modal.Footer>
-        <Button variant='success' onClick={onSave} disabled={saveState}>
-          Save
-        </Button>
-      </Modal.Footer>
+          </Form.Group>
+
+          <hr />
+          <Button disabled={saveState} variant='success' type='submit' block>
+            Save
+          </Button>
+        </Form>
+      </Modal.Body>
     </Modal>
   )
 }
@@ -341,8 +392,8 @@ const TaskRow = memo((props) => {
         <td>{memory}</td>
         <td>{rating ?? '-'}</td>
         <td>
-          <ConfigTask {...props} {...{ handleShow }} />
-          <EditModal {...props} {...{ handleClose, show }} />
+          <ConfigTask {...props} handleShow={handleShow} />
+          <EditModal {...props} handleClose={handleClose} show={show} />
         </td>
       </tr>
     </RenderOnIntersect>

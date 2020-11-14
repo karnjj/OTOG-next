@@ -33,7 +33,7 @@ const StyledTable = styled(Table)`
     }
   }
   tr {
-    animation: ${fadein} 0.2s ease;
+    animation: ${fadein} 0.1s ease;
   }
 `
 export const CustomTable = ({

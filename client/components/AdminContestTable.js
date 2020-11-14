@@ -4,7 +4,7 @@ import { useForm, useShow } from '../utils'
 import { mutate } from 'swr'
 
 import DatePicker from 'react-datepicker'
-import { Button, Modal, Form, Col, Row, InputGroup } from 'react-bootstrap'
+import { Button, Modal, Form, Col, InputGroup } from 'react-bootstrap'
 import { CustomTable } from './CustomTable'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -25,7 +25,7 @@ const StyledInputGroup = styled(InputGroup)`
 
 export const NewContest = ({ setIdContest }) => {
   const [show, handleShow, handleClose] = useShow(false)
-  const [data, setForm, setData] = useForm({
+  const { data, onValueChange, setData } = useForm({
     name: '',
     mode: 'unrated',
     judge: 'classic',
@@ -33,7 +33,6 @@ export const NewContest = ({ setIdContest }) => {
     endDate: new Date(),
   })
   const { startDate, endDate } = data
-  console.log(data)
 
   const post = usePost('/api/admin/contest')
   const onSubmit = async (event) => {
@@ -54,22 +53,22 @@ export const NewContest = ({ setIdContest }) => {
       <Button variant='success' size='lg' onClick={handleShow}>
         <FontAwesomeIcon icon={faPlusCircle} /> New Contest
       </Button>
-      <Form>
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Create New Contest</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create New Contest</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={onSubmit}>
             <Form.Group>
               <Form.Label>Contest Name : </Form.Label>
-              <Form.Control name='name' onChange={setForm} />
+              <Form.Control name='name' onChange={onValueChange} />
             </Form.Group>
             <Form.Group>
               <Form.Label>Choose Mode : </Form.Label>
               <InputGroup>
                 <Form.Control
                   name='mode'
-                  onChange={setForm}
+                  onChange={onValueChange}
                   as='select'
                   defaultValue='unrated'
                 >
@@ -78,7 +77,7 @@ export const NewContest = ({ setIdContest }) => {
                 </Form.Control>
                 <Form.Control
                   name='judge'
-                  onChange={setForm}
+                  onChange={onValueChange}
                   as='select'
                   defaultValue='classic'
                 >
@@ -95,10 +94,13 @@ export const NewContest = ({ setIdContest }) => {
                 <Form.Control
                   as={DatePicker}
                   selected={startDate}
-                  onChange={(date) => {
-                    setData((data) => ({ ...data, startDate: date }))
-                    setData((data) => ({ ...data, endDate: date }))
-                  }}
+                  onChange={(date) =>
+                    setData((data) => ({
+                      ...data,
+                      startDate: date,
+                      endDate: date,
+                    }))
+                  }
                   showTimeSelect
                   timeFormat='HH:mm'
                   timeIntervals={30}
@@ -119,51 +121,37 @@ export const NewContest = ({ setIdContest }) => {
                 />
               </StyledInputGroup>
             </Form.Group>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant='success' type='submit' onClick={onSubmit}>
+            <hr />
+            <Button variant='success' type='submit' block>
               Save
             </Button>
-          </Modal.Footer>
-        </Modal>
-      </Form>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </>
   )
 }
 
-export const ContestConfig = ({ contestData: data, idContest }) => {
+export const ContestConfig = ({ contestData, idContest }) => {
   const isSelected = idContest !== 0
   const [show, handleShow, handleClose] = useShow(false)
-  const [contestData, setContestData] = useState(data)
+  const { data, onValueChange, setData: setContestData } = useForm(contestData)
+  const { name, mode, judge, startDate, endDate } = data
   useEffect(() => {
-    setContestData(data)
-  }, [data])
-  const { name, mode, judge, startDate: start, endDate: end } = contestData
-
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
-  useEffect(() => {
-    setStartDate(new Date(start * 1000))
-    setEndDate(new Date(end * 1000))
-  }, [start, end])
-
-  const handleChangeName = (event) =>
-    setContestData({ ...contestData, name: event.target.value })
-  const handleChangeMode = (event) =>
-    setContestData({ ...contestData, mode: event.target.value })
-  const handleChangeJudge = (event) =>
-    setContestData({ ...contestData, judge: event.target.value })
-  const handleChangeStart = (date) =>
-    setContestData({ ...contestData, startDate: date, endDate: date })
-  const handleChangeEnd = (date) =>
-    setContestData({ ...contestData, endDate: date })
+    const { startDate, endDate } = contestData
+    setContestData({
+      ...contestData,
+      startDate: new Date(startDate * 1000),
+      endDate: new Date(endDate * 1000),
+    })
+  }, [contestData])
 
   const patch = usePatch(`/api/admin/contest/${idContest}`)
   const onSubmit = async (event) => {
     event.preventDefault()
-    contestData.startDate = Math.floor(Date.parse(startDate) / 1000)
-    contestData.endDate = Math.floor(Date.parse(endDate) / 1000)
-    const res = await patch(JSON.stringify(contestData))
+    data.startDate = Math.floor(Date.parse(startDate) / 1000)
+    data.endDate = Math.floor(Date.parse(endDate) / 1000)
+    const res = await patch(JSON.stringify(data))
     if (res.ok) {
       handleClose()
       mutate('/api/admin/contest')
@@ -172,12 +160,7 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
 
   return (
     <>
-      <Button
-        variant='warning'
-        className='ml-2'
-        onClick={handleShow}
-        disabled={!isSelected}
-      >
+      <Button variant='warning' onClick={handleShow} disabled={!isSelected}>
         <FontAwesomeIcon icon={faCog} />
       </Button>
       <Modal show={show} onHide={handleClose}>
@@ -185,26 +168,28 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
           <Modal.Title>Edit Contest #{idContest}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form onSubmit={onSubmit}>
             <Form.Group>
               <Form.Label>Contest Name : </Form.Label>
-              <Form.Control value={name} onChange={handleChangeName} />
+              <Form.Control name='name' value={name} onChange={onValueChange} />
             </Form.Group>
             <Form.Group>
               <Form.Label>Choose Mode : </Form.Label>
               <InputGroup>
                 <Form.Control
                   as='select'
-                  onChange={handleChangeMode}
+                  name='mode'
                   defaultValue={mode}
+                  onChange={onValueChange}
                 >
                   <option value='unrated'>Unrated Contest</option>
                   <option value='rated'>Rated Contest</option>
                 </Form.Control>
                 <Form.Control
                   as='select'
-                  onChange={handleChangeJudge}
+                  name='judge'
                   defaultValue={judge}
+                  onChange={onValueChange}
                 >
                   <option value='classic'>Classic (Time based)</option>
                   <option value='acm'>ACM Mode</option>
@@ -215,41 +200,46 @@ export const ContestConfig = ({ contestData: data, idContest }) => {
             </Form.Group>
             <Form.Group>
               <Form.Label>Time : </Form.Label>
-              <InputGroup as={Row} className='m-auto'>
+              <StyledInputGroup>
                 <Form.Control
                   as={DatePicker}
                   selected={startDate}
-                  onChange={(date) => {
-                    setStartDate(date), setEndDate(date)
-                  }}
+                  onChange={(date) =>
+                    setContestData((prevData) => ({
+                      ...prevData,
+                      startDate: date,
+                      endDate: date,
+                    }))
+                  }
                   showTimeSelect
                   timeFormat='HH:mm'
                   timeIntervals={30}
                   timeCaption='time'
                   dateFormat='d/MMMM/yyyy HH:mm'
                 />
-                <Col xs={1} />
                 <Form.Control
                   as={DatePicker}
                   selected={endDate}
-                  onChange={(date) => {
-                    setEndDate(date)
-                  }}
+                  onChange={(date) =>
+                    setContestData((prevData) => ({
+                      ...prevData,
+                      endDate: date,
+                    }))
+                  }
                   showTimeSelect
                   timeFormat='HH:mm'
                   timeIntervals={30}
                   timeCaption='time'
                   dateFormat='d/MMMM/yyyy HH:mm'
                 />
-              </InputGroup>
+              </StyledInputGroup>
             </Form.Group>
+            <hr />
+            <Button variant='success' type='submit' block>
+              Save
+            </Button>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant='success' onClick={onSubmit}>
-            Save
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   )
@@ -284,46 +274,24 @@ const EditModal = (props) => {
   const { show, handleClose, task } = props
   const { id_Prob } = task
 
-  const [data, setData] = useState(task)
+  const { data, onValueChange, onFileChange, setData } = useForm(task)
+  const { name, sname, memory, time, score, pdf, subtask, zip } = data
   useEffect(() => {
     setData(task)
   }, [task])
 
-  const { name, sname, memory, time, score, pdf, subtask, zip } = data
-
-  const selectFile = (event) => {
-    switch (event.target.id) {
-      case 'doc':
-        setData({ ...data, pdf: event.target.files[0] })
-        break
-      case 'testcase':
-        setData({ ...data, zip: event.target.files[0] })
-        break
-    }
-  }
-
-  const handleChangeName = (event) =>
-    setData({ ...data, name: event.target.value })
-  const handleChangeSname = (event) =>
-    setData({ ...data, sname: event.target.value })
-  const handleChangeMemory = (event) =>
-    setData({ ...data, memory: Number(event.target.value) ?? 0 })
-  const handleChangeTime = (event) =>
-    setData({ ...data, time: Number(event.target.value) ?? 0 })
-  const handleChangeScore = (event) =>
-    setData({ ...data, score: Number(event.target.value) ?? 0 })
-  const handleChangeTestcase = (event) =>
-    setData({ ...data, subtask: event.target.value })
-
+  const [saveState, saving, saved] = useShow(false)
   const post = usePost(`/api/admin/problem/${id_Prob}?option=save`)
   const onSave = async (event) => {
     event.preventDefault()
+    saving()
     const formData = new FormData()
     Object.keys(data).forEach((item) => formData.append(item, data[item]))
     const response = await post(formData, false)
     if (response.ok) {
       handleClose()
       mutate('/api/admin/problem')
+      saved()
     }
   }
 
@@ -332,63 +300,116 @@ const EditModal = (props) => {
       <Modal.Header closeButton>
         <Modal.Title>Task #{id_Prob}</Modal.Title>
       </Modal.Header>
-      <Form as={Modal.Body}>
-        <Form.Group>
-          <Form.Label>Name</Form.Label>
-          <Form.Control defaultValue={name} onChange={handleChangeName} />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Short Name</Form.Label>
-          <Form.Control defaultValue={sname} onChange={handleChangeSname} />
-        </Form.Group>
-        <Form.Group as={Row}>
-          <Col xs={6}>
-            <Form.Label>Time</Form.Label>
-            <Form.Control defaultValue={time} onChange={handleChangeTime} />
-          </Col>
-          <Col xs={6}>
-            <Form.Label>Memory</Form.Label>
-            <Form.Control defaultValue={memory} onChange={handleChangeMemory} />
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row}>
-          <Col xs={6}>
-            <Form.Label>Testcases</Form.Label>
-            <Form.Control
-              defaultValue={subtask}
-              onChange={handleChangeTestcase}
+      <Modal.Body>
+        <Form onSubmit={onSave}>
+          <Form.Group>
+            <Form.Label>Display Name / Short Name : </Form.Label>
+            <Form.Row>
+              <InputGroup as={Col}>
+                <Form.Control
+                  name='name'
+                  value={name ?? ''}
+                  onChange={onValueChange}
+                  placeholder='Display Name'
+                  required
+                />
+              </InputGroup>
+              <InputGroup as={Col}>
+                <Form.Control
+                  name='sname'
+                  value={sname ?? ''}
+                  onChange={onValueChange}
+                  placeholder='Short Name'
+                  required
+                />
+              </InputGroup>
+            </Form.Row>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Constraints : </Form.Label>
+            <Form.Row>
+              <InputGroup as={Col}>
+                <Form.Control
+                  name='time'
+                  value={time ?? ''}
+                  onChange={onValueChange}
+                  placeholder='Time Limit'
+                  required
+                />
+                <InputGroup.Append>
+                  <InputGroup.Text>s</InputGroup.Text>
+                </InputGroup.Append>
+              </InputGroup>
+              <InputGroup as={Col}>
+                <Form.Control
+                  name='memory'
+                  value={memory ?? ''}
+                  onChange={onValueChange}
+                  placeholder='Memory'
+                  required
+                />
+                <InputGroup.Append>
+                  <InputGroup.Text>MB</InputGroup.Text>
+                </InputGroup.Append>
+              </InputGroup>
+            </Form.Row>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Row>
+              <InputGroup as={Col}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Score</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  name='score'
+                  value={score ?? ''}
+                  onChange={onValueChange}
+                  placeholder='Score'
+                  required
+                />
+              </InputGroup>
+              <InputGroup as={Col}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Subtasks</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  name='subtask'
+                  value={subtask ?? ''}
+                  onChange={onValueChange}
+                  placeholder='Subtasks'
+                />
+              </InputGroup>
+            </Form.Row>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Files :</Form.Label>
+            <Form.File
+              custom
+              name='pdf'
+              accept='.pdf'
+              onChange={onFileChange}
+              label={pdf?.name ?? 'Document (PDF)'}
             />
-          </Col>
-          <Col xs={6}>
-            <Form.Label>Score</Form.Label>
-            <Form.Control defaultValue={score} onChange={handleChangeScore} />
-          </Col>
-        </Form.Group>
-        <Form.Group>
-          <Form.File
-            id='doc'
-            label={pdf?.name ?? 'New Document (PDF)'}
-            accept='.pdf'
-            onChange={selectFile}
-            custom
-            required
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.File
-            id='testcase'
-            label={zip?.name ?? 'New Testcases (ZIP)'}
-            accept='.zip'
-            onChange={selectFile}
-            custom
-          />
-        </Form.Group>
-      </Form>
-      <Modal.Footer>
-        <Button variant='success' onClick={onSave}>
-          Save
-        </Button>
-      </Modal.Footer>
+          </Form.Group>
+          <Form.Group>
+            <Form.File
+              custom
+              name='zip'
+              accept='.zip'
+              onChange={onFileChange}
+              label={zip?.name ?? 'Testcases (ZIP)'}
+            />
+          </Form.Group>
+
+          <hr />
+          <Button disabled={saveState} variant='success' type='submit' block>
+            Save
+          </Button>
+        </Form>
+      </Modal.Body>
     </Modal>
   )
 }
