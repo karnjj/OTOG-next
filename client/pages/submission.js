@@ -15,7 +15,7 @@ import Loader from '../components/Loader'
 import { useOnScreen } from '../utils'
 
 const Submission = () => {
-  const { isLogin, isAdmin } = useAuthContext()
+  const { isLogin, isAdmin, token } = useAuthContext()
   const isOnlyMe = !isAdmin && isLogin
   const [showOnlyMe, setShowOnlyMe] = useState(isOnlyMe)
   useEffect(() => setShowOnlyMe(isOnlyMe), [isOnlyMe])
@@ -47,9 +47,10 @@ const Submission = () => {
     if (hasMore && loadMore) {
       mutate(async ({ results, ...rest }) => {
         const lastId = results[results.length - 1].idResult
-        const { results: olderResults, hasMore } = await httpGet(
-          `${url}&last=${lastId}`
-        )
+        const {
+          results: olderResults,
+          hasMore,
+        } = await httpGet(`${url}&last=${lastId}`, { token })
         return { results: [...results, ...olderResults], hasMore, ...rest }
       }, false)
       resetLoadMore()
