@@ -21,14 +21,14 @@ async function AllSubmission(req, res) {
 			inner join User as U on Result.user_id = U.idUser
 			where contestmode is null 
 			${(userData?.state === 0) ? '' : 'and P.state = 1 '}
-			${(last === undefined) ? '' : `and idResult between ${last-54} and ${last-1} `}
+			${(last === undefined) ? '' : `and idResult <= ${last} `}
 			order by idResult desc limit 53`
 		else
 			sql = `SELECT idResult,U.sname,U.rating,U.state,U.idUser as idUser,P.name,P.sname as problemname,result,timeuse,Result.score,Result.time as time,errmsg FROM Result 
 			inner join Problem as P on Result.prob_id = P.id_Prob
 			inner join User as U on Result.user_id = U.idUser
 			where contestmode is null and user_id = ? 
-			${(last === undefined) ? '' : `and idResult between ${last-54} and ${last-1} `}
+			${(last === undefined) ? '' : `and idResult <= ${last} `}
 			order by idResult desc limit 53`
 		db.query(sql, [userData?.id], (err, result) =>
 			err ? reject(err) : resolve(result)
@@ -46,12 +46,20 @@ async function AllSubmission(req, res) {
 			sql = `SELECT idResult FROM Result 
 			where contestmode is null and user_id = ? 
 			order by idResult asc limit 1`
-		db.query(sql, [userData?.id], (err, result) =>
+		db.query(sql, [userData?.id], (err, result) =>{
 			err ? reject(err) : resolve(result)
-		)
+		})
 	})
 	Promise.all([lastestPromise, submitPromise, oldestPromise]).then((values) => {
-		res.json({ results: values[1], latest: values[0], hasMore: values[2][0].idResult !=last })
+		oldResult = values[1][values[1].length-1]
+		if (last !== undefined) {
+			values[1].shift()
+		}
+		res.json({ 
+			results: values[1], 
+			latest: values[0], 
+			hasMore: values[2][0].idResult !== oldResult.idResult
+		})
 	})
 }
 
