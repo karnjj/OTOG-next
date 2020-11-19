@@ -26,7 +26,7 @@ const Submission = () => {
     isLoading,
     isValidating,
     mutate,
-  } = useGet(url)
+  } = useGet(url, { revalidateOnFocus: false })
 
   //switch reload effect
   const [loading, setLoading] = useState(isLoading)
@@ -44,10 +44,10 @@ const Submission = () => {
   const [loaderRef, loadMore, resetLoadMore] = useOnScreen()
   useEffect(() => {
     if (hasMore && loadMore) {
-      mutate(async ({ results }) => {
+      mutate(async ({ results, ...rest }) => {
         const lastId = results[results.length - 1].idResult
         const data = await httpGet(`${url}&last=${lastId}`, { token })
-        return { ...data, results: [...results, ...data.results] }
+        return { ...rest, ...data, results: [...results, ...data.results] }
       }, false)
       resetLoadMore()
     }

@@ -92,7 +92,7 @@ export const useOnScreen = (rootMargin = '0px') => {
         }
       }
     },
-    [observer]
+    [observer, isIntersecting]
   )
 
   return [ref, isIntersecting, resetIntersecting]
