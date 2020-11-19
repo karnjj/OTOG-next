@@ -19,7 +19,7 @@ export const auth = (token) => {
 export const AuthContext = createContext()
 export const useAuthContext = () => useContext(AuthContext)
 export const AuthProvider = (props) => {
-  const [token, setToken] = useState(cookie.get('token'))
+  const [token, setToken] = useState(() => cookie.get('token'))
 
   const login = useCallback(
     (token) => {

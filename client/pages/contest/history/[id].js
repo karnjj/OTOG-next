@@ -14,7 +14,7 @@ import { useGet } from '../../../utils/api'
 
 const ScoreRow = (props) => {
   const { rank, sname, sumTime, sum, scores, tasks, rating, idUser } = props
-  const maxSum = tasks.reduce((total, prob) => total + prob.score, 0)
+  const maxSum = tasks?.reduce((total, prob) => total + prob.score, 0)
   const score = (prob) =>
     scores[prob.id_Prob] ? scores[prob.id_Prob].score : 0
   const round = (num) => Math.round(num * 100) / 100
@@ -25,9 +25,9 @@ const ScoreRow = (props) => {
       <td>
         <Name {...{ rating, sname, idUser }} />
       </td>
-      {tasks.map((prob, index) => (
+      {tasks?.map((prob) => (
         <TableData
-          key={index}
+          key={prob.id_Prob}
           acceptState={prob.score === score(prob)}
           wrongState={scores[prob.id_Prob] && prob.score !== score(prob)}
         >
@@ -57,8 +57,8 @@ const Scoreboard = ({ tasks, contestants, isLoading }) => {
         </tr>
       </thead>
       <tbody>
-        {contestants?.map((con, index) => (
-          <ScoreRow key={index} tasks={tasks} {...con} />
+        {contestants?.map((con) => (
+          <ScoreRow key={con.idUser} tasks={tasks} {...con} />
         ))}
       </tbody>
     </CustomTable>
