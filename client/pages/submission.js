@@ -42,15 +42,19 @@ const Submission = () => {
   }
 
   const [loaderRef, loadMore, resetLoadMore] = useOnScreen()
+
   useEffect(() => {
-    if (hasMore && loadMore) {
-      mutate(async ({ results, ...rest }) => {
-        const lastId = results[results.length - 1].idResult
-        const data = await httpGet(`${url}&last=${lastId}`, { token })
-        return { ...rest, ...data, results: [...results, ...data.results] }
-      }, false)
-      resetLoadMore()
+    const callback = async () => {
+      if (hasMore && loadMore) {
+        await mutate(async ({ results, ...rest }) => {
+          const lastId = results[results.length - 1].idResult
+          const data = await httpGet(`${url}&last=${lastId}`, { token })
+          return { ...rest, ...data, results: [...results, ...data.results] }
+        }, false)
+        resetLoadMore()
+      }
     }
+    callback()
   }, [loadMore, url, hasMore, token])
 
   return (
