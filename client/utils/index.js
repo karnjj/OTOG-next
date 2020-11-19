@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 
 export const useInput = (initialValue = '', converter) => {
   const [value, setValue] = useState(initialValue)
@@ -66,12 +66,17 @@ export const useRenderCount = (name) => {
   console.log(`${name} rendered : ${++count.current} `)
 }
 
+export const useClientSide = () =>
+  useMemo(() => process.browser, [process.browser])
+
 export const useOnScreen = (rootMargin = '0px') => {
   const [isIntersecting, setIntersecting] = useState(false)
   const resetIntersecting = useCallback(() => setIntersecting(false), [])
+  const isClient = useClientSide()
 
   const [observer] = useState(
     () =>
+      isClient &&
       new IntersectionObserver(
         ([entry]) => setIntersecting(entry.isIntersecting),
         { rootMargin, threshold: 0 }

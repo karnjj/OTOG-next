@@ -6,7 +6,7 @@ import { useOnScreen } from '../utils'
 const heightCache = {}
 
 const RenderOnIntersect = ({ id, initialHeight, as, children }) => {
-  const [boxRef, intersecting] = useOnScreen('200px')
+  const [boxRef, intersecting] = useOnScreen('500px')
 
   const onResize = useCallback(
     (contentRect) => {
