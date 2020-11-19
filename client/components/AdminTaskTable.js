@@ -421,8 +421,8 @@ export const TaskTable = () => {
         </RenderOnIntersect>
       </thead>
       <tbody>
-        {tasks?.map((task, index) => (
-          <TaskRow key={index} index={index} {...task} />
+        {tasks?.map((task) => (
+          <TaskRow key={task.id_Prob} {...task} />
         ))}
       </tbody>
     </CustomTable>

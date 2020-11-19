@@ -31,8 +31,8 @@ const TaskTable = ({ isLoading, tasks }) => {
         </RenderOnIntersect>
       </thead>
       <tbody>
-        {tasks?.map((prob, index) => (
-          <TaskRow key={index} {...prob} />
+        {tasks?.map((prob) => (
+          <TaskRow key={prob.id_Prob} {...prob} />
         ))}
       </tbody>
     </CustomTable>

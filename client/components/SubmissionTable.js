@@ -40,8 +40,8 @@ const SubmissionTable = ({ isLoading, results, canViewCode }) => {
         </tr>
       </thead>
       <tbody>
-        {results?.map((result, index) => (
-          <SubRow key={index} {...result} canViewCode={showCode} />
+        {results?.map((result) => (
+          <SubRow key={result.idResult} {...result} canViewCode={showCode} />
         ))}
       </tbody>
     </CustomTable>
