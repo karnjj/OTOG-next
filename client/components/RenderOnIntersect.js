@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { Container } from 'react-bootstrap'
 import Measure from 'react-measure'
 import { useOnScreen } from '../utils'
@@ -6,8 +6,7 @@ import { useOnScreen } from '../utils'
 const heightCache = {}
 
 const RenderOnIntersect = ({ id, initialHeight, as, children }) => {
-  const dummyBoxRef = useRef()
-  const [intersecting] = useOnScreen(dummyBoxRef, '200px', false)
+  const [boxRef, intersecting] = useOnScreen('200px')
 
   const onResize = useCallback(
     (contentRect) => {
@@ -28,7 +27,7 @@ const RenderOnIntersect = ({ id, initialHeight, as, children }) => {
     <Container
       fluid
       as={as}
-      ref={dummyBoxRef}
+      ref={boxRef}
       style={{ height: heightCache[id] || initialHeight }}
     />
   )

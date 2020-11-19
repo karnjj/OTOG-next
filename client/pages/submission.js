@@ -41,21 +41,17 @@ const Submission = () => {
     setLoading(true)
   }
 
-  const loaderRef = useRef()
-  const [loadMore, resetLoadMore] = useOnScreen(loaderRef)
+  const [loaderRef, loadMore, resetLoadMore] = useOnScreen()
   useEffect(() => {
     if (hasMore && loadMore) {
-      mutate(async ({ results, ...rest }) => {
+      mutate(async ({ results }) => {
         const lastId = results[results.length - 1].idResult
-        const {
-          results: olderResults,
-          hasMore,
-        } = await httpGet(`${url}&last=${lastId}`, { token })
-        return { results: [...results, ...olderResults], hasMore, ...rest }
+        const data = await httpGet(`${url}&last=${lastId}`, { token })
+        return { ...data, results: [...results, ...data.results] }
       }, false)
       resetLoadMore()
     }
-  }, [loadMore, url, hasMore])
+  }, [loadMore, url, hasMore, token])
 
   return (
     <>

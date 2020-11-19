@@ -66,31 +66,29 @@ export const useRenderCount = (name) => {
   console.log(`${name} rendered : ${++count.current} `)
 }
 
-export const useOnScreen = (ref, rootMargin = '0px', alwaysObserve = true) => {
+export const useOnScreen = (rootMargin = '0px') => {
   const [isIntersecting, setIntersecting] = useState(false)
-  const resetIntersecting = useCallback(() => setIntersecting(false), [
-    setIntersecting,
-  ])
-  useEffect(() => {
-    if (!alwaysObserve && isIntersecting) {
-      return
-    }
+  const resetIntersecting = useCallback(() => setIntersecting(false), [])
 
-    const observer = new IntersectionObserver(
-      ([entry]) => setIntersecting(entry.isIntersecting),
-      { rootMargin, threshold: 0 }
-    )
+  const [observer] = useState(
+    () =>
+      new IntersectionObserver(
+        ([entry]) => setIntersecting(entry.isIntersecting),
+        { rootMargin, threshold: 0 }
+      )
+  )
 
-    const target = ref.current
-    if (target) {
-      observer.observe(target)
-    }
-    return () => {
-      if (target) {
-        observer.unobserve(target)
+  const ref = useCallback(
+    (node) => {
+      if (observer) {
+        observer.disconnect()
+        if (node) {
+          observer.observe(node)
+        }
       }
-    }
-  }, [isIntersecting, ref.current, rootMargin, alwaysObserve])
+    },
+    [observer]
+  )
 
-  return [isIntersecting, resetIntersecting]
+  return [ref, isIntersecting, resetIntersecting]
 }
