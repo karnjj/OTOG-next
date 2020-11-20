@@ -73,7 +73,7 @@ const ContestScoreboard = () => {
     isLoadin: usersLoading,
   } = useGet(`/api/contest/history/${id}`)
   const {
-    data: { problems: tasks },
+    data: { tasks },
     isLoading: tasksLoading,
   } = useGet(`/api/contest/${id}`)
 
