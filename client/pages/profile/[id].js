@@ -86,7 +86,7 @@ const ImageCard = ({ userInfo, id }) => (
 
 const Profile = (props) => (
   <PageLayout>
-    <Title icon={faUser} text='Profile' />
+    <Title icon={faUser}>Profile</Title>
     <hr />
     <Row xs={1} lg={2}>
       <Col lg={7} xl={8} className='mb-3 mb-lg-0'>

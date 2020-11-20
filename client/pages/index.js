@@ -252,7 +252,7 @@ const Index = () => {
         <Guide />
         <div>
           <i className='glyphicon glyphicon-asterisk'></i>
-          <Title icon={faPuzzlePiece} text='โจทย์ใหม่' noBot='true' />
+          <Title icon={faPuzzlePiece}>โจทย์ใหม่</Title>
         </div>
         <hr />
         <NewTaskTable />

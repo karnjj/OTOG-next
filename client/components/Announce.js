@@ -294,7 +294,7 @@ const BAKA = [
   },
 ]
 
-const Announce = ({ value = BAKA, idContest, children }) => {
+const Announce = ({ announce = BAKA, idContest, children }) => {
   const editor = useMemo(() => withReact(createEditor()), [])
   const [show, handleShow, handleClose] = useShow()
   const renderElement = useCallback((props) => <Element {...props} />, [])
@@ -308,7 +308,7 @@ const Announce = ({ value = BAKA, idContest, children }) => {
           <Modal.Title>Contest #{idContest}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Slate value={value} editor={editor}>
+          <Slate value={announce} editor={editor}>
             <Editable
               renderElement={renderElement}
               renderLeaf={renderLeaf}

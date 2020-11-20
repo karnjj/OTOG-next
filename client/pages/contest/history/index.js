@@ -75,7 +75,7 @@ const ContestTable = () => {
 
 const History = () => (
   <PageLayout>
-    <Title icon={faTrophy} text='Contest History' />
+    <Title icon={faTrophy}>Contest History</Title>
     <hr />
     <ContestTable />
   </PageLayout>

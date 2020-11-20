@@ -16,26 +16,6 @@ import styled, { keyframes } from 'styled-components'
 import vars from '../../styles/vars'
 import { httpGet, useGet } from '../../utils/api'
 
-const popin = keyframes`
-	0% {
-		opacity: 0;
-		transform: scale(0);
-	}
-	100% {
-		opacity: 1;
-		transform: scale(1);
-	}
-`
-const popout = keyframes`
-	0% {
-		transform: translateY(0);
-	}
-	100% {
-		opacity: 0;
-		transform: translateY(-50px);
-	}
-`
-
 const CenteredDiv = styled.div`
   text-align: center;
   h1 {
@@ -48,16 +28,19 @@ const CenteredDiv = styled.div`
   }
 `
 const StyledJumbotron = styled(Jumbotron)`
-  background: ${vars.grey};
+  background: ${(props) => (props.white ? vars.white : vars.grey)};
   min-height: 40vh;
   display: flex;
   align-items: center;
 `
 
-const Countdown = ({ timeleft, name, idContest, announce: value }) => (
+const Countdown = ({ timeleft, name, idContest, announce }) => (
   <CenteredDiv>
     <h1>
-      การแข่งขัน <Announce {...{ idContest, value }}>{name}</Announce>{' '}
+      การแข่งขัน{' '}
+      <Announce idContest={idContest} announce={announce}>
+        {name}
+      </Announce>{' '}
       กำลังจะเริ่ม
     </h1>
     <h3>
@@ -81,7 +64,8 @@ const EndingContest = ({ idContest }) => {
     </CenteredDiv>
   )
 }
-const NoContest = (props) => {
+
+const NoContest = () => {
   const { isAdmin } = useAuthContext()
   return (
     <CenteredDiv>
@@ -100,7 +84,7 @@ const NoContest = (props) => {
   )
 }
 
-const NoLogin = (props) => {
+const NoLogin = () => {
   return (
     <CenteredDiv>
       <h1>กรุณาเข้าสู่ระบบเพื่อแข่งขัน</h1>
@@ -108,17 +92,25 @@ const NoLogin = (props) => {
   )
 }
 
-const HoldingContest = ({ idContest, timeleft, name }) => {
+const HoldingContest = ({ idContest, timeleft, name, announce }) => {
   const { isAdmin } = useAuthContext()
   const {
     data: { tasks },
   } = useGet(`/api/contest/${idContest}`)
   return (
     <Container>
-      <Title icon={faTrophy} text={name} paddingTop={false}>
-        <h2>
-          <Timer timeLeft={timeleft} />
-        </h2>
+      <Title
+        icon={faTrophy}
+        right={
+          <h2>
+            <Timer timeLeft={timeleft} />
+          </h2>
+        }
+        paddingTop={false}
+      >
+        <Announce idContest={idContest} announce={announce}>
+          {name}
+        </Announce>
       </Title>
       <hr />
       {tasks?.map((task, index) => (
@@ -174,7 +166,7 @@ const Contest = ({ contest, serverTime }) => {
 
   return (
     <PageLayout container={false} fluid className='justify-content-center'>
-      <StyledJumbotron>
+      <StyledJumbotron white={isHolding}>
         <Container fluid>
           <Row className='d-flex justify-content-center'>
             <Col xs={12} lg={isHolding ? 10 : 12} xl={isHolding ? 8 : 12}>
@@ -192,6 +184,7 @@ const Contest = ({ contest, serverTime }) => {
                   timeleft={end - now}
                   idContest={idContest}
                   name={contest.name}
+                  announce={contest.announce}
                 />
               ) : isJustEnd ? (
                 <EndingContest idContest={idContest} />

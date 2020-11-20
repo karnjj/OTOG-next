@@ -110,7 +110,7 @@ const Task = () => {
 const TaskPage = () => {
   return (
     <PageLayout>
-      <Title icon={faPuzzlePiece} text='Tasks' />
+      <Title icon={faPuzzlePiece}>Tasks</Title>
       <Task />
     </PageLayout>
   )

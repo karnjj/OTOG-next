@@ -76,7 +76,7 @@ const Rating = () => {
 const RatingPage = () => {
   return (
     <PageLayout>
-      <Title icon={faChartBar} text='Ratings' />
+      <Title icon={faChartBar}>Ratings</Title>
       <Rating />
     </PageLayout>
   )

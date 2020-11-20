@@ -121,7 +121,7 @@ const Submission = () => {
 const SubmissionPage = () => {
   return (
     <PageLayout>
-      <Title icon={faPuzzlePiece} text='Submissions' />
+      <Title icon={faPuzzlePiece}>Submissions</Title>
       <Submission />
     </PageLayout>
   )

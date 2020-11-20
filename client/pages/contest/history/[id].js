@@ -4,7 +4,6 @@ import OrangeButton from '../../../components/OrangeButton'
 import {
   CustomTable,
   TableRow,
-  UserTd,
   TableData,
 } from '../../../components/CustomTable'
 
@@ -79,8 +78,13 @@ const ContestScoreboard = () => {
 
   return (
     <PageLayout>
-      <Title icon={faChartArea} noBot='true' text={`Scoreboard #${id}`}>
-        <OrangeButton href='/contest/history'>View Contest</OrangeButton>
+      <Title
+        icon={faChartArea}
+        right={
+          <OrangeButton href='/contest/history'>View Contest</OrangeButton>
+        }
+      >
+        {`Scoreboard #${id}`}
       </Title>
       <hr />
       <Scoreboard

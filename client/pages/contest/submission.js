@@ -18,8 +18,11 @@ const Submission = () => {
 
 const ContestSubmissionPage = () => (
   <PageLayout>
-    <Title icon={faTrophy} text='Contest Submissions' noBot='true'>
-      <OrangeButton href='/contest'>View Contest</OrangeButton>
+    <Title
+      icon={faTrophy}
+      right={<OrangeButton href='/contest'>View Contest</OrangeButton>}
+    >
+      Contest Submissions
     </Title>
     <hr />
     <Submission />
