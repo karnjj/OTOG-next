@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { ThemeProvider } from 'styled-components'
 import { unregister } from 'next-offline/runtime'
 
-import { AuthProvider } from '../utils/auth'
+import { AuthProvider, getCookieContext } from '../utils/auth'
 import breakpoints from '../styles/breakpoints'
 import '../styles/otog-custom-theme.scss'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -23,7 +23,7 @@ const GlobalStyle = createGlobalStyle`
 	}
 `
 
-const MyApp = ({ Component, pageProps }) => {
+const MyApp = ({ Component, pageProps, reqToken }) => {
   useEffect(() => unregister(), [])
 
   return (
@@ -42,13 +42,18 @@ const MyApp = ({ Component, pageProps }) => {
         <meta name='theme-color' content='#ff851b' />
       </Head>
       <ThemeProvider theme={{ breakpoints }}>
-        <AuthProvider>
+        <AuthProvider reqToken={reqToken}>
           <GlobalStyle />
           <Component {...pageProps} />
         </AuthProvider>
       </ThemeProvider>
     </>
   )
+}
+
+MyApp.getInitialProps = async (context) => {
+  const reqToken = context.ctx.req?.cookies.token
+  return { reqToken }
 }
 
 export default MyApp
