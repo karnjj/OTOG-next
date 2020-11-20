@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAuthContext } from '../utils/auth'
 import { useGet, httpGet } from '../utils/api'
 
@@ -85,7 +85,7 @@ const Submission = () => {
                 </a>
               </Col>
               <Col xs='auto'>
-                <SubmitGroup {...latest} />
+                <SubmitGroup {...latest} callback={mutate} />
               </Col>
             </Row>
           )}

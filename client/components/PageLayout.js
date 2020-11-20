@@ -64,7 +64,8 @@ export const Header = () => {
             <Nav className='ml-auto'>
               {navLinks.map(([name, icon, paths, exact]) => (
                 <NavLink
-                  {...{ name, icon }}
+                  name={name}
+                  icon={icon}
                   path={paths[0]}
                   key={name}
                   active={paths.some((path) =>

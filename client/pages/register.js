@@ -89,8 +89,12 @@ const Register = () => {
             </OrangeButton>
           </Form>
           <hr />
-          <OrangeButton variant='outline-secondary' href='/login' block>
-            {`< Back`}
+          <OrangeButton
+            variant='outline-secondary'
+            onClick={() => window.history.back()}
+            block
+          >
+            {'< Back'}
           </OrangeButton>
         </Card.Body>
       </ShadowCard>

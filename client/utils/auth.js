@@ -6,7 +6,6 @@ import {
   useState,
 } from 'react'
 import Error from 'next/error'
-import router from 'next/router'
 import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
 import jwt_decode from 'jwt-decode'
@@ -30,11 +29,13 @@ export const AuthProvider = ({ reqToken, ...rest }) => {
     [token]
   )
 
-  const logout = useCallback(() => {
-    http('GET', '/api/logout', { token })
-    cookie.remove('token')
-    setToken(null)
-    window.localStorage.setItem('logout', Date.now())
+  const logout = useCallback(async () => {
+    const response = await http('GET', '/api/logout', { token })
+    if (response.ok) {
+      cookie.remove('token')
+      setToken(null)
+      window.localStorage.setItem('logout', Date.now())
+    }
   }, [token])
 
   const syncSession = useCallback(({ key }) => {

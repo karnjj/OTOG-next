@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { ThemeProvider } from 'styled-components'
 import { unregister } from 'next-offline/runtime'
 
-import { AuthProvider, getCookieContext } from '../utils/auth'
+import { AuthProvider } from '../utils/auth'
 import breakpoints from '../styles/breakpoints'
 import '../styles/otog-custom-theme.scss'
 import 'react-datepicker/dist/react-datepicker.css'

@@ -1,38 +1,48 @@
 import { useState } from 'react'
-import router from 'next/router'
-
-import { Modal, Form, ButtonGroup } from 'react-bootstrap'
+import CustomAlert from './CustomAlert'
 import OrangeButton from './OrangeButton'
+import { Modal, Form, ButtonGroup } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
+
 import { usePost } from '../utils/api'
-import { useShow } from '../utils'
+import { useAlert, useForm, useShow } from '../utils'
 
-const SubmitGroup = ({ name, id_Prob, children }) => {
+const SubmitGroup = ({ name, id_Prob, children, callback }) => {
   const [show, handleShow, handleClose] = useShow(false)
-  const [fileLang, setFileLang] = useState('C++')
-  const [file, setFile] = useState()
-
-  const selectLang = (event) => setFileLang(event.target.value)
-  const selectFile = (event) => setFile(event.target.files[0])
+  const [loading, setLoading] = useState(false)
+  const { data, onFileChange, onValueChange } = useForm({ fileLang: 'C++' })
+  const { file, fileLang } = data
 
   const post = usePost(`/api/upload/${id_Prob}`)
+  const [alert, setAlert] = useAlert()
   const uploadFile = async (e) => {
     e.preventDefault()
     if (!file) return
-    const body = new FormData()
-    body.append('file', file)
-    body.append('fileLang', fileLang)
-    const response = await post(body, false)
-    if (response.ok) {
-      router.pathname === '/submission'
-        ? window.location.reload(false)
-        : router.push('/submission')
+    setLoading(true)
+    alert.handleClose()
+    try {
+      const body = new FormData()
+      Object.keys(data).forEach((item) => body.append(item, data[item]))
+      const response = await post(body, false)
+      if (response.ok) {
+        handleClose()
+        if (callback) {
+          callback()
+        }
+      } else {
+        setAlert({ head: res.status, desc: res.statusText })
+      }
+    } catch (error) {
+      setAlert({ head: error.name, desc: error.message })
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
     <>
+      <CustomAlert {...alert} />
       <ButtonGroup>
         <OrangeButton expand={6} onClick={handleShow}>
           <FontAwesomeIcon icon={faFileUpload} />
@@ -47,23 +57,24 @@ const SubmitGroup = ({ name, id_Prob, children }) => {
         <Form as={Modal.Body}>
           <Form.Group>
             <Form.File
+              name='file'
               label={file?.name ?? 'Choose file'}
               accept='.c,.cpp'
-              onChange={selectFile}
+              onChange={onFileChange}
               custom
             />
           </Form.Group>
           <Form.Group>
             <Form.Label>Choose Language</Form.Label>
-            <Form.Control as='select' onChange={selectLang}>
+            <Form.Control as='select' value={fileLang} onChange={onValueChange}>
               <option>C++</option>
               <option>C</option>
             </Form.Control>
           </Form.Group>
         </Form>
         <Modal.Footer>
-          <OrangeButton type='submit' onClick={uploadFile}>
-            Submit
+          <OrangeButton type='submit' onClick={uploadFile} disabled={loading}>
+            {loading ? 'Submitting' : 'Submit'}
           </OrangeButton>
         </Modal.Footer>
       </Modal>

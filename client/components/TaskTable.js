@@ -9,6 +9,7 @@ import SubmitGroup from './SubmitGroup'
 import ViewCodeButton from './ViewCodeButton'
 import styled from 'styled-components'
 import { RenderOnIntersect } from './RenderOnIntersect'
+import { useRouter } from 'next/router'
 
 const StyledPop = styled(Popover)`
   max-width: none;
@@ -53,6 +54,8 @@ const TaskRow = memo((props) => {
   } = props
   const { isLogin } = useAuthContext()
 
+  const router = useRouter()
+
   const passed = []
   if (pass) {
     for (let i = 0; i < pass.length; i += 15) {
@@ -61,7 +64,7 @@ const TaskRow = memo((props) => {
   }
   return (
     <RenderOnIntersect id={`tasks/${id_Prob}`} initialHeight='73px' as='tr'>
-      <TableRow {...{ acceptState, wrongState }}>
+      <TableRow acceptState={acceptState} wrongState={wrongState}>
         <td>{id_Prob}</td>
         <td>
           <a target='_blank' href={`${process.env.API_URL}/api/docs/${sname}`}>
@@ -96,7 +99,12 @@ const TaskRow = memo((props) => {
         <td>{rating ? rating : '-'}</td>
         {isLogin && (
           <td>
-            <SubmitGroup {...props}>
+            <SubmitGroup
+              {...props}
+              callback={() => {
+                router.push('/submission')
+              }}
+            >
               {(acceptState || wrongState) && (
                 <ViewCodeButton {...{ id_Prob }} />
               )}
