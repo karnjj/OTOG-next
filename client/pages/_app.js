@@ -14,6 +14,7 @@ import vars from '../styles/vars'
 config.autoAddCss = false
 
 const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css?family=Fira+Code&display=swap');
 	body {
 		overflow-y: scroll;
 	}
