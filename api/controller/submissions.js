@@ -74,7 +74,23 @@ async function ContestSubmission(req, res) {
 	res.json({ results: submit })
 }
 
+async function GetSubmissionWithId(req, res) {
+	const idResult = req.params.id
+	const userData = req.user
+	let submit = await new Promise((resolve, reject) => {
+		let sql = `SELECT idResult,U.sname,U.rating,U.state,U.idUser as idUser,P.name,P.sname as problemname,result,timeuse,Result.score,Result.time as time,errmsg FROM Result 
+			inner join Problem as P on Result.prob_id = P.id_Prob
+			inner join User as U on Result.user_id = U.idUser
+			where contestmode is null 
+			${(userData?.state === 0) ? '' : 'and P.state = 1 '}
+			and idResult = ? limit 1`
+		db.query(sql, [idResult], (err, result) => (err ? reject(err) : resolve(result[0])))
+	})
+	res.json({results: submit})
+}
+
 module.exports = {
 	AllSubmission,
+	GetSubmissionWithId,
 	ContestSubmission,
 }

@@ -39,6 +39,7 @@ router.get('/countProblem', problems.cntProblem)
 router.get('/docs/:name', problems.getDoc)
 //Submission
 router.get('/submission', submission.AllSubmission)
+router.get('/submission/:id', submission.GetSubmissionWithId)
 router.get('/contest/submission',middleware.AdminAuth,submission.ContestSubmission)
 //Contest
 router.get('/contest', contest.contest)
