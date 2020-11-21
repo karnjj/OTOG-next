@@ -26,10 +26,10 @@ const SubmitGroup = ({ name, id_Prob, children, callback }) => {
       Object.keys(data).forEach((item) => body.append(item, data[item]))
       const response = await post(body, false)
       if (response.ok) {
-        handleClose()
         if (callback) {
           callback()
         }
+        handleClose()
       } else {
         setAlert({ head: res.status, desc: res.statusText })
       }

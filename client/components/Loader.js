@@ -34,8 +34,8 @@ const AnimationTable = styled(Table)`
     text-align: center;
   }
 `
-export const Loader = forwardRef((_, ref) => (
-  <Row className='justify-content-center py-5'>
+export const Loader = forwardRef((props, ref) => (
+  <Row className='justify-content-center py-4' {...props}>
     <Spinner ref={ref} variant='primary' animation='border' role='status'>
       <span className='sr-only'>Loading...</span>
     </Spinner>

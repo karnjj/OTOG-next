@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 import {
   Row,
@@ -17,40 +17,24 @@ import ViewCodeButton from './ViewCodeButton'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import styled from 'styled-components'
 import { useGet, usePost } from '../utils/api'
+import { useForm } from '../utils'
+import Loader from './Loader'
 
-const Icon = styled(FontAwesomeIcon)`
-  user-select: none;
-  cursor: pointer;
-`
-const MiniSubmission = ({ idContest, idProb, setSolved }) => {
-  const url = `/api/contest/${idContest}/submission?idProb=${idProb}`
-  const {
-    data: { best_submit, lastest_submit },
-    isValidating,
-    mutate: fetchData,
-  } = useGet(url, false)
+const SubRow = ({ label, result = '-', score = '-', idResult }) => (
+  <tr>
+    <td>{label}</td>
+    <td>{result}</td>
+    <td>{score}</td>
+    <td>
+      {idResult ? <ViewCodeButton mini='true' idResult={idResult} /> : '-'}
+    </td>
+  </tr>
+)
+
+const MiniSubmission = ({ lastest_submit, best_submit }) => {
   const latest = lastest_submit && lastest_submit[0]
   const best = best_submit && best_submit[0]
-
-  useEffect(() => {
-    const isGrading = !isValidating && latest?.status === 0
-    const timeout = isGrading && setTimeout(fetchData, 1000)
-    return () => clearTimeout(timeout)
-  }, [isValidating])
-
-  const SubRow = ({ label, result = '-', score = '-', idResult }) => (
-    <tr>
-      <td>{label}</td>
-      <td>{result}</td>
-      <td>{score}</td>
-      <td>
-        {idResult ? <ViewCodeButton mini='true' idResult={idResult} /> : '-'}
-      </td>
-    </tr>
-  )
-
   return (
     <Table size='sm' bordered hover>
       <thead>
@@ -71,51 +55,47 @@ const MiniSubmission = ({ idContest, idProb, setSolved }) => {
 
 const TaskCard = (props) => {
   const { idContest, id_Prob, index, name, whopass, sname } = props
-  const [selectedFile, setSelectedFile] = useState()
-  const [fileName, setFileName] = useState('')
-  const [fileLang, setFileLang] = useState('C++')
-  const [solved, setSolved] = useState(false)
+  const { data, onFileChange } = useForm({ fileLang: 'C++' })
+  const { file } = data
+  const [loading, setLoading] = useState(false)
 
-  const CustomToggle = (props) => {
-    const [isHidden, setIsHidden] = useState(false)
-    const handleClick = useAccordionToggle(props.eventKey, () => {
-      setIsHidden(!isHidden)
-    })
-    return (
-      <Accordion.Toggle
-        {...props}
-        as={Icon}
-        className='float-right'
-        icon={isHidden ? faChevronDown : faChevronUp}
-        onClick={handleClick}
-      />
-    )
-  }
+  const url = `/api/contest/${idContest}/submission?idProb=${id_Prob}`
+  const {
+    data: { solved, ...results },
+    isValidating,
+    mutate: fetchResult,
+  } = useGet(url, { revalidateOnMount: false, revalidateOnFocus: false })
+  console.log(solved, results)
 
-  const selectFile = (event) => {
-    if (event.target.files[0] !== undefined) {
-      setSelectedFile(event.target.files[0])
-      setFileName(event.target.files[0].name)
-    } else {
-      setSelectedFile(undefined)
-      setFileName('')
-    }
-  }
+  useEffect(() => {
+    const isGrading = !isValidating && results?.latest?.status === 0
+    const timeout = isGrading && setTimeout(fetchResult, 1000)
+    return () => clearTimeout(timeout)
+  }, [isValidating])
+
   const post = usePost(`/api/upload/${id_Prob}?contest=${idContest}`)
-  const uploadFile = async (e) => {
-    e.preventDefault()
-    if (!selectedFile) {
-      return
-    }
-
-    const data = new FormData()
-    data.append('file', selectedFile)
-    data.append('fileLang', fileLang)
-    const response = await post(data, false)
-    if (response.ok) {
-      window.location.reload(false)
-    }
-  }
+  const uploadFile = useCallback(
+    async (e) => {
+      e.preventDefault()
+      if (!file) return
+      setLoading(true)
+      try {
+        const formData = new FormData()
+        Object.keys(data).forEach((item) => body.append(item, data[item]))
+        const response = await post(formData, false)
+        if (response.ok) {
+          fetchResult()
+        } else {
+          setAlert({ head: res.status, desc: res.statusText })
+        }
+      } catch (error) {
+        setAlert({ head: error.name, desc: error.message })
+      } finally {
+        setLoading(false)
+      }
+    },
+    [data, fetchResult]
+  )
 
   return (
     <Accordion
@@ -141,20 +121,21 @@ const TaskCard = (props) => {
       <Accordion.Collapse eventKey='0'>
         <Card.Body as={Row}>
           <Col>
-            <MiniSubmission
-              idContest={idContest}
-              idProb={id_Prob}
-              setSolved={setSolved}
-            />
+            {isValidating ? (
+              <Loader style={{ height: '117px' }} />
+            ) : (
+              <MiniSubmission {...results} />
+            )}
           </Col>
           <Col xs={0} lg={1} />
           <Col style={{ maxWidth: '350px' }} className='mx-auto'>
             <Form.File
               as={Col}
+              name='file'
               className='mb-4'
-              label={fileName || 'Choose file'}
+              label={file?.name ?? 'Choose file'}
               accept='.c,.cpp'
-              onChange={selectFile}
+              onChange={onFileChange}
               custom
             />
             <ButtonToolbar as={Row}>
@@ -168,7 +149,11 @@ const TaskCard = (props) => {
                 </a>
               </ButtonGroup>
               <ButtonGroup className='mr-auto'>
-                <OrangeButton type='submit' onClick={uploadFile}>
+                <OrangeButton
+                  type='submit'
+                  onClick={uploadFile}
+                  disabled={loading}
+                >
                   Submit
                 </OrangeButton>
               </ButtonGroup>
@@ -181,3 +166,19 @@ const TaskCard = (props) => {
 }
 
 export default TaskCard
+
+// const CustomToggle = (props) => {
+//   const [isHidden, setIsHidden] = useState(false)
+//   const handleClick = useAccordionToggle(props.eventKey, () => {
+//     setIsHidden(!isHidden)
+//   })
+//   return (
+//     <Accordion.Toggle
+//       {...props}
+//       as={Icon}
+//       className='float-right'
+//       icon={isHidden ? faChevronDown : faChevronUp}
+//       onClick={handleClick}
+//     />
+//   )
+// }

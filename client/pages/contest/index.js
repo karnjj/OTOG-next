@@ -1,6 +1,6 @@
 import { useAuthContext } from '../../utils/auth'
 
-import { Container, Row, Jumbotron, Col } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 
 import { faTrophy } from '@fortawesome/free-solid-svg-icons'
 
@@ -12,11 +12,11 @@ import { Loader } from '../../components/Loader'
 import OrangeButton from '../../components/OrangeButton'
 import Announce from '../../components/Announce'
 
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import vars from '../../styles/vars'
 import { httpGet, useGet } from '../../utils/api'
 
-const CenteredDiv = styled.div`
+const CenteredContainer = styled(Container)`
   text-align: center;
   h1 {
     font-size: 300%;
@@ -27,7 +27,7 @@ const CenteredDiv = styled.div`
     font-weight: bold;
   }
 `
-const StyledJumbotron = styled(Jumbotron)`
+const Hero = styled(Container)`
   background: ${(props) => (props.white ? vars.white : vars.grey)};
   min-height: 40vh;
   display: flex;
@@ -35,7 +35,7 @@ const StyledJumbotron = styled(Jumbotron)`
 `
 
 const Countdown = ({ timeleft, name, idContest, announce }) => (
-  <CenteredDiv>
+  <CenteredContainer>
     <h1>
       การแข่งขัน{' '}
       <Announce idContest={idContest} announce={announce}>
@@ -47,12 +47,12 @@ const Countdown = ({ timeleft, name, idContest, announce }) => (
       ในอีก <Timer timeLeft={timeleft} mode='th' />
       ...
     </h3>
-  </CenteredDiv>
+  </CenteredContainer>
 )
 
 const EndingContest = ({ idContest }) => {
   return (
-    <CenteredDiv>
+    <CenteredContainer>
       <h1>การแข่งขันจบแล้ว</h1>
       <OrangeButton
         href='/contest/history/[id]'
@@ -61,14 +61,14 @@ const EndingContest = ({ idContest }) => {
       >
         สรุปผลการแข่งขัน
       </OrangeButton>
-    </CenteredDiv>
+    </CenteredContainer>
   )
 }
 
 const NoContest = () => {
   const { isAdmin } = useAuthContext()
   return (
-    <CenteredDiv>
+    <CenteredContainer>
       <h1>ยังไม่มีการแข่งขัน</h1>
       {isAdmin && (
         <OrangeButton
@@ -80,15 +80,15 @@ const NoContest = () => {
         </OrangeButton>
       )}
       <OrangeButton href='/contest/history'>See Contest History</OrangeButton>
-    </CenteredDiv>
+    </CenteredContainer>
   )
 }
 
 const NoLogin = () => {
   return (
-    <CenteredDiv>
+    <CenteredContainer>
       <h1>กรุณาเข้าสู่ระบบเพื่อแข่งขัน</h1>
-    </CenteredDiv>
+    </CenteredContainer>
   )
 }
 
@@ -98,7 +98,7 @@ const HoldingContest = ({ idContest, timeleft, name, announce }) => {
     data: { tasks },
   } = useGet(`/api/contest/${idContest}`)
   return (
-    <Container>
+    <Container style={{ maxWidth: '800px' }}>
       <Title
         icon={faTrophy}
         right={
@@ -106,7 +106,6 @@ const HoldingContest = ({ idContest, timeleft, name, announce }) => {
             <Timer timeLeft={timeleft} />
           </h2>
         }
-        paddingTop={false}
       >
         <Announce idContest={idContest} announce={announce}>
           {name}
@@ -115,7 +114,7 @@ const HoldingContest = ({ idContest, timeleft, name, announce }) => {
       <hr />
       {tasks?.map((task, index) => (
         <TaskCard
-          key={index}
+          key={task.id_Prob}
           idContest={idContest}
           index={index + 1}
           {...task}
@@ -166,35 +165,33 @@ const Contest = ({ contest, serverTime }) => {
 
   return (
     <PageLayout container={false} fluid className='justify-content-center'>
-      <StyledJumbotron white={isHolding}>
-        <Container fluid>
-          <Row className='d-flex justify-content-center'>
-            <Col xs={12} lg={isHolding ? 10 : 12} xl={isHolding ? 8 : 12}>
-              {!isLogin ? (
-                <NoLogin />
-              ) : isAboutToStart ? (
-                <Countdown
-                  timeleft={start - now}
-                  idContest={idContest}
-                  name={contest.name}
-                  announce={contest.announce}
-                />
-              ) : isHolding ? (
-                <HoldingContest
-                  timeleft={end - now}
-                  idContest={idContest}
-                  name={contest.name}
-                  announce={contest.announce}
-                />
-              ) : isJustEnd ? (
-                <EndingContest idContest={idContest} />
-              ) : (
-                <NoContest />
-              )}
-            </Col>
-          </Row>
-        </Container>
-      </StyledJumbotron>
+      <Hero
+        white={isLogin && isHolding}
+        fluid
+        className='justify-content-center p-0'
+      >
+        {!isLogin ? (
+          <NoLogin />
+        ) : isAboutToStart ? (
+          <Countdown
+            timeleft={start - now}
+            idContest={idContest}
+            name={contest.name}
+            announce={contest.announce}
+          />
+        ) : isHolding ? (
+          <HoldingContest
+            timeleft={end - now}
+            idContest={idContest}
+            name={contest.name}
+            announce={contest.announce}
+          />
+        ) : isJustEnd ? (
+          <EndingContest idContest={idContest} />
+        ) : (
+          <NoContest />
+        )}
+      </Hero>
     </PageLayout>
   )
 }
