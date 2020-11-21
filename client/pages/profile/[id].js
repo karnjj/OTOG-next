@@ -103,9 +103,9 @@ const Profile = (props) => (
   </PageLayout>
 )
 
-Profile.getInitialProps = async ({ query: { id } }) => {
+export const getServerSideProps = async ({ params: { id } }) => {
   const userInfo = await httpGet(`/api/profile/${id}`)
-  return { id, userInfo }
+  return { props: { id, userInfo } }
 }
 
 export default Profile

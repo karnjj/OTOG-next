@@ -110,7 +110,7 @@ export const Header = () => {
                 <NavLink
                   name='Login'
                   icon={faSignInAlt}
-                  path={`/login?page=${router.pathname}`}
+                  path={`/login?page=${router.asPath}`}
                 />
               )}
             </Nav>
