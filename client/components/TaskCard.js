@@ -80,7 +80,8 @@ const TaskCard = (props) => {
   } = useGet(url, { revalidateOnFocus: false })
 
   useEffect(() => {
-    const isGrading = !isValidating && results?.lastest_submit?.[0].status === 0
+    const isGrading =
+      !isValidating && results?.lastest_submit?.[0]?.status === 0
     const timeout = isGrading && setTimeout(fetchResult, 1000)
     return () => clearTimeout(timeout)
   }, [isValidating, fetchResult])
@@ -125,8 +126,10 @@ const TaskCard = (props) => {
               {solved && <Badge variant='success'>Solved</Badge>}
             </Col>
           </Row>
-          {time} วินาที {memory} MB
         </h5>
+        <h6>
+          {time} วินาที {memory} MB
+        </h6>
       </Accordion.Toggle>
 
       <Accordion.Collapse eventKey='0'>
