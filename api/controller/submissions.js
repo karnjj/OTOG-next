@@ -86,7 +86,7 @@ async function GetSubmissionWithId(req, res) {
 			and idResult = ? limit 1`
 		db.query(sql, [idResult], (err, result) => (err ? reject(err) : resolve(result[0])))
 	})
-	res.json({results: submit})
+	res.json(submit)
 }
 
 module.exports = {

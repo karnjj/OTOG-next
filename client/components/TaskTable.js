@@ -106,7 +106,7 @@ const TaskRow = memo((props) => {
               }}
             >
               {(acceptState || wrongState) && (
-                <ViewCodeButton {...{ id_Prob }} />
+                <ViewCodeButton id_Prob={id_Prob} taskName={name} />
               )}
             </SubmitGroup>
           </td>

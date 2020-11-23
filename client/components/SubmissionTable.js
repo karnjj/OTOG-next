@@ -4,22 +4,17 @@ import { timeToString, useShow } from '../utils'
 
 import { TableRow, CustomTable } from './CustomTable'
 import { Modal, ButtonGroup } from 'react-bootstrap'
-import { Name, Alink } from './CustomText'
+import { Name, Alink, ResultCode } from './CustomText'
 import ViewCodeButton from './ViewCodeButton'
 
 import styled from 'styled-components'
 import prism from 'prismjs'
-import vars from '../styles/vars'
 
 const FontPre = styled.pre`
   span,
   code {
     font-family: 'Fira Code', 'Courier New', Courier, monospace;
   }
-`
-const ResultCode = styled.code`
-  color: ${vars.black};
-  font-size: 16px;
 `
 
 const SubmissionTable = ({ isLoading, results, canViewCode }) => {
@@ -112,7 +107,7 @@ const SubRow = memo((props) => {
         {canViewCode && (
           <td>
             <ButtonGroup>
-              <ViewCodeButton {...{ idResult }} />
+              <ViewCodeButton idResult={idResult} />
             </ButtonGroup>
           </td>
         )}

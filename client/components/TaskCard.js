@@ -21,18 +21,22 @@ import { useGet, usePost } from '../utils/api'
 import { useForm } from '../utils'
 import Loader from './Loader'
 
-const SubRow = ({ label, result = '-', score = '-', idResult }) => (
+const SubRow = ({ label, result = '-', score = '-', idResult, name }) => (
   <tr>
     <td>{label}</td>
     <td>{result}</td>
     <td>{score}</td>
     <td>
-      {idResult ? <ViewCodeButton mini='true' idResult={idResult} /> : '-'}
+      {idResult ? (
+        <ViewCodeButton mini={true} idResult={idResult} taskName={name} />
+      ) : (
+        '-'
+      )}
     </td>
   </tr>
 )
 
-const MiniSubmission = ({ lastest_submit, best_submit }) => {
+const MiniSubmission = ({ lastest_submit, best_submit, name }) => {
   const latest = lastest_submit && lastest_submit[0]
   const best = best_submit && best_submit[0]
   return (
@@ -46,8 +50,8 @@ const MiniSubmission = ({ lastest_submit, best_submit }) => {
         </tr>
       </thead>
       <tbody>
-        <SubRow label='Latest' {...latest} />
-        <SubRow label='Best' {...best} />
+        <SubRow label='Latest' {...latest} name={name} />
+        <SubRow label='Best' {...best} name={name} />
       </tbody>
     </Table>
   )
@@ -131,7 +135,7 @@ const TaskCard = (props) => {
             {isLoading ? (
               <Loader style={{ height: '131px' }} />
             ) : (
-              <MiniSubmission {...results} />
+              <MiniSubmission {...results} name={name} />
             )}
           </Col>
           <Col xs={0} lg={1} />

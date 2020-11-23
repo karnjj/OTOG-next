@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import prism from 'prismjs'
 import { useShow } from '../utils'
 import { useGet } from '../utils/api'
+import { ResultCode } from './CustomText'
 
 const FontPre = styled.pre`
   &&,
@@ -19,7 +20,7 @@ const FontPre = styled.pre`
   }
 `
 
-const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
+const ViewCodeButton = ({ idResult, id_Prob, mini, taskName }) => {
   const [show, handleShow, handleClose, shown] = useShow(false)
 
   const url = idResult
@@ -29,6 +30,9 @@ const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
     data: { sCode: sourceCode },
     isLoading,
   } = useGet(shown && url)
+  const {
+    data: { name = taskName, result, timeuse },
+  } = useGet(shown && idResult && `/api/submission/${idResult}`)
 
   const [showLineNumber, setShowLineNumber] = useState(true)
 
@@ -70,7 +74,12 @@ const ViewCodeButton = ({ idResult, id_Prob, mini }) => {
 
       <Modal show={show && !isLoading} onHide={handleClose} centered size='lg'>
         <Modal.Header closeButton>
-          <Modal.Title>Submission : {idResult}</Modal.Title>
+          <Modal.Title>
+            <span>Task: {name}</span>
+            <h6 className='mb-0'>
+              <ResultCode>{result}</ResultCode> {timeuse ? `${timeuse} s` : ''}
+            </h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FontPre className={showLineNumber && 'line-numbers'}>

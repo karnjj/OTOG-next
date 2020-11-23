@@ -51,3 +51,8 @@ export const Alink = styled.a`
     cursor: pointer !important;
   }
 `
+
+export const ResultCode = styled.code`
+  color: ${vars.black};
+  font-size: 16px;
+`
