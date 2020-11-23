@@ -83,7 +83,7 @@ const TaskCard = (props) => {
     const isGrading = !isValidating && results?.lastest_submit?.[0].status === 0
     const timeout = isGrading && setTimeout(fetchResult, 1000)
     return () => clearTimeout(timeout)
-  }, [isValidating])
+  }, [isValidating, fetchResult])
 
   const post = usePost(`/api/upload/${id_Prob}?contest=${idContest}`)
   const uploadFile = useCallback(

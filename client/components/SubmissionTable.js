@@ -9,6 +9,7 @@ import ViewCodeButton from './ViewCodeButton'
 
 import styled from 'styled-components'
 import prism from 'prismjs'
+import { useGet } from '../utils/api'
 
 const FontPre = styled.pre`
   span,
@@ -36,7 +37,11 @@ const SubmissionTable = ({ isLoading, results, canViewCode }) => {
       </thead>
       <tbody>
         {results?.map((result) => (
-          <SubRow key={result.idResult} {...result} canViewCode={showCode} />
+          <SubRow
+            key={result.idResult}
+            result={result}
+            canViewCode={showCode}
+          />
         ))}
       </tbody>
     </CustomTable>
@@ -45,24 +50,41 @@ const SubmissionTable = ({ isLoading, results, canViewCode }) => {
 
 const SubRow = memo((props) => {
   const [showError, handleShow, handleClose] = useShow(false)
+  const { result, canViewCode } = props
+
+  const {
+    data,
+    isValidating,
+    mutate: fetchResult,
+  } = useGet(`/api/submission/${result.idResult}`, {
+    initialData: result,
+    revalidateOnMount: false,
+    revalidateOnFocus: false,
+  })
   const {
     problemname,
     state,
     timeuse,
     score,
-    result,
+    result: resultCode,
     idResult,
     errmsg,
-    canViewCode,
     name,
     sname,
     rating,
     idUser,
     time,
-  } = props
+    status,
+  } = data
 
-  const isAccept = (result) =>
-    result
+  useEffect(() => {
+    const isGrading = !isValidating && status === 0
+    const timeout = isGrading && setTimeout(fetchResult, 1000)
+    return () => clearTimeout(timeout)
+  }, [isValidating])
+
+  const isAccept = (resultCode) =>
+    resultCode
       .split('')
       .filter((res) => res !== '[' && res !== ']')
       .every((res) => res === 'P')
@@ -76,7 +98,7 @@ const SubRow = memo((props) => {
 
   return (
     <>
-      <TableRow acceptState={isAccept(result)}>
+      <TableRow acceptState={isAccept(resultCode)}>
         <td title={timeToString(time)}>{idResult}</td>
         {state != 0 ? (
           <td>
@@ -95,10 +117,10 @@ const SubRow = memo((props) => {
         </td>
         <td>
           <ResultCode>
-            {result === 'Compilation Error' && canViewCode ? (
-              <Alink onClick={handleShow}>{result}</Alink>
+            {resultCode === 'Compilation Error' && canViewCode ? (
+              <Alink onClick={handleShow}>{resultCode}</Alink>
             ) : (
-              result
+              resultCode
             )}
           </ResultCode>
         </td>
