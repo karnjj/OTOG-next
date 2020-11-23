@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { useMemo, memo } from 'react'
 import { useGet, usePost, useDelete } from '../utils/api'
 import { CustomTable } from './CustomTable'
 import {
@@ -21,7 +21,7 @@ import {
   faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
 import { RenderOnIntersect } from './RenderOnIntersect'
-import { useForm, useShow } from '../utils'
+import { useForm, useInput, useShow } from '../utils'
 import { mutate } from 'swr'
 
 export const NewTask = () => {
@@ -139,6 +139,9 @@ export const NewTask = () => {
                 accept='.pdf'
                 onChange={onFileChange}
                 label={pdf?.name ?? 'Document (PDF)'}
+                onClick={(event) => {
+                  event.target.value = null
+                }}
               />
             </Form.Group>
             <Form.Group>
@@ -148,6 +151,9 @@ export const NewTask = () => {
                 accept='.zip'
                 onChange={onFileChange}
                 label={zip?.name ?? 'Testcases (ZIP)'}
+                onClick={(event) => {
+                  event.target.value = null
+                }}
               />
             </Form.Group>
 
@@ -348,6 +354,9 @@ const EditModal = (props) => {
               accept='.pdf'
               onChange={onFileChange}
               label={pdf?.name ?? 'Document (PDF)'}
+              onClick={(event) => {
+                event.target.value = null
+              }}
             />
           </Form.Group>
           <Form.Group>
@@ -357,6 +366,9 @@ const EditModal = (props) => {
               accept='.zip'
               onChange={onFileChange}
               label={zip?.name ?? 'Testcases (ZIP)'}
+              onClick={(event) => {
+                event.target.value = null
+              }}
             />
           </Form.Group>
 
@@ -406,25 +418,42 @@ export const TaskTable = () => {
     isLoading,
   } = useGet('/api/admin/problem')
 
+  const [taskSearch, inputTaskSearch] = useInput()
+  const filteredTasks = useMemo(
+    () =>
+      tasks?.filter(
+        (task) =>
+          task.name.toLowerCase().indexOf(taskSearch.toLowerCase()) !== -1 ||
+          String(task.id_Prob)
+            .toLowerCase()
+            .indexOf(taskSearch.toLowerCase()) !== -1
+      ),
+    [tasks, taskSearch]
+  )
+
   return (
-    <CustomTable isLoading={isLoading} align='left'>
-      <thead className='thead-light'>
-        <RenderOnIntersect id='admin/tasks/head' initialHeight='50px' as='tr'>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Time</th>
-            <th>Memory</th>
-            <th>Rating</th>
-            <th>Config</th>
-          </tr>
-        </RenderOnIntersect>
-      </thead>
-      <tbody>
-        {tasks?.map((task) => (
-          <TaskRow key={task.id_Prob} {...task} />
-        ))}
-      </tbody>
-    </CustomTable>
+    <>
+      <Form.Control {...inputTaskSearch} placeholder='ค้นหาโจทย์' />
+      <hr />
+      <CustomTable isLoading={isLoading} align='left'>
+        <thead className='thead-light'>
+          <RenderOnIntersect id='admin/tasks/head' initialHeight='50px' as='tr'>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Time</th>
+              <th>Memory</th>
+              <th>Rating</th>
+              <th>Config</th>
+            </tr>
+          </RenderOnIntersect>
+        </thead>
+        <tbody>
+          {filteredTasks?.map((task) => (
+            <TaskRow key={task.id_Prob} {...task} />
+          ))}
+        </tbody>
+      </CustomTable>
+    </>
   )
 }

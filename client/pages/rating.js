@@ -8,6 +8,7 @@ import PageLayout from '../components/PageLayout'
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
 import { useInput } from '../utils'
 import { RenderOnIntersect } from '../components/RenderOnIntersect'
+import { useMemo } from 'react'
 
 const UserTable = ({ users, isLoading }) => (
   <CustomTable isLoading={isLoading}>
@@ -50,8 +51,13 @@ const Rating = () => {
   } = useGet('/api/user')
   const [usernameSearch, inputUsernameSearch] = useInput()
 
-  const filteredUsers = users?.filter(
-    (user) => user.sname.indexOf(usernameSearch.substr(0, 20)) !== -1
+  const filteredUsers = useMemo(
+    () =>
+      users?.filter(
+        (user) =>
+          user.sname.toLowerCase().indexOf(usernameSearch.toLowerCase()) !== -1
+      ),
+    [users, usernameSearch]
   )
   return (
     <>

@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { usePatch, usePost } from '../utils/api'
-import { useForm, useShow } from '../utils'
+import { useForm, useInput, useShow } from '../utils'
 import { mutate } from 'swr'
 
 import DatePicker from 'react-datepicker'
@@ -392,6 +392,9 @@ const EditModal = (props) => {
               accept='.pdf'
               onChange={onFileChange}
               label={pdf?.name ?? 'Document (PDF)'}
+              onClick={(event) => {
+                event.target.value = null
+              }}
             />
           </Form.Group>
           <Form.Group>
@@ -401,6 +404,9 @@ const EditModal = (props) => {
               accept='.zip'
               onChange={onFileChange}
               label={zip?.name ?? 'Testcases (ZIP)'}
+              onClick={(event) => {
+                event.target.value = null
+              }}
             />
           </Form.Group>
 
@@ -453,8 +459,23 @@ export const TaskTable = ({ tasks, idContest, selectedTasks, isLoading }) => {
     setTaskModal((prevState) => ({ ...prevState, show: false }))
   }, [])
 
+  const [taskSearch, inputTaskSearch] = useInput()
+  const filteredTasks = useMemo(
+    () =>
+      tasks?.filter(
+        (task) =>
+          task.name.toLowerCase().indexOf(taskSearch.toLowerCase()) !== -1 ||
+          String(task.id_Prob)
+            .toLowerCase()
+            .indexOf(taskSearch.toLowerCase()) !== -1
+      ),
+    [tasks, taskSearch]
+  )
+
   return (
     <>
+      <Form.Control {...inputTaskSearch} placeholder='ค้นหาโจทย์' />
+      <hr />
       <CustomTable isLoading={isLoading} align='left'>
         <thead className='thead-light'>
           <RenderOnIntersect
@@ -473,7 +494,7 @@ export const TaskTable = ({ tasks, idContest, selectedTasks, isLoading }) => {
           </RenderOnIntersect>
         </thead>
         <tbody>
-          {tasks?.map((task) => (
+          {filteredTasks?.map((task) => (
             <TaskRow
               key={task.id_Prob}
               task={task}

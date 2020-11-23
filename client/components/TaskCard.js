@@ -55,20 +55,20 @@ const MiniSubmission = ({ lastest_submit, best_submit }) => {
 
 const TaskCard = (props) => {
   const { idContest, id_Prob, index, name, whopass, sname } = props
-  const { data, onFileChange } = useForm({ fileLang: 'C++' })
+  const { data, onFileChange, setData } = useForm({ fileLang: 'C++' })
   const { file } = data
   const [loading, setLoading] = useState(false)
 
   const url = `/api/contest/${idContest}/submission?idProb=${id_Prob}`
   const {
     data: { solved, ...results },
+    isLoading,
     isValidating,
     mutate: fetchResult,
-  } = useGet(url, { revalidateOnMount: false, revalidateOnFocus: false })
-  console.log(solved, results)
+  } = useGet(url, { revalidateOnFocus: false })
 
   useEffect(() => {
-    const isGrading = !isValidating && results?.latest?.status === 0
+    const isGrading = !isValidating && results?.lastest_submit?.[0].status === 0
     const timeout = isGrading && setTimeout(fetchResult, 1000)
     return () => clearTimeout(timeout)
   }, [isValidating])
@@ -78,18 +78,17 @@ const TaskCard = (props) => {
     async (e) => {
       e.preventDefault()
       if (!file) return
+      setData((prevData) => ({ ...prevData, file: undefined }))
       setLoading(true)
       try {
-        const formData = new FormData()
+        const body = new FormData()
         Object.keys(data).forEach((item) => body.append(item, data[item]))
-        const response = await post(formData, false)
+        const response = await post(body, false)
         if (response.ok) {
           fetchResult()
-        } else {
-          setAlert({ head: res.status, desc: res.statusText })
         }
       } catch (error) {
-        setAlert({ head: error.name, desc: error.message })
+        // setAlert({ head: error.name, desc: error.message })
       } finally {
         setLoading(false)
       }
@@ -121,8 +120,8 @@ const TaskCard = (props) => {
       <Accordion.Collapse eventKey='0'>
         <Card.Body as={Row}>
           <Col>
-            {isValidating ? (
-              <Loader style={{ height: '117px' }} />
+            {isLoading ? (
+              <Loader style={{ height: '131px' }} />
             ) : (
               <MiniSubmission {...results} />
             )}
@@ -136,6 +135,9 @@ const TaskCard = (props) => {
               label={file?.name ?? 'Choose file'}
               accept='.c,.cpp'
               onChange={onFileChange}
+              onClick={(event) => {
+                event.target.value = null
+              }}
               custom
             />
             <ButtonToolbar as={Row}>

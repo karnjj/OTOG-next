@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, useEffect } from 'react'
+import { memo, useState, useCallback, useEffect, useMemo } from 'react'
 import { ButtonGroup, Button, Modal, Form } from 'react-bootstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -8,7 +8,7 @@ import {
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons'
 import { useGet, usePost, useDelete } from '../utils/api'
-import { useShow, useForm } from '../utils'
+import { useShow, useForm, useInput } from '../utils'
 import { RenderOnIntersect } from './RenderOnIntersect'
 import { CustomTable } from './CustomTable'
 import { mutate } from 'swr'
@@ -221,8 +221,21 @@ export const UserTable = () => {
     setUserModal((prevState) => ({ ...prevState, show: false }))
   }, [])
 
+  const [userSearch, inputUserSearch] = useInput()
+  const filteredUsers = useMemo(
+    () =>
+      users?.filter(
+        (user) =>
+          user.sname.toLowerCase().indexOf(userSearch.toLowerCase()) !== -1 ||
+          user.username.toLowerCase().indexOf(userSearch.toLowerCase()) !== -1
+      ),
+    [users, userSearch]
+  )
+
   return (
     <>
+      <Form.Control placeholder='ค้นหาผู้ใช้' {...inputUserSearch} />
+      <hr />
       <CustomTable isLoading={isLoading} align='left'>
         <thead className='thead-light'>
           <RenderOnIntersect id='admin/users/head' initialHeight='50px' as='tr'>
@@ -236,7 +249,7 @@ export const UserTable = () => {
           </RenderOnIntersect>
         </thead>
         <tbody>
-          {users?.map((user) => (
+          {filteredUsers?.map((user) => (
             <UserRow key={user.idUser} user={user} selectUser={selectUser} />
           ))}
         </tbody>

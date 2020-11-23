@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useAuthContext } from '../utils/auth'
 import { useGet } from '../utils/api'
 
@@ -68,13 +68,17 @@ const Task = () => {
     setLoading(true)
   }
 
-  const filteredTasks = tasks?.filter((task) => {
-    const id = String(task.id_Prob)
-    return (
-      task.name.indexOf(taskSearch.substr(0, 20)) !== -1 ||
-      id.indexOf(taskSearch.substr(0, 20)) !== -1
-    )
-  })
+  const filteredTasks = useMemo(
+    () =>
+      tasks?.filter(
+        (task) =>
+          task.name.toLowerCase().indexOf(taskSearch.toLowerCase()) !== -1 ||
+          String(task.id_Prob)
+            .toLowerCase()
+            .indexOf(taskSearch.toLowerCase()) !== -1
+      ),
+    [tasks, taskSearch]
+  )
 
   return (
     <>

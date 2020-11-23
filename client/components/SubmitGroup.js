@@ -62,6 +62,9 @@ const SubmitGroup = ({ name, id_Prob, children, callback }) => {
               accept='.c,.cpp'
               onChange={onFileChange}
               custom
+              onClick={(event) => {
+                event.target.value = null
+              }}
             />
           </Form.Group>
           <Form.Group>
