@@ -54,7 +54,15 @@ const MiniSubmission = ({ lastest_submit, best_submit }) => {
 }
 
 const TaskCard = (props) => {
-  const { idContest, id_Prob, index, name, whopass, sname } = props
+  const {
+    idContest,
+    id_Prob,
+    index,
+    name,
+    sname,
+    time = '-',
+    memory = '-',
+  } = props
   const { data, onFileChange, setData } = useForm({ fileLang: 'C++' })
   const { file } = data
   const [loading, setLoading] = useState(false)
@@ -113,7 +121,7 @@ const TaskCard = (props) => {
               {solved && <Badge variant='success'>Solved</Badge>}
             </Col>
           </Row>
-          ผ่านแล้ว : {whopass}
+          {time} วินาที {memory} MB
         </h5>
       </Accordion.Toggle>
 
