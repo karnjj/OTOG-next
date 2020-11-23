@@ -33,6 +33,11 @@ const Hero = styled(Container)`
   display: flex;
   align-items: center;
 `
+const ReponsiveContainer = styled(Container)`
+  @media (min-width: 992px) {
+    max-width: 800px;
+  }
+`
 
 const Countdown = ({ timeleft, name, idContest, announce }) => (
   <CenteredContainer>
@@ -98,7 +103,7 @@ const HoldingContest = ({ idContest, timeleft, name, announce }) => {
     data: { tasks },
   } = useGet(`/api/contest/${idContest}`)
   return (
-    <Container style={{ maxWidth: '800px' }}>
+    <ReponsiveContainer>
       <Title
         icon={faTrophy}
         right={
@@ -140,7 +145,7 @@ const HoldingContest = ({ idContest, timeleft, name, announce }) => {
           </Col>
         </Row>
       )}
-    </Container>
+    </ReponsiveContainer>
   )
 }
 
