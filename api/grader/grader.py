@@ -14,15 +14,13 @@ LANG_ARGS = {
     "C": {
         "extension": "c",
         "system": "find /usr/bin/ -name gcc",
-        "compile": "gcc ../uploaded/[userID]/[codeFileName].c -O2 -fomit-frame-pointer -o compiled/[codeFileName]"
-        + ioeredirect,
+        "compile": f"gcc ../uploaded/[userID]/[codeFileName].c -O2 -fomit-frame-pointer -o compiled/[codeFileName]{ioeredirect}",
         "execute": "compiled/[exeName][inputFile]",
     },
     "C++": {
         "extension": "cpp",
         "system": "find /usr/bin/ -name g++",
-        "compile": "g++ ../uploaded/[userID]/[codeFileName].cpp -O2 -fomit-frame-pointer -o compiled/[codeFileName]"
-        + ioeredirect,
+        "compile": f"g++ ../uploaded/[userID]/[codeFileName].cpp -O2 -fomit-frame-pointer -o compiled/[codeFileName]{ioeredirect}",
         "execute": "compiled/[exeName][inputFile]",
     },
 }
@@ -48,8 +46,6 @@ def file_write(filename, data):
 
 
 # Program Compiled
-
-
 def create(fileName, userID, language):
     os.system("chmod 777 compiled/" + fileName)
     os.system("rm compiled/" + fileName)
