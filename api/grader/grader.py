@@ -9,18 +9,18 @@ print("*****Grader started*****")
 mydb = mysql.connector.connect(
     host="localhost", user="root", passwd="0000", database="OTOG"
 )
-ioeredirect = " 0<env/input.txt 1>env/output.txt 2>env/error.txt"
+IO_REDIRECT = " 0<env/input.txt 1>env/output.txt 2>env/error.txt"
 LANG_ARGS = {
     "C": {
         "extension": "c",
         "system": "find /usr/bin/ -name gcc",
-        "compile": f"gcc ../uploaded/[userID]/[codeFileName].c -O2 -fomit-frame-pointer -o compiled/[codeFileName]{ioeredirect}",
+        "compile": f"gcc ../uploaded/[userID]/[codeFileName].c -O2 -fomit-frame-pointer -o compiled/[codeFileName]{IO_REDIRECT}",
         "execute": "compiled/[exeName][inputFile]",
     },
     "C++": {
         "extension": "cpp",
         "system": "find /usr/bin/ -name g++",
-        "compile": f"g++ ../uploaded/[userID]/[codeFileName].cpp -O2 -fomit-frame-pointer -o compiled/[codeFileName]{ioeredirect}",
+        "compile": f"g++ ../uploaded/[userID]/[codeFileName].cpp -O2 -fomit-frame-pointer -o compiled/[codeFileName]{IO_REDIRECT}",
         "execute": "compiled/[exeName][inputFile]",
     },
 }
@@ -53,7 +53,7 @@ def create(fileName, userID, language):
         return
 
     print("Compiling Code File ...")
-    
+
     compilecmd = LANG_ARGS[language]["compile"]
     compilecmd = compilecmd.replace("[codeFileName]", fileName)
     compilecmd = compilecmd.replace("[userID]", userID)
@@ -119,25 +119,26 @@ while True:
         print("====================================")
         print(submission[:4])
 
-        mycursor.execute("SELECT * FROM Problem WHERE id_Prob = " + str(submission[3]))
-        probInfo = mycursor.fetchone()
-        cnt = 0
-        ans = ""
-        perfect = True
-        sumTime = 0
-        lastTest = 0
-
         uploadTime = str(submission[1])
         userID = str(submission[2])
         idProb = str(submission[3])
         contestMode = submission[9]
         fileLang = submission[10]
 
+        mycursor.execute(f"SELECT * FROM Problem WHERE id_Prob = {idProb}")
+        probInfo = mycursor.fetchone()
+
         probName = str(probInfo[2])
         timeLimit = float(probInfo[4])
         memLimit = int(probInfo[5])
 
-        result = create(idProb + "_" + uploadTime, userID, fileLang)
+        cnt = 0
+        ans = ""
+        perfect = True
+        sumTime = 0
+        lastTest = 0
+
+        result = create(f"{idProb}_{uploadTime}", userID, fileLang)
 
         if os.path.exists(f"source/{probName}/script.php"):
             case = file_read(f"source/{probName}/script.php")
@@ -179,12 +180,13 @@ while True:
                     userResult = "env/output.txt"
                     solution = f"source/{probName}/{x + 1}.sol"
                     if t != 0:
-                        for k, v in ERROR_MSG.items():
-                            if t == k:
-                                file_write(
-                                    "env/error.txt",
-                                    v + file_read("env/error.txt") if k != 124 else "",
-                                )
+                        if t in ERROR_MSG.keys():
+                            file_write(
+                                "env/error.txt",
+                                ERROR_MSG[t] + file_read("env/error.txt")
+                                if t != 124
+                                else "",
+                            )
                             if t == 124:
                                 result = "TLE"
                         else:
@@ -220,8 +222,9 @@ while True:
             errMsg = file_read("env/error.txt")
         except:
             errMsg = "Something wrong."
-        print("TIME : " + str(sumTime))
+        print(f"Time : {sumTime}")
         score = (cnt / int(testcase)) * 100
+
         sql = "UPDATE Result SET result = %s, score = %s, timeuse = %s, status = 1, errmsg = %s WHERE idResult = %s"
         val = (ans, score, round(sumTime, 2), errMsg, submission[0])
         mycursor.execute(sql, val)
