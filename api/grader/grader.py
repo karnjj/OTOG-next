@@ -146,7 +146,7 @@ while True:
             # Remove maximum case number and improve structure.
             idxBegin = case.find("cases = ")
             idxEnd = case.find(";")
-            testcase = int(case[idxBegin:idxEnd])
+            testcase = int(case[idxBegin + len(idxBegin):idxEnd])
             print("Testcase : " + testcase)
         else:
             testcase = "-1"
